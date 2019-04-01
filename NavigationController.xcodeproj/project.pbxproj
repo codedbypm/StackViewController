@@ -13,6 +13,7 @@
 		FD67E5B8225257DA0051786B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD67E5B6225257DA0051786B /* Main.storyboard */; };
 		FD67E5BA225257DB0051786B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD67E5B9225257DB0051786B /* Assets.xcassets */; };
 		FD67E5BD225257DB0051786B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */; };
+		FD67E5C3225258840051786B /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C2225258840051786B /* NavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		FD67E5B9225257DB0051786B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FD67E5BC225257DB0051786B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FD67E5BE225257DB0051786B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FD67E5C2225258840051786B /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 			children = (
 				FD67E578225250E10051786B /* NavigationController.h */,
 				FD67E579225250E10051786B /* Info.plist */,
+				FD67E5C2225258840051786B /* NavigationController.swift */,
 			);
 			path = NavigationController;
 			sourceTree = "<group>";
@@ -141,10 +144,15 @@
 		FD67E56C225250E10051786B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = codedby.pm;
 				TargetAttributes = {
 					FD67E574225250E10051786B = {
+						CreatedOnToolsVersion = 10.2;
+						LastSwiftMigration = 1020;
+					};
+					FD67E5AF225257DA0051786B = {
 						CreatedOnToolsVersion = 10.2;
 					};
 				};
@@ -193,6 +201,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD67E5C3225258840051786B /* NavigationController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +361,7 @@
 		FD67E57E225250E10051786B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -370,6 +380,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pm.codedby.NavigationController;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -378,6 +389,7 @@
 		FD67E57F225250E10051786B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;

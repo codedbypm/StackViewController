@@ -13,6 +13,16 @@
 		FD67E5C3225258840051786B /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C2225258840051786B /* NavigationController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		FD67E5C422525B140051786B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FD67E56C225250E10051786B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FD67E574225250E10051786B;
+			remoteInfo = NavigationController;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		FD67E575225250E10051786B /* NavigationController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NavigationController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD67E578225250E10051786B /* NavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
@@ -123,6 +133,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				FD67E5C522525B140051786B /* PBXTargetDependency */,
 			);
 			name = TestApp;
 			productName = TestApp;
@@ -203,6 +214,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FD67E5C522525B140051786B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FD67E574225250E10051786B /* NavigationController */;
+			targetProxy = FD67E5C422525B140051786B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */ = {

@@ -13,7 +13,3 @@ FOUNDATION_EXPORT double NavigationControllerVersionNumber;
 
 //! Project version string for NavigationController.
 FOUNDATION_EXPORT const unsigned char NavigationControllerVersionString[];
-
-// In this header, you should import all the public headers of your framework using statements like #import <NavigationController/PublicHeader.h>
-
-

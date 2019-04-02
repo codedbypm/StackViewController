@@ -10,7 +10,14 @@
 		FD67E57A225250E10051786B /* NavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD67E578225250E10051786B /* NavigationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD67E5B3225257DA0051786B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5B2225257DA0051786B /* AppDelegate.swift */; };
 		FD67E5BD225257DB0051786B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */; };
-		FD67E5C3225258840051786B /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C2225258840051786B /* NavigationController.swift */; };
+		FD67E5C3225258840051786B /* StackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C2225258840051786B /* StackViewController.swift */; };
+		FD67E5C8225260C40051786B /* HorizontalSlideAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C7225260C40051786B /* HorizontalSlideAnimator.swift */; };
+		FD67E5CA225283A20051786B /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C9225283A20051786B /* RootViewController.swift */; };
+		FD67E5CC225296A00051786B /* PinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5CB225296A00051786B /* PinkViewController.swift */; };
+		FD67E5CE2252A57F0051786B /* NavigationController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* NavigationController.framework */; };
+		FD67E5CF2252A57F0051786B /* NavigationController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* NavigationController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FD67E5F32252AF220051786B /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F22252AF220051786B /* UIViewController+Extensions.swift */; };
+		FD67E5F52252EC770051786B /* RootCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F42252EC770051786B /* RootCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,6 +30,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		FD67E5D02252A57F0051786B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FD67E5CF2252A57F0051786B /* NavigationController.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		FD67E575225250E10051786B /* NavigationController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NavigationController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD67E578225250E10051786B /* NavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
@@ -31,7 +52,12 @@
 		FD67E5B2225257DA0051786B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FD67E5BC225257DB0051786B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FD67E5BE225257DB0051786B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FD67E5C2225258840051786B /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		FD67E5C2225258840051786B /* StackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewController.swift; sourceTree = "<group>"; };
+		FD67E5C7225260C40051786B /* HorizontalSlideAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSlideAnimator.swift; sourceTree = "<group>"; };
+		FD67E5C9225283A20051786B /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		FD67E5CB225296A00051786B /* PinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinkViewController.swift; sourceTree = "<group>"; };
+		FD67E5F22252AF220051786B /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		FD67E5F42252EC770051786B /* RootCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD67E5CE2252A57F0051786B /* NavigationController.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,9 +100,11 @@
 		FD67E577225250E10051786B /* NavigationController */ = {
 			isa = PBXGroup;
 			children = (
+				FD67E5F12252AF0F0051786B /* Extensions */,
+				FD67E5C622525F990051786B /* Transitions */,
+				FD67E5C2225258840051786B /* StackViewController.swift */,
 				FD67E578225250E10051786B /* NavigationController.h */,
 				FD67E579225250E10051786B /* Info.plist */,
-				FD67E5C2225258840051786B /* NavigationController.swift */,
 			);
 			path = NavigationController;
 			sourceTree = "<group>";
@@ -83,11 +112,30 @@
 		FD67E5B1225257DA0051786B /* TestApp */ = {
 			isa = PBXGroup;
 			children = (
+				FD67E5F42252EC770051786B /* RootCoordinator.swift */,
+				FD67E5C9225283A20051786B /* RootViewController.swift */,
+				FD67E5CB225296A00051786B /* PinkViewController.swift */,
 				FD67E5B2225257DA0051786B /* AppDelegate.swift */,
 				FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */,
 				FD67E5BE225257DB0051786B /* Info.plist */,
 			);
 			path = TestApp;
+			sourceTree = "<group>";
+		};
+		FD67E5C622525F990051786B /* Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				FD67E5C7225260C40051786B /* HorizontalSlideAnimator.swift */,
+			);
+			path = Transitions;
+			sourceTree = "<group>";
+		};
+		FD67E5F12252AF0F0051786B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FD67E5F22252AF220051786B /* UIViewController+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -129,6 +177,7 @@
 				FD67E5AC225257DA0051786B /* Sources */,
 				FD67E5AD225257DA0051786B /* Frameworks */,
 				FD67E5AE225257DA0051786B /* Resources */,
+				FD67E5D02252A57F0051786B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -201,7 +250,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD67E5C3225258840051786B /* NavigationController.swift in Sources */,
+				FD67E5C8225260C40051786B /* HorizontalSlideAnimator.swift in Sources */,
+				FD67E5F32252AF220051786B /* UIViewController+Extensions.swift in Sources */,
+				FD67E5C3225258840051786B /* StackViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,6 +260,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD67E5F52252EC770051786B /* RootCoordinator.swift in Sources */,
+				FD67E5CC225296A00051786B /* PinkViewController.swift in Sources */,
+				FD67E5CA225283A20051786B /* RootViewController.swift in Sources */,
 				FD67E5B3225257DA0051786B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -415,6 +469,7 @@
 		FD67E5BF225257DB0051786B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HPXR38FW5T;
@@ -434,6 +489,7 @@
 		FD67E5C0225257DB0051786B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HPXR38FW5T;

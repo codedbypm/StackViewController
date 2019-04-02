@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:NavigationController.xcodeproj">
+      location = "self:/Users/paolodev/Projects/NavigationController/StackViewController.xcodeproj">
    </FileRef>
 </Workspace>

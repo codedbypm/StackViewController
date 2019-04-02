@@ -17,7 +17,7 @@
                BlueprintIdentifier = "FD67E5AF225257DA0051786B"
                BuildableName = "TestApp.app"
                BlueprintName = "TestApp"
-               ReferencedContainer = "container:NavigationController.xcodeproj">
+               ReferencedContainer = "container:StackViewController.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
             BlueprintIdentifier = "FD67E5AF225257DA0051786B"
             BuildableName = "TestApp.app"
             BlueprintName = "TestApp"
-            ReferencedContainer = "container:NavigationController.xcodeproj">
+            ReferencedContainer = "container:StackViewController.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -58,7 +58,7 @@
             BlueprintIdentifier = "FD67E5AF225257DA0051786B"
             BuildableName = "TestApp.app"
             BlueprintName = "TestApp"
-            ReferencedContainer = "container:NavigationController.xcodeproj">
+            ReferencedContainer = "container:StackViewController.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -77,7 +77,7 @@
             BlueprintIdentifier = "FD67E5AF225257DA0051786B"
             BuildableName = "TestApp.app"
             BlueprintName = "TestApp"
-            ReferencedContainer = "container:NavigationController.xcodeproj">
+            ReferencedContainer = "container:StackViewController.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

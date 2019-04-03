@@ -6,24 +6,19 @@
 //  Copyright © 2019 codedby.pm. All rights reserved.
 //
 
-import NavigationController
+import StackViewController
 
 class RootCoordinator {
 
     lazy var window: UIWindow = UIWindow(frame: UIScreen.main.bounds)
     let stackViewController: StackViewController
-
-    lazy var rootViewController: UIViewController = {
-        let vc = RootViewController()
-        vc.didTapNext = { [weak self] in
-            self?.stackViewController.show(PinkViewController(), animated: true)
-        }
-        return vc
-    }()
+    let rootViewController = YellowViewController()
 
     init(window: UIWindow) {
-        stackViewController = StackViewController()
-        stackViewController.stack = [rootViewController]        
+        stackViewController = StackViewController(rootViewController: rootViewController)
+        rootViewController.didTapNext = {
+            self.stackViewController.show(PinkViewController(), animated: true)
+        }
         window.rootViewController = stackViewController
         window.makeKeyAndVisible()
     }

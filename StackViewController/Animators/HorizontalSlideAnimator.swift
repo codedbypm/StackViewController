@@ -22,10 +22,14 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
         setInitialFrameOfDestinationView(toView, inContainerView: containerView)
 
-        UIView.animate(withDuration: animationDuration, delay: 0.0, options: [], animations: {
-            self.setFinalFrameOfDestinationView(toView, inContainerView: containerView)
-        }) { done in
-            transitionContext.completeTransition(done)
+        UIView.animate(
+            withDuration: animationDuration,
+            delay: 0.0,
+            options: [.curveEaseInOut],
+            animations: {
+                self.setFinalFrameOfDestinationView(toView, inContainerView: containerView)
+            }) { done in
+                transitionContext.completeTransition(done)
         }
     }
 }
@@ -33,11 +37,8 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 private extension HorizontalSlideAnimator {
 
     func setInitialFrameOfDestinationView(_ view: UIView, inContainerView containerView: UIView) {
-        let containerViewBounds = containerView.bounds
-        let containerViewWidth = containerViewBounds.width
-
-        let translation = CGAffineTransform(translationX: containerViewWidth, y: 0.0)
-        view.frame = containerViewBounds.applying(translation)
+        let containerViewWidth = containerView.bounds.width
+        view.frame = containerView.bounds.offsetBy(dx: containerViewWidth, dy: 0.0)
     }
 
     func setFinalFrameOfDestinationView(_ view: UIView, inContainerView containerView: UIView) {

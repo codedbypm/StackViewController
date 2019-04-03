@@ -1,5 +1,5 @@
 //
-//  RootViewController.swift
+//  YellowViewController.swift
 //  TestApp
 //
 //  Created by Paolo Moroni on 01/04/2019.
@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import NavigationController
+import StackViewController
 
-class RootViewController: UIViewController {
+class YellowViewController: UIViewController {
 
     var didTapNext: (() -> Void)?
 
@@ -17,7 +17,7 @@ class RootViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
-        label.text = String(describing: RootViewController.self)
+        label.text = String(describing: YellowViewController.self)
         return label
     }()
 
@@ -29,8 +29,6 @@ class RootViewController: UIViewController {
         return button
     }()
 
-    weak var stackViewController: StackViewController?
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -40,7 +38,7 @@ class RootViewController: UIViewController {
     }
 }
 
-private extension RootViewController {
+private extension YellowViewController {
 
     func addSubviews() {
         view.addSubview(titleLabel)

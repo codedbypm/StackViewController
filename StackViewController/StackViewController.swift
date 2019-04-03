@@ -15,12 +15,19 @@ public class StackViewController: UIViewController {
     public var stack: [UIViewController] = [] {
         didSet {
             guard let topViewController = stack.last else { return }
-            addChildViewController(topViewController)
+            addChild(topViewController)
+            view.addSubview(topViewController.view)
+            topViewController.view.pinEdges(to: view)
+            topViewController.didMove(toParent: self)
         }
     }
 
     public var rootViewController: UIViewController? {
         return stack.first
+    }
+
+    public var topViewController: UIViewController? {
+        return stack.last
     }
 
     // MARK: - Init
@@ -29,13 +36,13 @@ public class StackViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         stack.append(rootViewController)
-        addChildViewController(rootViewController)
+
+        addChild(rootViewController)
+        view.addSubview(rootViewController.view)
+        rootViewController.view.pinEdges(to: view)
+        rootViewController.didMove(toParent: self)
     }
 
-    public init() {
-        super.init(nibName: nil, bundle: nil)
-    }
-    
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -43,12 +50,30 @@ public class StackViewController: UIViewController {
     // MARK: - Public methods
 
     public func show(_ viewController: UIViewController, animated: Bool) {
-        viewController.transitioningDelegate = self
-        viewController.modalPresentationStyle = .custom
-//        viewController.modalTransitionStyle = .coverVertical
+        guard let from = topViewController else {
+            assertionFailure("Error: there is no `from` viewController")
+            return
+        }
 
-        stack.append(viewController)
-        present(viewController, animated: true, completion: nil)
+        // 1. Configure objects
+        let to = viewController
+        let context = StackViewControllerTransitionContext(from: from,
+                                                           to: viewController,
+                                                           containerView: view)
+        context.isAnimated = animated
+
+        // 2. Store toViewController
+        stack.append(to)
+
+        // 3. Inform parent view controller
+        from.willMove(toParent: nil)
+        to.willMove(toParent: self)
+
+        // 4. Add to as child viewController
+        addChild(to)
+
+       let animator = HorizontalSlideAnimator()
+        animator.animateTransition(using: context)
     }
 }
 
@@ -56,12 +81,5 @@ public extension StackViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-}
-
-extension StackViewController: UIViewControllerTransitioningDelegate {
-
-    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return HorizontalSlideAnimator()
     }
 }

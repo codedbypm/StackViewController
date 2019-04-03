@@ -12,6 +12,9 @@ class PinkViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor =  UIColor(red: 255/255, green: 165/255, blue: 0.0, alpha: 1.0)
+        view.backgroundColor =  UIColor(red: 250/255,
+                                        green: 130/255,
+                                        blue: 160/255,
+                                        alpha: 1.0)
     }
 }

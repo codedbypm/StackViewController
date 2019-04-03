@@ -12,12 +12,13 @@
 		FD67E5BD225257DB0051786B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */; };
 		FD67E5C3225258840051786B /* StackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C2225258840051786B /* StackViewController.swift */; };
 		FD67E5C8225260C40051786B /* HorizontalSlideAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C7225260C40051786B /* HorizontalSlideAnimator.swift */; };
-		FD67E5CA225283A20051786B /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C9225283A20051786B /* RootViewController.swift */; };
+		FD67E5CA225283A20051786B /* YellowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C9225283A20051786B /* YellowViewController.swift */; };
 		FD67E5CC225296A00051786B /* PinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5CB225296A00051786B /* PinkViewController.swift */; };
 		FD67E5CE2252A57F0051786B /* StackViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* StackViewController.framework */; };
 		FD67E5CF2252A57F0051786B /* StackViewController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* StackViewController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		FD67E5F32252AF220051786B /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F22252AF220051786B /* UIViewController+Extensions.swift */; };
 		FD67E5F52252EC770051786B /* RootCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F42252EC770051786B /* RootCoordinator.swift */; };
+		FD67E5F82254F2010051786B /* StackViewControllerTransitionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */; };
+		FD67E5FA22552D3A0051786B /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F922552D3A0051786B /* UIView+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,10 +55,11 @@
 		FD67E5BE225257DB0051786B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD67E5C2225258840051786B /* StackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewController.swift; sourceTree = "<group>"; };
 		FD67E5C7225260C40051786B /* HorizontalSlideAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSlideAnimator.swift; sourceTree = "<group>"; };
-		FD67E5C9225283A20051786B /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		FD67E5C9225283A20051786B /* YellowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YellowViewController.swift; sourceTree = "<group>"; };
 		FD67E5CB225296A00051786B /* PinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinkViewController.swift; sourceTree = "<group>"; };
-		FD67E5F22252AF220051786B /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		FD67E5F42252EC770051786B /* RootCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootCoordinator.swift; sourceTree = "<group>"; };
+		FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerTransitionContext.swift; sourceTree = "<group>"; };
+		FD67E5F922552D3A0051786B /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,8 +102,9 @@
 		FD67E577225250E10051786B /* StackViewController */ = {
 			isa = PBXGroup;
 			children = (
+				FD67E5F62254F19B0051786B /* Transition Context */,
 				FD67E5F12252AF0F0051786B /* Extensions */,
-				FD67E5C622525F990051786B /* Transitions */,
+				FD67E5C622525F990051786B /* Animators */,
 				FD67E5C2225258840051786B /* StackViewController.swift */,
 				FD67E578225250E10051786B /* StackViewController.h */,
 				FD67E579225250E10051786B /* Info.plist */,
@@ -113,7 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				FD67E5F42252EC770051786B /* RootCoordinator.swift */,
-				FD67E5C9225283A20051786B /* RootViewController.swift */,
+				FD67E5C9225283A20051786B /* YellowViewController.swift */,
 				FD67E5CB225296A00051786B /* PinkViewController.swift */,
 				FD67E5B2225257DA0051786B /* AppDelegate.swift */,
 				FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */,
@@ -122,20 +125,28 @@
 			path = TestApp;
 			sourceTree = "<group>";
 		};
-		FD67E5C622525F990051786B /* Transitions */ = {
+		FD67E5C622525F990051786B /* Animators */ = {
 			isa = PBXGroup;
 			children = (
 				FD67E5C7225260C40051786B /* HorizontalSlideAnimator.swift */,
 			);
-			path = Transitions;
+			path = Animators;
 			sourceTree = "<group>";
 		};
 		FD67E5F12252AF0F0051786B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				FD67E5F22252AF220051786B /* UIViewController+Extensions.swift */,
+				FD67E5F922552D3A0051786B /* UIView+Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		FD67E5F62254F19B0051786B /* Transition Context */ = {
+			isa = PBXGroup;
+			children = (
+				FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */,
+			);
+			path = "Transition Context";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -251,7 +262,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD67E5C8225260C40051786B /* HorizontalSlideAnimator.swift in Sources */,
-				FD67E5F32252AF220051786B /* UIViewController+Extensions.swift in Sources */,
+				FD67E5FA22552D3A0051786B /* UIView+Extensions.swift in Sources */,
+				FD67E5F82254F2010051786B /* StackViewControllerTransitionContext.swift in Sources */,
 				FD67E5C3225258840051786B /* StackViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,7 +274,7 @@
 			files = (
 				FD67E5F52252EC770051786B /* RootCoordinator.swift in Sources */,
 				FD67E5CC225296A00051786B /* PinkViewController.swift in Sources */,
-				FD67E5CA225283A20051786B /* RootViewController.swift in Sources */,
+				FD67E5CA225283A20051786B /* YellowViewController.swift in Sources */,
 				FD67E5B3225257DA0051786B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -422,7 +434,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = NavigationController/Info.plist;
+				INFOPLIST_FILE = StackViewController/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -450,7 +462,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = NavigationController/Info.plist;
+				INFOPLIST_FILE = StackViewController/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (

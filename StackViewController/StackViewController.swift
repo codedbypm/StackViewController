@@ -8,40 +8,33 @@
 
 import UIKit
 
-public class StackViewController: UIViewController {
+public protocol StackViewControllerHandling: UIViewController {
+    init(rootViewController: UIViewController)
+    func popViewController(animated: Bool) -> UIViewController?
+    func pushViewController(_: UIViewController, animated: Bool)
+}
+
+public class StackViewController: UIViewController, StackViewControllerHandling {
 
     // MARK: - Public properties
 
     public var stack: [UIViewController] = []
-//    {
-//        didSet {
-//            guard let topViewController = stack.last else { return }
-//            addChild(topViewController)
-//            view.addSubview(topViewController.view)
-//            topViewController.view.pinEdges(to: view)
-//            topViewController.didMove(toParent: self)
-//        }
-//    }
 
-    public var rootViewController: UIViewController? {
-        return stack.first
-    }
+    public var rootViewController: UIViewController?
 
     public var topViewController: UIViewController? {
         return stack.last
     }
 
+    public override var shouldAutomaticallyForwardAppearanceMethods: Bool {
+        return false
+    }
+    
     // MARK: - Init
 
     public required init(rootViewController: UIViewController) {
         super.init(nibName: nil, bundle: nil)
-
-        stack.append(rootViewController)
-
-        addChild(rootViewController)
-        view.addSubview(rootViewController.view)
-        rootViewController.view.pinEdges(to: view)
-        rootViewController.didMove(toParent: self)
+        self.rootViewController = rootViewController
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -50,13 +43,23 @@ public class StackViewController: UIViewController {
 
     // MARK: - Public methods
 
-    public func show(_ viewController: UIViewController, animated: Bool) {
-        guard let from = topViewController else {
-            assertionFailure("Error: there is no `from` viewController")
+    public func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        guard isViewLoaded else {
             return
         }
 
-        // 1. Configure objects
+        guard let from = topViewController else {
+            stack.append(viewController)
+
+            addChild(viewController)
+            view.addSubview(viewController.view)
+            viewController.view.pinEdgesToSuperView()
+            viewController.didMove(toParent: self)
+            return
+        }
+
+        stack.append(viewController)
+
         let to = viewController
         let context = StackViewControllerTransitionContext(from: from,
                                                            to: viewController,
@@ -64,12 +67,8 @@ public class StackViewController: UIViewController {
                                                            transitionType: .slideIn)
         context.isAnimated = animated
 
-        // 2. Store toViewController
-        stack.append(to)
-
-        // 3. Inform parent view controller
+        // 3. Inform from that will be removed from his parent
         from.willMove(toParent: nil)
-        to.willMove(toParent: self)
 
         // 4. Add to as child viewController
         addChild(to)
@@ -78,10 +77,10 @@ public class StackViewController: UIViewController {
         animator.animateTransition(using: context)
     }
 
-    public func hide(_ viewController: UIViewController, animated: Bool) {
-        guard viewController === topViewController else {
+    public func popViewController(animated: Bool) -> UIViewController? {
+        guard let viewController = topViewController else {
             assertionFailure("Error: Cannot hide a view controller which is not on top of the stack")
-            return
+            return nil
         }
 
         // 1. Configure objects
@@ -105,6 +104,7 @@ public class StackViewController: UIViewController {
         let animator = HorizontalSlideAnimator()
         animator.animateTransition(using: context)
 
+        return nil
     }
 }
 
@@ -112,5 +112,29 @@ public extension StackViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if let rootViewController = rootViewController {
+            pushViewController(rootViewController, animated: false)
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        topViewController?.beginAppearanceTransition(true, animated: animated)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        topViewController?.endAppearanceTransition()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        topViewController?.beginAppearanceTransition(false, animated: animated)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        topViewController?.endAppearanceTransition()
     }
 }

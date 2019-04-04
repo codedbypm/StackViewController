@@ -10,7 +10,9 @@ import UIKit
 
 extension UIView {
 
-    func pinEdges(to superView: UIView) {
+    func pinEdgesToSuperView() {
+        guard let superView = superview else { return }
+        
         topAnchor.constraint(equalTo: superView.topAnchor).isActive = true
         leadingAnchor.constraint(equalTo: superView.leadingAnchor).isActive = true
         bottomAnchor.constraint(equalTo: superView.bottomAnchor).isActive = true

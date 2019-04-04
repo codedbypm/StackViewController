@@ -56,7 +56,6 @@ class YellowViewController: UIViewController {
         super.viewDidDisappear(animated)
         print("\(String(describing: self)): viewDidDisappear")
     }
-
 }
 
 private extension YellowViewController {

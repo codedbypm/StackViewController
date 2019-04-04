@@ -50,9 +50,11 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
             return
         }
 
+        let parent = viewController(forKey: .from)?.parent
+        viewController(forKey: .to)?.didMove(toParent: parent)
+
         view(forKey: .from)?.removeFromSuperview()
-        viewController(forKey: .from)?.didMove(toParent: nil)
-        viewController(forKey: .to)?.didMove(toParent: viewController(forKey: .from)?.parent)
+        viewController(forKey: .from)?.removeFromParent()
     }
 
     func viewController(forKey key: UITransitionContextViewControllerKey) -> UIViewController? {

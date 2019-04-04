@@ -27,15 +27,32 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             return
         }
 
-        let containerView = transitionContext.containerView        
+        let containerView = transitionContext.containerView
         let isSlidingIn = transitionContext.initialFrame(for: toViewController).minX == containerView.bounds.width
+        let animated = transitionContext.isAnimated
+
+        fromViewController.beginAppearanceTransition(false, animated: animated)
 
         toViewController.view.frame = transitionContext.initialFrame(for: toViewController)
-        
+        toViewController.beginAppearanceTransition(true, animated: animated)
+
         if isSlidingIn {
             containerView.addSubview(toViewController.view)
         } else {
             containerView.insertSubview(toViewController.view, belowSubview: fromViewController.view)
+        }
+
+        guard animated else {
+            if isSlidingIn {
+                toViewController.view.frame = transitionContext.finalFrame(for: toViewController)
+            } else {
+                fromViewController.view.frame = transitionContext.finalFrame(for: fromViewController)
+            }
+            transitionContext.completeTransition(true)
+
+            fromViewController.endAppearanceTransition()
+            toViewController.endAppearanceTransition()
+            return
         }
 
         UIView.animate(
@@ -50,6 +67,9 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
                 }
             }) { done in
                 transitionContext.completeTransition(done)
+
+                fromViewController.endAppearanceTransition()
+                toViewController.endAppearanceTransition()
         }
     }
 }

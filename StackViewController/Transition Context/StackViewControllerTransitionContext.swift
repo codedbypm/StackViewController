@@ -16,9 +16,10 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
     var transitionWasCancelled: Bool = false
     var presentationStyle: UIModalPresentationStyle = .custom
     var targetTransform: CGAffineTransform = .identity
-
+    
     // MARK: - Private properties
 
+    private let transitionType: HorizontalSlideTransitionType
     private var viewControllers: [UITransitionContextViewControllerKey: UIViewController]
     private var views: [UITransitionContextViewKey: UIView] {
         var views = [UITransitionContextViewKey: UIView]()
@@ -35,13 +36,23 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
 
     // MARK: - Init
 
-    init(from: UIViewController, to: UIViewController, containerView: UIView) {
+    init(from: UIViewController,
+         to: UIViewController,
+         containerView: UIView,
+         transitionType: HorizontalSlideTransitionType) {
         self.containerView = containerView
         viewControllers = [.from: from, .to: to]
+        self.transitionType = transitionType
     }
 
     func completeTransition(_ didComplete: Bool) {
-        
+        guard didComplete else {
+            return
+        }
+
+        view(forKey: .from)?.removeFromSuperview()
+        viewController(forKey: .from)?.didMove(toParent: nil)
+        viewController(forKey: .to)?.didMove(toParent: viewController(forKey: .from)?.parent)
     }
 
     func viewController(forKey key: UITransitionContextViewControllerKey) -> UIViewController? {
@@ -61,19 +72,28 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
     }
 
     func initialFrame(for vc: UIViewController) -> CGRect {
-        if let from = viewController(forKey: .from), from === vc {
+        switch transitionType {
+        case .slideIn:
+            if let from = viewController(forKey: .from), from === vc {
+                return containerView.bounds
+            }
+            return containerView.bounds.offsetBy(dx: containerView.bounds.width, dy: 0.0)
+        case .slideOut:
             return containerView.bounds
         }
-
-        return .zero
     }
 
     func finalFrame(for vc: UIViewController) -> CGRect {
-        if let to = viewController(forKey: .to), to === vc {
+        switch transitionType {
+        case .slideIn:
             return containerView.bounds
+        case .slideOut:
+            if let to = viewController(forKey: .to), to === vc {
+                return containerView.bounds
+            }
+
+            return containerView.bounds.offsetBy(dx: containerView.bounds.width, dy: 0.0)
         }
-        
-        return .zero
     }
 }
 

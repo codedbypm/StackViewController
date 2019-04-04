@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import NavigationController
+import StackViewController
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

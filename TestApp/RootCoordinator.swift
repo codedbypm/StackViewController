@@ -14,10 +14,15 @@ class RootCoordinator {
     let stackViewController: StackViewController
     let rootViewController = YellowViewController()
 
+
     init(window: UIWindow) {
         stackViewController = StackViewController(rootViewController: rootViewController)
-        rootViewController.didTapNext = {
-            self.stackViewController.show(PinkViewController(), animated: true)
+        rootViewController.onNext = {
+            let pink = PinkViewController()
+            pink.onBack = {
+                self.stackViewController.hide(pink, animated: true)
+            }
+            self.stackViewController.show(pink, animated: true)
         }
         window.rootViewController = stackViewController
         window.makeKeyAndVisible()

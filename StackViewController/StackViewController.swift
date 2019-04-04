@@ -12,15 +12,16 @@ public class StackViewController: UIViewController {
 
     // MARK: - Public properties
 
-    public var stack: [UIViewController] = [] {
-        didSet {
-            guard let topViewController = stack.last else { return }
-            addChild(topViewController)
-            view.addSubview(topViewController.view)
-            topViewController.view.pinEdges(to: view)
-            topViewController.didMove(toParent: self)
-        }
-    }
+    public var stack: [UIViewController] = []
+//    {
+//        didSet {
+//            guard let topViewController = stack.last else { return }
+//            addChild(topViewController)
+//            view.addSubview(topViewController.view)
+//            topViewController.view.pinEdges(to: view)
+//            topViewController.didMove(toParent: self)
+//        }
+//    }
 
     public var rootViewController: UIViewController? {
         return stack.first
@@ -59,7 +60,8 @@ public class StackViewController: UIViewController {
         let to = viewController
         let context = StackViewControllerTransitionContext(from: from,
                                                            to: viewController,
-                                                           containerView: view)
+                                                           containerView: view,
+                                                           transitionType: .slideIn)
         context.isAnimated = animated
 
         // 2. Store toViewController
@@ -72,8 +74,37 @@ public class StackViewController: UIViewController {
         // 4. Add to as child viewController
         addChild(to)
 
-       let animator = HorizontalSlideAnimator()
+        let animator = HorizontalSlideAnimator(direction: .slideIn)
         animator.animateTransition(using: context)
+    }
+
+    public func hide(_ viewController: UIViewController, animated: Bool) {
+        guard viewController === topViewController else {
+            assertionFailure("Error: Cannot hide a view controller which is not on top of the stack")
+            return
+        }
+
+        // 1. Configure objects
+        let from = viewController
+        let toIndex = stack.firstIndex(of: from)?.advanced(by: -1)
+        let to = stack[toIndex!]
+
+        let context = StackViewControllerTransitionContext(from: from,
+                                                           to: to,
+                                                           containerView: view,
+                                                           transitionType: .slideOut)
+        context.isAnimated = animated
+
+        // 2. Remove fromViewController
+        stack.removeLast()
+
+        // 3. Inform parent view controller
+        from.willMove(toParent: nil)
+        to.willMove(toParent: self)
+
+        let animator = HorizontalSlideAnimator(direction: .slideOut)
+        animator.animateTransition(using: context)
+
     }
 }
 

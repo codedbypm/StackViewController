@@ -45,25 +45,3 @@ class RootCoordinator {
         window.makeKeyAndVisible()
     }
 }
-
-// Start
-//<TestApp.YellowViewController: 0x7fa817e0a520>: willMove(toParent:)
-//<TestApp.YellowViewController: 0x7fa817e0a520>: viewWillAppear
-//<TestApp.YellowViewController: 0x7fa817e0a520>: viewDidAppear
-//<TestApp.YellowViewController: 0x7fa817e0a520>: didMove(toParent:)
-
-// Next
-//<TestApp.PinkViewController: 0x7fa817e19dc0>: willMove(toParent:)
-//<TestApp.YellowViewController: 0x7fa817e0a520>: viewWillDisappear
-//<TestApp.PinkViewController: 0x7fa817e19dc0>: viewWillAppear
-//<TestApp.YellowViewController: 0x7fa817e0a520>: viewDidDisappear
-//<TestApp.PinkViewController: 0x7fa817e19dc0>: viewDidAppear
-//<TestApp.PinkViewController: 0x7fa817e19dc0>: didMove(toParent:)
-
-// Back
-//<TestApp.PinkViewController: 0x7fa817e19dc0>: willMove(toParent:)
-//<TestApp.PinkViewController: 0x7fa817e19dc0>: viewWillDisappear
-//<TestApp.YellowViewController: 0x7fa817e0a520>: viewWillAppear
-//<TestApp.PinkViewController: 0x7fa817e19dc0>: viewDidDisappear
-//<TestApp.PinkViewController: 0x7fa817e19dc0>: didMove(toParent:)
-//<TestApp.YellowViewController: 0x7fa817e0a520>: viewDidAppear

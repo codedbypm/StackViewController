@@ -74,7 +74,7 @@ public class StackViewController: UIViewController {
         // 4. Add to as child viewController
         addChild(to)
 
-        let animator = HorizontalSlideAnimator(direction: .slideIn)
+        let animator = HorizontalSlideAnimator()
         animator.animateTransition(using: context)
     }
 
@@ -102,7 +102,7 @@ public class StackViewController: UIViewController {
         from.willMove(toParent: nil)
         to.willMove(toParent: self)
 
-        let animator = HorizontalSlideAnimator(direction: .slideOut)
+        let animator = HorizontalSlideAnimator()
         animator.animateTransition(using: context)
 
     }

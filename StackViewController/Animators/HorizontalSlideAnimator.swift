@@ -13,12 +13,7 @@ enum HorizontalSlideTransitionType {
 
 class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
-    required init(direction: HorizontalSlideTransitionType) {
-        self.transitionType = direction
-    }
-
     let animationDuration: TimeInterval = 0.3
-    let transitionType: HorizontalSlideTransitionType
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return animationDuration
@@ -32,13 +27,14 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             return
         }
 
-        let containerView = transitionContext.containerView
+        let containerView = transitionContext.containerView        
+        let isSlidingIn = transitionContext.initialFrame(for: toViewController).minX == containerView.bounds.width
 
         toViewController.view.frame = transitionContext.initialFrame(for: toViewController)
         
-        if case .slideIn = transitionType {
+        if isSlidingIn {
             containerView.addSubview(toViewController.view)
-        } else if case .slideOut = transitionType {
+        } else {
             containerView.insertSubview(toViewController.view, belowSubview: fromViewController.view)
         }
 
@@ -47,9 +43,9 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             delay: 0.0,
             options: [.curveEaseInOut],
             animations: {
-                if case .slideIn = self.transitionType {
+                if isSlidingIn {
                     toViewController.view.frame = transitionContext.finalFrame(for: toViewController)
-                } else if case .slideOut = self.transitionType {
+                } else {
                     fromViewController.view.frame = transitionContext.finalFrame(for: fromViewController)
                 }
             }) { done in

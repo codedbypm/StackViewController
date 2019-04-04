@@ -32,9 +32,9 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         let animated = transitionContext.isAnimated
 
         fromViewController.beginAppearanceTransition(false, animated: animated)
+        toViewController.beginAppearanceTransition(true, animated: animated)
 
         toViewController.view.frame = transitionContext.initialFrame(for: toViewController)
-        toViewController.beginAppearanceTransition(true, animated: animated)
 
         if isSlidingIn {
             containerView.addSubview(toViewController.view)
@@ -42,16 +42,24 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             containerView.insertSubview(toViewController.view, belowSubview: fromViewController.view)
         }
 
-        guard animated else {
+        let animations: (() -> Void) = {
             if isSlidingIn {
                 toViewController.view.frame = transitionContext.finalFrame(for: toViewController)
             } else {
                 fromViewController.view.frame = transitionContext.finalFrame(for: fromViewController)
             }
-            transitionContext.completeTransition(true)
+        }
 
+        let whenAnimationsDone: ((Bool) -> Void) = { didFinish in
+            transitionContext.completeTransition(didFinish)
+            
             fromViewController.endAppearanceTransition()
             toViewController.endAppearanceTransition()
+        }
+
+        guard animated else {
+            animations()
+            whenAnimationsDone(true)
             return
         }
 
@@ -59,17 +67,7 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             withDuration: animationDuration,
             delay: 0.0,
             options: [.curveEaseInOut],
-            animations: {
-                if isSlidingIn {
-                    toViewController.view.frame = transitionContext.finalFrame(for: toViewController)
-                } else {
-                    fromViewController.view.frame = transitionContext.finalFrame(for: fromViewController)
-                }
-            }) { done in
-                transitionContext.completeTransition(done)
-
-                fromViewController.endAppearanceTransition()
-                toViewController.endAppearanceTransition()
-        }
+            animations: animations,
+            completion: whenAnimationsDone)
     }
 }

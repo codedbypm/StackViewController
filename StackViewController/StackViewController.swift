@@ -180,15 +180,8 @@ private extension StackViewController {
         if let from = viewControllerBefore(to) {
             performTransition(from: from, to: to, animated: animated)
         } else {
-
+            performInitialTransition()
         }
-    }
-
-    func showTopViewController(_ topViewController: UIViewController, animated: Bool) {
-        addChild(topViewController)
-        view.addSubview(topViewController.view)
-        topViewController.view.pinEdgesToSuperView()
-        topViewController.didMove(toParent: self)
     }
 
     func performTransition(from: UIViewController, to: UIViewController, animated: Bool) {
@@ -197,6 +190,18 @@ private extension StackViewController {
         let animator = animatorForTransitionFrom(from, to: to)
 
         animator.animateTransition(using: context)
+    }
+
+    func performInitialTransition() {
+        guard let to = topViewController else {
+            assertionFailure("Error: trying to show the top viewController but there are no view controllers in the stack")
+            return
+        }
+
+        addChild(to)
+        view.addSubview(to.view)
+        to.view.pinEdgesToSuperView()
+        to.didMove(toParent: self)
     }
 
 }

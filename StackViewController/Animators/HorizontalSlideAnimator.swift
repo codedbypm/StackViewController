@@ -14,6 +14,12 @@ enum HorizontalSlideTransitionType {
 class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
     let animationDuration: TimeInterval = 0.3
+    let sourceController: UIViewController
+
+    required init(source: UIViewController) {
+        sourceController = source
+        super.init()
+    }
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return animationDuration
@@ -24,6 +30,7 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             let fromViewController = transitionContext.viewController(forKey: .from),
             let toViewController = transitionContext.viewController(forKey: .to)
         else {
+            transitionContext.completeTransition(false)
             return
         }
 
@@ -34,6 +41,8 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         fromViewController.beginAppearanceTransition(false, animated: animated)
         toViewController.beginAppearanceTransition(true, animated: animated)
 
+        fromViewController.willMove(toParent: nil)
+        sourceController.addChild(toViewController)
         toViewController.view.frame = transitionContext.initialFrame(for: toViewController)
 
         if isSlidingIn {

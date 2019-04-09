@@ -16,7 +16,8 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
     var transitionWasCancelled: Bool = false
     var presentationStyle: UIModalPresentationStyle = .custom
     var targetTransform: CGAffineTransform = .identity
-    
+    var onTransitionFinished: ((Bool) -> Void)?
+
     // MARK: - Private properties
 
     private let transitionType: HorizontalSlideTransitionType
@@ -46,15 +47,7 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
     }
 
     func completeTransition(_ didComplete: Bool) {
-        guard didComplete else {
-            return
-        }
-
-        let parent = viewController(forKey: .from)?.parent
-        viewController(forKey: .to)?.didMove(toParent: parent)
-
-        view(forKey: .from)?.removeFromSuperview()
-        viewController(forKey: .from)?.removeFromParent()
+        onTransitionFinished?(didComplete)
     }
 
     func viewController(forKey key: UITransitionContextViewControllerKey) -> UIViewController? {

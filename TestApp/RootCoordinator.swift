@@ -8,20 +8,6 @@
 
 import StackViewController
 
-extension UINavigationController: StackViewControllerHandling {}
-
-class StackNavigationController: UINavigationController {
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print("\(String(describing: self)): viewWillAppear")
-    }
-
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print("\(String(describing: self)): viewDidAppear")
-    }
-}
-
 class RootCoordinator {
 
     lazy var window: UIWindow = UIWindow(frame: UIScreen.main.bounds)
@@ -29,11 +15,7 @@ class RootCoordinator {
     let rootViewController = YellowViewController()
 
     init(window: UIWindow) {
-        if true {
-            stackViewController = StackViewController(rootViewController: rootViewController)
-        } else {
-            stackViewController = StackNavigationController(rootViewController: rootViewController)
-        }
+        stackViewController = StackViewController(viewControllers: [rootViewController])
         rootViewController.onNext = {
             let pink = PinkViewController()
             pink.onBack = {

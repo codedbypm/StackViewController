@@ -6,61 +6,66 @@
 //  Copyright © 2019 codedby.pm. All rights reserved.
 //
 
-enum HorizontalSlideTransitionType {
+public enum HorizontalSlideTransitionType {
     case slideIn
     case slideOut
 }
 
-class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+public class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
     let animationDuration: TimeInterval = 0.3
-    let sourceController: UIViewController
 
-    required init(source: UIViewController) {
-        sourceController = source
+    private let transitionType: HorizontalSlideTransitionType
+
+    public required init(type: HorizontalSlideTransitionType) {
+        transitionType = type
         super.init()
     }
 
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return animationDuration
     }
 
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    public func animateTransition(using context: UIViewControllerContextTransitioning) {
         guard
-            let fromViewController = transitionContext.viewController(forKey: .from),
-            let toViewController = transitionContext.viewController(forKey: .to)
+            let from = context.viewController(forKey: .from),
+            let to = context.viewController(forKey: .to)
         else {
-            transitionContext.completeTransition(false)
+            context.completeTransition(false)
             return
         }
 
-        let containerView = transitionContext.containerView
-        let isSlidingIn = transitionContext.initialFrame(for: toViewController).minX == containerView.bounds.width
-        let animated = transitionContext.isAnimated
+        let containerView = context.containerView
+        let horizontalOffset = containerView.bounds.width
+        let frameWhenOffScreen = containerView.bounds.offsetBy(dx: horizontalOffset, dy: 0.0)
+        let isSlidingIn = (transitionType == .slideIn)
 
-        toViewController.view.frame = transitionContext.initialFrame(for: toViewController)
-
-        if isSlidingIn {
-            containerView.addSubview(toViewController.view)
-        } else {
-            containerView.insertSubview(toViewController.view, belowSubview: fromViewController.view)
+        let beforeAnimationsStart: (() -> Void) = {
+            if isSlidingIn {
+                containerView.addSubview(to.view)
+                to.view.frame = frameWhenOffScreen
+            } else {
+                containerView.insertSubview(to.view, belowSubview: from.view)
+                to.view.frame = containerView.bounds
+            }
         }
 
         let animations: (() -> Void) = {
             if isSlidingIn {
-                toViewController.view.frame = transitionContext.finalFrame(for: toViewController)
+                to.view.frame = context.finalFrame(for: to)
             } else {
-                fromViewController.view.frame = transitionContext.finalFrame(for: fromViewController)
+                to.view.frame = context.finalFrame(for: to)
+                from.view.frame = frameWhenOffScreen
             }
         }
 
-        let whenAnimationsDone: ((Bool) -> Void) = { didFinish in
-            transitionContext.completeTransition(didFinish)
-        }
+        let whenAnimationsFinish: ((Bool) -> Void) = { context.completeTransition($0) }
 
-        guard animated else {
+        beforeAnimationsStart()
+
+        guard context.isAnimated else {
             animations()
-            whenAnimationsDone(true)
+            whenAnimationsFinish(true)
             return
         }
 
@@ -69,6 +74,6 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             delay: 0.0,
             options: [.curveEaseInOut],
             animations: animations,
-            completion: whenAnimationsDone)
+            completion: whenAnimationsFinish)
     }
 }

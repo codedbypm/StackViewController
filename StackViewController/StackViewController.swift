@@ -9,7 +9,6 @@
 import UIKit
 
 public protocol StackViewControllerHandling: UIViewController {
-    init(viewControllers: [UIViewController])
     func popViewController(animated: Bool) -> UIViewController?
     func pushViewController(_: UIViewController, animated: Bool)
 }
@@ -137,7 +136,8 @@ private extension StackViewController {
                                                         to: to) {
             return animator
         } else {
-            return HorizontalSlideAnimator(source: self)
+            let transitionType = self.transitionType(fromViewController: from, toViewController: to)
+            return HorizontalSlideAnimator(type: transitionType)
         }
     }
 

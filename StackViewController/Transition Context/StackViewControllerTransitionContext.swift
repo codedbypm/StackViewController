@@ -67,28 +67,17 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
     }
 
     func initialFrame(for vc: UIViewController) -> CGRect {
-        switch transitionType {
-        case .slideIn:
-            if let from = viewController(forKey: .from), from === vc {
-                return containerView.bounds
-            }
-            return containerView.bounds.offsetBy(dx: containerView.bounds.width, dy: 0.0)
-        case .slideOut:
+        if vc == viewController(forKey: .from) {
             return containerView.bounds
         }
+        return .zero
     }
 
     func finalFrame(for vc: UIViewController) -> CGRect {
-        switch transitionType {
-        case .slideIn:
+        if vc == viewController(forKey: .to) {
             return containerView.bounds
-        case .slideOut:
-            if let to = viewController(forKey: .to), to === vc {
-                return containerView.bounds
-            }
-
-            return containerView.bounds.offsetBy(dx: containerView.bounds.width, dy: 0.0)
         }
+        return .zero
     }
 }
 

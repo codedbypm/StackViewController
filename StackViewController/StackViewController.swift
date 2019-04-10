@@ -35,7 +35,16 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
     public override var shouldAutomaticallyForwardAppearanceMethods: Bool {
         return false
     }
-    
+
+    // MARK: - Private properties
+
+    private lazy var popGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
+        let recognizer = UIScreenEdgePanGestureRecognizer()
+        recognizer.edges = .left
+        recognizer.addTarget(self, action: #selector(didDetectPanningFromEdge(_:)))
+        return recognizer
+    }()
+
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {
@@ -85,14 +94,15 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
     }
 }
 
+// MARK: - UIViewController
+
 public extension StackViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addGestureRecognizer(popGestureRecognizer)
 
-        if let topViewController = topViewController {
-            pushViewController(topViewController, animated: false)
-        }
+        showTopViewController(animated: false)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -115,6 +125,8 @@ public extension StackViewController {
         topViewController?.endAppearanceTransition()
     }
 }
+
+// MARK: - Private
 
 private extension StackViewController {
 
@@ -176,7 +188,6 @@ private extension StackViewController {
 
     func showTopViewController(animated: Bool) {
         guard let to = topViewController else {
-            assertionFailure("Error: trying to show the top viewController but there are no view controllers in the stack")
             return
         }
 
@@ -213,4 +224,11 @@ private extension StackViewController {
         to.didMove(toParent: self)
     }
 
+    @objc func didDetectPanningFromEdge(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        guard viewControllers.count > 1 else {
+            return
+        }
+
+        popViewController(animated: true)
+    }
 }

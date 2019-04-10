@@ -38,11 +38,6 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         let isSlidingIn = transitionContext.initialFrame(for: toViewController).minX == containerView.bounds.width
         let animated = transitionContext.isAnimated
 
-        fromViewController.beginAppearanceTransition(false, animated: animated)
-        toViewController.beginAppearanceTransition(true, animated: animated)
-
-        fromViewController.willMove(toParent: nil)
-        sourceController.addChild(toViewController)
         toViewController.view.frame = transitionContext.initialFrame(for: toViewController)
 
         if isSlidingIn {
@@ -61,9 +56,6 @@ class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
         let whenAnimationsDone: ((Bool) -> Void) = { didFinish in
             transitionContext.completeTransition(didFinish)
-            
-            fromViewController.endAppearanceTransition()
-            toViewController.endAppearanceTransition()
         }
 
         guard animated else {

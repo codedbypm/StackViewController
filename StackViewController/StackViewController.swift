@@ -155,9 +155,12 @@ private extension StackViewController {
         context.onTransitionFinished = { didComplete in
             guard didComplete else { return }
 
-            to.didMove(toParent: self)
             from.view.removeFromSuperview()
             from.removeFromParent()
+            from.endAppearanceTransition()
+
+            to.didMove(toParent: self)
+            to.endAppearanceTransition()
         }
 
         return context
@@ -188,6 +191,12 @@ private extension StackViewController {
 
         let context = transitionContextForTransitionFrom(from, to: to, animated: animated)
         let animator = animatorForTransitionFrom(from, to: to)
+
+        from.willMove(toParent: nil)
+        from.beginAppearanceTransition(false, animated: animated)
+
+        addChild(to)
+        to.beginAppearanceTransition(true, animated: animated)
 
         animator.animateTransition(using: context)
     }

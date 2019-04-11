@@ -79,17 +79,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
             return nil
         }
 
-        let context = transitionContextForTransitionFrom(from, to: to, animated: animated)
-        context.onTransitionFinished = { didComplete in
-            guard didComplete else { return }
-
-            to.didMove(toParent: self)
-            from.view.removeFromSuperview()
-            from.removeFromParent()
-        }
-
-        animatorForTransitionFrom(from, to: to).animateTransition(using: context)
-
+        performTransition(from: from, to: to, animated: animated)
         return viewControllers.removeLast()
     }
 }

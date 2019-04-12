@@ -83,14 +83,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		FD00021D2260CC6E00A87FFB /* Interactive Animators */ = {
-			isa = PBXGroup;
-			children = (
-				FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveAnimator.swift */,
-			);
-			path = "Interactive Animators";
-			sourceTree = "<group>";
-		};
 		FD67E56B225250E10051786B = {
 			isa = PBXGroup;
 			children = (
@@ -112,11 +104,11 @@
 		FD67E577225250E10051786B /* StackViewController */ = {
 			isa = PBXGroup;
 			children = (
-				FD00021D2260CC6E00A87FFB /* Interactive Animators */,
-				FD67E5F62254F19B0051786B /* Transition Context */,
 				FD67E5F12252AF0F0051786B /* Extensions */,
-				FD67E5C622525F990051786B /* Animators */,
+				FD67E5C7225260C40051786B /* HorizontalSlideAnimator.swift */,
+				FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveAnimator.swift */,
 				FD67E5C2225258840051786B /* StackViewController.swift */,
+				FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */,
 				FD67E578225250E10051786B /* StackViewController.h */,
 				FD67E579225250E10051786B /* Info.plist */,
 			);
@@ -136,28 +128,12 @@
 			path = TestApp;
 			sourceTree = "<group>";
 		};
-		FD67E5C622525F990051786B /* Animators */ = {
-			isa = PBXGroup;
-			children = (
-				FD67E5C7225260C40051786B /* HorizontalSlideAnimator.swift */,
-			);
-			path = Animators;
-			sourceTree = "<group>";
-		};
 		FD67E5F12252AF0F0051786B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				FD67E5F922552D3A0051786B /* UIView+Extensions.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		FD67E5F62254F19B0051786B /* Transition Context */ = {
-			isa = PBXGroup;
-			children = (
-				FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */,
-			);
-			path = "Transition Context";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

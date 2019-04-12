@@ -45,6 +45,8 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         return recognizer
     }()
 
+    private var interactiveAnimator: HorizontalSlideInteractiveAnimator?
+
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {
@@ -214,6 +216,47 @@ private extension StackViewController {
             return
         }
 
-        popViewController(animated: true)
+        switch recognizer.state {
+        case .began:
+            startInteractiveTransition()
+        case .changed:
+            updateInteractiveTransition()
+        case .cancelled:
+            cancelInteractiveTransition()
+        case .ended:
+            stopInteractiveTransition()
+        default:
+            break
+        }
+    }
+
+    func startInteractiveTransition() {
+        print("START PanningFromEdge")
+
+        guard let from = topViewController else { return }
+        guard let to = viewControllerBefore(from) else { return }
+
+        let context = transitionContextForTransitionFrom(from, to: to, animated: true)
+        context.isInteractive = true
+
+        let animator = animatorForTransitionFrom(from, to: to)
+
+        interactiveAnimator = HorizontalSlideInteractiveAnimator(animator: animator)
+        interactiveAnimator?.startInteractiveTransition(context)
+    }
+
+    func updateInteractiveTransition() {
+        print("UPDATE PanningFromEdge")
+        interactiveAnimator?.update(0.0)
+    }
+
+    func cancelInteractiveTransition() {
+        print("CANCEL PanningFromEdge")
+        interactiveAnimator?.cancel()
+    }
+
+    func stopInteractiveTransition() {
+        print("STOP PanningFromEdge")
+        interactiveAnimator?.finish()
     }
 }

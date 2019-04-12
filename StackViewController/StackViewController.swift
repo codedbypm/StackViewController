@@ -64,8 +64,15 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
             return
         }
 
+        guard let from = topViewController else {
+            showTopViewController()
+            return
+        }
+
+        let to = viewController
+
         viewControllers.append(viewController)
-        showTopViewController(animated: animated)
+        performTransition(from: from, to: to, animated: animated)
     }
 
     public func popViewController(animated: Bool) -> UIViewController? {
@@ -92,7 +99,7 @@ public extension StackViewController {
         super.viewDidLoad()
         view.addGestureRecognizer(popGestureRecognizer)
 
-        showTopViewController(animated: false)
+        showTopViewController()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -176,18 +183,6 @@ private extension StackViewController {
         }
     }
 
-    func showTopViewController(animated: Bool) {
-        guard let to = topViewController else {
-            return
-        }
-
-        if let from = viewControllerBefore(to) {
-            performTransition(from: from, to: to, animated: animated)
-        } else {
-            performInitialTransition()
-        }
-    }
-
     func performTransition(from: UIViewController, to: UIViewController, animated: Bool) {
 
         let context = transitionContextForTransitionFrom(from, to: to, animated: animated)
@@ -202,7 +197,7 @@ private extension StackViewController {
         animator.animateTransition(using: context)
     }
 
-    func performInitialTransition() {
+    func showTopViewController() {
         guard let to = topViewController else {
             assertionFailure("Error: trying to show the top viewController but there are no view controllers in the stack")
             return

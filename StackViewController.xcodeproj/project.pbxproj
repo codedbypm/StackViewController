@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FD00021F2260CC9100A87FFB /* HorizontalSlideInteractiveAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveAnimator.swift */; };
 		FD67E57A225250E10051786B /* StackViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD67E578225250E10051786B /* StackViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD67E5B3225257DA0051786B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5B2225257DA0051786B /* AppDelegate.swift */; };
 		FD67E5BD225257DB0051786B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */; };
@@ -46,6 +47,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSlideInteractiveAnimator.swift; sourceTree = "<group>"; };
 		FD67E575225250E10051786B /* StackViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StackViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD67E578225250E10051786B /* StackViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StackViewController.h; sourceTree = "<group>"; };
 		FD67E579225250E10051786B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -81,6 +83,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FD00021D2260CC6E00A87FFB /* Interactive Animators */ = {
+			isa = PBXGroup;
+			children = (
+				FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveAnimator.swift */,
+			);
+			path = "Interactive Animators";
+			sourceTree = "<group>";
+		};
 		FD67E56B225250E10051786B = {
 			isa = PBXGroup;
 			children = (
@@ -102,6 +112,7 @@
 		FD67E577225250E10051786B /* StackViewController */ = {
 			isa = PBXGroup;
 			children = (
+				FD00021D2260CC6E00A87FFB /* Interactive Animators */,
 				FD67E5F62254F19B0051786B /* Transition Context */,
 				FD67E5F12252AF0F0051786B /* Extensions */,
 				FD67E5C622525F990051786B /* Animators */,
@@ -261,6 +272,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD00021F2260CC9100A87FFB /* HorizontalSlideInteractiveAnimator.swift in Sources */,
 				FD67E5C8225260C40051786B /* HorizontalSlideAnimator.swift in Sources */,
 				FD67E5FA22552D3A0051786B /* UIView+Extensions.swift in Sources */,
 				FD67E5F82254F2010051786B /* StackViewControllerTransitionContext.swift in Sources */,

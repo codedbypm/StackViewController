@@ -11,7 +11,7 @@ public enum HorizontalSlideTransitionType {
     case slideOut
 }
 
-public class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+public class HorizontalSlideAnimator: NSObject {
 
     let animationsDuration: TimeInterval = 0.3
 
@@ -22,6 +22,11 @@ public class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransiti
         transitionType = type
         super.init()
     }
+}
+
+// MARK: - UIViewControllerAnimatedTransitioning
+
+extension HorizontalSlideAnimator: UIViewControllerAnimatedTransitioning {
 
     public func transitionDuration(using _: UIViewControllerContextTransitioning?) -> TimeInterval {
         return animationsDuration
@@ -38,6 +43,13 @@ public class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransiti
         }
     }
 
+    public func interruptibleAnimator(using _: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
+        guard let animator = propertyAnimator else {
+            fatalError("Fatal: the `propertyAnimator` cannot be nil")
+        }
+
+        return animator
+    }
 }
 
 private extension HorizontalSlideAnimator {

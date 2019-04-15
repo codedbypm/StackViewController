@@ -50,6 +50,10 @@ extension HorizontalSlideAnimator: UIViewControllerAnimatedTransitioning {
 
         return animator
     }
+
+    public func animationEnded(_ transitionCompleted: Bool) {
+        propertyAnimator = nil
+    }
 }
 
 private extension HorizontalSlideAnimator {

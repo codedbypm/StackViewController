@@ -21,6 +21,8 @@ class HorizontalSlideInteractiveAnimator: NSObject {
         self.context = context
         self.animator = animator
         self.gestureRecognizer = gestureRecognizer
+        super.init()
+
         gestureRecognizer.addTarget(self, action: #selector(didDetectPanningFromEdge(_:)))
     }
 
@@ -48,8 +50,10 @@ private extension HorizontalSlideInteractiveAnimator {
     @objc func didDetectPanningFromEdge(_ recognizer: UIScreenEdgePanGestureRecognizer) {
         switch recognizer.state {
         case .began:
-            startInteractiveTransition()
+            print("START PanningFromEdge")
+            startInteractiveTransition(context)
         case .changed:
+            print("UPDATE PanningFromEdge")
             updateInteractiveTransition(recognizer)
         case .cancelled:
             cancelInteractiveTransition()
@@ -60,23 +64,8 @@ private extension HorizontalSlideInteractiveAnimator {
         }
     }
 
-    func startInteractiveTransition() {
-        print("START PanningFromEdge")
-
-        guard let from = topViewController else { return }
-        guard let to = viewControllerBefore(from) else { return }
-
-        let context = transitionContextForTransitionFrom(from, to: to, interactive: true)
-        let animator = animatorForTransitionFrom(from, to: to)
-
-        interactiveAnimator = HorizontalSlideInteractiveAnimator(context: context,
-                                                                 animator: animator,
-                                                                 gestureRecognizer: popGestureRecognizer)
-        interactiveAnimator?.startInteractiveTransition()
-    }
 
     func updateInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {
-        print("UPDATE PanningFromEdge")
 
         let translation = recognizer.translation(in: recognizer.view)
         let maxTranslationX: CGFloat
@@ -88,7 +77,7 @@ private extension HorizontalSlideInteractiveAnimator {
         }
         let percentage = translation.x/maxTranslationX
 
-        interactiveAnimator?.updateInteractiveTransition(progress: percentage)
+        updateInteractiveTransition(progress: percentage)
     }
 
     func cancelInteractiveTransition() {

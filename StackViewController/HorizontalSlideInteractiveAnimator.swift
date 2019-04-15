@@ -12,12 +12,24 @@ class HorizontalSlideInteractiveAnimator: NSObject {
 
     let animator: UIViewControllerAnimatedTransitioning
 
-    init(animator: UIViewControllerAnimatedTransitioning) {
+    private let context: UIViewControllerContextTransitioning
+    private let gestureRecognizer: UIScreenEdgePanGestureRecognizer
+
+    init(context: UIViewControllerContextTransitioning,
+         animator: UIViewControllerAnimatedTransitioning,
+         gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+        self.context = context
         self.animator = animator
+        self.gestureRecognizer = gestureRecognizer
+        gestureRecognizer.addTarget(self, action: #selector(didDetectPanningFromEdge(_:)))
     }
 
-    public func updateInteractiveTransition(_ percentage: CGFloat) {
-        
+    public func startInteractiveTransition() {
+        startInteractiveTransition(context)
+    }
+
+    public func updateInteractiveTransition(progress: CGFloat) {
+        context.updateInteractiveTransition(progress)
     }
 }
 
@@ -28,5 +40,64 @@ extension HorizontalSlideInteractiveAnimator: UIViewControllerInteractiveTransit
     public func startInteractiveTransition(_ context: UIViewControllerContextTransitioning) {
 
         animator.animateTransition(using: context)
+    }
+}
+
+private extension HorizontalSlideInteractiveAnimator {
+    
+    @objc func didDetectPanningFromEdge(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        switch recognizer.state {
+        case .began:
+            startInteractiveTransition()
+        case .changed:
+            updateInteractiveTransition(recognizer)
+        case .cancelled:
+            cancelInteractiveTransition()
+        case .ended:
+            stopInteractiveTransition()
+        default:
+            break
+        }
+    }
+
+    func startInteractiveTransition() {
+        print("START PanningFromEdge")
+
+        guard let from = topViewController else { return }
+        guard let to = viewControllerBefore(from) else { return }
+
+        let context = transitionContextForTransitionFrom(from, to: to, interactive: true)
+        let animator = animatorForTransitionFrom(from, to: to)
+
+        interactiveAnimator = HorizontalSlideInteractiveAnimator(context: context,
+                                                                 animator: animator,
+                                                                 gestureRecognizer: popGestureRecognizer)
+        interactiveAnimator?.startInteractiveTransition()
+    }
+
+    func updateInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        print("UPDATE PanningFromEdge")
+
+        let translation = recognizer.translation(in: recognizer.view)
+        let maxTranslationX: CGFloat
+
+        if let view = recognizer.view {
+            maxTranslationX = view.bounds.width
+        } else {
+            maxTranslationX = UIScreen.main.bounds.midX
+        }
+        let percentage = translation.x/maxTranslationX
+
+        interactiveAnimator?.updateInteractiveTransition(progress: percentage)
+    }
+
+    func cancelInteractiveTransition() {
+        print("CANCEL PanningFromEdge")
+        //        interactiveAnimator?.cancel()
+    }
+
+    func stopInteractiveTransition() {
+        print("STOP PanningFromEdge")
+        //        interactiveAnimator?.finish()
     }
 }

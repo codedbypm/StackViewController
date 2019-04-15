@@ -41,7 +41,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
     private lazy var popGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
         let recognizer = UIScreenEdgePanGestureRecognizer()
         recognizer.edges = .left
-        recognizer.addTarget(self, action: #selector(didDetectPanningFromEdge(_:)))
+        recognizer.delegate = self
         return recognizer
     }()
 
@@ -154,7 +154,8 @@ private extension StackViewController {
 
     func transitionContextForTransitionFrom(_ from: UIViewController,
                                             to: UIViewController,
-                                            animated: Bool) -> StackViewControllerTransitionContext {
+                                            animated: Bool = true,
+                                            interactive: Bool = false) -> StackViewControllerTransitionContext {
 
         let transitionType = self.transitionType(fromViewController: from, toViewController: to)
 
@@ -163,6 +164,7 @@ private extension StackViewController {
                                                            containerView: view,
                                                            transitionType: transitionType)
         context.isAnimated = animated
+        context.isInteractive = interactive
         context.onTransitionFinished = { didComplete in
             guard didComplete else { return }
 
@@ -210,53 +212,12 @@ private extension StackViewController {
         to.view.pinEdgesToSuperView()
         to.didMove(toParent: self)
     }
+}
 
-    @objc func didDetectPanningFromEdge(_ recognizer: UIScreenEdgePanGestureRecognizer) {
-        guard viewControllers.count > 1 else {
-            return
-        }
+extension StackViewController: UIGestureRecognizerDelegate {
 
-        switch recognizer.state {
-        case .began:
-            startInteractiveTransition()
-        case .changed:
-            updateInteractiveTransition()
-        case .cancelled:
-            cancelInteractiveTransition()
-        case .ended:
-            stopInteractiveTransition()
-        default:
-            break
-        }
-    }
-
-    func startInteractiveTransition() {
-        print("START PanningFromEdge")
-
-        guard let from = topViewController else { return }
-        guard let to = viewControllerBefore(from) else { return }
-
-        let context = transitionContextForTransitionFrom(from, to: to, animated: true)
-        context.isInteractive = true
-
-        let animator = animatorForTransitionFrom(from, to: to)
-
-        interactiveAnimator = HorizontalSlideInteractiveAnimator(animator: animator)
-        interactiveAnimator?.startInteractiveTransition(context)
-    }
-
-    func updateInteractiveTransition() {
-        print("UPDATE PanningFromEdge")
-        interactiveAnimator?.update(0.0)
-    }
-
-    func cancelInteractiveTransition() {
-        print("CANCEL PanningFromEdge")
-        interactiveAnimator?.cancel()
-    }
-
-    func stopInteractiveTransition() {
-        print("STOP PanningFromEdge")
-        interactiveAnimator?.finish()
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard gestureRecognizer === popGestureRecognizer else { return false }
+        return viewControllers.count > 1
     }
 }

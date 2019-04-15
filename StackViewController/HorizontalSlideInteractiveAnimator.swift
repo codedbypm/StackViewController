@@ -8,7 +8,7 @@
 
 import Foundation
 
-class HorizontalSlideInteractiveAnimator: UIPercentDrivenInteractiveTransition {
+class HorizontalSlideInteractiveAnimator: NSObject {
 
     let animator: UIViewControllerAnimatedTransitioning
 
@@ -16,8 +16,17 @@ class HorizontalSlideInteractiveAnimator: UIPercentDrivenInteractiveTransition {
         self.animator = animator
     }
 
-    public override func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
+    public func updateInteractiveTransition(_ percentage: CGFloat) {
+        
+    }
+}
 
+// MARK: - UIViewControllerInteractiveTransitioning
 
+extension HorizontalSlideInteractiveAnimator: UIViewControllerInteractiveTransitioning {
+
+    public func startInteractiveTransition(_ context: UIViewControllerContextTransitioning) {
+
+        animator.animateTransition(using: context)
     }
 }

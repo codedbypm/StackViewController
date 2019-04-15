@@ -217,7 +217,25 @@ private extension StackViewController {
 extension StackViewController: UIGestureRecognizerDelegate {
 
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard gestureRecognizer === popGestureRecognizer else { return false }
-        return viewControllers.count > 1
+        if gestureRecognizer === popGestureRecognizer {
+            return screenEdgePanGestureRecognizerShouldBegin()
+        } else {
+            return false
+        }
+    }
+
+    private func screenEdgePanGestureRecognizerShouldBegin() -> Bool {
+        guard viewControllers.count > 1 else { return false }
+        guard interactiveAnimator == nil else { return false }
+        guard let from = topViewController else { return false }
+        guard let to = viewControllerBefore(from) else { return false }
+
+        let context = transitionContextForTransitionFrom(from, to: to, interactive: true)
+        let animator = animatorForTransitionFrom(from, to: to)
+
+        interactiveAnimator = HorizontalSlideInteractiveAnimator(context: context,
+                                                                 animator: animator,
+                                                                 gestureRecognizer: popGestureRecognizer)
+        return true
     }
 }

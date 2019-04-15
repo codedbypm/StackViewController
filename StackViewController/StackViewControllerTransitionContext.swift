@@ -8,7 +8,11 @@
 
 import Foundation
 
-class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTransitioning {
+protocol StackViewControllerContextTransitioning: UIViewControllerContextTransitioning {
+    var frameOfViewWhenOffScreen: CGRect { get }
+}
+
+class StackViewControllerTransitionContext: NSObject, StackViewControllerContextTransitioning {
 
     let containerView: UIView
     var isAnimated: Bool = false
@@ -17,6 +21,11 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
     var presentationStyle: UIModalPresentationStyle = .custom
     var targetTransform: CGAffineTransform = .identity
     var onTransitionFinished: ((Bool) -> Void)?
+
+    var frameOfViewWhenOffScreen: CGRect {
+        let horizontalOffset = containerView.bounds.width
+        return containerView.bounds.offsetBy(dx: horizontalOffset, dy: 0.0)
+    }
 
     // MARK: - Private properties
 

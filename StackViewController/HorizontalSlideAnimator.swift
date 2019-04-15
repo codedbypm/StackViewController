@@ -13,67 +13,88 @@ public enum HorizontalSlideTransitionType {
 
 public class HorizontalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
-    let animationDuration: TimeInterval = 0.3
+    let animationsDuration: TimeInterval = 0.3
 
     private let transitionType: HorizontalSlideTransitionType
+    private var propertyAnimator: UIViewPropertyAnimator?
 
     public required init(type: HorizontalSlideTransitionType) {
         transitionType = type
         super.init()
     }
 
-    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return animationDuration
+    public func transitionDuration(using _: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return animationsDuration
     }
 
     public func animateTransition(using context: UIViewControllerContextTransitioning) {
-        guard
-            let from = context.viewController(forKey: .from),
-            let to = context.viewController(forKey: .to)
-        else {
-            context.completeTransition(false)
-            return
+        guard let context = context as? StackViewControllerContextTransitioning else { return }
+
+        switch transitionType {
+        case .slideIn:
+            animateSlideInTransition(using: context)
+        case .slideOut:
+            animateSlideOutTransition(using: context)
         }
+    }
+
+}
+
+private extension HorizontalSlideAnimator {
+
+    func animateSlideInTransition(using context: StackViewControllerContextTransitioning) {
+        guard let to = context.viewController(forKey: .to) else { return }
 
         let containerView = context.containerView
-        let horizontalOffset = containerView.bounds.width
-        let frameWhenOffScreen = containerView.bounds.offsetBy(dx: horizontalOffset, dy: 0.0)
-        let isSlidingIn = (transitionType == .slideIn)
 
-        let beforeAnimationsStart: (() -> Void) = {
-            if isSlidingIn {
-                containerView.addSubview(to.view)
-                to.view.frame = frameWhenOffScreen
-            } else {
-                containerView.insertSubview(to.view, belowSubview: from.view)
-                to.view.frame = containerView.bounds
-            }
-        }
-
-        let animations: (() -> Void) = {
-            if isSlidingIn {
-                to.view.frame = context.finalFrame(for: to)
-            } else {
-                to.view.frame = context.finalFrame(for: to)
-                from.view.frame = frameWhenOffScreen
-            }
-        }
-
-        let whenAnimationsFinish: ((Bool) -> Void) = { context.completeTransition($0) }
-
-        beforeAnimationsStart()
+        containerView.addSubview(to.view)
+        to.view.frame = context.frameOfViewWhenOffScreen
 
         guard context.isAnimated else {
-            animations()
-            whenAnimationsFinish(true)
+            to.view.frame = context.finalFrame(for: to)
+            context.completeTransition(true)
             return
         }
 
-        UIView.animate(
-            withDuration: animationDuration,
-            delay: 0.0,
-            options: [.curveEaseInOut],
-            animations: animations,
-            completion: whenAnimationsFinish)
+        configurePropertyAnimator(using: context) {
+            to.view.frame = context.finalFrame(for: to)
+        }
+
+        propertyAnimator?.startAnimation()
+    }
+
+    func animateSlideOutTransition(using context: StackViewControllerContextTransitioning) {
+        guard let from = context.viewController(forKey: .from) else { return }
+        guard let to = context.viewController(forKey: .to) else { return }
+
+        let containerView = context.containerView
+
+        containerView.insertSubview(to.view, belowSubview: from.view)
+        to.view.frame = containerView.bounds
+
+        guard context.isAnimated else {
+            context.completeTransition(true)
+            return
+        }
+
+        configurePropertyAnimator(using: context) {
+            to.view.frame = context.finalFrame(for: to)
+            from.view.frame = context.frameOfViewWhenOffScreen
+        }
+
+        propertyAnimator?.startAnimation()
+    }
+
+    func configurePropertyAnimator(using context: UIViewControllerContextTransitioning,
+                                   animations: @escaping () -> Void) {
+
+        propertyAnimator = UIViewPropertyAnimator(duration: animationsDuration,
+                                                  curve: .easeInOut,
+                                                  animations: animations)
+
+        propertyAnimator?.addCompletion { position in
+            let completed = (position == .end)
+            context.completeTransition(completed)
+        }
     }
 }

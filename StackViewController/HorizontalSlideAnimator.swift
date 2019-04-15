@@ -44,11 +44,11 @@ extension HorizontalSlideAnimator: UIViewControllerAnimatedTransitioning {
     }
 
     public func interruptibleAnimator(using _: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
-        guard let animator = propertyAnimator else {
+        guard let propertyAnimator = propertyAnimator else {
             fatalError("Fatal: the `propertyAnimator` cannot be nil")
         }
 
-        return animator
+        return propertyAnimator
     }
 
     public func animationEnded(_ transitionCompleted: Bool) {

@@ -10,15 +10,13 @@ import Foundation
 
 class HorizontalSlideInteractiveAnimator: NSObject {
 
-    let animator: UIViewControllerAnimatedTransitioning
+    let animator: HorizontalSlideAnimator
+    var context: UIViewControllerContextTransitioning!
 
-    private let context: UIViewControllerContextTransitioning
     private let gestureRecognizer: UIScreenEdgePanGestureRecognizer
 
-    init(context: UIViewControllerContextTransitioning,
-         animator: UIViewControllerAnimatedTransitioning,
+    init(animator: HorizontalSlideAnimator,
          gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
-        self.context = context
         self.animator = animator
         self.gestureRecognizer = gestureRecognizer
         super.init()

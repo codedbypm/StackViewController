@@ -174,6 +174,8 @@ private extension StackViewController {
 
             to.didMove(toParent: self)
             to.endAppearanceTransition()
+
+            self.interactiveAnimator = nil
         }
 
         return context

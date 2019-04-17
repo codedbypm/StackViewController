@@ -8,11 +8,7 @@
 
 import Foundation
 
-protocol StackViewControllerContextTransitioning: UIViewControllerContextTransitioning {
-    var frameOfViewWhenOffScreen: CGRect { get }
-}
-
-class StackViewControllerTransitionContext: NSObject, StackViewControllerContextTransitioning {
+class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTransitioning {
 
     let containerView: UIView
     var isAnimated: Bool = false

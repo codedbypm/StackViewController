@@ -38,7 +38,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     // MARK: - Private properties
 
-    private lazy var popGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
+    private lazy var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
         let recognizer = UIScreenEdgePanGestureRecognizer()
         recognizer.edges = .left
         recognizer.delegate = self
@@ -99,7 +99,7 @@ public extension StackViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addGestureRecognizer(popGestureRecognizer)
+        view.addGestureRecognizer(screenEdgePanGestureRecognizer)
 
         showTopViewController()
     }
@@ -217,7 +217,7 @@ private extension StackViewController {
 extension StackViewController: UIGestureRecognizerDelegate {
 
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer === popGestureRecognizer {
+        if gestureRecognizer === screenEdgePanGestureRecognizer {
             return screenEdgePanGestureRecognizerShouldBegin()
         } else {
             return false
@@ -227,15 +227,17 @@ extension StackViewController: UIGestureRecognizerDelegate {
     private func screenEdgePanGestureRecognizerShouldBegin() -> Bool {
         guard viewControllers.count > 1 else { return false }
         guard interactiveAnimator == nil else { return false }
+
         guard let from = topViewController else { return false }
         guard let to = viewControllerBefore(from) else { return false }
+        guard let animator = animatorForTransitionFrom(from, to: to) as? HorizontalSlideAnimator else { return false }
 
         let context = transitionContextForTransitionFrom(from, to: to, interactive: true)
-        let animator = animatorForTransitionFrom(from, to: to)
 
-        interactiveAnimator = HorizontalSlideInteractiveAnimator(context: context,
-                                                                 animator: animator,
-                                                                 gestureRecognizer: popGestureRecognizer)
+        interactiveAnimator = HorizontalSlideInteractiveAnimator(animator: animator,
+                                                                 gestureRecognizer: screenEdgePanGestureRecognizer)
+        interactiveAnimator?.context = context
+        
         return true
     }
 }

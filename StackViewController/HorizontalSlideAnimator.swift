@@ -33,22 +33,24 @@ extension HorizontalSlideAnimator: UIViewControllerAnimatedTransitioning {
     }
 
     public func animateTransition(using context: UIViewControllerContextTransitioning) {
-        guard let context = context as? StackViewControllerContextTransitioning else { return }
+        prepareTransition(using: context)
 
-        switch transitionType {
-        case .slideIn:
-            animateSlideInTransition(using: context)
-        case .slideOut:
-            animateSlideOutTransition(using: context)
+        if context.isAnimated {
+            interruptibleAnimator(using: context).startAnimation()
+        } else {
+            completeNonAnimatedTransition(using: context)
         }
     }
 
-    public func interruptibleAnimator(using _: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
-        guard let propertyAnimator = propertyAnimator else {
-            fatalError("Fatal: the `propertyAnimator` cannot be nil")
-        }
+    public func interruptibleAnimator(using context: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
 
-        return propertyAnimator
+        if let propertyAnimator = propertyAnimator {
+            return propertyAnimator
+        } else {
+            let propertyAnimator = self.propertyAnimator(using: context)
+            self.propertyAnimator = propertyAnimator
+            return propertyAnimator
+        }
     }
 
     public func animationEnded(_ transitionCompleted: Bool) {
@@ -58,59 +60,75 @@ extension HorizontalSlideAnimator: UIViewControllerAnimatedTransitioning {
 
 private extension HorizontalSlideAnimator {
 
-    func animateSlideInTransition(using context: StackViewControllerContextTransitioning) {
+    func prepareTransition(using context: UIViewControllerContextTransitioning) {
+        switch transitionType {
+        case .slideIn:
+            prepareSlideInTransition(using: context)
+        case .slideOut:
+            prepareSlideOutTransition(using: context)
+        }
+    }
+
+    func prepareSlideInTransition(using context: UIViewControllerContextTransitioning) {
         guard let to = context.viewController(forKey: .to) else { return }
 
         let containerView = context.containerView
-
+        let frameOfViewWhenOffScreen = containerView.bounds.offsetBy(dx: containerView.bounds.width,
+                                                                     dy: 0.0)
         containerView.addSubview(to.view)
-        to.view.frame = context.frameOfViewWhenOffScreen
-
-        guard context.isAnimated else {
-            to.view.frame = context.finalFrame(for: to)
-            context.completeTransition(true)
-            return
-        }
-
-        configurePropertyAnimator(using: context) {
-            to.view.frame = context.finalFrame(for: to)
-        }
-
-        propertyAnimator?.startAnimation()
+        to.view.frame = frameOfViewWhenOffScreen
     }
 
-    func animateSlideOutTransition(using context: StackViewControllerContextTransitioning) {
+    func prepareSlideOutTransition(using context: UIViewControllerContextTransitioning) {
         guard let from = context.viewController(forKey: .from) else { return }
         guard let to = context.viewController(forKey: .to) else { return }
 
         let containerView = context.containerView
-
+        
         containerView.insertSubview(to.view, belowSubview: from.view)
         to.view.frame = containerView.bounds
-
-        guard context.isAnimated else {
-            context.completeTransition(true)
-            return
-        }
-
-        configurePropertyAnimator(using: context) {
-            to.view.frame = context.finalFrame(for: to)
-            from.view.frame = context.frameOfViewWhenOffScreen
-        }
-
-        propertyAnimator?.startAnimation()
     }
 
-    func configurePropertyAnimator(using context: UIViewControllerContextTransitioning,
-                                   animations: @escaping () -> Void) {
+    typealias Animations = () -> Void
 
-        propertyAnimator = UIViewPropertyAnimator(duration: animationsDuration,
-                                                  curve: .easeInOut,
-                                                  animations: animations)
+    func transitionAnimations(using context: UIViewControllerContextTransitioning) -> Animations {
+        switch transitionType {
+        case .slideIn:
+            return {
+                guard let to = context.viewController(forKey: .to) else { return }
+                to.view.frame = context.finalFrame(for: to)
+            }
+        case .slideOut:
+            return {
+                guard let to = context.viewController(forKey: .to) else { return }
+                guard let from = context.viewController(forKey: .from) else { return }
 
-        propertyAnimator?.addCompletion { position in
+                let containerView = context.containerView
+                let frameOfViewWhenOffScreen = containerView.bounds.offsetBy(dx: containerView.bounds.width,
+                                                                             dy: 0.0)
+                to.view.frame = context.finalFrame(for: to)
+                from.view.frame = frameOfViewWhenOffScreen
+            }
+        }
+    }
+
+    func propertyAnimator(using context: UIViewControllerContextTransitioning) -> UIViewPropertyAnimator {
+        let animations = transitionAnimations(using: context)
+        let propertyAnimator = UIViewPropertyAnimator(duration: animationsDuration,
+                                                      curve: .easeInOut,
+                                                      animations: animations)
+        propertyAnimator.addCompletion { position in
             let completed = (position == .end)
             context.completeTransition(completed)
         }
+
+        return propertyAnimator
+    }
+
+    func completeNonAnimatedTransition(using context: UIViewControllerContextTransitioning) {
+        guard let to = context.viewController(forKey: .to) else { return }
+
+        to.view.frame = context.finalFrame(for: to)
+        context.completeTransition(true)
     }
 }

@@ -31,6 +31,7 @@ class PinkViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "Pink"
         view.backgroundColor =  UIColor(red: 250/255,
                                         green: 130/255,
                                         blue: 160/255,

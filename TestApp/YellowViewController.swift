@@ -31,7 +31,7 @@ class YellowViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        navigationItem.title = "Yellow"
         view.backgroundColor = .yellow
         addSubviews()
         addSubviewsLayoutConstraints()

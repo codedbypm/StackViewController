@@ -10,19 +10,27 @@ import StackViewController
 
 extension UINavigationController: StackViewControllerHandling {}
 
-class RootCoordinator {
+class RootCoordinator: NSObject {
 
     lazy var window: UIWindow = UIWindow(frame: UIScreen.main.bounds)
-    var stackViewController: StackViewControllerHandling
-    let rootViewController = YellowViewController()
 
-    let navControllerDelegate = NavControllerDelegate()
+    lazy var tabBarController: UITabBarController = {
+        let tabBar = UITabBarController()
+        return tabBar
+    }()
+
+    lazy var stackViewController: StackViewController = {
+        let stack = StackViewController(viewControllers: [yellowViewController])
+        stack.tabBarItem = UITabBarItem(title: "Stack", image: nil, tag: 1)
+        return stack
+    }()
 
     lazy var navigationController: UINavigationController = {
-        let navController = UINavigationController(rootViewController: rootViewController)
-        navController.delegate = navControllerDelegate
+        let navController = UINavigationController(rootViewController: yellowViewController)
+        navController.delegate = self
         navController.interactivePopGestureRecognizer?.isEnabled = false
         navController.view.addGestureRecognizer(screenEdgePanGestureRecognizer)
+        navController.tabBarItem = UITabBarItem(title: "UIKit", image: nil, tag: 1)
         return navController
     }()
 
@@ -32,29 +40,30 @@ class RootCoordinator {
         return recognizer
     }()
 
-
-    init(window: UIWindow) {
-        stackViewController = StackViewController(viewControllers: [rootViewController])
-        if false {
-            stackViewController = navigationController
-        }
-
-        rootViewController.onNext = {
+    var yellowViewController: UIViewController {
+        let yellow = YellowViewController()
+        yellow.onNext = {
             let pink = PinkViewController()
             pink.onBack = {
                 self.stackViewController.popViewController(animated: true)
             }
             self.stackViewController.pushViewController(pink, animated: true)
         }
+        return yellow
+    }
 
-        window.rootViewController = stackViewController
+    var operation: UINavigationController.Operation = .none
+
+    init(window: UIWindow) {
+        super.init()
+
+        tabBarController.setViewControllers([stackViewController, navigationController], animated: false)
+        window.rootViewController = tabBarController
         window.makeKeyAndVisible()
     }
 }
 
-class NavControllerDelegate: NSObject, UINavigationControllerDelegate {
-
-    var operation: UINavigationController.Operation = .none
+extension RootCoordinator: UINavigationControllerDelegate {
 
     func navigationController(_ navigationController: UINavigationController,
                               animationControllerFor operation: UINavigationController.Operation,

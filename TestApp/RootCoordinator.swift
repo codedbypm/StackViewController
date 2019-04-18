@@ -28,16 +28,8 @@ class RootCoordinator: NSObject {
     lazy var navigationController: UINavigationController = {
         let navController = UINavigationController(rootViewController: yellowViewController)
         navController.delegate = self
-        navController.interactivePopGestureRecognizer?.isEnabled = false
-        navController.view.addGestureRecognizer(screenEdgePanGestureRecognizer)
         navController.tabBarItem = UITabBarItem(title: "UIKit", image: nil, tag: 1)
         return navController
-    }()
-
-    lazy var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
-        let recognizer = UIScreenEdgePanGestureRecognizer()
-        recognizer.edges = .left
-        return recognizer
     }()
 
     var yellowViewController: UIViewController {
@@ -80,18 +72,5 @@ extension RootCoordinator: UINavigationControllerDelegate {
         default:
             return nil
         }
-    }
-
-    func navigationController(_ navigationController: UINavigationController,
-                              interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-
-        guard operation == .pop else { return nil }
-
-        guard let recognizer = navigationController.view.gestureRecognizers?.first(where: { recognizer -> Bool in
-            return (recognizer is UIScreenEdgePanGestureRecognizer)
-        }) as? UIScreenEdgePanGestureRecognizer else { return nil }
-
-        return HorizontalSlideInteractiveController(animator: animationController,
-                                                  gestureRecognizer: recognizer)
     }
 }

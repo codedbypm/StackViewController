@@ -15,6 +15,7 @@ public class HorizontalSlideInteractiveController: NSObject {
 
     private let gestureRecognizer: UIScreenEdgePanGestureRecognizer
     private var animationProgressInitialOffset: CGFloat = 0.0
+    private var didStartInteractively = false
 
     public init(animator: UIViewControllerAnimatedTransitioning,
                 gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
@@ -33,7 +34,14 @@ extension HorizontalSlideInteractiveController: UIViewControllerInteractiveTrans
     public func startInteractiveTransition(_ context: UIViewControllerContextTransitioning) {
 
         animator.animateTransition(using: context)
-        animator.interruptibleAnimator?(using: context).pauseAnimation()
+
+        if didStartInteractively {
+            animator.interruptibleAnimator?(using: context).pauseAnimation()
+        }
+    }
+
+    public var wantsInteractiveStart: Bool {
+        return didStartInteractively
     }
 }
 
@@ -42,6 +50,7 @@ private extension HorizontalSlideInteractiveController {
     @objc func didDetectPanningFromEdge(_ recognizer: UIScreenEdgePanGestureRecognizer) {
         switch recognizer.state {
         case .began:
+            didStartInteractively = true
             let panGestureStartLocation = recognizer.location(in: context.containerView)
             animationProgressInitialOffset = animationProgressUpdate(for: panGestureStartLocation)
             startInteractiveTransition(context)

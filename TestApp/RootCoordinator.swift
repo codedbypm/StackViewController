@@ -26,7 +26,7 @@ class RootCoordinator {
         return navController
     }()
 
-    private lazy var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
+    lazy var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
         let recognizer = UIScreenEdgePanGestureRecognizer()
         recognizer.edges = .left
         return recognizer
@@ -53,18 +53,36 @@ class RootCoordinator {
 }
 
 class NavControllerDelegate: NSObject, UINavigationControllerDelegate {
+
+    var operation: UINavigationController.Operation = .none
+
     func navigationController(_ navigationController: UINavigationController,
                               animationControllerFor operation: UINavigationController.Operation,
                               from fromVC: UIViewController,
                               to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 
+        self.operation = operation
+
         switch operation {
         case .push:
-            return HorizontalSlideAnimator(type: .slideIn)
+            return HorizontalSlideAnimationController(type: .slideIn)
         case .pop:
-            return HorizontalSlideAnimator(type: .slideOut)
+            return HorizontalSlideAnimationController(type: .slideOut)
         default:
             return nil
         }
+    }
+
+    func navigationController(_ navigationController: UINavigationController,
+                              interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+
+        guard operation == .pop else { return nil }
+
+        guard let recognizer = navigationController.view.gestureRecognizers?.first(where: { recognizer -> Bool in
+            return (recognizer is UIScreenEdgePanGestureRecognizer)
+        }) as? UIScreenEdgePanGestureRecognizer else { return nil }
+
+        return HorizontalSlideInteractiveController(animator: animationController,
+                                                  gestureRecognizer: recognizer)
     }
 }

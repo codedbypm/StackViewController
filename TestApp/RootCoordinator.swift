@@ -13,19 +13,32 @@ extension UINavigationController: StackViewControllerHandling {}
 class RootCoordinator {
 
     lazy var window: UIWindow = UIWindow(frame: UIScreen.main.bounds)
-    let stackViewController: StackViewControllerHandling
+    var stackViewController: StackViewControllerHandling
     let rootViewController = YellowViewController()
 
     let navControllerDelegate = NavControllerDelegate()
 
+    lazy var navigationController: UINavigationController = {
+        let navController = UINavigationController(rootViewController: rootViewController)
+        navController.delegate = navControllerDelegate
+        navController.interactivePopGestureRecognizer?.isEnabled = false
+        navController.view.addGestureRecognizer(screenEdgePanGestureRecognizer)
+        return navController
+    }()
+
+    private lazy var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
+        let recognizer = UIScreenEdgePanGestureRecognizer()
+        recognizer.edges = .left
+        return recognizer
+    }()
+
+
     init(window: UIWindow) {
-        if true {
-            stackViewController = StackViewController(viewControllers: [rootViewController])
-        } else {
-            let navController = UINavigationController(rootViewController: rootViewController)
-            navController.delegate = navControllerDelegate
-            stackViewController = navController
+        stackViewController = StackViewController(viewControllers: [rootViewController])
+        if false {
+            stackViewController = navigationController
         }
+
         rootViewController.onNext = {
             let pink = PinkViewController()
             pink.onBack = {
@@ -33,6 +46,7 @@ class RootCoordinator {
             }
             self.stackViewController.pushViewController(pink, animated: true)
         }
+
         window.rootViewController = stackViewController
         window.makeKeyAndVisible()
     }

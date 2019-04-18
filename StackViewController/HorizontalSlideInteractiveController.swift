@@ -1,5 +1,5 @@
 //
-//  HorizontalSlideInteractiveAnimator.swift
+//  HorizontalSlideInteractiveController.swift
 //  StackViewController
 //
 //  Created by Paolo Moroni on 12/04/2019.
@@ -8,50 +8,44 @@
 
 import Foundation
 
-class HorizontalSlideInteractiveAnimator: NSObject {
+public class HorizontalSlideInteractiveController: NSObject {
 
-    let animator: HorizontalSlideAnimator
+    let animator: UIViewControllerAnimatedTransitioning
     var context: UIViewControllerContextTransitioning!
 
     private let gestureRecognizer: UIScreenEdgePanGestureRecognizer
+    private var animationProgressInitialOffset: CGFloat = 0.0
 
-    init(animator: HorizontalSlideAnimator,
-         gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+    public init(animator: UIViewControllerAnimatedTransitioning,
+                gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
         self.animator = animator
         self.gestureRecognizer = gestureRecognizer
         super.init()
 
         gestureRecognizer.addTarget(self, action: #selector(didDetectPanningFromEdge(_:)))
     }
-
-    public func startInteractiveTransition() {
-        startInteractiveTransition(context)
-    }
-
-    public func updateInteractiveTransition(progress: CGFloat) {
-        context.updateInteractiveTransition(progress)
-    }
 }
 
 // MARK: - UIViewControllerInteractiveTransitioning
 
-extension HorizontalSlideInteractiveAnimator: UIViewControllerInteractiveTransitioning {
+extension HorizontalSlideInteractiveController: UIViewControllerInteractiveTransitioning {
 
     public func startInteractiveTransition(_ context: UIViewControllerContextTransitioning) {
 
         animator.animateTransition(using: context)
+        animator.interruptibleAnimator?(using: context).pauseAnimation()
     }
 }
 
-private extension HorizontalSlideInteractiveAnimator {
+private extension HorizontalSlideInteractiveController {
     
     @objc func didDetectPanningFromEdge(_ recognizer: UIScreenEdgePanGestureRecognizer) {
         switch recognizer.state {
         case .began:
-            print("START PanningFromEdge")
+            let panGestureStartLocation = recognizer.location(in: context.containerView)
+            animationProgressInitialOffset = animationProgressUpdate(for: panGestureStartLocation)
             startInteractiveTransition(context)
         case .changed:
-            print("UPDATE PanningFromEdge")
             updateInteractiveTransition(recognizer)
         case .cancelled:
             cancelInteractiveTransition()
@@ -62,20 +56,16 @@ private extension HorizontalSlideInteractiveAnimator {
         }
     }
 
-
     func updateInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        let translation = recognizer.translation(in: context.containerView)
+        let updatedProgress = animationProgressUpdate(for: translation)
 
-        let translation = recognizer.translation(in: recognizer.view)
-        let maxTranslationX: CGFloat
+        print("Pan translation: \(translation)")
+        print("Progress: \(updatedProgress)")
+        print("fractionComplete: \(updatedProgress + animationProgressInitialOffset)\n")
 
-        if let view = recognizer.view {
-            maxTranslationX = view.bounds.width
-        } else {
-            maxTranslationX = UIScreen.main.bounds.midX
-        }
-        let percentage = translation.x/maxTranslationX
-
-        updateInteractiveTransition(progress: percentage)
+        animator.interruptibleAnimator?(using: context).fractionComplete = updatedProgress
+        context.updateInteractiveTransition(updatedProgress)
     }
 
     func cancelInteractiveTransition() {
@@ -86,5 +76,11 @@ private extension HorizontalSlideInteractiveAnimator {
     func stopInteractiveTransition() {
         print("STOP PanningFromEdge")
         //        interactiveAnimator?.finish()
+    }
+
+    func animationProgressUpdate(for translation: CGPoint) -> CGFloat {
+        let maxTranslationX = context.containerView.bounds.width
+        let percentage = translation.x/maxTranslationX
+        return percentage
     }
 }

@@ -1,5 +1,5 @@
 //
-//  HorizontalSlideAnimator.swift
+//  HorizontalSlideAnimationController.swift
 //  StackViewController
 //
 //  Created by Paolo Moroni on 01/04/2019.
@@ -11,7 +11,7 @@ public enum HorizontalSlideTransitionType {
     case slideOut
 }
 
-public class HorizontalSlideAnimator: NSObject {
+public class HorizontalSlideAnimationController: NSObject {
 
     let animationsDuration: TimeInterval = 0.3
 
@@ -26,7 +26,7 @@ public class HorizontalSlideAnimator: NSObject {
 
 // MARK: - UIViewControllerAnimatedTransitioning
 
-extension HorizontalSlideAnimator: UIViewControllerAnimatedTransitioning {
+extension HorizontalSlideAnimationController: UIViewControllerAnimatedTransitioning {
 
     public func transitionDuration(using _: UIViewControllerContextTransitioning?) -> TimeInterval {
         return animationsDuration
@@ -43,7 +43,6 @@ extension HorizontalSlideAnimator: UIViewControllerAnimatedTransitioning {
     }
 
     public func interruptibleAnimator(using context: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
-
         if let propertyAnimator = propertyAnimator {
             return propertyAnimator
         } else {
@@ -58,7 +57,7 @@ extension HorizontalSlideAnimator: UIViewControllerAnimatedTransitioning {
     }
 }
 
-private extension HorizontalSlideAnimator {
+private extension HorizontalSlideAnimationController {
 
     func prepareTransition(using context: UIViewControllerContextTransitioning) {
         switch transitionType {

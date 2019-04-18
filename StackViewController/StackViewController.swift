@@ -45,7 +45,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         return recognizer
     }()
 
-    private var interactiveAnimator: HorizontalSlideInteractiveAnimator?
+    private var interactiveAnimator: HorizontalSlideInteractiveController?
 
     // MARK: - Init
 
@@ -148,7 +148,7 @@ private extension StackViewController {
             return animator
         } else {
             let transitionType = self.transitionType(fromViewController: from, toViewController: to)
-            return HorizontalSlideAnimator(type: transitionType)
+            return HorizontalSlideAnimationController(type: transitionType)
         }
     }
 
@@ -232,11 +232,11 @@ extension StackViewController: UIGestureRecognizerDelegate {
 
         guard let from = topViewController else { return false }
         guard let to = viewControllerBefore(from) else { return false }
-        guard let animator = animatorForTransitionFrom(from, to: to) as? HorizontalSlideAnimator else { return false }
+        guard let animator = animatorForTransitionFrom(from, to: to) as? HorizontalSlideAnimationController else { return false }
 
         let context = transitionContextForTransitionFrom(from, to: to, interactive: true)
 
-        interactiveAnimator = HorizontalSlideInteractiveAnimator(animator: animator,
+        interactiveAnimator = HorizontalSlideInteractiveController(animator: animator,
                                                                  gestureRecognizer: screenEdgePanGestureRecognizer)
         interactiveAnimator?.context = context
         

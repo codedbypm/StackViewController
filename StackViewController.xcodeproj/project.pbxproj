@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FD00021F2260CC9100A87FFB /* HorizontalSlideInteractiveAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveAnimator.swift */; };
+		FD00021F2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift */; };
 		FD67E57A225250E10051786B /* StackViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD67E578225250E10051786B /* StackViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD67E5B3225257DA0051786B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5B2225257DA0051786B /* AppDelegate.swift */; };
 		FD67E5BD225257DB0051786B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */; };
 		FD67E5C3225258840051786B /* StackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C2225258840051786B /* StackViewController.swift */; };
-		FD67E5C8225260C40051786B /* HorizontalSlideAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C7225260C40051786B /* HorizontalSlideAnimator.swift */; };
+		FD67E5C8225260C40051786B /* HorizontalSlideAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C7225260C40051786B /* HorizontalSlideAnimationController.swift */; };
 		FD67E5CA225283A20051786B /* YellowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C9225283A20051786B /* YellowViewController.swift */; };
 		FD67E5CC225296A00051786B /* PinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5CB225296A00051786B /* PinkViewController.swift */; };
 		FD67E5CE2252A57F0051786B /* StackViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* StackViewController.framework */; };
@@ -47,7 +47,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSlideInteractiveAnimator.swift; sourceTree = "<group>"; };
+		FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSlideInteractiveController.swift; sourceTree = "<group>"; };
 		FD67E575225250E10051786B /* StackViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StackViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD67E578225250E10051786B /* StackViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StackViewController.h; sourceTree = "<group>"; };
 		FD67E579225250E10051786B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -56,7 +56,7 @@
 		FD67E5BC225257DB0051786B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FD67E5BE225257DB0051786B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD67E5C2225258840051786B /* StackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewController.swift; sourceTree = "<group>"; };
-		FD67E5C7225260C40051786B /* HorizontalSlideAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSlideAnimator.swift; sourceTree = "<group>"; };
+		FD67E5C7225260C40051786B /* HorizontalSlideAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSlideAnimationController.swift; sourceTree = "<group>"; };
 		FD67E5C9225283A20051786B /* YellowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YellowViewController.swift; sourceTree = "<group>"; };
 		FD67E5CB225296A00051786B /* PinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinkViewController.swift; sourceTree = "<group>"; };
 		FD67E5F42252EC770051786B /* RootCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootCoordinator.swift; sourceTree = "<group>"; };
@@ -105,8 +105,8 @@
 			isa = PBXGroup;
 			children = (
 				FD67E5F12252AF0F0051786B /* Extensions */,
-				FD67E5C7225260C40051786B /* HorizontalSlideAnimator.swift */,
-				FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveAnimator.swift */,
+				FD67E5C7225260C40051786B /* HorizontalSlideAnimationController.swift */,
+				FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift */,
 				FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */,
 				FD67E5C2225258840051786B /* StackViewController.swift */,
 				FD67E578225250E10051786B /* StackViewController.h */,
@@ -248,8 +248,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD00021F2260CC9100A87FFB /* HorizontalSlideInteractiveAnimator.swift in Sources */,
-				FD67E5C8225260C40051786B /* HorizontalSlideAnimator.swift in Sources */,
+				FD00021F2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift in Sources */,
+				FD67E5C8225260C40051786B /* HorizontalSlideAnimationController.swift in Sources */,
 				FD67E5FA22552D3A0051786B /* UIView+Extensions.swift in Sources */,
 				FD67E5F82254F2010051786B /* StackViewControllerTransitionContext.swift in Sources */,
 				FD67E5C3225258840051786B /* StackViewController.swift in Sources */,

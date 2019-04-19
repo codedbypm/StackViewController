@@ -166,6 +166,7 @@ private extension StackViewController {
         context.isAnimated = animated
         context.isInteractive = interactive
         context.onTransitionFinished = { didComplete in
+            defer { self.interactiveController = nil }
             guard didComplete else { return }
 
             from.view.removeFromSuperview()
@@ -174,8 +175,6 @@ private extension StackViewController {
 
             to.didMove(toParent: self)
             to.endAppearanceTransition()
-
-            self.interactiveController = nil
         }
 
         return context

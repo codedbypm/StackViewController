@@ -17,7 +17,11 @@ public class HorizontalSlideInteractiveController: NSObject {
     private var animationProgressInitialOffset: CGFloat = 0.0
     private var didStartInteractively = false
 
-    public init(animator: UIViewControllerAnimatedTransitioning,
+    private var interruptibleAnimator: UIViewImplicitlyAnimating? {
+        return animationController.interruptibleAnimator?(using: context)
+    }
+
+    public init(animationController: UIViewControllerAnimatedTransitioning,
                 gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
         self.animator = animator
         self.gestureRecognizer = gestureRecognizer
@@ -36,7 +40,8 @@ extension HorizontalSlideInteractiveController: UIViewControllerInteractiveTrans
         animator.animateTransition(using: context)
 
         if didStartInteractively {
-            animator.interruptibleAnimator?(using: context).pauseAnimation()
+            interruptibleAnimator?.pauseAnimation()
+            context.pauseInteractiveTransition()
         }
     }
 
@@ -73,7 +78,7 @@ private extension HorizontalSlideInteractiveController {
         print("Progress: \(updatedProgress)")
         print("fractionComplete: \(updatedProgress + animationProgressInitialOffset)\n")
 
-        animator.interruptibleAnimator?(using: context).fractionComplete = updatedProgress
+        interruptibleAnimator?.fractionComplete = updatedProgress
         context.updateInteractiveTransition(updatedProgress)
     }
 

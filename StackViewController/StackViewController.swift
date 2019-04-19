@@ -239,7 +239,13 @@ extension StackViewController: UIGestureRecognizerDelegate {
         interactiveAnimator = HorizontalSlideInteractiveController(animationController: animator,
                                                                    gestureRecognizer: screenEdgePanGestureRecognizer)
         interactiveAnimator?.context = context
-        
+
+        from.willMove(toParent: nil)
+        from.beginAppearanceTransition(false, animated: true)
+
+        addChild(to)
+        to.beginAppearanceTransition(true, animated: true)
+
         return true
     }
 }

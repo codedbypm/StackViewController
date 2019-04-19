@@ -32,14 +32,18 @@ class RootCoordinator: NSObject {
         return navController
     }()
 
+    var stackController: StackViewControllerHandling? {
+        return tabBarController.selectedViewController as? StackViewControllerHandling
+    }
+
     var yellowViewController: UIViewController {
         let yellow = YellowViewController()
         yellow.onNext = {
             let pink = PinkViewController()
             pink.onBack = {
-                self.stackViewController.popViewController(animated: true)
+                self.stackController?.popViewController(animated: true)
             }
-            self.stackViewController.pushViewController(pink, animated: true)
+            self.stackController?.pushViewController(pink, animated: true)
         }
         return yellow
     }

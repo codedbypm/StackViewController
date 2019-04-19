@@ -83,21 +83,26 @@ private extension HorizontalSlideInteractiveController {
 
     func cancelInteractiveTransition() {
         print("CANCEL PanningFromEdge")
-        //        interactiveAnimator?.cancel()
+
+        context.cancelInteractiveTransition()
+
+        let durationFraction = interruptibleAnimator?.fractionComplete ?? 0
+        interruptibleAnimator?.isReversed = true
+        interruptibleAnimator?.continueAnimation?(withTimingParameters: nil, durationFactor: durationFraction)
     }
 
     func stopInteractiveTransition() {
-        print("STOP PanningFromEdge")
-
-        let animationCompletionPosition = completionPosition()
-        if animationCompletionPosition == .end {
-            context.finishInteractiveTransition()
-        } else {
-            context.cancelInteractiveTransition()
+        guard completionPosition() == .end else {
+            cancelInteractiveTransition()
+            return
         }
 
+        print("STOP PanningFromEdge")
+
+        context.finishInteractiveTransition()
+
         let fractionLeft = 1 - (interruptibleAnimator?.fractionComplete ?? 0)
-        interruptibleAnimator?.isReversed = (animationCompletionPosition == .start)
+        interruptibleAnimator?.isReversed = false
         interruptibleAnimator?.continueAnimation?(withTimingParameters: nil, durationFactor: fractionLeft)
     }
 

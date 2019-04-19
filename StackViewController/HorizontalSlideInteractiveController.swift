@@ -88,7 +88,17 @@ private extension HorizontalSlideInteractiveController {
 
     func stopInteractiveTransition() {
         print("STOP PanningFromEdge")
-        //        interactiveAnimator?.finish()
+
+        let animationCompletionPosition = completionPosition()
+        if animationCompletionPosition == .end {
+            context.finishInteractiveTransition()
+        } else {
+            context.cancelInteractiveTransition()
+        }
+
+        let fractionLeft = 1 - (interruptibleAnimator?.fractionComplete ?? 0)
+        interruptibleAnimator?.isReversed = (animationCompletionPosition == .start)
+        interruptibleAnimator?.continueAnimation?(withTimingParameters: nil, durationFactor: fractionLeft)
     }
 
     func animationProgressUpdate(for translation: CGPoint) -> CGFloat {

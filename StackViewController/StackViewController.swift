@@ -45,7 +45,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         return recognizer
     }()
 
-    private var interactiveAnimator: HorizontalSlideInteractiveController?
+    private var interactiveController: HorizontalSlideInteractiveController?
 
     // MARK: - Init
 
@@ -175,7 +175,7 @@ private extension StackViewController {
             to.didMove(toParent: self)
             to.endAppearanceTransition()
 
-            self.interactiveAnimator = nil
+            self.interactiveController = nil
         }
 
         return context
@@ -228,23 +228,23 @@ extension StackViewController: UIGestureRecognizerDelegate {
 
     private func screenEdgePanGestureRecognizerShouldBegin() -> Bool {
         guard viewControllers.count > 1 else { return false }
-        guard interactiveAnimator == nil else { return false }
+        guard interactiveController == nil else { return false }
 
         guard let from = topViewController else { return false }
         guard let to = viewControllerBefore(from) else { return false }
-        guard let animator = animatorForTransitionFrom(from, to: to) as? HorizontalSlideAnimationController else { return false }
+        guard let animationController = animatorForTransitionFrom(from, to: to) as? HorizontalSlideAnimationController else { return false }
 
         let context = transitionContextForTransitionFrom(from, to: to, interactive: true)
 
-        interactiveAnimator = HorizontalSlideInteractiveController(animationController: animator,
+        interactiveController = HorizontalSlideInteractiveController(animationController: animationController,
                                                                    gestureRecognizer: screenEdgePanGestureRecognizer)
-        interactiveAnimator?.context = context
+        interactiveController?.context = context
 
-        from.willMove(toParent: nil)
-        from.beginAppearanceTransition(false, animated: true)
-
-        addChild(to)
-        to.beginAppearanceTransition(true, animated: true)
+//        from.willMove(toParent: nil)
+//        from.beginAppearanceTransition(false, animated: true)
+//
+//        addChild(to)
+//        to.beginAppearanceTransition(true, animated: true)
 
         return true
     }

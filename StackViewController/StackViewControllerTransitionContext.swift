@@ -94,7 +94,9 @@ extension StackViewControllerTransitionContext {
 
     func finishInteractiveTransition() {}
 
-    func cancelInteractiveTransition() {}
+    func cancelInteractiveTransition() {
+        transitionWasCancelled = true
+    }
 
     func pauseInteractiveTransition() {}
 }

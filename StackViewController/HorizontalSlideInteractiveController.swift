@@ -74,8 +74,7 @@ private extension HorizontalSlideInteractiveController {
         let translation = recognizer.translation(in: context.containerView)
         let updatedProgress = animationProgressUpdate(for: translation)
 
-        print("Pan translation: \(translation)")
-        print("Progress: \(updatedProgress)")
+        print("Pan translation: \(translation.x) (\(updatedProgress) %)")
         print("fractionComplete: \(updatedProgress + animationProgressInitialOffset)\n")
 
         interruptibleAnimator?.fractionComplete = updatedProgress

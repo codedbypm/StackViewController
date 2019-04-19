@@ -10,7 +10,7 @@ import Foundation
 
 public class HorizontalSlideInteractiveController: NSObject {
 
-    let animator: UIViewControllerAnimatedTransitioning
+    let animationController: UIViewControllerAnimatedTransitioning
     var context: UIViewControllerContextTransitioning!
 
     private let gestureRecognizer: UIScreenEdgePanGestureRecognizer
@@ -23,7 +23,7 @@ public class HorizontalSlideInteractiveController: NSObject {
 
     public init(animationController: UIViewControllerAnimatedTransitioning,
                 gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
-        self.animator = animator
+        self.animationController = animationController
         self.gestureRecognizer = gestureRecognizer
         super.init()
 
@@ -37,7 +37,7 @@ extension HorizontalSlideInteractiveController: UIViewControllerInteractiveTrans
 
     public func startInteractiveTransition(_ context: UIViewControllerContextTransitioning) {
 
-        animator.animateTransition(using: context)
+        animationController.animateTransition(using: context)
 
         if didStartInteractively {
             interruptibleAnimator?.pauseAnimation()

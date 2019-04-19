@@ -236,8 +236,8 @@ extension StackViewController: UIGestureRecognizerDelegate {
 
         let context = transitionContextForTransitionFrom(from, to: to, interactive: true)
 
-        interactiveAnimator = HorizontalSlideInteractiveController(animator: animator,
-                                                                 gestureRecognizer: screenEdgePanGestureRecognizer)
+        interactiveAnimator = HorizontalSlideInteractiveController(animationController: animator,
+                                                                   gestureRecognizer: screenEdgePanGestureRecognizer)
         interactiveAnimator?.context = context
         
         return true

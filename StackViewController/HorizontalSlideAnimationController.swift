@@ -13,10 +13,16 @@ public enum HorizontalSlideTransitionType {
 
 public class HorizontalSlideAnimationController: NSObject {
 
+    // MARK: - Internal properties
+
     let animationsDuration: TimeInterval = 0.3
+
+    // MARK: - Private properties
 
     private let transitionType: HorizontalSlideTransitionType
     private var propertyAnimator: UIViewPropertyAnimator?
+
+    // MARK: - Init
 
     public required init(type: HorizontalSlideTransitionType) {
         transitionType = type

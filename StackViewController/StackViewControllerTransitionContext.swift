@@ -90,14 +90,20 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
 
 extension StackViewControllerTransitionContext {
 
-    func updateInteractiveTransition(_ percentComplete: CGFloat) {}
+    func updateInteractiveTransition(_ percentComplete: CGFloat) {
 
-    func finishInteractiveTransition() {}
+    }
+
+    func finishInteractiveTransition() {
+        transitionWasCancelled = false
+    }
 
     func cancelInteractiveTransition() {
         transitionWasCancelled = true
     }
 
-    func pauseInteractiveTransition() {}
+    func pauseInteractiveTransition() {
+        
+    }
 }
 

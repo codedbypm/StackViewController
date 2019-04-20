@@ -10,6 +10,8 @@ import UIKit
 
 class PinkViewController: UIViewController {
 
+    let debugAppearance = false
+
     var onBack: (() -> Void)?
     var onNext: (() -> Void)?
 
@@ -43,22 +45,30 @@ class PinkViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("\(String(describing: self)): viewWillAppear")
+        if debugAppearance {
+            print("\(String(describing: self)): viewWillAppear")
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("\(String(describing: self)): viewDidAppear")
+        if debugAppearance {
+            print("\(String(describing: self)): viewDidAppear")
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("\(String(describing: self)): viewWillDisappear")
+        if debugAppearance {
+            print("\(String(describing: self)): viewWillDisappear")
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        print("\(String(describing: self)): viewDidDisappear")
+        if debugAppearance {
+            print("\(String(describing: self)): viewDidDisappear")
+        }
     }
 
     @objc func didTapNext() {

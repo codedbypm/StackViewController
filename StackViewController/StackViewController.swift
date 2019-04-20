@@ -239,12 +239,12 @@ extension StackViewController: UIGestureRecognizerDelegate {
                                                                      gestureRecognizer: screenEdgePanGestureRecognizer,
                                                                      context: context)
 
-//        from.willMove(toParent: nil)
-//        from.beginAppearanceTransition(false, animated: true)
-//
-//        addChild(to)
-//        to.beginAppearanceTransition(true, animated: true)
+        from.willMove(toParent: nil)
+        from.beginAppearanceTransition(false, animated: true)
 
+        addChild(to)
+        to.beginAppearanceTransition(true, animated: true)
+ 
         return true
     }
 }

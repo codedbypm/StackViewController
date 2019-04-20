@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		FD00021F2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift */; };
+		FD226059226B6359007E44CE /* StackCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD226058226B6359007E44CE /* StackCoordinator.swift */; };
+		FD22605B226B6363007E44CE /* UIKitCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD22605A226B6363007E44CE /* UIKitCoordinator.swift */; };
 		FD67E57A225250E10051786B /* StackViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD67E578225250E10051786B /* StackViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD67E5B3225257DA0051786B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5B2225257DA0051786B /* AppDelegate.swift */; };
 		FD67E5BD225257DB0051786B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */; };
@@ -48,6 +50,8 @@
 
 /* Begin PBXFileReference section */
 		FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSlideInteractiveController.swift; sourceTree = "<group>"; };
+		FD226058226B6359007E44CE /* StackCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackCoordinator.swift; sourceTree = "<group>"; };
+		FD22605A226B6363007E44CE /* UIKitCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitCoordinator.swift; sourceTree = "<group>"; };
 		FD67E575225250E10051786B /* StackViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StackViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD67E578225250E10051786B /* StackViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StackViewController.h; sourceTree = "<group>"; };
 		FD67E579225250E10051786B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -119,6 +123,8 @@
 			isa = PBXGroup;
 			children = (
 				FD67E5F42252EC770051786B /* RootCoordinator.swift */,
+				FD22605A226B6363007E44CE /* UIKitCoordinator.swift */,
+				FD226058226B6359007E44CE /* StackCoordinator.swift */,
 				FD67E5C9225283A20051786B /* YellowViewController.swift */,
 				FD67E5CB225296A00051786B /* PinkViewController.swift */,
 				FD67E5B2225257DA0051786B /* AppDelegate.swift */,
@@ -264,6 +270,8 @@
 				FD67E5CC225296A00051786B /* PinkViewController.swift in Sources */,
 				FD67E5CA225283A20051786B /* YellowViewController.swift in Sources */,
 				FD67E5B3225257DA0051786B /* AppDelegate.swift in Sources */,
+				FD226059226B6359007E44CE /* StackCoordinator.swift in Sources */,
+				FD22605B226B6363007E44CE /* UIKitCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -272,5 +272,4 @@ private extension StackViewController {
             return .slideOut
         }
     }
-
 }

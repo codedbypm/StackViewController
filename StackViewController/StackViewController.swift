@@ -74,22 +74,28 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         let to = viewController
 
         viewControllers.append(viewController)
-        performTransition(from: from, to: to, animated: animated)
+        performTransition(from: from, to: to, animated: animated, interactive: false)
     }
 
     public func popViewController(animated: Bool) -> UIViewController? {
+        let last = viewControllers.last
+        _popViewController(animated: animated)
+        return last
+    }
+
+    public func _popViewController(animated: Bool) {
+
         guard let from = topViewController else {
             assertionFailure("Error: Cannot hide a view controller which is not on top of the stack")
-            return nil
+            return
         }
 
         guard let to = viewControllerBefore(from) else {
             assertionFailure("Error: Cannot pop the last view controller")
-            return nil
+            return
         }
 
-        performTransition(from: from, to: to, animated: animated)
-        return viewControllers.removeLast()
+        performTransition(from: from, to: to, animated: animated, interactive: false)
     }
 }
 
@@ -157,25 +163,11 @@ private extension StackViewController {
                                         animated: Bool = true,
                                         interactive: Bool = false) -> StackViewControllerTransitionContext {
 
-        let transitionType = self.transitionType(fromViewController: from, toViewController: to)
-
         let context = StackViewControllerTransitionContext(from: from,
                                                            to: to,
-                                                           containerView: view,
-                                                           transitionType: transitionType)
+                                                           containerView: view)
         context.isAnimated = animated
         context.isInteractive = interactive
-        context.onTransitionFinished = { didComplete in
-            defer { self.interactiveController = nil }
-            guard didComplete else { return }
-
-            from.view.removeFromSuperview()
-            from.removeFromParent()
-            from.endAppearanceTransition()
-
-            to.didMove(toParent: self)
-            to.endAppearanceTransition()
-        }
 
         return context
     }
@@ -186,20 +178,6 @@ private extension StackViewController {
         } else {
             return .slideOut
         }
-    }
-
-    func performTransition(from: UIViewController, to: UIViewController, animated: Bool) {
-
-        let context = transitionContextForTransition(from: from, to: to, animated: animated)
-        let animator = animatorForTransition(from: from, to: to)
-
-        from.willMove(toParent: nil)
-        from.beginAppearanceTransition(false, animated: animated)
-
-        addChild(to)
-        to.beginAppearanceTransition(true, animated: animated)
-
-        animator.animateTransition(using: context)
     }
 
     func showTopViewController() {
@@ -226,25 +204,58 @@ extension StackViewController: UIGestureRecognizerDelegate {
     }
 
     private func screenEdgePanGestureRecognizerShouldBegin() -> Bool {
-        guard viewControllers.count > 1 else { return false }
         guard interactiveController == nil else { return false }
-
         guard let from = topViewController else { return false }
         guard let to = viewControllerBefore(from) else { return false }
 
-        let animationController = animatorForTransition(from: from, to: to)
-        let context = transitionContextForTransition(from: from, to: to, interactive: true)
+        performInteractiveTransition(from: from, to: to)
+        return true
+    }
 
-        interactiveController = HorizontalSlideInteractiveController(animationController: animationController,
-                                                                     gestureRecognizer: screenEdgePanGestureRecognizer,
-                                                                     context: context)
+    func performInteractiveTransition(from: UIViewController, to: UIViewController) {
+        performTransition(from: from, to: to, animated: true, interactive: true)
+    }
+
+    func performTransition(from: UIViewController, to: UIViewController, animated: Bool, interactive: Bool) {
+        let transitionType = self.transitionType(fromViewController: from, toViewController: to)
+
+        let context = transitionContextForTransition(from: from,
+                                                     to: to,
+                                                     animated: animated,
+                                                     interactive: interactive)
+
+        context.onTransitionFinished = { didComplete in
+            defer { self.interactiveController = nil }
+
+            guard didComplete else { return }
+
+            from.view.removeFromSuperview()
+            from.removeFromParent()
+            from.endAppearanceTransition()
+
+            to.didMove(toParent: self)
+            to.endAppearanceTransition()
+
+            if transitionType == .slideOut {
+                self.viewControllers.removeLast()
+            }
+        }
 
         from.willMove(toParent: nil)
-        from.beginAppearanceTransition(false, animated: true)
+        from.beginAppearanceTransition(false, animated: animated)
 
         addChild(to)
-        to.beginAppearanceTransition(true, animated: true)
- 
-        return true
+        to.beginAppearanceTransition(true, animated: animated)
+
+        if interactive {
+            let animationController = animatorForTransition(from: from, to: to)
+
+            interactiveController = HorizontalSlideInteractiveController(animationController: animationController,
+                                                                         gestureRecognizer: screenEdgePanGestureRecognizer,
+                                                                         context: context)
+        } else {
+            let animator = animatorForTransition(from: from, to: to)
+            animator.animateTransition(using: context)
+        }
     }
 }

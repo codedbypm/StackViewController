@@ -25,7 +25,6 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
 
     // MARK: - Private properties
 
-    private let transitionType: HorizontalSlideTransitionType
     private var viewControllers: [UITransitionContextViewControllerKey: UIViewController]
     private var views: [UITransitionContextViewKey: UIView] {
         var views = [UITransitionContextViewKey: UIView]()
@@ -44,11 +43,9 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
 
     init(from: UIViewController,
          to: UIViewController,
-         containerView: UIView,
-         transitionType: HorizontalSlideTransitionType) {
+         containerView: UIView) {
         self.containerView = containerView
         viewControllers = [.from: from, .to: to]
-        self.transitionType = transitionType
     }
 
     func completeTransition(_ didComplete: Bool) {

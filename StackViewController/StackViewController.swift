@@ -131,7 +131,100 @@ public extension StackViewController {
     }
 }
 
-// MARK: - Private
+// MARK: - UIGestureRecognizerDelegate
+
+extension StackViewController: UIGestureRecognizerDelegate {
+
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer === screenEdgePanGestureRecognizer {
+            return screenEdgePanGestureRecognizerShouldBegin()
+        } else {
+            return false
+        }
+    }
+
+    private func screenEdgePanGestureRecognizerShouldBegin() -> Bool {
+        guard interactiveController == nil else { return false }
+        guard let from = topViewController else { return false }
+        guard let to = viewControllerBefore(from) else { return false }
+
+        performInteractiveTransition(from: from, to: to)
+        return true
+    }
+}
+
+// MARK: - Transition
+
+private extension StackViewController {
+
+    func performInteractiveTransition(from: UIViewController, to: UIViewController) {
+        performTransition(from: from, to: to, animated: true, interactive: true)
+    }
+
+    func performTransition(from: UIViewController, to: UIViewController, animated: Bool, interactive: Bool) {
+        let transitionType = self.transitionType(fromViewController: from, toViewController: to)
+
+        let context = transitionContextForTransition(from: from,
+                                                     to: to,
+                                                     animated: animated,
+                                                     interactive: interactive)
+
+        context.onTransitionFinished = { didComplete in
+            defer { self.interactiveController = nil }
+
+            guard didComplete else { return }
+
+            self.sendFinalViewAppearanceEvents(from: from, to: to)
+
+            if transitionType == .slideOut {
+                self.viewControllers.removeLast()
+            }
+        }
+
+        sendInitialViewAppearanceEvents(from: from, to: to, animated: animated)
+
+        let animationController = animatorForTransition(from: from, to: to)
+
+        if interactive {
+            interactiveController = HorizontalSlideInteractiveController(animationController: animationController,
+                                                                         gestureRecognizer: screenEdgePanGestureRecognizer,
+                                                                         context: context)
+        } else {
+            animationController.animateTransition(using: context)
+        }
+    }
+
+    func sendInitialViewAppearanceEvents(from: UIViewController, to: UIViewController, animated: Bool) {
+        from.willMove(toParent: nil)
+        from.beginAppearanceTransition(false, animated: animated)
+
+        addChild(to)
+        to.beginAppearanceTransition(true, animated: animated)
+    }
+
+    func sendFinalViewAppearanceEvents(from: UIViewController, to: UIViewController) {
+        from.view.removeFromSuperview()
+        from.removeFromParent()
+        from.endAppearanceTransition()
+
+        to.didMove(toParent: self)
+        to.endAppearanceTransition()
+    }
+
+    func showTopViewController() {
+        guard let to = topViewController else {
+            assertionFailure("Error: trying to show the top viewController but there are no view controllers in the stack")
+            return
+        }
+
+        addChild(to)
+        view.addSubview(to.view)
+        to.view.pinEdgesToSuperView()
+        to.didMove(toParent: self)
+    }
+}
+
+// MARK: - Object creation
 
 private extension StackViewController {
 
@@ -180,82 +273,4 @@ private extension StackViewController {
         }
     }
 
-    func showTopViewController() {
-        guard let to = topViewController else {
-            assertionFailure("Error: trying to show the top viewController but there are no view controllers in the stack")
-            return
-        }
-
-        addChild(to)
-        view.addSubview(to.view)
-        to.view.pinEdgesToSuperView()
-        to.didMove(toParent: self)
-    }
-}
-
-extension StackViewController: UIGestureRecognizerDelegate {
-
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer === screenEdgePanGestureRecognizer {
-            return screenEdgePanGestureRecognizerShouldBegin()
-        } else {
-            return false
-        }
-    }
-
-    private func screenEdgePanGestureRecognizerShouldBegin() -> Bool {
-        guard interactiveController == nil else { return false }
-        guard let from = topViewController else { return false }
-        guard let to = viewControllerBefore(from) else { return false }
-
-        performInteractiveTransition(from: from, to: to)
-        return true
-    }
-
-    func performInteractiveTransition(from: UIViewController, to: UIViewController) {
-        performTransition(from: from, to: to, animated: true, interactive: true)
-    }
-
-    func performTransition(from: UIViewController, to: UIViewController, animated: Bool, interactive: Bool) {
-        let transitionType = self.transitionType(fromViewController: from, toViewController: to)
-
-        let context = transitionContextForTransition(from: from,
-                                                     to: to,
-                                                     animated: animated,
-                                                     interactive: interactive)
-
-        context.onTransitionFinished = { didComplete in
-            defer { self.interactiveController = nil }
-
-            guard didComplete else { return }
-
-            from.view.removeFromSuperview()
-            from.removeFromParent()
-            from.endAppearanceTransition()
-
-            to.didMove(toParent: self)
-            to.endAppearanceTransition()
-
-            if transitionType == .slideOut {
-                self.viewControllers.removeLast()
-            }
-        }
-
-        from.willMove(toParent: nil)
-        from.beginAppearanceTransition(false, animated: animated)
-
-        addChild(to)
-        to.beginAppearanceTransition(true, animated: animated)
-
-        if interactive {
-            let animationController = animatorForTransition(from: from, to: to)
-
-            interactiveController = HorizontalSlideInteractiveController(animationController: animationController,
-                                                                         gestureRecognizer: screenEdgePanGestureRecognizer,
-                                                                         context: context)
-        } else {
-            let animator = animatorForTransition(from: from, to: to)
-            animator.animateTransition(using: context)
-        }
-    }
 }

@@ -76,16 +76,14 @@ private extension HorizontalSlideInteractiveController {
         let translation = recognizer.translation(in: context.containerView)
         let updatedProgress = animationProgressUpdate(for: translation)
 
-        print("Pan translation: \(translation.x) (\(updatedProgress) %)")
-        print("fractionComplete: \(updatedProgress + animationProgressInitialOffset)\n")
-
+//        print("Pan translation: \(translation.x) (\(updatedProgress) %)")
+//        print("fractionComplete: \(updatedProgress + animationProgressInitialOffset)\n")
+//
         interruptibleAnimator?.fractionComplete = updatedProgress
         context.updateInteractiveTransition(updatedProgress)
     }
 
     func cancelInteractiveTransition() {
-        print("CANCEL PanningFromEdge")
-
         context.cancelInteractiveTransition()
         animate(to: .start)
     }
@@ -95,8 +93,6 @@ private extension HorizontalSlideInteractiveController {
             cancelInteractiveTransition()
             return
         }
-
-        print("STOP PanningFromEdge")
 
         context.finishInteractiveTransition()
         animate(to: .end)

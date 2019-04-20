@@ -11,7 +11,7 @@ import Foundation
 public class HorizontalSlideInteractiveController: NSObject {
 
     let animationController: UIViewControllerAnimatedTransitioning
-    var context: UIViewControllerContextTransitioning!
+    let context: UIViewControllerContextTransitioning
 
     private let gestureRecognizer: UIScreenEdgePanGestureRecognizer
     private var animationProgressInitialOffset: CGFloat = 0.0
@@ -22,9 +22,11 @@ public class HorizontalSlideInteractiveController: NSObject {
     }
 
     public init(animationController: UIViewControllerAnimatedTransitioning,
-                gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+                gestureRecognizer: UIScreenEdgePanGestureRecognizer,
+                context: UIViewControllerContextTransitioning) {
         self.animationController = animationController
         self.gestureRecognizer = gestureRecognizer
+        self.context = context
         super.init()
 
         gestureRecognizer.addTarget(self, action: #selector(didDetectPanningFromEdge(_:)))

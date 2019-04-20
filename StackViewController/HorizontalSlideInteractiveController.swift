@@ -87,10 +87,7 @@ private extension HorizontalSlideInteractiveController {
         print("CANCEL PanningFromEdge")
 
         context.cancelInteractiveTransition()
-
-        let durationFraction = interruptibleAnimator?.fractionComplete ?? 0
-        interruptibleAnimator?.isReversed = true
-        interruptibleAnimator?.continueAnimation?(withTimingParameters: nil, durationFactor: durationFraction)
+        animate(to: .start)
     }
 
     func stopInteractiveTransition() {
@@ -102,10 +99,28 @@ private extension HorizontalSlideInteractiveController {
         print("STOP PanningFromEdge")
 
         context.finishInteractiveTransition()
+        animate(to: .end)
+    }
 
-        let fractionLeft = 1 - (interruptibleAnimator?.fractionComplete ?? 0)
-        interruptibleAnimator?.isReversed = false
-        interruptibleAnimator?.continueAnimation?(withTimingParameters: nil, durationFactor: fractionLeft)
+    func animate(to position: UIViewAnimatingPosition) {
+        let durationFraction: CGFloat
+        let isReversed: Bool
+
+        switch position {
+        case .start:
+            durationFraction = interruptibleAnimator?.fractionComplete ?? 0
+            isReversed = true
+        case .end:
+            durationFraction = 1 - (interruptibleAnimator?.fractionComplete ?? 0)
+            isReversed = false
+        case .current:
+            fallthrough
+        @unknown default:
+            return
+        }
+
+        interruptibleAnimator?.isReversed = isReversed
+        interruptibleAnimator?.continueAnimation?(withTimingParameters: nil, durationFactor: durationFraction)
     }
 
     func animationProgressUpdate(for translation: CGPoint) -> CGFloat {

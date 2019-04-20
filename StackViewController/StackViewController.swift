@@ -139,8 +139,8 @@ private extension StackViewController {
         return viewControllers[beforeIndex]
     }
 
-    func animatorForTransitionFrom(_ from: UIViewController,
-                                   to: UIViewController) -> UIViewControllerAnimatedTransitioning {
+    func animatorForTransition(from: UIViewController,
+                               to: UIViewController) -> UIViewControllerAnimatedTransitioning {
 
         if let animator = delegate?.stackViewController(self,
                                                         animationControllerForTransitionFrom: from,
@@ -152,10 +152,10 @@ private extension StackViewController {
         }
     }
 
-    func transitionContextForTransitionFrom(_ from: UIViewController,
-                                            to: UIViewController,
-                                            animated: Bool = true,
-                                            interactive: Bool = false) -> StackViewControllerTransitionContext {
+    func transitionContextForTransition(from: UIViewController,
+                                        to: UIViewController,
+                                        animated: Bool = true,
+                                        interactive: Bool = false) -> StackViewControllerTransitionContext {
 
         let transitionType = self.transitionType(fromViewController: from, toViewController: to)
 
@@ -190,8 +190,8 @@ private extension StackViewController {
 
     func performTransition(from: UIViewController, to: UIViewController, animated: Bool) {
 
-        let context = transitionContextForTransitionFrom(from, to: to, animated: animated)
-        let animator = animatorForTransitionFrom(from, to: to)
+        let context = transitionContextForTransition(from: from, to: to, animated: animated)
+        let animator = animatorForTransition(from: from, to: to)
 
         from.willMove(toParent: nil)
         from.beginAppearanceTransition(false, animated: animated)
@@ -231,13 +231,13 @@ extension StackViewController: UIGestureRecognizerDelegate {
 
         guard let from = topViewController else { return false }
         guard let to = viewControllerBefore(from) else { return false }
-        guard let animationController = animatorForTransitionFrom(from, to: to) as? HorizontalSlideAnimationController else { return false }
 
-        let context = transitionContextForTransitionFrom(from, to: to, interactive: true)
+        let animationController = animatorForTransition(from: from, to: to)
+        let context = transitionContextForTransition(from: from, to: to, interactive: true)
 
         interactiveController = HorizontalSlideInteractiveController(animationController: animationController,
-                                                                   gestureRecognizer: screenEdgePanGestureRecognizer)
-        interactiveController?.context = context
+                                                                     gestureRecognizer: screenEdgePanGestureRecognizer,
+                                                                     context: context)
 
 //        from.willMove(toParent: nil)
 //        from.beginAppearanceTransition(false, animated: true)

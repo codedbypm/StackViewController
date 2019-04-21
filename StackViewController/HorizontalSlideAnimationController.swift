@@ -91,7 +91,7 @@ private extension HorizontalSlideAnimationController {
         let containerView = context.containerView
         
         containerView.insertSubview(to.view, belowSubview: from.view)
-        to.view.frame = containerView.bounds
+        to.view.frame = containerView.bounds.offsetBy(dx: -90.0, dy: 0.0)
     }
 
     typealias Animations = () -> Void

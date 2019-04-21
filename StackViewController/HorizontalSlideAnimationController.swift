@@ -101,7 +101,10 @@ private extension HorizontalSlideAnimationController {
         case .slideIn:
             return {
                 guard let to = context.viewController(forKey: .to) else { return }
+                guard let from = context.viewController(forKey: .from) else { return }
+                
                 to.view.frame = context.finalFrame(for: to)
+                from.view.frame = from.view.frame.offsetBy(dx: -90.0, dy: 0.0)
             }
         case .slideOut:
             return {

@@ -219,7 +219,6 @@ private extension StackViewController {
 
         addChild(to)
         view.addSubview(to.view)
-        to.view.pinEdgesToSuperView()
         to.didMove(toParent: self)
     }
 }

@@ -126,11 +126,10 @@ private extension HorizontalSlideInteractiveController {
     }
 
     func completionPosition() -> UIViewAnimatingPosition {
-        let panGestureLocation = gestureRecognizer.location(in: context.containerView)
         let panGestureTranslation = gestureRecognizer.translation(in: context.containerView)
         let threshold = context.containerView.bounds.midX
 
-        if panGestureLocation.x + panGestureTranslation.x > threshold {
+        if panGestureTranslation.x > threshold {
             return .end
         } else {
             return .start

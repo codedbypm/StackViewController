@@ -15,7 +15,7 @@ class UIKitCoordinator: NSObject {
     var operation: UINavigationController.Operation = .none
 
     lazy var navigationController: UINavigationController = {
-        let navController = UINavigationController(rootViewController: yellowViewController())
+        let navController = UINavigationController(rootViewController: yellowViewController)
         navController.delegate = self
         navController.interactivePopGestureRecognizer?.delegate = self
         navController.tabBarItem = UITabBarItem(title: "UIKit", image: nil, tag: 1)
@@ -24,20 +24,30 @@ class UIKitCoordinator: NSObject {
 
     var interactionController: HorizontalSlideInteractiveController?
 
-    func start() -> UIViewController {
-        return navigationController
-    }
-
-    func yellowViewController() -> UIViewController {
+    lazy var yellowViewController: YellowViewController = {
         let yellow = YellowViewController()
+        yellow.navigationItem.title = "var yellow"
         yellow.onNext = {
-            self.navigationController.pushViewController(self.pinkViewController(), animated: true)
+            self.navigationController.pushViewController(self.pinkViewController, animated: true)
+        }
+
+        yellow.onReplaceViewControllers = {
+            let viewControllers = [
+                self.newPinkViewController(title: "root pink"),
+                yellow,
+                self.newPinkViewController(title: "top pink")
+            ]
+
+            self.navigationController.setViewControllers(viewControllers, animated: true)
         }
         return yellow
-    }
+    }()
+    
+    lazy var pinkViewController: UIViewController = newPinkViewController(title: "var pink")
 
-    func pinkViewController() -> UIViewController {
+    func newPinkViewController(title: String) -> UIViewController {
         let pink = PinkViewController()
+        pink.navigationItem.title = title
         pink.onBack = { self.navigationController.popViewController(animated: true) }
         return pink
     }
@@ -52,22 +62,22 @@ extension UIKitCoordinator: UIGestureRecognizerDelegate {
 
 extension UIKitCoordinator: UINavigationControllerDelegate {
 
-    func navigationController(_ navigationController: UINavigationController,
-                              animationControllerFor operation: UINavigationController.Operation,
-                              from fromVC: UIViewController,
-                              to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-
-        self.operation = operation
-
-        switch operation {
-        case .push:
-            return HorizontalSlideAnimationController(type: .slideIn)
-        case .pop:
-            return HorizontalSlideAnimationController(type: .slideOut)
-        default:
-            return nil
-        }
-    }
+//    func navigationController(_ navigationController: UINavigationController,
+//                              animationControllerFor operation: UINavigationController.Operation,
+//                              from fromVC: UIViewController,
+//                              to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//
+//        self.operation = operation
+//
+//        switch operation {
+//        case .push:
+//            return HorizontalSlideAnimationController(type: .slideIn)
+//        case .pop:
+//            return HorizontalSlideAnimationController(type: .slideOut)
+//        default:
+//            return nil
+//        }
+//    }
 
 //    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
 //

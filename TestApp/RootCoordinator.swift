@@ -19,13 +19,13 @@ class RootCoordinator: NSObject {
 
     let stackCoordinator = StackCoordinator()
     let uikitCoordinator = UIKitCoordinator()
-    lazy var stackRootViewController = stackCoordinator.start()
-    lazy var uikitRootViewController = uikitCoordinator.start()
 
     init(window: UIWindow) {
         super.init()
 
-        tabBarController.setViewControllers([stackRootViewController, uikitRootViewController], animated: false)
+        tabBarController.setViewControllers([stackCoordinator.stackViewController,
+                                             uikitCoordinator.navigationController],
+                                            animated: false)
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()
     }

@@ -12,27 +12,36 @@ import StackViewController
 class StackCoordinator {
 
     lazy var stackViewController: StackViewController = {
-        let stack = StackViewController(viewControllers: [yellowViewController()])
+        let stack = StackViewController(viewControllers: [yellowViewController])
         stack.tabBarItem = UITabBarItem(title: "Stack", image: nil, tag: 1)
         return stack
     }()
 
-    func start() -> UIViewController {
-        return stackViewController
-    }
-
-    func yellowViewController() -> UIViewController {
+    lazy var yellowViewController: YellowViewController = {
         let yellow = YellowViewController()
+        yellow.navigationItem.title = "var yellow"
         yellow.onNext = {
-            self.stackViewController.pushViewController(self.pinkViewController(), animated: true)
+            self.stackViewController.pushViewController(self.pinkViewController, animated: true)
+        }
+
+        yellow.onReplaceViewControllers = {
+            let viewControllers = [
+                self.newPinkViewController(title: "root pink"),
+                yellow,
+                self.newPinkViewController(title: "top pink")
+            ]
+
+            self.stackViewController.setViewControllers(viewControllers, animated: true)
         }
         return yellow
-    }
+    }()
 
-    func pinkViewController() -> UIViewController {
+    lazy var pinkViewController: UIViewController = newPinkViewController(title: "var pink")
+
+    func newPinkViewController(title: String) -> UIViewController {
         let pink = PinkViewController()
+        pink.navigationItem.title = title
         pink.onBack = { self.stackViewController.popViewController(animated: true) }
         return pink
     }
-
 }

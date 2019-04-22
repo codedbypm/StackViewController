@@ -14,6 +14,7 @@ class YellowViewController: UIViewController {
     let debugAppearance = false
 
     var onNext: (() -> Void)?
+    var onReplaceViewControllers: (() -> Void)?
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -31,10 +32,18 @@ class YellowViewController: UIViewController {
         return button
     }()
 
+    lazy var replaceViewControllersButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Replace viewControllers", for: .normal)
+        button.addTarget(self, action: #selector(didTapReplaceViewControllers), for: .touchUpInside)
+        return button
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Yellow"
         view.backgroundColor = .yellow
+
         addSubviews()
         addSubviewsLayoutConstraints()
     }
@@ -73,11 +82,13 @@ private extension YellowViewController {
     func addSubviews() {
         view.addSubview(titleLabel)
         view.addSubview(nextButton)
+        view.addSubview(replaceViewControllersButton)
     }
 
     func addSubviewsLayoutConstraints() {
         addTitleLabelLayoutConstraints()
         addNextButtonLayoutConstraints()
+        addReplaceViewControllersButtonConstraints()
     }
 
     func addTitleLabelLayoutConstraints() {
@@ -92,7 +103,17 @@ private extension YellowViewController {
         nextButton.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
     }
 
+    func addReplaceViewControllersButtonConstraints() {
+        replaceViewControllersButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        replaceViewControllersButton.topAnchor.constraint(greaterThanOrEqualTo: nextButton.bottomAnchor, constant: 20.0).isActive = true
+        replaceViewControllersButton.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+    }
+
     @objc func didTapShowNext() {
         onNext?()
+    }
+
+    @objc func didTapReplaceViewControllers() {
+        onReplaceViewControllers?()
     }
 }

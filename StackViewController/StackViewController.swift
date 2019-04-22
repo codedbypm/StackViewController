@@ -218,10 +218,7 @@ private extension StackViewController {
     }
 
     func showTopViewController() {
-        guard let to = topViewController else {
-            assertionFailure("Error: trying to show the top viewController but there are no view controllers in the stack")
-            return
-        }
+        guard let to = topViewController else { return }
 
         addChild(to)
         view.addSubview(to.view)

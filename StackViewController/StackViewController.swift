@@ -83,16 +83,23 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         }
     }
 
+    @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
-        let last = viewControllers.last
-        _popViewController(animated: animated)
-        return last
+        guard let from = topViewController else { return nil }
+        guard let to = viewControllerBefore(from) else { return nil }
+
+        return popToViewController(to, animated: animated).first
     }
 
-    public func _popViewController(animated: Bool) {
+    @discardableResult
+    func popToViewController(_ to: UIViewController, animated: Bool) -> [UIViewController] {
+        guard let from = topViewController, topViewController != to else { return [] }
+        guard let indexOfTo = viewControllers.firstIndex(where: { $0 === to }) else { return [] }
 
-        guard let from = topViewController else {
-            assertionFailure("Error: Cannot hide a view controller which is not on top of the stack")
+        let poppedViewControllers = viewControllers[(indexOfTo + 1)...]
+        performTransition(from: from, to: to, animated: animated, interactive: false)
+        return Array(poppedViewControllers)
+    }
             return
         }
 

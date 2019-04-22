@@ -32,7 +32,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     public weak var delegate: StackViewControllerDelegate?
 
-    public var viewControllers: [UIViewController] = []
+    public private(set) var viewControllers: [UIViewController]
 
     public var topViewController: UIViewController? {
         return viewControllers.last

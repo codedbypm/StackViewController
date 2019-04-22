@@ -22,6 +22,12 @@ public protocol StackViewControllerDelegate: class {
 
 public class StackViewController: UIViewController, StackViewControllerHandling {
 
+    public enum Operation {
+        case push
+        case pop
+        case none
+    }
+    
     // MARK: - Public properties
 
     public weak var delegate: StackViewControllerDelegate?

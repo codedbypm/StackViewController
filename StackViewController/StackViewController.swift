@@ -68,20 +68,19 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
     // MARK: - Public methods
 
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        guard isViewLoaded else {
-            assertionFailure("Error: Cannot push a view controller before the \(String(describing: self))'s view is loaded")
+        guard !viewControllers.contains(viewController) else {
+            assertionFailure(StackViewControllerError.duplicateOnPushing.localizedDescription)
             return
         }
-
-        guard let from = topViewController else {
-            showTopViewController()
-            return
-        }
-
-        let to = viewController
 
         viewControllers.append(viewController)
-        performTransition(from: from, to: to, animated: animated, interactive: false)
+
+        if let from = topViewController {
+            let to = viewController
+            performTransition(from: from, to: to, animated: animated, interactive: false)
+        } else {
+            showTopViewController()
+        }
     }
 
     public func popViewController(animated: Bool) -> UIViewController? {

@@ -100,15 +100,43 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         performTransition(from: from, to: to, animated: animated, interactive: false)
         return Array(poppedViewControllers)
     }
+
+    public func setViewControllers(_ newViewControllers: [UIViewController], animated: Bool) {
+        guard let newTopViewController = newViewControllers.last else {
+            assertionFailure("Error: Cannot replace viewControllers with an empty array")
             return
         }
 
-        guard let to = viewControllerBefore(from) else {
-            assertionFailure("Error: Cannot pop the last view controller")
-            return
+        let operation = stackViewControllerOperation(for: newViewControllers)
+
+        switch operation {
+        case .push:
+            pushViewController(newTopViewController, animated: animated)
+        case .pop:
+            popToViewController(newTopViewController, animated: animated)
+        case .none:
+            break
         }
 
-        performTransition(from: from, to: to, animated: animated, interactive: false)
+        viewControllers = newViewControllers
+
+//
+//        guard let topViewController = topViewController else {
+//            pushViewController(newTopViewController, animated: animated)
+//            return
+//        }
+//
+//        guard topViewController != newTopViewController else {
+//            return
+//        }
+//
+//        if viewControllers.contains(newTopViewController) {
+//            popToViewController(newTopViewController, animated: animated)
+//            return
+//        } else {
+//            pushViewController(newTopViewController, animated: animated)
+//            return
+//        }
     }
 }
 

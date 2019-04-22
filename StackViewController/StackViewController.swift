@@ -56,11 +56,12 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {
-        super.init(nibName: nil, bundle: nil)
         self.viewControllers = viewControllers
+        super.init(nibName: nil, bundle: nil)
     }
 
     public required init?(coder aDecoder: NSCoder) {
+        self.viewControllers = []
         super.init(coder: aDecoder)
     }
 

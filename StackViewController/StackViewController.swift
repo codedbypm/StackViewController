@@ -73,10 +73,12 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
             return
         }
 
-        viewControllers.append(viewController)
+        let from = topViewController
+        let to = viewController
 
-        if let from = topViewController {
-            let to = viewController
+        viewControllers.append(to)
+
+        if let from = from {
             performTransition(from: from, to: to, animated: animated, interactive: false)
         } else {
             showTopViewController()

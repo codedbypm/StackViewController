@@ -107,7 +107,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
             return
         }
 
-        let operation = stackViewControllerOperation(for: newViewControllers)
+        let operation = operationWhenReplacingStack(with: newViewControllers)
 
         switch operation {
         case .push:
@@ -119,24 +119,30 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         }
 
         viewControllers = newViewControllers
+    }
 
-//
-//        guard let topViewController = topViewController else {
-//            pushViewController(newTopViewController, animated: animated)
-//            return
-//        }
-//
-//        guard topViewController != newTopViewController else {
-//            return
-//        }
-//
-//        if viewControllers.contains(newTopViewController) {
-//            popToViewController(newTopViewController, animated: animated)
-//            return
-//        } else {
-//            pushViewController(newTopViewController, animated: animated)
-//            return
-//        }
+    func operationWhenReplacingStack(with newStack: [UIViewController]) -> Operation {
+
+        guard let newTopViewController = newStack.last else {
+            // newStack is empty
+            return .none
+        }
+
+        guard let oldTopViewController = topViewController else {
+            // oldStack is empty
+            return .none
+        }
+
+        guard newTopViewController != oldTopViewController else {
+            // the new top is already on top of the old stack
+            return .none
+        }
+
+        if viewControllers.contains(newTopViewController) {
+            return .pop
+        } else {
+            return .push
+        }
     }
 }
 

@@ -15,7 +15,8 @@ public protocol StackViewControllerHandling: UIViewController {
 
 public protocol StackViewControllerDelegate: class {
     func stackViewController(_: StackViewController,
-                             animationControllerForTransitionFrom from: UIViewController,
+                             animationControllerForOperation: StackViewController.Operation,
+                             from: UIViewController,
                              to: UIViewController) -> UIViewControllerAnimatedTransitioning?
 
 }
@@ -25,7 +26,6 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
     public enum Operation {
         case push
         case pop
-        case none
     }
     
     // MARK: - Public properties
@@ -83,7 +83,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
 
         if let from = from {
-            performTransition(from: from, to: to, animated: animated) { didComplete in
+            performTransition(forOperation: .push, from: from, to: to, animated: animated) { didComplete in
                 guard didComplete else { return }
                 self.viewControllers.append(to)
             }
@@ -106,7 +106,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         guard let indexOfTo = viewControllers.firstIndex(where: { $0 === to }) else { return [] }
 
         let poppedViewControllers = viewControllers[(indexOfTo + 1)...]
-        performTransition(from: from, to: to, animated: animated, interactive: false) { didComplete in
+        performTransition(forOperation: .pop, from: from, to: to, animated: animated, interactive: false) { didComplete in
             guard didComplete else { return }
             self.viewControllers.removeLast(poppedViewControllers.count)
         }
@@ -126,8 +126,6 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
             pushViewController(newTopViewController, animated: animated)
         case .pop:
             popToViewController(newTopViewController, animated: animated)
-        case .none:
-            break
         }
 
         viewControllers = newViewControllers
@@ -137,18 +135,18 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
         guard let newTopViewController = newStack.last else {
             // newStack is empty
-            return .none
+            return .pop
         }
 
         guard let oldTopViewController = topViewController else {
             // oldStack is empty
-            return .none
+            return .push
         }
 
-        guard newTopViewController != oldTopViewController else {
-            // the new top is already on top of the old stack
-            return .none
-        }
+//        guard newTopViewController != oldTopViewController else {
+//            // the new top is already on top of the old stack
+//            return .none
+//        }
 
         if viewControllers.contains(newTopViewController) {
             return .pop
@@ -217,13 +215,14 @@ extension StackViewController: UIGestureRecognizerDelegate {
 private extension StackViewController {
 
     func performInteractivePopTransition(from: UIViewController, to: UIViewController) {
-        performTransition(from: from, to: to, animated: true, interactive: true) { didComplete in
+        performTransition(forOperation: .pop, from: from, to: to, animated: true, interactive: true) { didComplete in
             guard didComplete else { return }
             self.viewControllers.removeLast()
         }
     }
 
-    func performTransition(from: UIViewController,
+    func performTransition(forOperation operation: Operation,
+                           from: UIViewController,
                            to: UIViewController,
                            animated: Bool,
                            interactive: Bool = false,
@@ -245,7 +244,7 @@ private extension StackViewController {
 
         sendInitialViewAppearanceEvents(from: from, to: to, animated: animated)
 
-        let animationController = animationControllerForTransition(from: from, to: to)
+        let animationController = animationControllerForOperation(operation, from: from, to: to)
 
         if interactive {
             interactiveController = HorizontalSlideInteractiveController(animationController: animationController,
@@ -286,15 +285,17 @@ private extension StackViewController {
 
 private extension StackViewController {
 
-    func animationControllerForTransition(from: UIViewController,
-                                          to: UIViewController) -> UIViewControllerAnimatedTransitioning {
+    func animationControllerForOperation(_ operation: Operation,
+                                         from: UIViewController,
+                                         to: UIViewController) -> UIViewControllerAnimatedTransitioning {
 
         if let animator = delegate?.stackViewController(self,
-                                                        animationControllerForTransitionFrom: from,
+                                                        animationControllerForOperation: operation,
+                                                        from: from,
                                                         to: to) {
             return animator
         } else {
-            let transitionType = self.transitionType(fromViewController: from, toViewController: to)
+            let transitionType = self.transitionType(for: operation)
             return HorizontalSlideAnimationController(type: transitionType)
         }
     }
@@ -328,11 +329,10 @@ extension StackViewController {
         return viewControllers[beforeIndex]
     }
 
-    func transitionType(fromViewController from: UIViewController, toViewController to: UIViewController) -> HorizontalSlideTransitionType {
-        if let topViewController = topViewController, topViewController === to {
-            return .slideIn
-        } else {
-            return .slideOut
+    func transitionType(for operation: Operation) -> HorizontalSlideTransitionType {
+        switch operation {
+        case .push: return .slideIn
+        case .pop: return .slideOut
         }
     }
 }

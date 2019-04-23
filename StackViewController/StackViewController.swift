@@ -232,7 +232,7 @@ private extension StackViewController {
 
         sendInitialViewAppearanceEvents(from: from, to: to, animated: animated)
 
-        let animationController = animatorForTransition(from: from, to: to)
+        let animationController = animationControllerForTransition(from: from, to: to)
 
         if interactive {
             interactiveController = HorizontalSlideInteractiveController(animationController: animationController,
@@ -273,18 +273,8 @@ private extension StackViewController {
 
 private extension StackViewController {
 
-    func viewControllerBefore(_ viewController: UIViewController) -> UIViewController? {
-        let indexOfViewControllerInStack = viewControllers.firstIndex(of: viewController)
-
-        guard let beforeIndex = indexOfViewControllerInStack?.advanced(by: -1), beforeIndex >= 0 else {
-            return nil
-        }
-
-        return viewControllers[beforeIndex]
-    }
-
-    func animatorForTransition(from: UIViewController,
-                               to: UIViewController) -> UIViewControllerAnimatedTransitioning {
+    func animationControllerForTransition(from: UIViewController,
+                                          to: UIViewController) -> UIViewControllerAnimatedTransitioning {
 
         if let animator = delegate?.stackViewController(self,
                                                         animationControllerForTransitionFrom: from,
@@ -308,6 +298,21 @@ private extension StackViewController {
         context.isInteractive = interactive
 
         return context
+    }
+}
+
+// MARK: - Stack-based information
+
+extension StackViewController {
+
+    func viewControllerBefore(_ viewController: UIViewController) -> UIViewController? {
+        let indexOfViewControllerInStack = viewControllers.firstIndex(of: viewController)
+
+        guard let beforeIndex = indexOfViewControllerInStack?.advanced(by: -1), beforeIndex >= 0 else {
+            return nil
+        }
+
+        return viewControllers[beforeIndex]
     }
 
     func transitionType(fromViewController from: UIViewController, toViewController to: UIViewController) -> HorizontalSlideTransitionType {

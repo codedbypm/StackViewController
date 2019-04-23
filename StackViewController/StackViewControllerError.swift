@@ -9,15 +9,15 @@
 import Foundation
 
 public enum StackViewControllerError: Error {
-    case duplicateOnPushing
+    case controllerAlreadyInStack(UIViewController)
 }
 
 extension StackViewControllerError {
 
     public var localizedDescription: String {
         switch self {
-        case .duplicateOnPushing:
-            return NSLocalizedString("It is not allowed to push an instance of UIViewController, if the same instance is already in the stack",
+        case .controllerAlreadyInStack(let viewController):
+            return NSLocalizedString("It is not allowed to push view controller \(viewController), since it is already in the stack",
                                      comment: "")
         }
     }

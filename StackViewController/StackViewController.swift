@@ -69,7 +69,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
         guard !viewControllers.contains(viewController) else {
-            assertionFailure(StackViewControllerError.duplicateOnPushing.localizedDescription)
+            assertionFailure(StackViewControllerError.controllerAlreadyInStack(viewController).localizedDescription)
             return
         }
 

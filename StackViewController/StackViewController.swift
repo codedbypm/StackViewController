@@ -84,7 +84,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         viewControllers.append(to)
 
         if let from = from {
-            performTransition(from: from, to: to, animated: animated, interactive: false)
+            performTransition(from: from, to: to, animated: animated)
         } else {
             showTopViewController()
         }
@@ -215,7 +215,7 @@ private extension StackViewController {
         performTransition(from: from, to: to, animated: true, interactive: true)
     }
 
-    func performTransition(from: UIViewController, to: UIViewController, animated: Bool, interactive: Bool) {
+    func performTransition(from: UIViewController, to: UIViewController, animated: Bool, interactive: Bool = false) {
         let transitionType = self.transitionType(fromViewController: from, toViewController: to)
 
         let context = transitionContextForTransition(from: from,

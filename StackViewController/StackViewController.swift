@@ -67,8 +67,13 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     // MARK: - Public methods
 
+    func canPush(_ viewController: UIViewController) -> Bool {
+        guard !viewControllers.contains(viewController) else { return false }
+        return true
+    }
+
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        guard !viewControllers.contains(viewController) else {
+        guard canPush(viewController) else {
             assertionFailure(StackViewControllerError.controllerAlreadyInStack(viewController).localizedDescription)
             return
         }

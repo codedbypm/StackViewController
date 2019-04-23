@@ -81,10 +81,12 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         let from = topViewController
         let to = viewController
 
-        viewControllers.append(to)
 
         if let from = from {
-            performTransition(from: from, to: to, animated: animated)
+            performTransition(from: from, to: to, animated: animated) { didComplete in
+                guard didComplete else { return }
+                self.viewControllers.append(to)
+            }
         } else {
             showTopViewController()
         }
@@ -104,7 +106,10 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         guard let indexOfTo = viewControllers.firstIndex(where: { $0 === to }) else { return [] }
 
         let poppedViewControllers = viewControllers[(indexOfTo + 1)...]
-        performTransition(from: from, to: to, animated: animated, interactive: false)
+        performTransition(from: from, to: to, animated: animated, interactive: false) { didComplete in
+            guard didComplete else { return }
+            self.viewControllers.removeLast(poppedViewControllers.count)
+        }
         return Array(poppedViewControllers)
     }
 
@@ -202,7 +207,7 @@ extension StackViewController: UIGestureRecognizerDelegate {
         guard let from = topViewController else { return false }
         guard let to = viewControllerBefore(from) else { return false }
 
-        performInteractiveTransition(from: from, to: to)
+        performInteractivePopTransition(from: from, to: to)
         return true
     }
 }
@@ -211,12 +216,18 @@ extension StackViewController: UIGestureRecognizerDelegate {
 
 private extension StackViewController {
 
-    func performInteractiveTransition(from: UIViewController, to: UIViewController) {
-        performTransition(from: from, to: to, animated: true, interactive: true)
+    func performInteractivePopTransition(from: UIViewController, to: UIViewController) {
+        performTransition(from: from, to: to, animated: true, interactive: true) { didComplete in
+            guard didComplete else { return }
+            self.viewControllers.removeLast()
+        }
     }
 
-    func performTransition(from: UIViewController, to: UIViewController, animated: Bool, interactive: Bool = false) {
-        let transitionType = self.transitionType(fromViewController: from, toViewController: to)
+    func performTransition(from: UIViewController,
+                           to: UIViewController,
+                           animated: Bool,
+                           interactive: Bool = false,
+                           completion: ((Bool) -> Void)?) {
 
         let context = transitionContextForTransition(from: from,
                                                      to: to,
@@ -224,14 +235,11 @@ private extension StackViewController {
                                                      interactive: interactive)
 
         context.onTransitionFinished = { didComplete in
-            defer { self.interactiveController = nil }
+            self.interactiveController = nil
+            completion?(didComplete)
 
-            guard didComplete else { return }
-
-            self.sendFinalViewAppearanceEvents(from: from, to: to)
-
-            if transitionType == .slideOut {
-                self.viewControllers.removeLast()
+            if didComplete {
+                self.sendFinalViewAppearanceEvents(from: from, to: to)
             }
         }
 

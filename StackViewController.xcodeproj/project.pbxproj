@@ -26,6 +26,8 @@
 		FD76B7052270C9530090EDB2 /* StackViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* StackViewController.framework */; };
 		FD76B7632270DA340090EDB2 /* StackViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7622270DA340090EDB2 /* StackViewController+Extensions.swift */; };
 		FD76B7652270E3B70090EDB2 /* TimeInterval+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */; };
+		FD76B7672270E9C60090EDB2 /* StackViewControllerTests+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */; };
+		FD76B7692270EA010090EDB2 /* StackViewControllerTests+Push.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +84,8 @@
 		FD76B7042270C9530090EDB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD76B7622270DA340090EDB2 /* StackViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+Extensions.swift"; sourceTree = "<group>"; };
 		FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extensions.swift"; sourceTree = "<group>"; };
+		FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+Properties.swift"; sourceTree = "<group>"; };
+		FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+Push.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +176,8 @@
 			isa = PBXGroup;
 			children = (
 				FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */,
+				FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */,
+				FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */,
 				FD76B7622270DA340090EDB2 /* StackViewController+Extensions.swift */,
 				FD76B7042270C9530090EDB2 /* Info.plist */,
 				FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */,
@@ -345,6 +351,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD76B7692270EA010090EDB2 /* StackViewControllerTests+Push.swift in Sources */,
+				FD76B7672270E9C60090EDB2 /* StackViewControllerTests+Properties.swift in Sources */,
 				FD76B7032270C9530090EDB2 /* StackViewControllerTests.swift in Sources */,
 				FD76B7652270E3B70090EDB2 /* TimeInterval+Extensions.swift in Sources */,
 				FD76B7632270DA340090EDB2 /* StackViewController+Extensions.swift in Sources */,

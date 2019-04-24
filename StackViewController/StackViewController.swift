@@ -83,8 +83,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
 
         if let from = from {
-            performTransition(forOperation: .push, from: from, to: to, animated: animated) { didComplete in
-                guard didComplete else { return }
+            performTransition(forOperation: .push, from: from, to: to, animated: animated) {
                 self.viewControllers.append(to)
             }
         } else {
@@ -106,8 +105,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         guard let indexOfTo = viewControllers.firstIndex(where: { $0 === to }) else { return [] }
 
         let poppedViewControllers = viewControllers[(indexOfTo + 1)...]
-        performTransition(forOperation: .pop, from: from, to: to, animated: animated, interactive: false) { didComplete in
-            guard didComplete else { return }
+        performTransition(forOperation: .pop, from: from, to: to, animated: animated, interactive: false) {
             self.viewControllers.removeLast(poppedViewControllers.count)
         }
         return Array(poppedViewControllers)
@@ -215,8 +213,7 @@ extension StackViewController: UIGestureRecognizerDelegate {
 private extension StackViewController {
 
     func performInteractivePopTransition(from: UIViewController, to: UIViewController) {
-        performTransition(forOperation: .pop, from: from, to: to, animated: true, interactive: true) { didComplete in
-            guard didComplete else { return }
+        performTransition(forOperation: .pop, from: from, to: to, animated: true, interactive: true) {
             self.viewControllers.removeLast()
         }
     }
@@ -226,7 +223,7 @@ private extension StackViewController {
                            to: UIViewController,
                            animated: Bool,
                            interactive: Bool = false,
-                           completion: ((Bool) -> Void)?) {
+                           completion: (() -> Void)?) {
 
         let context = transitionContextForTransition(from: from,
                                                      to: to,
@@ -235,9 +232,9 @@ private extension StackViewController {
 
         context.onTransitionFinished = { didComplete in
             self.interactiveController = nil
-            completion?(didComplete)
 
             if didComplete {
+                completion?()
                 self.sendFinalViewAppearanceEvents(from: from, to: to)
             }
         }

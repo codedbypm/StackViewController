@@ -125,20 +125,16 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     func operationWhenReplacingStack(with newStack: [UIViewController]) -> Operation {
 
+        // newStack is empty => instant pop all
         guard let newTopViewController = newStack.last else {
-            // newStack is empty
             return .pop
         }
 
+        // oldStack is empty => instant push all
         guard let oldTopViewController = topViewController else {
             // oldStack is empty
             return .push
         }
-
-//        guard newTopViewController != oldTopViewController else {
-//            // the new top is already on top of the old stack
-//            return .none
-//        }
 
         if viewControllers.contains(newTopViewController) {
             return .pop

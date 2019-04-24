@@ -281,12 +281,22 @@ private extension StackViewController {
         to.endAppearanceTransition()
     }
 
-    func showTopViewController() {
-        guard let to = topViewController else { return }
+    func show(_ viewController: UIViewController) {
+        addChild(viewController)
+        viewController.didMove(toParent: self)
 
-        addChild(to)
-        view.addSubview(to.view)
-        to.didMove(toParent: self)
+        viewController.beginAppearanceTransition(true, animated: false)
+        view.addSubview(viewController.view)
+        viewController.endAppearanceTransition()
+    }
+
+    func hideVisibleViewController() {
+        visibleViewController?.beginAppearanceTransition(false, animated: false)
+        visibleViewController?.view.removeFromSuperview()
+        visibleViewController?.endAppearanceTransition()
+
+        visibleViewController?.willMove(toParent: nil)
+        visibleViewController?.removeFromParent()
     }
 }
 

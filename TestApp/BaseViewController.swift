@@ -8,8 +8,26 @@
 
 import UIKit
 
+enum Color: String {
+    case yellow
+    case green
+
+    var uiColor: UIColor {
+        switch self {
+        case .yellow: return .yellow
+        case .green: return .green
+        }
+    }
+}
+
+protocol DebugDelegate: class {
+    func debug(_ text: String)
+}
+
 class BaseViewController: UIViewController {
 
+    weak var delegate: DebugDelegate?
+    
     let debugAppearance = true
     let debugViewControllerContainment = true
 
@@ -50,11 +68,13 @@ class BaseViewController: UIViewController {
         return button
     }()
 
-    private let backgroundColor: UIColor
+    private let color: Color
     private let showsBackButton: Bool
     
-    required init(color: UIColor, title: String, showsBackButton: Bool = true) {
-        backgroundColor = color
+    required init(delegate: DebugDelegate, color: Color, title: String, showsBackButton: Bool = true) {
+        self.delegate = delegate
+        self.color = color
+        self.showsBackButton = showsBackButton
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = title
     }
@@ -65,7 +85,7 @@ class BaseViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = backgroundColor
+        view.backgroundColor = color.uiColor
 
         addSubviews()
         addSubviewsLayoutConstraints()
@@ -74,47 +94,63 @@ class BaseViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if debugAppearance {
-            print("\(String(describing: self)): viewWillAppear")
+            delegate?.debug(String(describing: self)
+                .appending(" => ")
+                .appending(#function))
         }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if debugAppearance {
-            print("\(String(describing: self)): viewDidAppear")
+            delegate?.debug(String(describing: self)
+                .appending(" => ")
+                .appending(#function))
         }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if debugAppearance {
-            print("\(String(describing: self)): viewWillDisappear")
+            delegate?.debug(String(describing: self)
+                .appending(" => ")
+                .appending(#function))
         }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if debugAppearance {
-            print("\(String(describing: self)): viewDidDisappear")
+            delegate?.debug(String(describing: self)
+                .appending(" => ")
+                .appending(#function))
         }
     }
 
     override func willMove(toParent parent: UIViewController?) {
         super.willMove(toParent: parent)
         if debugViewControllerContainment {
-            print("\(String(describing: self)): willMove(toParent: \(String(describing: parent))")
+            delegate?.debug(String(describing: self)
+                .appending(" => ")
+                .appending(#function)
+                .appending(" ")
+                .appending(String(describing: parent)))
         }
     }
 
     override func didMove(toParent parent: UIViewController?) {
         super.didMove(toParent: parent)
         if debugViewControllerContainment {
-            print("\(String(describing: self)): didMove(toParent: \(String(describing: parent))")
+            delegate?.debug(String(describing: self)
+                .appending(" => ")
+                .appending(#function)
+                .appending(" ")
+                .appending(String(describing: parent)))
         }
     }
 
-    override var debugDescription: String {
-        return "BaseViewController: \(navigationItem.title!)"
+    override var description: String {
+        return "\(navigationItem.title?.capitalized ?? "")"
     }
 }
 

@@ -12,20 +12,20 @@ class RootCoordinator: NSObject {
 
     lazy var window: UIWindow = UIWindow(frame: UIScreen.main.bounds)
 
-    lazy var tabBarController: UITabBarController = {
-        let tabBar = UITabBarController()
-        return tabBar
-    }()
+    lazy var tabBarController = UITabBarController()
 
     let stackCoordinator = StackCoordinator()
     let uikitCoordinator = UIKitCoordinator()
 
+    lazy var stackViewController = stackCoordinator.stackViewController
+    lazy var navigationController = uikitCoordinator.navigationController
+
     init(window: UIWindow) {
         super.init()
 
-        tabBarController.setViewControllers([stackCoordinator.stackViewController,
-                                             uikitCoordinator.navigationController],
-                                            animated: false)
+        tabBarController.setViewControllers([stackViewController, navigationController], animated: false)
+        tabBarController.selectedViewController = stackViewController
+
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()
     }

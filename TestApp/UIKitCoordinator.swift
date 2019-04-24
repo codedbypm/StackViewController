@@ -12,51 +12,59 @@ extension UINavigationController: StackViewControllerHandling {}
 
 class UIKitCoordinator: NSObject {
 
+    let debugPrefix = "[UIKit]"
+    let canPrint = false
+
     var operation: UINavigationController.Operation = .none
 
     lazy var navigationController: UINavigationController = {
         let navController = UINavigationController(rootViewController: yellowViewController)
         navController.delegate = self
         navController.interactivePopGestureRecognizer?.delegate = self
-        navController.tabBarItem = UITabBarItem(title: "UIKit", image: nil, tag: 1)
+        navController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
         return navController
     }()
 
     var interactionController: HorizontalSlideInteractiveController?
 
-    lazy var yellowViewController: YellowViewController = {
-        let yellow = YellowViewController()
-        yellow.navigationItem.title = "var yellow"
+    lazy var yellowViewController: BaseViewController = {
+        let yellow = BaseViewController(delegate: self, color: .yellow, title: titled("lazy var yellow"), showsBackButton: false)
         yellow.onNext = {
-            self.navigationController.pushViewController(self.pinkViewController, animated: true)
+            self.navigationController.pushViewController(self.greenViewController, animated: true)
         }
 
         yellow.onReplaceViewControllers = {
-            let viewControllers = [
-                self.newPinkViewController(title: "root pink"),
-                yellow,
-                self.newPinkViewController(title: "top pink") {
-                    self.navigationController.setViewControllers([], animated: false)
-                }
-            ]
+            let root = self.newGreenViewController(title: self.titled("root green"))
+            let top = self.newGreenViewController(title: self.titled("top green")) {
+                self.navigationController.setViewControllers([], animated: false)
+            }
 
-            self.navigationController.setViewControllers(viewControllers, animated: true)
+            self.navigationController.setViewControllers([root, yellow, top], animated: true)
         }
 
         yellow.onEmptyStack = {
             self.navigationController.setViewControllers([], animated: true)
         }
+
         return yellow
     }()
     
-    lazy var pinkViewController: UIViewController = newPinkViewController(title: "var pink")
+    lazy var greenViewController: BaseViewController = {
+        let green = newGreenViewController(title: titled("lazy var green"))
+        green.delegate = self
+        return green
+    }()
 
-    func newPinkViewController(title: String, onEmptyStack: (() -> Void)? = nil) -> UIViewController {
-        let pink = PinkViewController()
-        pink.navigationItem.title = title
-        pink.onBack = { self.navigationController.popViewController(animated: true) }
-        pink.onEmptyStack = onEmptyStack
-        return pink
+    func newGreenViewController(title: String, onEmptyStack: (() -> Void)? = nil) -> BaseViewController {
+        let green = BaseViewController(delegate: self, color: .green, title: title)
+        green.navigationItem.title = title
+        green.onBack = { self.navigationController.popViewController(animated: true) }
+        green.onEmptyStack = onEmptyStack
+        return green
+    }
+
+    func titled(_ title: String) -> String {
+        return "\(debugPrefix) \(title)"
     }
 }
 
@@ -97,3 +105,10 @@ extension UIKitCoordinator: UINavigationControllerDelegate {
 //    }
 }
 
+extension UIKitCoordinator: DebugDelegate {
+
+    func debug(_ text: String) {
+        guard canPrint else { return }
+        print(text)
+    }
+}

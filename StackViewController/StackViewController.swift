@@ -54,7 +54,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         return recognizer
     }()
 
-    private var interactiveController: HorizontalSlideInteractiveController?
+    private var interactionController: UIViewControllerInteractiveTransitioning?
 
     // MARK: - Init
 
@@ -202,7 +202,7 @@ extension StackViewController: UIGestureRecognizerDelegate {
     }
 
     private func screenEdgePanGestureRecognizerShouldBegin() -> Bool {
-        guard interactiveController == nil else { return false }
+        guard interactionController == nil else { return false }
         guard let from = topViewController else { return false }
         guard let to = viewControllerBefore(from) else { return false }
 
@@ -234,7 +234,7 @@ private extension StackViewController {
                                                      interactive: interactive)
 
         context.onTransitionFinished = { didComplete in
-            self.interactiveController = nil
+            self.interactionController = nil
 
             if didComplete {
                 completion?()
@@ -247,9 +247,7 @@ private extension StackViewController {
         let animationController = animationControllerForOperation(operation, from: from, to: to)
 
         if interactive {
-            interactiveController = HorizontalSlideInteractiveController(animationController: animationController,
-                                                                         gestureRecognizer: screenEdgePanGestureRecognizer,
-                                                                         context: context)
+            interactionController = interactionController(for: animationController, context: context)
         } else {
             animationController.animateTransition(using: context)
         }
@@ -289,14 +287,24 @@ private extension StackViewController {
                                          from: UIViewController,
                                          to: UIViewController) -> UIViewControllerAnimatedTransitioning {
 
-        if let animator = delegate?.stackViewController(self,
-                                                        animationControllerForOperation: operation,
-                                                        from: from,
-                                                        to: to) {
-            return animator
+        if let controller = delegate?.stackViewController(self, animationControllerFor: operation,
+                                                          from: from, to: to) {
+            return controller
         } else {
             let transitionType = self.transitionType(for: operation)
             return HorizontalSlideAnimationController(type: transitionType)
+        }
+    }
+
+    func interactionController(for animationController: UIViewControllerAnimatedTransitioning,
+                               context: UIViewControllerContextTransitioning) -> UIViewControllerInteractiveTransitioning? {
+
+        if let controller = delegate?.stackViewController(self, interactionControllerFor: animationController) {
+            return controller
+        } else {
+            return HorizontalSlideInteractiveController(animationController: animationController,
+                                                        gestureRecognizer: screenEdgePanGestureRecognizer,
+                                                        context: context)
         }
     }
 

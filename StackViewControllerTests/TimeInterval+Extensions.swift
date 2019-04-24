@@ -7,3 +7,7 @@
 //
 
 import Foundation
+
+extension TimeInterval {
+    static let testExpectationTimeout: TimeInterval = 0.1
+}

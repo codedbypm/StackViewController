@@ -128,7 +128,4 @@ class StackViewControllerTests: XCTestCase {
         // Assert
         XCTAssertEqual(sut.viewControllers, [testViewController])
     }
-
-
-
 }

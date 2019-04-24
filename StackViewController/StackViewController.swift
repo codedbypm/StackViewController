@@ -71,21 +71,17 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
     // MARK: - Public methods
 
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        guard canPush(viewController) else {
-            assertionFailure(StackViewControllerError.controllerAlreadyInStack(viewController).localizedDescription)
+        guard canPush(viewController) else { return }
+
+        guard let from = topViewController else {
+            showTopViewController()
             return
         }
 
-        let from = topViewController
         let to = viewController
 
-
-        if let from = from {
-            performTransition(forOperation: .push, from: from, to: to, animated: animated) {
-                self.viewControllers.append(to)
-            }
-        } else {
-            showTopViewController()
+        performTransition(forOperation: .push, from: from, to: to, animated: animated) {
+            self.viewControllers.append(to)
         }
     }
 

@@ -114,8 +114,8 @@
 				FD67E5C7225260C40051786B /* HorizontalSlideAnimationController.swift */,
 				FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift */,
 				FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */,
-				FD67E5C2225258840051786B /* StackViewController.swift */,
 				FD22605E226E579D007E44CE /* StackViewControllerError.swift */,
+				FD67E5C2225258840051786B /* StackViewController.swift */,
 				FD67E578225250E10051786B /* StackViewController.h */,
 				FD67E579225250E10051786B /* Info.plist */,
 			);

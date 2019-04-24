@@ -24,6 +24,7 @@
 		FD76B6FB2270C5B30090EDB2 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B6FA2270C5B30090EDB2 /* BaseViewController.swift */; };
 		FD76B7032270C9530090EDB2 /* StackViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */; };
 		FD76B7052270C9530090EDB2 /* StackViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* StackViewController.framework */; };
+		FD76B7632270DA340090EDB2 /* StackViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7622270DA340090EDB2 /* StackViewControllerExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		FD76B7002270C9530090EDB2 /* StackViewControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StackViewControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerTests.swift; sourceTree = "<group>"; };
 		FD76B7042270C9530090EDB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FD76B7622270DA340090EDB2 /* StackViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */,
+				FD76B7622270DA340090EDB2 /* StackViewControllerExtensions.swift */,
 				FD76B7042270C9530090EDB2 /* Info.plist */,
 			);
 			path = StackViewControllerTests;
@@ -340,6 +343,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD76B7032270C9530090EDB2 /* StackViewControllerTests.swift in Sources */,
+				FD76B7632270DA340090EDB2 /* StackViewControllerExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

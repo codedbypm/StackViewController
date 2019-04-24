@@ -41,6 +41,15 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         return viewControllers.last
     }
 
+    public var visibleViewController: UIViewController? {
+        guard
+            let topViewController = topViewController,
+            topViewController.isViewLoaded && topViewController.view.superview != nil
+        else { return nil }
+
+        return topViewController
+    }
+
     public override var shouldAutomaticallyForwardAppearanceMethods: Bool {
         return false
     }
@@ -73,8 +82,9 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
         guard canPush(viewController) else { return }
 
-        guard let from = topViewController else {
-            showTopViewController()
+        guard let from = visibleViewController else {
+            show(viewController)
+            viewControllers.append(viewController)
             return
         }
 
@@ -87,7 +97,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
-        guard let from = topViewController else { return nil }
+        guard let from = visibleViewController else { return nil }
         guard let to = viewControllerBefore(from) else { return nil }
 
         return popToViewController(to, animated: animated).first
@@ -95,7 +105,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     @discardableResult
     func popToViewController(_ to: UIViewController, animated: Bool) -> [UIViewController] {
-        guard let from = topViewController, topViewController != to else { return [] }
+        guard let from = visibleViewController, visibleViewController != to else { return [] }
         guard let indexOfTo = viewControllers.firstIndex(where: { $0 === to }) else { return [] }
 
         let poppedViewControllers = viewControllers[(indexOfTo + 1)...]
@@ -152,27 +162,31 @@ public extension StackViewController {
         super.viewDidLoad()
         view.addGestureRecognizer(screenEdgePanGestureRecognizer)
 
-        showTopViewController()
+        if let topViewController = topViewController {
+            addChild(topViewController)
+            topViewController.didMove(toParent: self)
+            view.addSubview(topViewController.view)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        topViewController?.beginAppearanceTransition(true, animated: animated)
+        visibleViewController?.beginAppearanceTransition(true, animated: animated)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        topViewController?.endAppearanceTransition()
+        visibleViewController?.endAppearanceTransition()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        topViewController?.beginAppearanceTransition(false, animated: animated)
+        visibleViewController?.beginAppearanceTransition(false, animated: animated)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        topViewController?.endAppearanceTransition()
+        visibleViewController?.endAppearanceTransition()
     }
 }
 
@@ -190,7 +204,7 @@ extension StackViewController: UIGestureRecognizerDelegate {
 
     private func screenEdgePanGestureRecognizerShouldBegin() -> Bool {
         guard interactionController == nil else { return false }
-        guard let from = topViewController else { return false }
+        guard let from = visibleViewController else { return false }
         guard let to = viewControllerBefore(from) else { return false }
 
         performInteractivePopTransition(from: from, to: to)

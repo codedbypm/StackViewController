@@ -70,11 +70,6 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     // MARK: - Public methods
 
-    func canPush(_ viewController: UIViewController) -> Bool {
-        guard !viewControllers.contains(viewController) else { return false }
-        return true
-    }
-
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
         guard canPush(viewController) else {
             assertionFailure(StackViewControllerError.controllerAlreadyInStack(viewController).localizedDescription)
@@ -207,6 +202,16 @@ extension StackViewController: UIGestureRecognizerDelegate {
         guard let to = viewControllerBefore(from) else { return false }
 
         performInteractivePopTransition(from: from, to: to)
+        return true
+    }
+}
+
+// MARK: - Validation
+
+private extension StackViewController {
+
+    func canPush(_ viewController: UIViewController) -> Bool {
+        guard !viewControllers.contains(viewController) else { return false }
         return true
     }
 }

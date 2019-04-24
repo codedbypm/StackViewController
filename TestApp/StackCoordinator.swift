@@ -17,18 +17,17 @@ class StackCoordinator {
         return stack
     }()
 
-    lazy var yellowViewController: YellowViewController = {
-        let yellow = YellowViewController()
-        yellow.navigationItem.title = "var yellow"
+    lazy var yellowViewController: BaseViewController = {
+        let yellow = BaseViewController(color: .yellow, title: "yellow", showsBackButton: false)
         yellow.onNext = {
-            self.stackViewController.pushViewController(self.pinkViewController, animated: true)
+            self.stackViewController.pushViewController(self.greenViewController, animated: true)
         }
 
         yellow.onReplaceViewControllers = {
             let viewControllers = [
-                self.newPinkViewController(title: "root pink"),
+                self.newGreenViewController(title: "root green"),
                 yellow,
-                self.newPinkViewController(title: "top pink") {
+                self.newGreenViewController(title: "top green") {
                     self.stackViewController.setViewControllers([], animated: false)
                 }
             ]
@@ -43,10 +42,10 @@ class StackCoordinator {
         return yellow
     }()
 
-    lazy var pinkViewController: UIViewController = newPinkViewController(title: "var pink")
+    lazy var pinkViewController: UIViewController = newGreenViewController(title: "var pink")
 
-    func newPinkViewController(title: String, onEmptyStack: (() -> Void)? = nil) -> UIViewController {
-        let pink = PinkViewController()
+    func newGreenViewController(title: String, onEmptyStack: (() -> Void)? = nil) -> UIViewController {
+        let pink = BaseViewController(color: .green, title: title)
         pink.navigationItem.title = title
         pink.onBack = { self.stackViewController.popViewController(animated: true) }
         pink.onEmptyStack = onEmptyStack

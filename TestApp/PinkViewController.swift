@@ -10,10 +10,12 @@ import UIKit
 
 class PinkViewController: UIViewController {
 
-    let debugAppearance = false
+    let debugAppearance = true
 
     var onBack: (() -> Void)?
     var onNext: (() -> Void)?
+    var onReplaceViewControllers: (() -> Void)?
+    var onEmptyStack: (() -> Void)?
 
     lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
@@ -31,6 +33,22 @@ class PinkViewController: UIViewController {
         return button
     }()
 
+    lazy var replaceViewControllersButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Replace viewControllers", for: .normal)
+        button.addTarget(self, action: #selector(didTapReplaceViewControllers), for: .touchUpInside)
+        return button
+    }()
+
+    lazy var emptyStackButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Empty stack", for: .normal)
+        button.addTarget(self, action: #selector(emptyStack), for: .touchUpInside)
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor =  UIColor(red: 250/255,
@@ -69,14 +87,6 @@ class PinkViewController: UIViewController {
             print("\(String(describing: self)): viewDidDisappear")
         }
     }
-
-    @objc func didTapNext() {
-        onNext?()
-    }
-
-    @objc func didTapBack() {
-        onBack?()
-    }
 }
 
 private extension PinkViewController {
@@ -84,11 +94,15 @@ private extension PinkViewController {
     func addSubviews() {
         view.addSubview(backButton)
         view.addSubview(nextButton)
+        view.addSubview(replaceViewControllersButton)
+        view.addSubview(emptyStackButton)
     }
 
     func addSubviewsLayoutConstraints() {
         addBackButtonLayoutConstraints()
         addNextButtonLayoutConstraints()
+        addReplaceViewControllersButtonConstraints()
+        addEmptyStackButtonConstraints()
     }
 
     func addBackButtonLayoutConstraints() {
@@ -101,6 +115,34 @@ private extension PinkViewController {
         nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         nextButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         nextButton.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+    }
+
+    func addReplaceViewControllersButtonConstraints() {
+        replaceViewControllersButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        replaceViewControllersButton.topAnchor.constraint(greaterThanOrEqualTo: nextButton.bottomAnchor, constant: 20.0).isActive = true
+        replaceViewControllersButton.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+    }
+
+    func addEmptyStackButtonConstraints() {
+        emptyStackButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        emptyStackButton.topAnchor.constraint(greaterThanOrEqualTo: replaceViewControllersButton.bottomAnchor, constant: 20.0).isActive = true
+        emptyStackButton.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+    }
+
+    @objc func didTapNext() {
+        onNext?()
+    }
+
+    @objc func didTapBack() {
+        onBack?()
+    }
+
+    @objc func didTapReplaceViewControllers() {
+        onReplaceViewControllers?()
+    }
+
+    @objc func emptyStack() {
+        onEmptyStack?()
     }
 
 }

@@ -11,7 +11,7 @@ import StackViewController
 
 class YellowViewController: UIViewController {
 
-    let debugAppearance = false
+    let debugAppearance = true
 
     var onNext: (() -> Void)?
     var onReplaceViewControllers: (() -> Void)?

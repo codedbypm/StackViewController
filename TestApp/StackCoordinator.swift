@@ -28,7 +28,9 @@ class StackCoordinator {
             let viewControllers = [
                 self.newPinkViewController(title: "root pink"),
                 yellow,
-                self.newPinkViewController(title: "top pink")
+                self.newPinkViewController(title: "top pink") {
+                    self.stackViewController.setViewControllers([], animated: false)
+                }
             ]
 
             self.stackViewController.setViewControllers(viewControllers, animated: true)
@@ -43,10 +45,11 @@ class StackCoordinator {
 
     lazy var pinkViewController: UIViewController = newPinkViewController(title: "var pink")
 
-    func newPinkViewController(title: String) -> UIViewController {
+    func newPinkViewController(title: String, onEmptyStack: (() -> Void)? = nil) -> UIViewController {
         let pink = PinkViewController()
         pink.navigationItem.title = title
         pink.onBack = { self.stackViewController.popViewController(animated: true) }
+        pink.onEmptyStack = onEmptyStack
         return pink
     }
 }

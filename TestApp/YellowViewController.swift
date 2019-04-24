@@ -15,6 +15,7 @@ class YellowViewController: UIViewController {
 
     var onNext: (() -> Void)?
     var onReplaceViewControllers: (() -> Void)?
+    var onEmptyStack: (() -> Void)?
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -37,6 +38,14 @@ class YellowViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Replace viewControllers", for: .normal)
         button.addTarget(self, action: #selector(didTapReplaceViewControllers), for: .touchUpInside)
+        return button
+    }()
+
+    lazy var emptyStackButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Empty stack", for: .normal)
+        button.addTarget(self, action: #selector(emptyStack), for: .touchUpInside)
         return button
     }()
 
@@ -83,12 +92,14 @@ private extension YellowViewController {
         view.addSubview(titleLabel)
         view.addSubview(nextButton)
         view.addSubview(replaceViewControllersButton)
+        view.addSubview(emptyStackButton)
     }
 
     func addSubviewsLayoutConstraints() {
         addTitleLabelLayoutConstraints()
         addNextButtonLayoutConstraints()
         addReplaceViewControllersButtonConstraints()
+        addEmptyStackButtonConstraints()
     }
 
     func addTitleLabelLayoutConstraints() {
@@ -109,11 +120,21 @@ private extension YellowViewController {
         replaceViewControllersButton.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
     }
 
+    func addEmptyStackButtonConstraints() {
+        emptyStackButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        emptyStackButton.topAnchor.constraint(greaterThanOrEqualTo: replaceViewControllersButton.bottomAnchor, constant: 20.0).isActive = true
+        emptyStackButton.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+    }
+
     @objc func didTapShowNext() {
         onNext?()
     }
 
     @objc func didTapReplaceViewControllers() {
         onReplaceViewControllers?()
+    }
+
+    @objc func emptyStack() {
+        onEmptyStack?()
     }
 }

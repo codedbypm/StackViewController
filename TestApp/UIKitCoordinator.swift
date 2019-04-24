@@ -40,6 +40,10 @@ class UIKitCoordinator: NSObject {
 
             self.navigationController.setViewControllers(viewControllers, animated: true)
         }
+
+        yellow.onEmptyStack = {
+            self.navigationController.setViewControllers([], animated: true)
+        }
         return yellow
     }()
     

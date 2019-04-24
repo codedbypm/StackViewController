@@ -33,6 +33,11 @@ class StackCoordinator {
 
             self.stackViewController.setViewControllers(viewControllers, animated: true)
         }
+
+        yellow.onEmptyStack = {
+            self.stackViewController.setViewControllers([], animated: true)
+        }
+
         return yellow
     }()
 

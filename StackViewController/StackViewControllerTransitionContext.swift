@@ -25,7 +25,7 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
 
     // MARK: - Private properties
 
-    private var viewControllers: [UITransitionContextViewControllerKey: UIViewController]
+    private var viewControllers: [UITransitionContextViewControllerKey: UIViewController?]
     private var views: [UITransitionContextViewKey: UIView] {
         var views = [UITransitionContextViewKey: UIView]()
 
@@ -41,8 +41,8 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
 
     // MARK: - Init
 
-    init(from: UIViewController,
-         to: UIViewController,
+    init(from: UIViewController?,
+         to: UIViewController?,
          containerView: UIView) {
         self.containerView = containerView
         viewControllers = [.from: from, .to: to]
@@ -53,15 +53,15 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
     }
 
     func viewController(forKey key: UITransitionContextViewControllerKey) -> UIViewController? {
-        return viewControllers[key]
+        return viewControllers[key].flatMap({ $0 })
     }
 
     func view(forKey key: UITransitionContextViewKey) -> UIView? {
-        if case .from = key, let fromVC = viewControllers[.from], fromVC.isViewLoaded {
+        if case .from = key, let fromVC = viewControllers[.from].flatMap({ $0 }), fromVC.isViewLoaded {
             return fromVC.view
         }
 
-        if case .to = key, let toVC = viewControllers[.to], toVC.isViewLoaded {
+        if case .to = key, let toVC = viewControllers[.to].flatMap({ $0 }), toVC.isViewLoaded {
             return toVC.view
         }
 

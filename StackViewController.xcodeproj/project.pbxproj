@@ -16,13 +16,14 @@
 		FD67E5BD225257DB0051786B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */; };
 		FD67E5C3225258840051786B /* StackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C2225258840051786B /* StackViewController.swift */; };
 		FD67E5C8225260C40051786B /* HorizontalSlideAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C7225260C40051786B /* HorizontalSlideAnimationController.swift */; };
-		FD67E5CA225283A20051786B /* YellowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C9225283A20051786B /* YellowViewController.swift */; };
-		FD67E5CC225296A00051786B /* PinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5CB225296A00051786B /* PinkViewController.swift */; };
 		FD67E5CE2252A57F0051786B /* StackViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* StackViewController.framework */; };
 		FD67E5CF2252A57F0051786B /* StackViewController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* StackViewController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FD67E5F52252EC770051786B /* RootCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F42252EC770051786B /* RootCoordinator.swift */; };
 		FD67E5F82254F2010051786B /* StackViewControllerTransitionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */; };
 		FD67E5FA22552D3A0051786B /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F922552D3A0051786B /* UIView+Extensions.swift */; };
+		FD76B6FB2270C5B30090EDB2 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B6FA2270C5B30090EDB2 /* BaseViewController.swift */; };
+		FD76B7032270C9530090EDB2 /* StackViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */; };
+		FD76B7052270C9530090EDB2 /* StackViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* StackViewController.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +33,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FD67E574225250E10051786B;
 			remoteInfo = NavigationController;
+		};
+		FD76B7062270C9530090EDB2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FD67E56C225250E10051786B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FD67E574225250E10051786B;
+			remoteInfo = StackViewController;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -63,11 +71,13 @@
 		FD67E5BE225257DB0051786B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD67E5C2225258840051786B /* StackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewController.swift; sourceTree = "<group>"; };
 		FD67E5C7225260C40051786B /* HorizontalSlideAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSlideAnimationController.swift; sourceTree = "<group>"; };
-		FD67E5C9225283A20051786B /* YellowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YellowViewController.swift; sourceTree = "<group>"; };
-		FD67E5CB225296A00051786B /* PinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinkViewController.swift; sourceTree = "<group>"; };
 		FD67E5F42252EC770051786B /* RootCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootCoordinator.swift; sourceTree = "<group>"; };
 		FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerTransitionContext.swift; sourceTree = "<group>"; };
 		FD67E5F922552D3A0051786B /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
+		FD76B6FA2270C5B30090EDB2 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		FD76B7002270C9530090EDB2 /* StackViewControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StackViewControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerTests.swift; sourceTree = "<group>"; };
+		FD76B7042270C9530090EDB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +96,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FD76B6FD2270C9530090EDB2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD76B7052270C9530090EDB2 /* StackViewController.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -94,6 +112,7 @@
 			children = (
 				FD67E577225250E10051786B /* StackViewController */,
 				FD67E5B1225257DA0051786B /* TestApp */,
+				FD76B7012270C9530090EDB2 /* StackViewControllerTests */,
 				FD67E576225250E10051786B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,6 +122,7 @@
 			children = (
 				FD67E575225250E10051786B /* StackViewController.framework */,
 				FD67E5B0225257DA0051786B /* TestApp.app */,
+				FD76B7002270C9530090EDB2 /* StackViewControllerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -128,8 +148,7 @@
 				FD67E5F42252EC770051786B /* RootCoordinator.swift */,
 				FD226058226B6359007E44CE /* StackCoordinator.swift */,
 				FD22605A226B6363007E44CE /* UIKitCoordinator.swift */,
-				FD67E5C9225283A20051786B /* YellowViewController.swift */,
-				FD67E5CB225296A00051786B /* PinkViewController.swift */,
+				FD76B6FA2270C5B30090EDB2 /* BaseViewController.swift */,
 				FD67E5B2225257DA0051786B /* AppDelegate.swift */,
 				FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */,
 				FD67E5BE225257DB0051786B /* Info.plist */,
@@ -143,6 +162,15 @@
 				FD67E5F922552D3A0051786B /* UIView+Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		FD76B7012270C9530090EDB2 /* StackViewControllerTests */ = {
+			isa = PBXGroup;
+			children = (
+				FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */,
+				FD76B7042270C9530090EDB2 /* Info.plist */,
+			);
+			path = StackViewControllerTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,6 +224,24 @@
 			productReference = FD67E5B0225257DA0051786B /* TestApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		FD76B6FF2270C9530090EDB2 /* StackViewControllerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FD76B7082270C9530090EDB2 /* Build configuration list for PBXNativeTarget "StackViewControllerTests" */;
+			buildPhases = (
+				FD76B6FC2270C9530090EDB2 /* Sources */,
+				FD76B6FD2270C9530090EDB2 /* Frameworks */,
+				FD76B6FE2270C9530090EDB2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FD76B7072270C9530090EDB2 /* PBXTargetDependency */,
+			);
+			name = StackViewControllerTests;
+			productName = StackViewControllerTests;
+			productReference = FD76B7002270C9530090EDB2 /* StackViewControllerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -212,6 +258,9 @@
 					};
 					FD67E5AF225257DA0051786B = {
 						CreatedOnToolsVersion = 10.2;
+					};
+					FD76B6FF2270C9530090EDB2 = {
+						CreatedOnToolsVersion = 10.2.1;
 					};
 				};
 			};
@@ -230,6 +279,7 @@
 			targets = (
 				FD67E574225250E10051786B /* StackViewController */,
 				FD67E5AF225257DA0051786B /* TestApp */,
+				FD76B6FF2270C9530090EDB2 /* StackViewControllerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -247,6 +297,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD67E5BD225257DB0051786B /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD76B6FE2270C9530090EDB2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,11 +328,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD67E5F52252EC770051786B /* RootCoordinator.swift in Sources */,
-				FD67E5CC225296A00051786B /* PinkViewController.swift in Sources */,
-				FD67E5CA225283A20051786B /* YellowViewController.swift in Sources */,
 				FD67E5B3225257DA0051786B /* AppDelegate.swift in Sources */,
 				FD226059226B6359007E44CE /* StackCoordinator.swift in Sources */,
+				FD76B6FB2270C5B30090EDB2 /* BaseViewController.swift in Sources */,
 				FD22605B226B6363007E44CE /* UIKitCoordinator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD76B6FC2270C9530090EDB2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD76B7032270C9530090EDB2 /* StackViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,6 +350,11 @@
 			isa = PBXTargetDependency;
 			target = FD67E574225250E10051786B /* StackViewController */;
 			targetProxy = FD67E5C422525B140051786B /* PBXContainerItemProxy */;
+		};
+		FD76B7072270C9530090EDB2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FD67E574225250E10051786B /* StackViewController */;
+			targetProxy = FD76B7062270C9530090EDB2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -518,6 +587,44 @@
 			};
 			name = Release;
 		};
+		FD76B7092270C9530090EDB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = HPXR38FW5T;
+				INFOPLIST_FILE = StackViewControllerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pm.codedby.StackViewControllerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FD76B70A2270C9530090EDB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = HPXR38FW5T;
+				INFOPLIST_FILE = StackViewControllerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pm.codedby.StackViewControllerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -544,6 +651,15 @@
 			buildConfigurations = (
 				FD67E5BF225257DB0051786B /* Debug */,
 				FD67E5C0225257DB0051786B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FD76B7082270C9530090EDB2 /* Build configuration list for PBXNativeTarget "StackViewControllerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FD76B7092270C9530090EDB2 /* Debug */,
+				FD76B70A2270C9530090EDB2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -22,6 +22,10 @@ public class HorizontalSlideAnimationController: NSObject {
     private let transitionType: HorizontalSlideTransitionType
     private var propertyAnimator: UIViewPropertyAnimator?
 
+    private var context: UIViewControllerContextTransitioning?
+    private var from: UIViewController? { return context?.viewController(forKey: .from) }
+    private var to: UIViewController? { return context?.viewController(forKey: .to) }
+
     // MARK: - Init
 
     public required init(type: HorizontalSlideTransitionType) {
@@ -39,6 +43,7 @@ extension HorizontalSlideAnimationController: UIViewControllerAnimatedTransition
     }
 
     public func animateTransition(using context: UIViewControllerContextTransitioning) {
+        self.context = context
         prepareTransition(using: context)
 
         if context.isAnimated {
@@ -75,7 +80,7 @@ private extension HorizontalSlideAnimationController {
     }
 
     func prepareSlideInTransition(using context: UIViewControllerContextTransitioning) {
-        guard let to = context.viewController(forKey: .to) else { return }
+        guard let to = to else { return }
 
         let containerView = context.containerView
         let frameOfViewWhenOffScreen = containerView.bounds.offsetBy(dx: containerView.bounds.width,
@@ -85,8 +90,7 @@ private extension HorizontalSlideAnimationController {
     }
 
     func prepareSlideOutTransition(using context: UIViewControllerContextTransitioning) {
-        guard let from = context.viewController(forKey: .from) else { return }
-        guard let to = context.viewController(forKey: .to) else { return }
+        guard let from = from, let to = to else { return }
 
         let containerView = context.containerView
         
@@ -100,16 +104,14 @@ private extension HorizontalSlideAnimationController {
         switch transitionType {
         case .slideIn:
             return {
-                guard let to = context.viewController(forKey: .to) else { return }
-                guard let from = context.viewController(forKey: .from) else { return }
-                
+                guard let from = self.from, let to = self.to else { return }
+
                 to.view.frame = context.finalFrame(for: to)
                 from.view.frame = from.view.frame.offsetBy(dx: -90.0, dy: 0.0)
             }
         case .slideOut:
             return {
-                guard let to = context.viewController(forKey: .to) else { return }
-                guard let from = context.viewController(forKey: .from) else { return }
+                guard let from = self.from, let to = self.to else { return }
 
                 let containerView = context.containerView
                 let frameOfViewWhenOffScreen = containerView.bounds.offsetBy(dx: containerView.bounds.width,
@@ -134,7 +136,7 @@ private extension HorizontalSlideAnimationController {
     }
 
     func completeNonAnimatedTransition(using context: UIViewControllerContextTransitioning) {
-        guard let to = context.viewController(forKey: .to) else { return }
+        guard let to = to else { return }
 
         to.view.frame = context.finalFrame(for: to)
         context.completeTransition(true)

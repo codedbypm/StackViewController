@@ -129,6 +129,9 @@ private extension HorizontalSlideAnimationController {
                                                       animations: animations)
         propertyAnimator.addCompletion { position in
             let completed = (position == .end)
+            if completed {
+                self.from?.view.removeFromSuperview()
+            }
             context.completeTransition(completed)
         }
 

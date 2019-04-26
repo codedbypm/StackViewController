@@ -28,6 +28,7 @@
 		FD76B7652270E3B70090EDB2 /* TimeInterval+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */; };
 		FD76B7672270E9C60090EDB2 /* StackViewControllerTests+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */; };
 		FD76B7692270EA010090EDB2 /* StackViewControllerTests+Push.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */; };
+		FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 		FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extensions.swift"; sourceTree = "<group>"; };
 		FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+Properties.swift"; sourceTree = "<group>"; };
 		FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+Push.swift"; sourceTree = "<group>"; };
+		FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 				FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */,
 				FD22605E226E579D007E44CE /* StackViewControllerError.swift */,
 				FD67E5C2225258840051786B /* StackViewController.swift */,
+				FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */,
 				FD67E578225250E10051786B /* StackViewController.h */,
 				FD67E579225250E10051786B /* Info.plist */,
 			);
@@ -327,6 +330,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD00021F2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift in Sources */,
+				FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */,
 				FD67E5C8225260C40051786B /* HorizontalSlideAnimationController.swift in Sources */,
 				FD22605F226E579D007E44CE /* StackViewControllerError.swift in Sources */,
 				FD67E5FA22552D3A0051786B /* UIView+Extensions.swift in Sources */,

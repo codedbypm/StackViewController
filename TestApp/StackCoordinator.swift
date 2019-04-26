@@ -15,8 +15,11 @@ class StackCoordinator {
     let canPrint = true
 
     lazy var stackViewController: StackViewController = {
-        let stack = StackViewController(viewControllers: [yellowViewController])
+        let stack = StackViewController(viewControllers: [self.yellowViewController])
         stack.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 4, execute: {
+//            stack.setViewControllers([self.greenViewController], animated: true)
+//        })
         return stack
     }()
 

@@ -38,9 +38,8 @@ class StackCoordinator {
             self.stackViewController.setViewControllers([root, yellow, top], animated: true)
         }
 
-        yellow.onEmptyStack = {
-            self.stackViewController.setViewControllers([], animated: true)
-        }
+        yellow.onBack = { self.stackViewController.popViewController(animated: true) }
+        yellow.onEmptyStack = { self.stackViewController.setViewControllers([], animated: true) }
 
         return yellow
     }()
@@ -56,6 +55,16 @@ class StackCoordinator {
         green.navigationItem.title = title
         green.onBack = { self.stackViewController.popViewController(animated: true) }
         green.onEmptyStack = onEmptyStack
+        green.onReplaceViewControllers = {
+            let stack = [
+                self.newGreenViewController(title: self.titled("Alfa")),
+                self.newGreenViewController(title: self.titled("Beta")),
+                self.newGreenViewController(title: self.titled("Gamma")),
+                self.yellowViewController
+            ]
+            self.stackViewController.setViewControllers(stack, animated: true)
+        }
+
         return green
     }
 

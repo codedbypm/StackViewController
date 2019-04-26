@@ -33,7 +33,7 @@ extension StackViewControllerTests {
 
         // Assert
         XCTAssertNotNil(topViewController)
-        XCTAssertEqual(topViewController, sut.viewControllers.last)
+        XCTAssertEqual(topViewController, sut.stack.last)
     }
 
     // MARK: - visibleViewController

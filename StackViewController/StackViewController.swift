@@ -8,8 +8,6 @@
 
 import UIKit
 
-typealias OnTransitionDone = (Bool) -> Void
-
 public class StackViewController: UIViewController, StackViewControllerHandling {
 
     public enum Operation {
@@ -21,13 +19,13 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     public weak var delegate: StackViewControllerDelegate?
 
-    public var viewControllers: [UIViewController] {
-        get { return _viewControllers }
+    public var stack: [UIViewController] {
+        get { return _stack }
         set { setViewControllers(newValue, animated: false) }
     }
 
     public var topViewController: UIViewController? {
-        return _viewControllers.last
+        return _stack.last
     }
 
     public var visibleViewController: UIViewController? {
@@ -45,7 +43,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     // MARK: - Private properties
 
-    private var _viewControllers: [UIViewController]
+    private var _stack: [UIViewController]
 
     private lazy var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
         let recognizer = UIScreenEdgePanGestureRecognizer()
@@ -56,17 +54,15 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     private var interactionController: UIViewControllerInteractiveTransitioning?
 
-    private var onTransitionCompleted: (() -> Void)?
-
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {
-        self._viewControllers = viewControllers
+        self._stack = viewControllers
         super.init(nibName: nil, bundle: nil)
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        self._viewControllers = []
+        self._stack = []
         super.init(coder: aDecoder)
     }
 
@@ -137,7 +133,7 @@ private extension StackViewController {
         let from = visibleViewController
         let to = viewController
 
-        _viewControllers.append(viewController)
+        _stack.append(viewController)
 
         performTransition(forOperation: .push, from: from, to: to, animated: animated)
     }
@@ -150,10 +146,10 @@ private extension StackViewController {
     @discardableResult
     func popToViewController(_ to: UIViewController, animated: Bool) -> [UIViewController] {
         guard let from = visibleViewController, visibleViewController != to else { return [] }
-        guard let indexOfTo = _viewControllers.firstIndex(where: { $0 === to }) else { return [] }
+        guard let indexOfTo = _stack.firstIndex(where: { $0 === to }) else { return [] }
 
-        let poppedViewControllers = viewControllers.suffix(from: indexOfTo + 1)
-        _viewControllers = _viewControllers.dropLast(poppedViewControllers.count)
+        let poppedViewControllers = stack.suffix(from: indexOfTo + 1)
+        _stack = _stack.dropLast(poppedViewControllers.count)
         performTransition(forOperation: .pop, from: from, to: to, animated: animated, interactive: false)
         return Array(poppedViewControllers)
     }
@@ -165,10 +161,10 @@ private extension StackViewController {
 
     func replaceViewControllers(with newStack: [UIViewController], animated: Bool) {
 
-        let currentStack = Array(_viewControllers)
+        let currentStack = Array(_stack)
         let currentTopViewController = topViewController
 
-        _viewControllers = newStack
+        _stack = newStack
 
         // newStack is empty => instant pop all
         guard let newTopViewController = newStack.last else {
@@ -196,25 +192,6 @@ private extension StackViewController {
             performTransition(forOperation: .push, from: from, to: to, animated: animated)
         }
     }
-
-    func removeAllViewControllers() {
-        _viewControllers.forEach {
-            let isInViewHierarchy = ($0.view.superview != nil)
-
-            if isInViewHierarchy {
-                $0.beginAppearanceTransition(false, animated: false)
-                $0.view.removeFromSuperview()
-            }
-
-            $0.removeFromParent()
-
-            if isInViewHierarchy {
-                $0.endAppearanceTransition()
-            }
-        }
-
-        _viewControllers.removeAll()
-    }
 }
 
 // MARK: - Validation
@@ -222,17 +199,16 @@ private extension StackViewController {
 private extension StackViewController {
 
     func canPush(_ viewController: UIViewController) -> Bool {
-        guard !_viewControllers.contains(viewController) else { return false }
+        guard !_stack.contains(viewController) else { return false }
         return true
     }
 
     func canPop() -> Bool {
-        return (viewControllers.count > 1 && visibleViewController != nil)
+        return (stack.count > 1 && visibleViewController != nil)
     }
 
     func canReplaceViewControllers(with newViewControllers: [UIViewController]) -> Bool {
-
-        guard !_viewControllers.isEmpty || !newViewControllers.isEmpty else { return false }
+        guard !_stack.isEmpty || !newViewControllers.isEmpty else { return false }
 
         return true
     }
@@ -394,13 +370,13 @@ private extension StackViewController {
 extension StackViewController {
 
     func viewControllerBefore(_ viewController: UIViewController) -> UIViewController? {
-        let indexOfViewControllerInStack = _viewControllers.firstIndex(of: viewController)
+        let indexOfViewControllerInStack = _stack.firstIndex(of: viewController)
 
         guard let beforeIndex = indexOfViewControllerInStack?.advanced(by: -1), beforeIndex >= 0 else {
             return nil
         }
 
-        return viewControllers[beforeIndex]
+        return stack[beforeIndex]
     }
 
     func transitionType(for operation: Operation) -> HorizontalSlideTransitionType {
@@ -439,7 +415,7 @@ private extension StackViewController {
             """
 
             =========== Transition completed ===========
-            Stack contains \(self.viewControllers.count) view controllers
+            Stack contains \(self.stack.count) view controllers
             StackViewControllers has \(self.children.count) children
             TopViewController is \(String(describing: self.topViewController))
             VisibleViewController is \(String(describing: self.visibleViewController))

@@ -22,7 +22,7 @@ extension StackViewControllerTests {
         sut.pushViewController(pushedViewController, animated: true)
 
         // Assert
-        XCTAssertEqual(sut.viewControllers, StackViewController.knownStack)
+        XCTAssertEqual(sut.stack, StackViewController.knownStack)
     }
 
     func testThat_whenPushingViewControllerAndTheCurrentStackIsEmpty_thePushedControllerIsImmediatelyAddedToTheStack() {
@@ -30,7 +30,7 @@ extension StackViewControllerTests {
         sut = StackViewController.withEmptyStack()
         let pushedViewController = StackViewController.knwownViewControllerB
 
-        XCTAssertTrue(sut.viewControllers.isEmpty)
+        XCTAssertTrue(sut.stack.isEmpty)
 
         // Act
         sut.pushViewController(pushedViewController, animated: true)
@@ -38,7 +38,7 @@ extension StackViewControllerTests {
         // Assert
         XCTAssertEqual(pushedViewController.view.superview, sut.view)
         XCTAssertEqual(pushedViewController.parent, sut)
-        XCTAssertEqual(sut.viewControllers, [pushedViewController])
+        XCTAssertEqual(sut.stack, [pushedViewController])
 
     }
 

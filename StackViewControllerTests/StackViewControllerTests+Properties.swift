@@ -64,7 +64,7 @@ extension StackViewControllerTests {
         XCTAssertNil(visibleViewController)
     }
 
-    func testThat_whenTopViewControllerViewIsLoadedButNotAddedToTheViewHierarchy_visibleViewControllerIsNil() {
+    func testThat_whenTopViewControllerViewIsLoadedButNotBeingInAWindow_visibleViewControllerIsNil() {
         // Arrange
         sut = StackViewController
             .withNumberOfViewControllers(3)
@@ -84,13 +84,13 @@ extension StackViewControllerTests {
         XCTAssertNil(visibleViewController)
     }
 
-    func testThat_whenTopViewControllerViewIsAddedToTheStackViewControllerView_visibleViewControllerIsNotNil() {
+    func testThat_whenTopViewControllerViewIsContainedInAWindow_visibleViewControllerIsNotNil() {
         // Arrange
         sut = StackViewController
             .withNumberOfViewControllers(3)
-            .showingTopViewControllerView()
+            .embeddedInWindow()
 
-        guard let topViewController = sut.topViewController, topViewController.view.superview != nil else {
+        guard let topViewController = sut.topViewController, topViewController.view.window != nil else {
             XCTFail("topViewController's view should have a superview")
             return
         }

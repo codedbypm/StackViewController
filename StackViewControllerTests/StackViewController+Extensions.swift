@@ -47,9 +47,13 @@ extension StackViewController {
         return self
     }
 
-    func showingTopViewControllerView() -> StackViewController {
-        guard let topViewControllerView = topViewController?.view else { return .dummy }
-        view.addSubview(topViewControllerView)
+    func embeddedInWindow() -> StackViewController {
+        class MockWindowView: UIView {
+            override var window: UIWindow? { return UIWindow() }
+        }
+
+        guard let topViewController = topViewController else { return .dummy }
+        topViewController.view = MockWindowView()
         return self
     }
 }

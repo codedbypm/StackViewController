@@ -108,7 +108,6 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
         guard canPush(viewController) else { return }
-
         forcePushViewController(viewController, animated: animated)
     }
 
@@ -123,9 +122,9 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
     }
 
     public func setViewControllers(_ newViewControllers: [UIViewController], animated: Bool) {
-        guard canReplaceViewControllers(_viewControllers, with: newViewControllers) else { return }
+        guard canReplaceViewControllers(with: newViewControllers) else { return }
 
-        replaceViewControllers(_viewControllers, with: newViewControllers, animated: false)
+        replaceViewControllers(with: newViewControllers, animated: animated)
     }
 }
 
@@ -134,10 +133,12 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 private extension StackViewController {
 
     func forcePushViewController(_ viewController: UIViewController, animated: Bool) {
+
         let from = visibleViewController
         let to = viewController
 
-        _viewControllers.append(to)
+        _viewControllers.append(viewController)
+
         performTransition(forOperation: .push, from: from, to: to, animated: animated)
     }
 }
@@ -162,16 +163,42 @@ private extension StackViewController {
 
 private extension StackViewController {
 
-    func replaceViewControllers(_ currentViewControllers: [UIViewController],
-                                with newViewControllers: [UIViewController],
-                                animated: Bool) {
+    func replaceViewControllers(with newViewControllers: [UIViewController], animated: Bool) {
 
-        switch (currentViewControllers.isEmpty, newViewControllers.isEmpty) {
-        case (true, true): assertionFailure()
-        case (true, false): installViewControllers(newViewControllers)
-        case (false, true): removeAllViewControllers()
-        case (false, false): assertionFailure()
+        _viewControllers = newViewControllers
+
+        // newStack is empty => instant pop all
+        guard let newTopViewController = newViewControllers.last else {
+            performInstantPopTransition()
+            return
         }
+
+        // oldStack is empty => instant push all
+        guard let topViewController = visibleViewController else {
+            performInstantPushTransition(for: newTopViewController)
+            return
+        }
+
+        // Same topViewController => do nothing
+        guard newTopViewController != topViewController else {
+            return
+        }
+
+        if _viewControllers.contains(newTopViewController) {
+            popToViewController(newTopViewController, animated: animated)
+        } else {
+            forcePushViewController(newTopViewController, animated: animated)
+        }
+    }
+
+
+    func pushViewControllers(_ viewControllers: [UIViewController]) {
+        _viewControllers = viewControllers
+
+        guard let to = viewControllers.last else { return }
+        let from = visibleViewController
+
+        performTransition(forOperation: .push, from: from, to: to)
     }
 
     func installViewControllers(_ newViewControllers: [UIViewController]) {
@@ -182,89 +209,6 @@ private extension StackViewController {
         sendInitialViewContainmentEvents(from: nil, to: newTopViewController)
 
         performTransition(forOperation: .push, from: nil, to: newTopViewController, animated: false)
-    }
-
-    func whatever(_ currentViewControllers: [UIViewController],
-                  with newViewControllers: [UIViewController],
-                  animated: Bool) {
-        // In case there is no visible VC....
-        guard let visibleViewController = visibleViewController else {
-            guard let newTopViewController = newViewControllers.last else { return assertionFailure() }
-
-            // 1. the SVC is not yet on the screen
-            if view.window == nil {
-
-            } else {
-                // 2. the SVC is on screen but empty
-                _viewControllers = newViewControllers
-                sendInitialViewContainmentEvents(from: nil, to: newTopViewController)
-            }
-
-            performTransition(forOperation: .push,
-                              from: nil,
-                              to: newTopViewController,
-                              animated: false)
-            return
-        }
-
-        _viewControllers = newViewControllers
-
-        guard let currentVisibleViewController = currentViewControllers.last, currentVisibleViewController.view.window != nil else {
-            guard let newTopViewController = newViewControllers.last else { return }
-            performTransition(forOperation: .push, from: nil, to: newTopViewController, animated: false)
-
-            return
-        }
-
-        guard let newTopViewController = newViewControllers.last else {
-            hideVisibleViewController()
-            _viewControllers = []
-            return
-        }
-
-        //        guard let topViewController = visibleViewController else {
-        //
-        //        }
-
-        guard let operation = operationWhenReplacingStack(with: newViewControllers) else {
-            return
-        }
-
-        // When dealing with empty stacks replacements, animations are not allowed
-        let allowsAnimation = !_viewControllers.isEmpty && !newViewControllers.isEmpty
-        let shouldAnimate = allowsAnimation ? animated : false
-
-        switch operation {
-        case .push:
-            forcePushViewController(newTopViewController, animated: shouldAnimate)
-        case .pop:
-            popToViewController(newTopViewController, animated: shouldAnimate)
-        }
-
-    }
-
-    func operationWhenReplacingStack(with newStack: [UIViewController]) -> Operation? {
-
-        // newStack is empty => instant pop all
-        guard let newTopViewController = newStack.last else {
-            return .pop
-        }
-
-        // oldStack is empty => instant push all
-        guard let topViewController = visibleViewController else {
-            return .push
-        }
-
-        // Same topViewController => do nothing
-        guard newTopViewController != topViewController else {
-            return nil
-        }
-
-        if _viewControllers.contains(newTopViewController) {
-            return .pop
-        } else {
-            return .push
-        }
     }
 
     func removeAllViewControllers() {
@@ -300,10 +244,9 @@ private extension StackViewController {
         return (viewControllers.count > 1 && visibleViewController != nil)
     }
 
-    func canReplaceViewControllers(_ currentViewControllers: [UIViewController],
-                                   with newViewControllers: [UIViewController]) -> Bool {
+    func canReplaceViewControllers(with newViewControllers: [UIViewController]) -> Bool {
 
-        guard !currentViewControllers.isEmpty || !newViewControllers.isEmpty else { return false }
+        guard !_viewControllers.isEmpty || !newViewControllers.isEmpty else { return false }
 
         return true
     }
@@ -352,13 +295,31 @@ private extension StackViewController {
         }
     }
 
+    func performInstantPushTransition(for viewController: UIViewController) {
+        addChild(viewController)
+        viewController.beginAppearanceTransition(true, animated: false)
+        view.addSubview(viewController.view)
+        viewController.endAppearanceTransition()
+        viewController.didMove(toParent: self)
+    }
+
+    func performInstantPopTransition() {
+        guard let viewController = visibleViewController else { return }
+        viewController.willMove(toParent: nil)
+        viewController.beginAppearanceTransition(false, animated: false)
+        viewController.view.removeFromSuperview()
+        viewController.endAppearanceTransition()
+        viewController.removeFromParent()
+    }
+}
+
+// MARK: - Manual events
+
+private extension StackViewController {
+
     func sendInitialViewContainmentEvents(from: UIViewController?, to: UIViewController) {
         from?.willMove(toParent: nil)
         addChild(to)
-    }
-
-    func undoInitialViewContainmentEvents(from: UIViewController?, to: UIViewController) {
-        to.removeFromParent()
     }
 
     func sendFinalViewContainmentEvents(from: UIViewController?, to: UIViewController) {
@@ -379,8 +340,7 @@ private extension StackViewController {
         to.beginAppearanceTransition(true, animated: animated)
     }
 
-    func sendFinalViewAppearanceEvents(from: UIViewController?,
-                                       to: UIViewController) {
+    func sendFinalViewAppearanceEvents(from: UIViewController?, to: UIViewController) {
         if let from = from, from.isViewLoaded, from.view.window == nil {
             from.endAppearanceTransition()
         }
@@ -388,17 +348,6 @@ private extension StackViewController {
         if to.isViewLoaded, to.view.window != nil {
             to.endAppearanceTransition()
         }
-    }
-
-    func hideVisibleViewController() {
-        let visibleViewController = self.visibleViewController
-        
-        visibleViewController?.beginAppearanceTransition(false, animated: false)
-        visibleViewController?.view.removeFromSuperview()
-        visibleViewController?.endAppearanceTransition()
-
-        visibleViewController?.willMove(toParent: nil)
-        visibleViewController?.removeFromParent()
     }
 }
 
@@ -439,11 +388,11 @@ private extension StackViewController {
     }
 
     func transitionContextForTransition(from: UIViewController?,
-                                        to: UIViewController,
+                                        to: UIViewController?,
                                         animated: Bool = true,
                                         interactive: Bool = false) -> StackViewControllerTransitionContext {
 
-        let animationsEnabled = (from != nil)
+        let animationsEnabled = (from != nil || to != nil)
         let context = StackViewControllerTransitionContext(from: from,
                                                            to: to,
                                                            containerView: view)
@@ -506,8 +455,8 @@ private extension StackViewController {
             =========== Transition completed ===========
             Stack contains \(self.viewControllers.count) view controllers
             StackViewControllers has \(self.children.count) children
-            TopViewController is \(self.topViewController)
-            VisibleViewController is \(self.visibleViewController)
+            TopViewController is \(String(describing: self.topViewController))
+            VisibleViewController is \(String(describing: self.visibleViewController))
 
             """
         )

@@ -163,18 +163,21 @@ private extension StackViewController {
 
 private extension StackViewController {
 
-    func replaceViewControllers(with newViewControllers: [UIViewController], animated: Bool) {
+    func replaceViewControllers(with newStack: [UIViewController], animated: Bool) {
 
-        _viewControllers = newViewControllers
+        let currentStack = Array(_viewControllers)
+        let currentTopViewController = topViewController
+
+        _viewControllers = newStack
 
         // newStack is empty => instant pop all
-        guard let newTopViewController = newViewControllers.last else {
+        guard let newTopViewController = newStack.last else {
             performInstantPopTransition()
             return
         }
 
         // oldStack is empty => instant push all
-        guard let topViewController = visibleViewController else {
+        guard let topViewController = currentTopViewController else {
             performInstantPushTransition(for: newTopViewController)
             return
         }
@@ -184,31 +187,14 @@ private extension StackViewController {
             return
         }
 
-        if _viewControllers.contains(newTopViewController) {
-            popToViewController(newTopViewController, animated: animated)
+        let from = currentTopViewController
+        let to = newTopViewController
+
+        if currentStack.contains(newTopViewController) {
+            performTransition(forOperation: .pop, from: from, to: to, animated: animated)
         } else {
-            forcePushViewController(newTopViewController, animated: animated)
+            performTransition(forOperation: .push, from: from, to: to, animated: animated)
         }
-    }
-
-
-    func pushViewControllers(_ viewControllers: [UIViewController]) {
-        _viewControllers = viewControllers
-
-        guard let to = viewControllers.last else { return }
-        let from = visibleViewController
-
-        performTransition(forOperation: .push, from: from, to: to)
-    }
-
-    func installViewControllers(_ newViewControllers: [UIViewController]) {
-        guard let newTopViewController = newViewControllers.last else { return assertionFailure() }
-        guard isViewLoaded else { return assertionFailure() }
-
-        _viewControllers = newViewControllers
-        sendInitialViewContainmentEvents(from: nil, to: newTopViewController)
-
-        performTransition(forOperation: .push, from: nil, to: newTopViewController, animated: false)
     }
 
     func removeAllViewControllers() {

@@ -114,6 +114,8 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
+        guard canPop() else { return nil }
+
         guard let from = visibleViewController else { return nil }
         guard let to = viewControllerBefore(from) else { return nil }
 
@@ -136,13 +138,7 @@ private extension StackViewController {
         let to = viewController
 
         _viewControllers.append(to)
-        sendInitialViewContainmentEvents(from: from, to: to)
-
-        performTransition(forOperation: .push, from: from, to: to, animated: animated) { completed in
-            if completed {
-                self.sendFinalViewContainmentEvents(from: from, to: to)
-            }
-        }
+        performTransition(forOperation: .push, from: from, to: to, animated: animated)
     }
 }
 
@@ -155,7 +151,8 @@ private extension StackViewController {
         guard let from = visibleViewController, visibleViewController != to else { return [] }
         guard let indexOfTo = _viewControllers.firstIndex(where: { $0 === to }) else { return [] }
 
-        let poppedViewControllers = viewControllers[(indexOfTo + 1)...]
+        let poppedViewControllers = viewControllers.suffix(from: indexOfTo + 1)
+        _viewControllers = _viewControllers.dropLast(poppedViewControllers.count)
         performTransition(forOperation: .pop, from: from, to: to, animated: animated, interactive: false)
         return Array(poppedViewControllers)
     }
@@ -299,6 +296,10 @@ private extension StackViewController {
         return true
     }
 
+    func canPop() -> Bool {
+        return (viewControllers.count > 1 && visibleViewController != nil)
+    }
+
     func canReplaceViewControllers(_ currentViewControllers: [UIViewController],
                                    with newViewControllers: [UIViewController]) -> Bool {
 
@@ -320,11 +321,13 @@ private extension StackViewController {
                            from: UIViewController?,
                            to: UIViewController,
                            animated: Bool = true,
-                           interactive: Bool = false,
-                           whenDone: OnTransitionDone? = nil) {
+                           interactive: Bool = false) {
+
+        sendInitialViewContainmentEvents(from: from, to: to)
+
+        sendInitialViewAppearanceEvents(from: from, to: to, animated: animated)
 
         let animationController = animationControllerForOperation(operation, from: from, to: to)
-
         let context = transitionContextForTransition(from: from,
                                                      to: to,
                                                      animated: animated,
@@ -336,9 +339,9 @@ private extension StackViewController {
 
             if didComplete {
                 self.sendFinalViewAppearanceEvents(from: from, to: to)
+                self.sendFinalViewContainmentEvents(from: from, to: to)
             }
 
-            whenDone?(didComplete)
             self.debugEndTransition()
         }
 

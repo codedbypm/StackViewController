@@ -11,6 +11,21 @@ import XCTest
 
 extension StackViewControllerTests {
 
+    // MARK: - screenEdgePanGestureRecognizer
+
+    func testThat_screenEdgePanGestureRecognizerIsProperlyConfigured() {
+        // Arrange
+        sut = StackViewController.dummy
+
+        // Act
+        let gestureRecognizer = sut.screenEdgePanGestureRecognizer
+
+        // Assert
+        XCTAssertEqual(gestureRecognizer.edges, .left)
+        XCTAssert(gestureRecognizer.delegate === sut)
+    }
+
+
     // MARK: - topViewController
 
     func testThat_whenTheStackIsEmpty_topViewControllerIsNil() {

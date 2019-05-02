@@ -8,61 +8,63 @@
 
 import UIKit
 
-public class StackViewController: UIViewController, StackViewControllerHandling {
+public class StackViewController: UIViewController, StackViewControllerHandling, UIGestureRecognizerDelegate {
 
     public enum Operation {
         case push
         case pop
     }
-    
+
     // MARK: - Public properties
+    
+    public var debugDelegate: DebugDelegate?
 
     public weak var delegate: StackViewControllerDelegate?
 
-    public var stack: [UIViewController] {
-        get { return _stack }
-        set { setViewControllers(newValue, animated: false) }
+    public var viewControllers: [UIViewController] {
+        get { return stackHandler.stack }
+        set { stackHandler.setStack(newValue, animated: false) }
     }
 
     public var topViewController: UIViewController? {
-        return _stack.last
-    }
-
-    public var visibleViewController: UIViewController? {
-        guard
-            let topViewController = topViewController,
-            topViewController.isViewLoaded && topViewController.view.window != nil
-        else { return nil }
-
-        return topViewController
+        return stackHandler.topViewController
     }
 
     public override var shouldAutomaticallyForwardAppearanceMethods: Bool {
         return false
     }
 
-    // MARK: - Private properties
+    // MARK: - Internal properties
 
-    private var _stack: [UIViewController]
+    let stackHandler: StackHandler
 
-    private lazy var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
+    lazy var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
         let recognizer = UIScreenEdgePanGestureRecognizer()
         recognizer.edges = .left
         recognizer.delegate = self
         return recognizer
     }()
 
-    private var interactionController: UIViewControllerInteractiveTransitioning?
+    // MARK: - Private properties
+
+    private(set) var interactionController: UIViewControllerInteractiveTransitioning?
+
+    private var viewControllerWrapperView: UIView {
+        return stackHandler.viewControllerWrapperView
+    }
 
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {
-        self._stack = viewControllers
+        stackHandler = StackHandler(stack: viewControllers)
         super.init(nibName: nil, bundle: nil)
+
+        stackHandler.delegate = self    
+        addChildren(viewControllers)
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        self._stack = []
+        stackHandler = StackHandler(stack: [])
         super.init(coder: aDecoder)
     }
 
@@ -70,11 +72,15 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     override public func viewDidLoad() {
         super.viewDidLoad()
+        debugFunc(#function, allowed: true)
+
         view.addGestureRecognizer(screenEdgePanGestureRecognizer)
 
-        guard let topViewController = topViewController else { return }
-        addChild(topViewController)
-        view.addSubview(topViewController.view)
+        if let topViewController = stackHandler.topViewController {
+            view.addSubview(viewControllerWrapperView)
+            viewControllerWrapperView.frame = view.bounds
+            viewControllerWrapperView.addSubview(topViewController.view)
+        }
     }
 
     override public func viewWillAppear(_ animated: Bool) {
@@ -84,10 +90,9 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        guard let topViewController = topViewController else { return }
-        topViewController.endAppearanceTransition()
-        topViewController.didMove(toParent: self)
+        topViewController?.endAppearanceTransition()
+        topViewController?.didMove(toParent: self)
+        debugEndTransition()
     }
 
     override public func viewWillDisappear(_ animated: Bool) {
@@ -100,117 +105,75 @@ public class StackViewController: UIViewController, StackViewControllerHandling 
         topViewController?.endAppearanceTransition()
     }
 
+    // MARK: - UIGestureRecognizerDelegate
+
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard gestureRecognizer === screenEdgePanGestureRecognizer else { return false }
+
+        return popViewControllerInteractively()
+    }
+
     // MARK: - Public methods
 
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        guard canPush(viewController) else { return }
-        forcePushViewController(viewController, animated: animated)
+        stackHandler.pushViewController(viewController, animated: animated)
     }
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
-        guard canPop() else { return nil }
-
-        guard let from = visibleViewController else { return nil }
-        guard let to = viewControllerBefore(from) else { return nil }
-
-        return popToViewController(to, animated: animated).first
+        return stackHandler.popViewController(animated: animated)
     }
-
-    public func setViewControllers(_ newViewControllers: [UIViewController], animated: Bool) {
-        guard canReplaceViewControllers(with: newViewControllers) else { return }
-
-        replaceViewControllers(with: newViewControllers, animated: animated)
-    }
-}
-
-// MARK: - Push
-
-private extension StackViewController {
-
-    func forcePushViewController(_ viewController: UIViewController, animated: Bool) {
-
-        let from = visibleViewController
-        let to = viewController
-
-        _stack.append(viewController)
-
-        performTransition(forOperation: .push, from: from, to: to, animated: animated)
-    }
-}
-
-// MARK: - Pop
-
-private extension StackViewController {
 
     @discardableResult
-    func popToViewController(_ to: UIViewController, animated: Bool) -> [UIViewController] {
-        guard let from = visibleViewController, visibleViewController != to else { return [] }
-        guard let indexOfTo = _stack.firstIndex(where: { $0 === to }) else { return [] }
+    public func popToRootViewController(animated: Bool) -> Stack? {
+        return stackHandler.popToRootViewController(animated: animated)
+    }
 
-        let poppedViewControllers = stack.suffix(from: indexOfTo + 1)
-        _stack = _stack.dropLast(poppedViewControllers.count)
-        performTransition(forOperation: .pop, from: from, to: to, animated: animated, interactive: false)
-        return Array(poppedViewControllers)
+    @discardableResult
+    public func popToViewController(_ viewController: UIViewController, animated: Bool) -> Stack? {
+        return stackHandler.popToViewController(viewController, animated: animated)
+    }
+
+    public func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
+        stackHandler.setStack(viewControllers, animated: animated)
+    }
+
+    // MARK: - Private methods
+
+    private func popViewControllerInteractively() -> Bool {
+        guard stackHandler.canPopInteractively() else { return false }
+
+        stackHandler.setStack(stackHandler.stack.dropLast(), animated: true, interactive: true)
+
+        return true
     }
 }
 
-// MARK: - Stack modifications
 
-private extension StackViewController {
+extension StackViewController: StackHandlerDelegate {
 
-    func replaceViewControllers(with newStack: [UIViewController], animated: Bool) {
+    func stackDidChange() {
+        guard let stackTransition = stackHandler.currentTransition else { return }
 
-        let currentStack = Array(_stack)
-        let currentTopViewController = topViewController
-
-        _stack = newStack
-
-        // newStack is empty => instant pop all
-        guard let newTopViewController = newStack.last else {
-            performInstantPopTransition()
-            return
+        if stackTransition.operation == .push {
+            if isInViewHierarchy {
+                performStackTransition(stackTransition) { [weak self] in
+                    self?.stackHandler.endStackTransition()
+                }
+            } else {
+                addChild(stackTransition.viewController(forKey: .to)!)
+                stackHandler.endStackTransition()
+            }
+        } else if stackTransition.operation == .pop {
+            if isInViewHierarchy {
+                // perform pop
+                performStackTransition(stackTransition) { [weak self] in
+                    self?.stackHandler.endStackTransition()
+                }
+            } else {
+                // notify willMove(to: nil)
+            }
         }
-
-        // oldStack is empty => instant push all
-        guard let topViewController = currentTopViewController else {
-            performInstantPushTransition(for: newTopViewController)
-            return
-        }
-
-        // Same topViewController => do nothing
-        guard newTopViewController != topViewController else {
-            return
-        }
-
-        let from = currentTopViewController
-        let to = newTopViewController
-
-        if currentStack.contains(newTopViewController) {
-            performTransition(forOperation: .pop, from: from, to: to, animated: animated)
-        } else {
-            performTransition(forOperation: .push, from: from, to: to, animated: animated)
-        }
-    }
-}
-
-// MARK: - Validation
-
-private extension StackViewController {
-
-    func canPush(_ viewController: UIViewController) -> Bool {
-        guard !_stack.contains(viewController) else { return false }
-        return true
-    }
-
-    func canPop() -> Bool {
-        return (stack.count > 1 && visibleViewController != nil)
-    }
-
-    func canReplaceViewControllers(with newViewControllers: [UIViewController]) -> Bool {
-        guard !_stack.isEmpty || !newViewControllers.isEmpty else { return false }
-
-        return true
     }
 }
 
@@ -218,46 +181,77 @@ private extension StackViewController {
 
 private extension StackViewController {
 
-    func performInteractivePopTransition(from: UIViewController, to: UIViewController) {
-        performTransition(forOperation: .pop, from: from, to: to, animated: true, interactive: true)
+    func performStackTransition(_ transition: Transition,
+                                whenCompleted: (() -> Void)? = nil) {
+
+        let from = transition.viewController(forKey: .from)
+        let to = transition.viewController(forKey: .to)
+
+        switch (from, to) {
+        case (.some(let from), .none):
+            performInstantPopTransition(of: from)
+            whenCompleted?()
+        case (.none, .some(let to)):
+            performInstantPushTransition(of: to)
+            whenCompleted?()
+        case (.some(let from), .some(let to)):
+            performTransition(transition,
+                              from: from,
+                              to: to,
+                              whenCompleted: whenCompleted)
+        case (.none, .none):
+            assertionFailure()
+        }
     }
 
-    func performTransition(forOperation operation: Operation,
-                           from: UIViewController?,
+    func performTransition(_ transition: Transition,
+                           from: UIViewController,
                            to: UIViewController,
-                           animated: Bool = true,
-                           interactive: Bool = false) {
+                           whenCompleted: (() -> Void)? = nil) {
 
-        sendInitialViewContainmentEvents(from: from, to: to)
+        assert(isInViewHierarchy)
 
-        sendInitialViewAppearanceEvents(from: from, to: to, animated: animated)
+        let animationController = self.animationController(for: transition.operation, from: from, to: to)
 
-        let animationController = animationControllerForOperation(operation, from: from, to: to)
-        let context = transitionContextForTransition(from: from,
-                                                     to: to,
-                                                     animated: animated,
-                                                     interactive: interactive)
-
-        context.onTransitionFinished = { didComplete in
-            animationController.animationEnded?(didComplete)
+        transition.onTransitionFinished = { didComplete in
             self.interactionController = nil
 
             if didComplete {
-                self.sendFinalViewAppearanceEvents(from: from, to: to)
-                self.sendFinalViewContainmentEvents(from: from, to: to)
+                self.sendFinalViewAppearanceEvents(for: transition)
+                self.sendFinalViewContainmentEvents(for: transition)
+                whenCompleted?()
+            } else {
+                self.sendInitialViewAppearanceEvents(for: transition)
+                self.sendFinalViewAppearanceEvents(for: transition)
             }
 
-            self.debugEndTransition()
-        }
+            animationController.animationEnded?(didComplete)
 
-        if interactive {
-            interactionController = interactionController(for: animationController, context: context)
+            self.debugEndTransition()
+        }        
+
+        sendInitialViewContainmentEvents(for: transition)
+        sendInitialViewAppearanceEvents(for: transition)
+
+        if transition.isInteractive {
+            startInteractiveTransition(animationController: animationController, context: transition)
         } else {
-            animationController.animateTransition(using: context)
+            startTransition(animationController: animationController, context: transition)
         }
     }
 
-    func performInstantPushTransition(for viewController: UIViewController) {
+    func startTransition(animationController: UIViewControllerAnimatedTransitioning,
+                         context: UIViewControllerContextTransitioning) {
+        animationController.animateTransition(using: context)
+    }
+
+    func startInteractiveTransition(animationController: UIViewControllerAnimatedTransitioning,
+                                    context: UIViewControllerContextTransitioning) {
+        interactionController = self.interactionController(animationController: animationController,
+                                                           context: context)
+    }
+
+    func performInstantPushTransition(of viewController: UIViewController) {
         addChild(viewController)
         viewController.beginAppearanceTransition(true, animated: false)
         view.addSubview(viewController.view)
@@ -265,8 +259,7 @@ private extension StackViewController {
         viewController.didMove(toParent: self)
     }
 
-    func performInstantPopTransition() {
-        guard let viewController = visibleViewController else { return }
+    func performInstantPopTransition(of viewController: UIViewController) {
         viewController.willMove(toParent: nil)
         viewController.beginAppearanceTransition(false, animated: false)
         viewController.view.removeFromSuperview()
@@ -275,152 +268,8 @@ private extension StackViewController {
     }
 }
 
-// MARK: - Manual events
-
-private extension StackViewController {
-
-    func sendInitialViewContainmentEvents(from: UIViewController?, to: UIViewController) {
-        from?.willMove(toParent: nil)
-        addChild(to)
-    }
-
-    func sendFinalViewContainmentEvents(from: UIViewController?, to: UIViewController) {
-        from?.removeFromParent()
-
-        if to.isViewLoaded, to.view.window != nil {
-            to.didMove(toParent: self)
-        }
-    }
-
-    func sendInitialViewAppearanceEvents(from: UIViewController?,
-                                         to: UIViewController,
-                                         animated: Bool) {
-        if let from = from, from.isViewLoaded, from.view.window != nil {
-            from.beginAppearanceTransition(false, animated: animated)
-        }
-
-        to.beginAppearanceTransition(true, animated: animated)
-    }
-
-    func sendFinalViewAppearanceEvents(from: UIViewController?, to: UIViewController) {
-        if let from = from, from.isViewLoaded, from.view.window == nil {
-            from.endAppearanceTransition()
-        }
-
-        if to.isViewLoaded, to.view.window != nil {
-            to.endAppearanceTransition()
-        }
-    }
-}
-
-// MARK: - Object creation
-
-private extension StackViewController {
-
-    func animationControllerForOperation(_ operation: Operation,
-                                         from: UIViewController?,
-                                         to: UIViewController) -> UIViewControllerAnimatedTransitioning {
-        let transitionType = self.transitionType(for: operation)
-
-        guard let from = from else {
-            return HorizontalSlideAnimationController(type: transitionType)
-        }
-
-        let delegateController =  delegate?.stackViewController(self,
-                                                                animationControllerFor: operation,
-                                                                from: from,
-                                                                to: to)
-        if let delegateController = delegateController {
-            return delegateController
-        } else {
-            return HorizontalSlideAnimationController(type: transitionType)
-        }
-    }
-
-    func interactionController(for animationController: UIViewControllerAnimatedTransitioning,
-                               context: UIViewControllerContextTransitioning) -> UIViewControllerInteractiveTransitioning? {
-
-        guard let delegate = delegate else {
-            return HorizontalSlideInteractiveController(animationController: animationController,
-                                                        gestureRecognizer: screenEdgePanGestureRecognizer,
-                                                        context: context)
-        }
-
-        return delegate.stackViewController(self, interactionControllerFor: animationController)
-    }
-
-    func transitionContextForTransition(from: UIViewController?,
-                                        to: UIViewController?,
-                                        animated: Bool = true,
-                                        interactive: Bool = false) -> StackViewControllerTransitionContext {
-
-        let animationsEnabled = (from != nil || to != nil)
-        let context = StackViewControllerTransitionContext(from: from,
-                                                           to: to,
-                                                           containerView: view)
-        context.isAnimated = animated && animationsEnabled
-        context.isInteractive = interactive
-
-        return context
-    }
-}
-
-// MARK: - Stack-based information
-
-extension StackViewController {
-
-    func viewControllerBefore(_ viewController: UIViewController) -> UIViewController? {
-        let indexOfViewControllerInStack = _stack.firstIndex(of: viewController)
-
-        guard let beforeIndex = indexOfViewControllerInStack?.advanced(by: -1), beforeIndex >= 0 else {
-            return nil
-        }
-
-        return stack[beforeIndex]
-    }
-
-    func transitionType(for operation: Operation) -> HorizontalSlideTransitionType {
-        switch operation {
-        case .push: return .slideIn
-        case .pop: return .slideOut
-        }
-    }
-}
-
-// MARK: - UIGestureRecognizerDelegate
-
-extension StackViewController: UIGestureRecognizerDelegate {
-
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer === screenEdgePanGestureRecognizer {
-            return screenEdgePanGestureRecognizerShouldBegin()
-        } else {
-            return false
-        }
-    }
-
-    private func screenEdgePanGestureRecognizerShouldBegin() -> Bool {
-        guard interactionController == nil else { return false }
-        guard let from = visibleViewController else { return false }
-        guard let to = viewControllerBefore(from) else { return false }
-
-        performInteractivePopTransition(from: from, to: to)
-        return true
-    }
-}
-
-private extension StackViewController {
-    func debugEndTransition() {
-        print(
-            """
-
-            =========== Transition completed ===========
-            Stack contains \(self.stack.count) view controllers
-            StackViewControllers has \(self.children.count) children
-            TopViewController is \(String(describing: self.topViewController))
-            VisibleViewController is \(String(describing: self.visibleViewController))
-
-            """
-        )
+extension StackViewController: ConsoleDebuggable {
+    public override var description: String {
+        return "SVC"
     }
 }

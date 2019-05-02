@@ -1,25 +1,30 @@
 //
-//  HorizontalSlideInteractiveController.swift
+//  InteractivePopAnimator.swift
 //  StackViewController
 //
 //  Created by Paolo Moroni on 12/04/2019.
 //  Copyright © 2019 codedby.pm. All rights reserved.
 //
 
-import Foundation
+//TODO: remove this public
+public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransitioning {
 
-public class HorizontalSlideInteractiveController: NSObject {
+    // MARK: - Internal properties
 
     let animationController: UIViewControllerAnimatedTransitioning
     let context: UIViewControllerContextTransitioning
 
+    // MARK: - Private properties
+
     private let gestureRecognizer: UIScreenEdgePanGestureRecognizer
-    private var animationProgressInitialOffset: CGFloat = 0.0
     private var didStartInteractively = false
+    private var animationProgressInitialOffset: CGFloat = 0.0
 
     private var interruptibleAnimator: UIViewImplicitlyAnimating? {
         return animationController.interruptibleAnimator?(using: context)
     }
+
+    // MARK: - Init
 
     public init(animationController: UIViewControllerAnimatedTransitioning,
                 gestureRecognizer: UIScreenEdgePanGestureRecognizer,
@@ -31,11 +36,8 @@ public class HorizontalSlideInteractiveController: NSObject {
 
         gestureRecognizer.addTarget(self, action: #selector(didDetectPanningFromEdge(_:)))
     }
-}
 
-// MARK: - UIViewControllerInteractiveTransitioning
-
-extension HorizontalSlideInteractiveController: UIViewControllerInteractiveTransitioning {
+    // MARK: - UIViewControllerInteractiveTransitioning
 
     public func startInteractiveTransition(_ context: UIViewControllerContextTransitioning) {
 
@@ -52,7 +54,7 @@ extension HorizontalSlideInteractiveController: UIViewControllerInteractiveTrans
     }
 }
 
-private extension HorizontalSlideInteractiveController {
+private extension InteractivePopAnimator {
     
     @objc func didDetectPanningFromEdge(_ recognizer: UIScreenEdgePanGestureRecognizer) {
         switch recognizer.state {

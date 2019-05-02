@@ -1,5 +1,5 @@
 //
-//  StackViewControllerTransitionContext.swift
+//  Transition.swift
 //  StackViewController
 //
 //  Created by Paolo Moroni on 03/04/2019.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTransitioning {
+class Transition: NSObject, UIViewControllerContextTransitioning {
 
     let containerView: UIView
     var isAnimated: Bool = false
@@ -17,15 +17,11 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
     var presentationStyle: UIModalPresentationStyle = .custom
     var targetTransform: CGAffineTransform = .identity
     var onTransitionFinished: ((Bool) -> Void)?
-
-    var frameOfViewWhenOffScreen: CGRect {
-        let horizontalOffset = containerView.bounds.width
-        return containerView.bounds.offsetBy(dx: horizontalOffset, dy: 0.0)
-    }
+    let operation: StackViewController.Operation
 
     // MARK: - Private properties
 
-    private var viewControllers: [UITransitionContextViewControllerKey: UIViewController?]
+    private var viewControllers: [UITransitionContextViewControllerKey: UIViewController?] = [:]
     private var views: [UITransitionContextViewKey: UIView] {
         var views = [UITransitionContextViewKey: UIView]()
 
@@ -41,11 +37,17 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
 
     // MARK: - Init
 
-    init(from: UIViewController?,
+    init(operation: StackViewController.Operation,
+         from: UIViewController?,
          to: UIViewController?,
-         containerView: UIView) {
+         in containerView: UIView) {
+        self.operation = operation
+        self.viewControllers = [.from: from, .to: to]
         self.containerView = containerView
-        viewControllers = [.from: from, .to: to]
+    }
+
+    deinit {
+        print(#function)
     }
 
     func completeTransition(_ didComplete: Bool) {
@@ -81,11 +83,8 @@ class StackViewControllerTransitionContext: NSObject, UIViewControllerContextTra
         }
         return .zero
     }
-}
 
-// MARK: - Interactive transition
-
-extension StackViewControllerTransitionContext {
+    // MARK: - Interactive transition
 
     func updateInteractiveTransition(_ percentComplete: CGFloat) {
 
@@ -100,7 +99,6 @@ extension StackViewControllerTransitionContext {
     }
 
     func pauseInteractiveTransition() {
-        
+
     }
 }
-

@@ -11,72 +11,34 @@ import StackViewController
 
 class StackCoordinator {
 
-    var debugPrefix = "[Stack]"
     let canPrint = true
 
     lazy var stackViewController: StackViewController = {
-        let stack = StackViewController(viewControllers: [self.yellowViewController])
-        stack.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 4, execute: {
-//            stack.setViewControllers([self.greenViewController], animated: true)
-//        })
-        return stack
+        var first: BaseViewController = UIViewController.stacked(on: nil,
+                                                                      delegate: self,
+                                                                      color: .yellow)
+        let stackViewController = StackViewController(viewControllers: [first])
+        first.stack = stackViewController
+
+        stackViewController.debugDelegate = self
+        stackViewController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
+//        stackViewController.viewControllers = [
+//            UIViewController.stacked(on: stackViewController, delegate: self, color: .black),
+//            UIViewController.stacked(on: stackViewController, delegate: self, color: .red),
+//            UIViewController.stacked(on: stackViewController, delegate: self, color: .green),
+//        ]
+        return stackViewController
     }()
-
-    lazy var yellowViewController: BaseViewController = {
-        let yellow = BaseViewController(delegate: self, color: .yellow, title: titled("lazy var yellow"), showsBackButton: false)
-        yellow.onNext = {
-            self.stackViewController.pushViewController(self.greenViewController, animated: true)
-        }
-
-        yellow.onReplaceViewControllers = {
-            let root = self.newGreenViewController(title: self.titled("root green"))
-            let top = self.newGreenViewController(title: self.titled("top green")) {
-                self.stackViewController.setViewControllers([], animated: false)
-            }
-
-            self.stackViewController.setViewControllers([root, yellow, top], animated: true)
-        }
-
-        yellow.onBack = { self.stackViewController.popViewController(animated: true) }
-        yellow.onEmptyStack = { self.stackViewController.setViewControllers([], animated: true) }
-
-        return yellow
-    }()
-
-    lazy var greenViewController: BaseViewController = {
-        let green = newGreenViewController(title: titled("lazy var green"))
-        green.delegate = self
-        return green
-    }()
-
-    func newGreenViewController(title: String, onEmptyStack: (() -> Void)? = nil) -> BaseViewController {
-        let green = BaseViewController(delegate: self, color: .green, title: title)
-        green.navigationItem.title = title
-        green.onBack = { self.stackViewController.popViewController(animated: true) }
-        green.onEmptyStack = onEmptyStack
-        green.onReplaceViewControllers = {
-            let stack = [
-                self.newGreenViewController(title: self.titled("Alfa")),
-                self.newGreenViewController(title: self.titled("Beta")),
-                self.newGreenViewController(title: self.titled("Gamma")),
-                self.yellowViewController
-            ]
-            self.stackViewController.setViewControllers(stack, animated: true)
-        }
-
-        return green
-    }
-
-    func titled(_ title: String) -> String {
-        return "\(debugPrefix) \(title)"
-    }
 }
 
 extension StackCoordinator: DebugDelegate {
-    
+
+    var debugPrefix: String {
+        return "[Stack] "
+    }
+
     func debug(_ text: String) {
         guard canPrint else { return }
-        print(text)
+        print(debugPrefix + text)
     }
 }

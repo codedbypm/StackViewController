@@ -6,17 +6,17 @@
 //  Copyright © 2019 codedby.pm. All rights reserved.
 //
 
-public protocol StackViewControllerHandling: UIViewController {
-    func popViewController(animated: Bool) -> UIViewController?
-    func pushViewController(_: UIViewController, animated: Bool)
-}
-
 public protocol StackViewControllerDelegate: class {
-    func stackViewController(_: StackViewController,
-                             animationControllerFor operation: StackViewController.Operation,
+    func animationController(for operation: StackViewController.Operation,
                              from: UIViewController,
                              to: UIViewController) -> UIViewControllerAnimatedTransitioning?
 
-    func stackViewController(_: StackViewController,
-                             interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning?
+    func interactionController(for animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning?
+}
+
+public protocol StackViewControllerHandling: UIViewController {
+    var viewControllers: [UIViewController] { get set }
+    @discardableResult func popViewController(animated: Bool) -> UIViewController?
+    func pushViewController(_: UIViewController, animated: Bool)
+    func setViewControllers(_: [UIViewController], animated: Bool)
 }

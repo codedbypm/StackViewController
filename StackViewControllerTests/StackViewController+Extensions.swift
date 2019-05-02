@@ -15,7 +15,7 @@ extension StackViewController {
     static let knwownViewControllerB = UIViewController()
     static let knwownViewControllerC = UIViewController()
 
-    static let knownStack = [
+    static let knownViewControllers = [
         knwownViewControllerA,
         knwownViewControllerB,
         knwownViewControllerC
@@ -30,12 +30,12 @@ extension StackViewController {
     }
 
     static func withNumberOfViewControllers(_ count: UInt) -> StackViewController {
-        let stack = (0..<count).map { _ in return UIViewController() }
-        return StackViewController(viewControllers: stack)
+        let viewControllers = (0..<count).map { _ in return UIViewController() }
+        return StackViewController(viewControllers: viewControllers)
     }
 
     static func withKnownStack() -> StackViewController {
-        return StackViewController(viewControllers: knownStack)
+        return StackViewController(viewControllers: knownViewControllers)
     }
 }
 

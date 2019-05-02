@@ -7,80 +7,130 @@
 //
 
 import UIKit
+import StackViewController
 
-enum Color: String {
+enum Color: String, CaseIterable {
     case yellow
     case green
+    case red
+    case magenta
+    case gray
+    case blue
+    case black
+
 
     var uiColor: UIColor {
         switch self {
         case .yellow: return .yellow
         case .green: return .green
+        case .red: return .red
+        case .magenta: return .magenta
+        case .gray: return .gray
+        case .blue: return .blue
+        case .black: return .black
         }
+    }
+
+    var textColor: UIColor {
+        switch self {
+        case .red, .yellow, .magenta, .green : return .darkText
+        case .blue, .black, .gray: return .lightText
+
+        }
+    }
+
+    static var random: Color {
+        return allCases.randomElement()!
     }
 }
 
-protocol DebugDelegate: class {
-    func debug(_ text: String)
-}
+class BaseViewController: UIViewController, ConsoleDebuggable {
 
-class BaseViewController: UIViewController {
-
-    weak var delegate: DebugDelegate?
+    weak var debugDelegate: DebugDelegate?
+    weak var stack: StackViewControllerHandling?
     
     let debugAppearance = true
     let debugViewControllerContainment = true
+    let debugTraitCollection = true
 
-    var onNext: (() -> Void)?
-    var onReplaceViewControllers: (() -> Void)?
-    var onEmptyStack: (() -> Void)?
-    var onBack: (() -> Void)?
+    var onPopAnimated: (() -> Void)?
+    var onPopNonAnimated: (() -> Void)?
+    var onPushAnimated: (() -> Void)?
+    var onPushNonAnimated: (() -> Void)?
 
-    lazy var backButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Back", for: .normal)
-        button.addTarget(self, action: #selector(didTapBack), for: .touchUpInside)
-        return button
-    }()
+    var onSetViewControllersSameAnimated: (() -> Void)?
+    var onSetViewControllersSameNonAnimated: (() -> Void)?
+    var onSetVarViewControllersSame: (() -> Void)?
 
-    lazy var nextButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Show next view controller", for: .normal)
-        button.addTarget(self, action: #selector(didTapShowNext), for: .touchUpInside)
-        return button
-    }()
+    var onSetViewControllersEmptyAnimated: (() -> Void)?
+    var onSetViewControllersEmptyNonAnimated: (() -> Void)?
+    var onSetVarViewControllersEmpty: (() -> Void)?
+    var onReplaceWithRootAnimated: (() -> Void)?
+    var onReplaceWithRootNonAnimated: (() -> Void)?
 
-    lazy var replaceViewControllersButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Replace viewControllers", for: .normal)
-        button.addTarget(self, action: #selector(didTapReplaceViewControllers), for: .touchUpInside)
-        return button
-    }()
+    lazy var titles: [String] = [
+        "pop(_: true)",
+        "pop(_: false)",
+        "push(_: true)",
+        "push(_: false)",
+        "setViewControllers(same, true)",
+        "setViewControllers(same, false)",
+        "viewControllers = same",
+        "setViewControllers([], true)",
+        "setViewControllers([], false)",
+        "viewControllers = []",
+        "setViewControllers([root], true)",
+        "viewControllers = [root]"
+    ]
 
-    lazy var emptyStackButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Empty stack", for: .normal)
-        button.addTarget(self, action: #selector(emptyStack), for: .touchUpInside)
-        return button
+    lazy var closures = [
+        onPopAnimated,
+        onPopNonAnimated,
+        onPushAnimated,
+        onPushNonAnimated,
+        onSetViewControllersSameAnimated,
+        onSetViewControllersSameNonAnimated,
+        onSetVarViewControllersSame,
+        onSetViewControllersEmptyAnimated,
+        onSetViewControllersEmptyNonAnimated,
+        onSetVarViewControllersEmpty,
+        onReplaceWithRootAnimated,
+        onReplaceWithRootNonAnimated,
+    ]
+
+    lazy var buttons: [UIButton] = titles.map { button(title: $0) }
+    lazy var buttonsAndClosures = zip(buttons, closures)
+    lazy var dictionary = Dictionary(uniqueKeysWithValues: buttonsAndClosures)
+
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: buttons)
+        stackView.axis = .vertical
+        stackView.spacing = 10.0
+        stackView.alignment = .center
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
     }()
 
     private let color: Color
-    private let showsBackButton: Bool
     
-    required init(delegate: DebugDelegate, color: Color, title: String, showsBackButton: Bool = true) {
-        self.delegate = delegate
+    required init(debugDelegate: DebugDelegate, color: Color) {
+        self.debugDelegate = debugDelegate
         self.color = color
-        self.showsBackButton = showsBackButton
         super.init(nibName: nil, bundle: nil)
-        navigationItem.title = title
+        navigationItem.title = color.rawValue
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func debugFunc(_ functionName: String, allowed: Bool, appending string: String? = nil) {
+        if allowed {
+            debugDelegate?.debug(String(describing: self)
+                .appending(debugArrow)
+                .appending(functionName)
+                .appending(string ?? ""))
+        }
     }
 
     override func viewDidLoad() {
@@ -93,120 +143,80 @@ class BaseViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if debugAppearance {
-            delegate?.debug(String(describing: self)
-                .appending(" => ")
-                .appending(#function))
-        }
+        debugFunc(#function, allowed: debugAppearance)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if debugAppearance {
-            delegate?.debug(String(describing: self)
-                .appending(" => ")
-                .appending(#function))
-        }
+        debugFunc(#function, allowed: debugAppearance)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if debugAppearance {
-            delegate?.debug(String(describing: self)
-                .appending(" => ")
-                .appending(#function))
-        }
+        debugFunc(#function, allowed: debugAppearance)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if debugAppearance {
-            delegate?.debug(String(describing: self)
-                .appending(" => ")
-                .appending(#function))
-        }
+        debugFunc(#function, allowed: debugAppearance)
     }
 
     override func willMove(toParent parent: UIViewController?) {
         super.willMove(toParent: parent)
-        if debugViewControllerContainment {
-            delegate?.debug(String(describing: self)
-                .appending(" => ")
-                .appending(#function)
-                .appending(" ")
-                .appending(String(describing: parent)))
-        }
+        debugFunc(#function, allowed: debugViewControllerContainment, appending: " \(parent == nil ? "nil" : "")")
     }
 
     override func didMove(toParent parent: UIViewController?) {
         super.didMove(toParent: parent)
-        if debugViewControllerContainment {
-            delegate?.debug(String(describing: self)
-                .appending(" => ")
-                .appending(#function)
-                .appending(" ")
-                .appending(String(describing: parent)))
-        }
+        debugFunc(#function, allowed: debugViewControllerContainment, appending: " \(parent == nil ? "nil" : "")")
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        debugFunc(#function, allowed: debugTraitCollection)
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        debugFunc(#function, allowed: debugTraitCollection)
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        debugFunc(#function, allowed: debugTraitCollection)
     }
 
     override var description: String {
         return "\(navigationItem.title?.capitalized ?? "")"
+    }
+
+    @objc func didTap(button: UIButton) {
+        dictionary[button]??()
+    }
+
+    func button(title: String) -> UIButton {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(color.textColor, for: .normal)
+        button.addTarget(self, action: #selector(didTap(button:)), for: .touchUpInside)
+        return button
     }
 }
 
 private extension BaseViewController {
 
     func addSubviews() {
-        view.addSubview(backButton)
-        view.addSubview(nextButton)
-        view.addSubview(replaceViewControllersButton)
-        view.addSubview(emptyStackButton)
+        view.addSubview(stackView)
     }
 
     func addSubviewsLayoutConstraints() {
-        addBackButtonLayoutConstraints()
-        addNextButtonLayoutConstraints()
-        addReplaceViewControllersButtonConstraints()
-        addEmptyStackButtonConstraints()
+        addStackViewLayoutConstraints()
     }
 
-    func addBackButtonLayoutConstraints() {
-        backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20.0).isActive = true
-        backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20.0).isActive = true
-        backButton.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
-    }
-
-    func addNextButtonLayoutConstraints() {
-        nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        nextButton.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 40.0).isActive = true
-        nextButton.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
-    }
-
-    func addReplaceViewControllersButtonConstraints() {
-        replaceViewControllersButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        replaceViewControllersButton.topAnchor.constraint(greaterThanOrEqualTo: nextButton.bottomAnchor, constant: 20.0).isActive = true
-        replaceViewControllersButton.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
-    }
-
-    func addEmptyStackButtonConstraints() {
-        emptyStackButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        emptyStackButton.topAnchor.constraint(greaterThanOrEqualTo: replaceViewControllersButton.bottomAnchor, constant: 20.0).isActive = true
-        emptyStackButton.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
-    }
-
-    @objc func didTapShowNext() {
-        onNext?()
-    }
-
-    @objc func didTapReplaceViewControllers() {
-        onReplaceViewControllers?()
-    }
-
-    @objc func emptyStack() {
-        onEmptyStack?()
-    }
-
-    @objc func didTapBack() {
-        onBack?()
+    func addStackViewLayoutConstraints() {
+        stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        stackView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 20.0).isActive = true
+        stackView.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
     }
 }

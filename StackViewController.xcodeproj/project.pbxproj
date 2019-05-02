@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FD00021F2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift */; };
+		FD00021F2260CC9100A87FFB /* InteractivePopAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD00021E2260CC9100A87FFB /* InteractivePopAnimator.swift */; };
 		FD226059226B6359007E44CE /* StackCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD226058226B6359007E44CE /* StackCoordinator.swift */; };
 		FD22605B226B6363007E44CE /* UIKitCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD22605A226B6363007E44CE /* UIKitCoordinator.swift */; };
 		FD22605F226E579D007E44CE /* StackViewControllerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD22605E226E579D007E44CE /* StackViewControllerError.swift */; };
@@ -15,11 +15,11 @@
 		FD67E5B3225257DA0051786B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5B2225257DA0051786B /* AppDelegate.swift */; };
 		FD67E5BD225257DB0051786B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */; };
 		FD67E5C3225258840051786B /* StackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C2225258840051786B /* StackViewController.swift */; };
-		FD67E5C8225260C40051786B /* HorizontalSlideAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C7225260C40051786B /* HorizontalSlideAnimationController.swift */; };
+		FD67E5C8225260C40051786B /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5C7225260C40051786B /* Animator.swift */; };
 		FD67E5CE2252A57F0051786B /* StackViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* StackViewController.framework */; };
 		FD67E5CF2252A57F0051786B /* StackViewController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* StackViewController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FD67E5F52252EC770051786B /* RootCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F42252EC770051786B /* RootCoordinator.swift */; };
-		FD67E5F82254F2010051786B /* StackViewControllerTransitionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */; };
+		FD67E5F82254F2010051786B /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F72254F2010051786B /* Transition.swift */; };
 		FD67E5FA22552D3A0051786B /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F922552D3A0051786B /* UIView+Extensions.swift */; };
 		FD76B6FB2270C5B30090EDB2 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B6FA2270C5B30090EDB2 /* BaseViewController.swift */; };
 		FD76B7032270C9530090EDB2 /* StackViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */; };
@@ -29,6 +29,19 @@
 		FD76B7672270E9C60090EDB2 /* StackViewControllerTests+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */; };
 		FD76B7692270EA010090EDB2 /* StackViewControllerTests+Push.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */; };
 		FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */; };
+		FD76B7752275DE290090EDB2 /* StackViewController+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7742275DE290090EDB2 /* StackViewController+Validation.swift */; };
+		FD76B7772275F39C0090EDB2 /* StackViewController+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */; };
+		FD76B7792275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7782275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift */; };
+		FD76B77B2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B77A2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift */; };
+		FD76B77D227614D60090EDB2 /* ViewControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B77C227614D60090EDB2 /* ViewControllerFactory.swift */; };
+		FD76B77F227643600090EDB2 /* PushAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B77E227643600090EDB2 /* PushAnimator.swift */; };
+		FD76B7812276449F0090EDB2 /* PopAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7802276449F0090EDB2 /* PopAnimator.swift */; };
+		FD76B7862278AFA20090EDB2 /* StackViewController+ObjectFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7852278AFA20090EDB2 /* StackViewController+ObjectFactory.swift */; };
+		FD76B7882278E8D20090EDB2 /* UIViewController+Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7872278E8D20090EDB2 /* UIViewController+Extenstions.swift */; };
+		FD76B78A227917320090EDB2 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B789227917320090EDB2 /* NavigationController.swift */; };
+		FD76B78E2279D26A0090EDB2 /* StackHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B78D2279D26A0090EDB2 /* StackHandler.swift */; };
+		FD76B78F2279E0950090EDB2 /* ConsoleDebuggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */; };
+		FD76B791227A5B7A0090EDB2 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,7 +76,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSlideInteractiveController.swift; sourceTree = "<group>"; };
+		FD00021E2260CC9100A87FFB /* InteractivePopAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractivePopAnimator.swift; sourceTree = "<group>"; };
 		FD226058226B6359007E44CE /* StackCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackCoordinator.swift; sourceTree = "<group>"; };
 		FD22605A226B6363007E44CE /* UIKitCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitCoordinator.swift; sourceTree = "<group>"; };
 		FD22605E226E579D007E44CE /* StackViewControllerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerError.swift; sourceTree = "<group>"; };
@@ -75,9 +88,9 @@
 		FD67E5BC225257DB0051786B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FD67E5BE225257DB0051786B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD67E5C2225258840051786B /* StackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewController.swift; sourceTree = "<group>"; };
-		FD67E5C7225260C40051786B /* HorizontalSlideAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSlideAnimationController.swift; sourceTree = "<group>"; };
+		FD67E5C7225260C40051786B /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		FD67E5F42252EC770051786B /* RootCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootCoordinator.swift; sourceTree = "<group>"; };
-		FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerTransitionContext.swift; sourceTree = "<group>"; };
+		FD67E5F72254F2010051786B /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
 		FD67E5F922552D3A0051786B /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		FD76B6FA2270C5B30090EDB2 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		FD76B7002270C9530090EDB2 /* StackViewControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StackViewControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,6 +101,19 @@
 		FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+Properties.swift"; sourceTree = "<group>"; };
 		FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+Push.swift"; sourceTree = "<group>"; };
 		FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerDelegate.swift; sourceTree = "<group>"; };
+		FD76B7742275DE290090EDB2 /* StackViewController+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+Validation.swift"; sourceTree = "<group>"; };
+		FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+Debug.swift"; sourceTree = "<group>"; };
+		FD76B7782275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+AppearanceEvents.swift"; sourceTree = "<group>"; };
+		FD76B77A2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+ViewContainmentEvents.swift"; sourceTree = "<group>"; };
+		FD76B77C227614D60090EDB2 /* ViewControllerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerFactory.swift; sourceTree = "<group>"; };
+		FD76B77E227643600090EDB2 /* PushAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushAnimator.swift; sourceTree = "<group>"; };
+		FD76B7802276449F0090EDB2 /* PopAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopAnimator.swift; sourceTree = "<group>"; };
+		FD76B7852278AFA20090EDB2 /* StackViewController+ObjectFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+ObjectFactory.swift"; sourceTree = "<group>"; };
+		FD76B7872278E8D20090EDB2 /* UIViewController+Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extenstions.swift"; sourceTree = "<group>"; };
+		FD76B789227917320090EDB2 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleDebuggable.swift; sourceTree = "<group>"; };
+		FD76B78D2279D26A0090EDB2 /* StackHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackHandler.swift; sourceTree = "<group>"; };
+		FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,12 +167,17 @@
 			isa = PBXGroup;
 			children = (
 				FD67E5F12252AF0F0051786B /* Extensions */,
-				FD67E5C7225260C40051786B /* HorizontalSlideAnimationController.swift */,
-				FD00021E2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift */,
-				FD67E5F72254F2010051786B /* StackViewControllerTransitionContext.swift */,
-				FD22605E226E579D007E44CE /* StackViewControllerError.swift */,
+				FD76B782227648A50090EDB2 /* Animators */,
 				FD67E5C2225258840051786B /* StackViewController.swift */,
+				FD76B78D2279D26A0090EDB2 /* StackHandler.swift */,
+				FD76B7852278AFA20090EDB2 /* StackViewController+ObjectFactory.swift */,
+				FD76B7782275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift */,
+				FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */,
+				FD67E5F72254F2010051786B /* Transition.swift */,
+				FD76B7742275DE290090EDB2 /* StackViewController+Validation.swift */,
+				FD76B77A2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift */,
 				FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */,
+				FD22605E226E579D007E44CE /* StackViewControllerError.swift */,
 				FD67E578225250E10051786B /* StackViewController.h */,
 				FD67E579225250E10051786B /* Info.plist */,
 			);
@@ -156,11 +187,14 @@
 		FD67E5B1225257DA0051786B /* TestApp */ = {
 			isa = PBXGroup;
 			children = (
+				FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */,
 				FD67E5F42252EC770051786B /* RootCoordinator.swift */,
 				FD226058226B6359007E44CE /* StackCoordinator.swift */,
 				FD22605A226B6363007E44CE /* UIKitCoordinator.swift */,
 				FD76B6FA2270C5B30090EDB2 /* BaseViewController.swift */,
+				FD76B77C227614D60090EDB2 /* ViewControllerFactory.swift */,
 				FD67E5B2225257DA0051786B /* AppDelegate.swift */,
+				FD76B789227917320090EDB2 /* NavigationController.swift */,
 				FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */,
 				FD67E5BE225257DB0051786B /* Info.plist */,
 			);
@@ -170,7 +204,9 @@
 		FD67E5F12252AF0F0051786B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */,
 				FD67E5F922552D3A0051786B /* UIView+Extensions.swift */,
+				FD76B7872278E8D20090EDB2 /* UIViewController+Extenstions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -186,6 +222,17 @@
 				FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */,
 			);
 			path = StackViewControllerTests;
+			sourceTree = "<group>";
+		};
+		FD76B782227648A50090EDB2 /* Animators */ = {
+			isa = PBXGroup;
+			children = (
+				FD67E5C7225260C40051786B /* Animator.swift */,
+				FD76B77E227643600090EDB2 /* PushAnimator.swift */,
+				FD76B7802276449F0090EDB2 /* PopAnimator.swift */,
+				FD00021E2260CC9100A87FFB /* InteractivePopAnimator.swift */,
+			);
+			path = Animators;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -329,12 +376,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD00021F2260CC9100A87FFB /* HorizontalSlideInteractiveController.swift in Sources */,
+				FD76B7882278E8D20090EDB2 /* UIViewController+Extenstions.swift in Sources */,
+				FD00021F2260CC9100A87FFB /* InteractivePopAnimator.swift in Sources */,
+				FD76B7862278AFA20090EDB2 /* StackViewController+ObjectFactory.swift in Sources */,
+				FD76B78E2279D26A0090EDB2 /* StackHandler.swift in Sources */,
 				FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */,
-				FD67E5C8225260C40051786B /* HorizontalSlideAnimationController.swift in Sources */,
+				FD76B78F2279E0950090EDB2 /* ConsoleDebuggable.swift in Sources */,
+				FD67E5C8225260C40051786B /* Animator.swift in Sources */,
+				FD76B77F227643600090EDB2 /* PushAnimator.swift in Sources */,
+				FD76B7812276449F0090EDB2 /* PopAnimator.swift in Sources */,
 				FD22605F226E579D007E44CE /* StackViewControllerError.swift in Sources */,
 				FD67E5FA22552D3A0051786B /* UIView+Extensions.swift in Sources */,
-				FD67E5F82254F2010051786B /* StackViewControllerTransitionContext.swift in Sources */,
+				FD76B7752275DE290090EDB2 /* StackViewController+Validation.swift in Sources */,
+				FD76B7792275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift in Sources */,
+				FD76B7772275F39C0090EDB2 /* StackViewController+Debug.swift in Sources */,
+				FD67E5F82254F2010051786B /* Transition.swift in Sources */,
+				FD76B77B2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift in Sources */,
+				FD76B791227A5B7A0090EDB2 /* Array+Extensions.swift in Sources */,
 				FD67E5C3225258840051786B /* StackViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,7 +404,9 @@
 				FD67E5F52252EC770051786B /* RootCoordinator.swift in Sources */,
 				FD67E5B3225257DA0051786B /* AppDelegate.swift in Sources */,
 				FD226059226B6359007E44CE /* StackCoordinator.swift in Sources */,
+				FD76B77D227614D60090EDB2 /* ViewControllerFactory.swift in Sources */,
 				FD76B6FB2270C5B30090EDB2 /* BaseViewController.swift in Sources */,
+				FD76B78A227917320090EDB2 /* NavigationController.swift in Sources */,
 				FD22605B226B6363007E44CE /* UIKitCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

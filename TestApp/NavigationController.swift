@@ -64,9 +64,9 @@ extension NavigationController: UINavigationControllerDelegate {
                               from fromVC: UIViewController,
                               to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 
-        print("Operation: \(operation.rawValue)")
-        print("From: \(fromVC)")
-        print("To: \(toVC == nil ? "nil" : toVC.description)")
+//        print("Operation: \(operation.rawValue)")
+//        print("From: \(fromVC)")
+//        print("To: \(toVC == nil ? "nil" : toVC.description)")
 
         switch operation {
         case .push:

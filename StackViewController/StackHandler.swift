@@ -14,6 +14,14 @@ protocol StackHandlerDelegate: class {
     func stackDidChange()
 }
 
+/// StackHandler is responsible for storing and updating the view controllers array of a
+/// StackViewController instance.
+///
+/// It supports these operations:
+/// - **add** a view controller
+/// - **remove** one or more view controllers
+/// - **replace** the whole stack with a new one
+
 class StackHandler: ExceptionThrowing {
 
     private(set) lazy var viewControllerWrapperView = ViewControllerWrapperView()

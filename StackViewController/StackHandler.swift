@@ -16,7 +16,7 @@ protocol StackHandlerDelegate: class {
 
 class StackHandler: ExceptionThrowing {
 
-    private(set) lazy var viewControllerWrapperView = UIView()
+    private(set) lazy var viewControllerWrapperView = ViewControllerWrapperView()
 
     private(set) var currentTransition: Transition? {
         didSet {

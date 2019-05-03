@@ -23,9 +23,9 @@ extension StackViewController {
             """
 
             =========== Transition completed ===========
-            Stack contains \(self.viewControllers.count) view controllers
-            StackViewControllers has \(self.children.count) children
-            TopViewController is \(String(describing: self.topViewController!))
+            Stack \(viewControllers.isEmpty ? "is empty" : "contains \(viewControllers.count) view controllers")
+            StackViewControllers has \(children.isEmpty ? "no child" : "\(children.count) children")
+            TopViewController is \(topViewController == nil ? "nil" : "\(String(describing: topViewController!))")
 
             """
         )

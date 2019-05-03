@@ -15,8 +15,8 @@ class StackCoordinator {
 
     lazy var stackViewController: StackViewController = {
         var first: BaseViewController = UIViewController.stacked(on: nil,
-                                                                      delegate: self,
-                                                                      color: .yellow)
+                                                                 delegate: self,
+                                                                 color: .yellow)
         let stackViewController = StackViewController(viewControllers: [first])
         first.stack = stackViewController
 

@@ -142,8 +142,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
 
     private func popViewControllerInteractively() -> Bool {
         guard stackHandler.canPopInteractively() else { return false }
-
-        stackHandler.setStack(stackHandler.stack.dropLast(), animated: true, interactive: true)
+        stackHandler.popViewController(animated: true, interactive: true)
 
         return true
     }

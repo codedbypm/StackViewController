@@ -60,8 +60,9 @@ class StackHandler: ExceptionThrowing {
                                             interactive: false)
     }
 
-    func popViewController(animated: Bool) -> UIViewController? {
-        return popToViewController(at: stack.endIndex - 2, animated: animated)?.first
+    @discardableResult
+    func popViewController(animated: Bool, interactive: Bool = false) -> UIViewController? {
+        return popToViewController(at: stack.endIndex - 2, animated: animated, interactive: interactive)?.first
     }
 
     func popToRootViewController(animated: Bool) -> Stack? {
@@ -73,7 +74,7 @@ class StackHandler: ExceptionThrowing {
         return popToViewController(at: targetIndex, animated: animated)
     }
 
-    private func popToViewController(at index: Int, animated: Bool) -> Stack? {
+    private func popToViewController(at index: Int, animated: Bool, interactive: Bool = false) -> Stack? {
         assert(currentTransition == nil)
         guard canPop(to: index) else { return nil }
 
@@ -90,11 +91,11 @@ class StackHandler: ExceptionThrowing {
                                             to: to,
                                             in: viewControllerWrapperView,
                                             animated: animated,
-                                            interactive: false)
+                                            interactive: interactive)
         return poppedStack
     }
 
-    func setStack(_ newStack: Stack, animated: Bool, interactive: Bool = false) {
+    func setStack(_ newStack: Stack, animated: Bool) {
         assert(currentTransition == nil)
 
         guard canReplaceStack(with: newStack) else { return }

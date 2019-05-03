@@ -47,7 +47,7 @@ class NavigationController: UINavigationController, ConsoleDebuggable {
     }
 
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        super.pushViewController(viewController, animated: true)
+        super.pushViewController(viewController, animated: animated)
         
     }
 

@@ -8,19 +8,39 @@
 
 import Foundation
 
+protocol ExceptionThrowing {
+    func throwError(_: StackViewControllerError, userInfo: [String: Any]?)
+}
+
+extension ExceptionThrowing {
+    
+    func throwError(_ error: StackViewControllerError, userInfo: [String: Any]? = nil) {
+        error.raiseException(userInfo: userInfo)
+    }
+}
+
 public enum StackViewControllerError: Error {
-    case controllerAlreadyInStack(UIViewController)
+    case duplicateViewControllers
 }
 
 extension StackViewControllerError {
 
-    public var localizedDescription: String {
-        switch self {
-        case .controllerAlreadyInStack(let viewController):
-            return NSLocalizedString("It is not allowed to push view controller \(viewController), since it is already in the stack",
-                                     comment: "")
-        }
+    func raiseException(userInfo: [String: Any]? = nil) {
+        exception(userInfo: userInfo).raise()
     }
 
-    
+    private func exception(userInfo: [String: Any]? = nil) -> NSException {
+        switch self {
+        case .duplicateViewControllers:
+            let name = NSExceptionName.internalInconsistencyException
+            let stack = userInfo?["stack"] as? Stack ?? []
+            let reason =
+            """
+                All view controllers in a navigation controller must be distinct:
+                \(stack)
+            """
+            return NSException(name: name, reason: reason, userInfo: userInfo)
+        }
+    }
 }
+

@@ -14,7 +14,7 @@ protocol StackHandlerDelegate: class {
     func stackDidChange()
 }
 
-class StackHandler {
+class StackHandler: ExceptionThrowing {
 
     private(set) lazy var viewControllerWrapperView = UIView()
 
@@ -36,11 +36,9 @@ class StackHandler {
 
     init(stack: Stack) {
         guard !stack.hasDuplicates else {
-            assertionFailure()
+            throwError(.duplicateViewControllers, userInfo: ["stack": stack])
             return
         }
-
-        guard !stack.isEmpty else { return }
 
         self.stack = stack
     }

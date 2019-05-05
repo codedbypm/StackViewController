@@ -13,7 +13,7 @@ extension StackViewController {
         if let from = transition.from, let to = transition.to, let controller = delegate?.animationController(for: transition.operation, from: from, to: to) {
             return controller
         } else {
-            return viewModel.animationController(for: transition)
+            return viewModel.defaultAnimationController(for: transition)
         }
     }
 
@@ -28,15 +28,5 @@ extension StackViewController {
                                          gestureRecognizer: screenEdgePanGestureRecognizer,
                                          context: context)
         }
-    }
-
-    func interactionController(
-        animationController: UIViewControllerAnimatedTransitioning,
-        gestureRecognizer: UIScreenEdgePanGestureRecognizer,
-        context: UIViewControllerContextTransitioning) -> InteractivePopAnimator {
-
-        return InteractivePopAnimator(animationController: animationController,
-                                      gestureRecognizer: gestureRecognizer,
-                                      context: context)
     }
 }

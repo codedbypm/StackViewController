@@ -103,9 +103,8 @@ class StackViewModel {
     func transitionFinished(_ didComplete: Bool) {
         currentTransition = nil
     }
-}
 
-extension StackViewModel {
+    // MARK: - Transition Actors creation
 
     func context(for transition: Transition,
                  in containerView: UIView,
@@ -123,10 +122,20 @@ extension StackViewModel {
         return context
     }
 
-    func animationController(for transition: Transition) -> Animator {
+    func defaultAnimationController(for transition: Transition) -> Animator {
         switch transition.operation {
         case .pop: return PopAnimator()
         case .push: return PushAnimator()
         }
+    }
+
+    func defaultInteractionController(
+        animationController: UIViewControllerAnimatedTransitioning,
+        gestureRecognizer: UIScreenEdgePanGestureRecognizer,
+        context: UIViewControllerContextTransitioning) -> InteractivePopAnimator {
+
+        return InteractivePopAnimator(animationController: animationController,
+                                      gestureRecognizer: gestureRecognizer,
+                                      context: context)
     }
 }

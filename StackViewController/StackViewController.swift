@@ -156,7 +156,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
 extension StackViewController: StackViewModelDelegate {
 
     func didCreateTransition() {
-        guard let transition = viewModel.currentTransition else { return assertionFailure() }
+        guard let transition = viewModel.transition else { return assertionFailure() }
 
         let animationController = self.animationController(for: transition)
 

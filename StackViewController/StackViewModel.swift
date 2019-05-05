@@ -30,13 +30,13 @@ class StackViewModel {
         return stackHandler.top
     }
 
-    var currentTransition: Transition? {
+    var transition: Transition? {
         willSet {
-            if newValue == nil { assert(currentTransition != nil) }
-            else { assert(currentTransition == nil) }
+            if newValue == nil { assert(transition != nil) }
+            else { assert(transition == nil) }
         }
         didSet {
-            if currentTransition != nil {
+            if transition != nil {
                 delegate?.didCreateTransition()
             }
         }
@@ -45,9 +45,7 @@ class StackViewModel {
     func didPush(_ viewControllers: [UIViewController], animated: Bool) {
         let from = topViewController
         stackHandler.push(viewControllers)
-        currentTransition = Transition(operation: .push,
-                                       from: from,
-                                       to: viewControllers.last)
+        transition = Transition(operation: .push, from: from, to: viewControllers.last)
     }
 
     func didPop(animated: Bool) -> UIViewController? {
@@ -69,9 +67,7 @@ class StackViewModel {
         let poppedCount = stack.endIndex - (index + 1)
         let poppedElements = stackHandler.popLast(poppedCount)
 
-        currentTransition = Transition(operation: .pop,
-                                       from: poppedElements.last,
-                                       to: topViewController)
+        transition = Transition(operation: .pop, from: poppedElements.last, to: topViewController)
         return poppedElements
     }
 
@@ -97,11 +93,11 @@ class StackViewModel {
         }
 
         stackHandler.replaceStack(with: newStack)
-        currentTransition = Transition(operation: operation, from: from, to: to)
+        transition = Transition(operation: operation, from: from, to: to)
     }
 
     func transitionFinished(_ didComplete: Bool) {
-        currentTransition = nil
+        transition = nil
     }
 
     // MARK: - Transition Actors creation

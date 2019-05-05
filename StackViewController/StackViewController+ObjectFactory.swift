@@ -6,33 +6,6 @@
 //  Copyright © 2019 codedby.pm. All rights reserved.
 //
 
-extension StackHandler {
-
-    func stackTransition(for operation: StackViewController.Operation,
-                         from: UIViewController?,
-                         to: UIViewController?,
-                         in containerView: UIView,
-                         animated: Bool = true,
-                         interactive: Bool = false) -> Transition {
-
-        assert(from != nil || to != nil)
-
-        let animationsEnabled = (from != nil || to != nil)
-        let context = Transition(operation: operation, from: from, to: to, in: containerView)
-        context.isAnimated = animated && animationsEnabled
-        context.isInteractive = interactive
-
-        return context
-    }
-
-    func animationController(for operation: StackViewController.Operation) -> Animator {
-        switch operation {
-        case .pop: return PopAnimator()
-        case .push: return PushAnimator()
-        }
-    }
-}
-
 extension StackViewController {
 
     func animationController(for operation: Operation,

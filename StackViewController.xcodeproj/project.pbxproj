@@ -13,6 +13,7 @@
 		FD1B56FE227CBD3C00E005EC /* CollectionDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B56FD227CBD3C00E005EC /* CollectionDifference.swift */; };
 		FD1B5700227CBD4C00E005EC /* Diffing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B56FF227CBD4C00E005EC /* Diffing.swift */; };
 		FD1B5703227CBEF900E005EC /* Collection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B5702227CBEF900E005EC /* Collection+Extensions.swift */; };
+		FD1B5707227D38B800E005EC /* TransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B5706227D38B800E005EC /* TransitionHandler.swift */; };
 		FD1B570B227D68CB00E005EC /* StackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B570A227D68CB00E005EC /* StackViewModel.swift */; };
 		FD1B570D227DB9AF00E005EC /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B570C227DB9AF00E005EC /* Transition.swift */; };
 		FD226059226B6359007E44CE /* StackCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD226058226B6359007E44CE /* StackCoordinator.swift */; };
@@ -26,7 +27,7 @@
 		FD67E5CE2252A57F0051786B /* StackViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* StackViewController.framework */; };
 		FD67E5CF2252A57F0051786B /* StackViewController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FD67E575225250E10051786B /* StackViewController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FD67E5F52252EC770051786B /* RootCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F42252EC770051786B /* RootCoordinator.swift */; };
-		FD67E5F82254F2010051786B /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F72254F2010051786B /* Transition.swift */; };
+		FD67E5F82254F2010051786B /* TransitionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F72254F2010051786B /* TransitionContext.swift */; };
 		FD67E5FA22552D3A0051786B /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5F922552D3A0051786B /* UIView+Extensions.swift */; };
 		FD76B6FB2270C5B30090EDB2 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B6FA2270C5B30090EDB2 /* BaseViewController.swift */; };
 		FD76B7032270C9530090EDB2 /* StackViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */; };
@@ -36,7 +37,6 @@
 		FD76B7672270E9C60090EDB2 /* StackViewControllerTests+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */; };
 		FD76B7692270EA010090EDB2 /* StackViewControllerTests+Push.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */; };
 		FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */; };
-		FD76B7752275DE290090EDB2 /* StackViewController+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7742275DE290090EDB2 /* StackViewController+Validation.swift */; };
 		FD76B7772275F39C0090EDB2 /* StackViewController+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */; };
 		FD76B7792275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7782275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift */; };
 		FD76B77B2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B77A2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift */; };
@@ -89,6 +89,7 @@
 		FD1B56FD227CBD3C00E005EC /* CollectionDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDifference.swift; sourceTree = "<group>"; };
 		FD1B56FF227CBD4C00E005EC /* Diffing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diffing.swift; sourceTree = "<group>"; };
 		FD1B5702227CBEF900E005EC /* Collection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Extensions.swift"; sourceTree = "<group>"; };
+		FD1B5706227D38B800E005EC /* TransitionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionHandler.swift; sourceTree = "<group>"; };
 		FD1B570A227D68CB00E005EC /* StackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewModel.swift; sourceTree = "<group>"; };
 		FD1B570C227DB9AF00E005EC /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
 		FD226058226B6359007E44CE /* StackCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackCoordinator.swift; sourceTree = "<group>"; };
@@ -104,7 +105,7 @@
 		FD67E5C2225258840051786B /* StackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewController.swift; sourceTree = "<group>"; };
 		FD67E5C7225260C40051786B /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		FD67E5F42252EC770051786B /* RootCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootCoordinator.swift; sourceTree = "<group>"; };
-		FD67E5F72254F2010051786B /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
+		FD67E5F72254F2010051786B /* TransitionContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionContext.swift; sourceTree = "<group>"; };
 		FD67E5F922552D3A0051786B /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		FD76B6FA2270C5B30090EDB2 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		FD76B7002270C9530090EDB2 /* StackViewControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StackViewControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,7 +116,6 @@
 		FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+Properties.swift"; sourceTree = "<group>"; };
 		FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+Push.swift"; sourceTree = "<group>"; };
 		FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerDelegate.swift; sourceTree = "<group>"; };
-		FD76B7742275DE290090EDB2 /* StackViewController+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+Validation.swift"; sourceTree = "<group>"; };
 		FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+Debug.swift"; sourceTree = "<group>"; };
 		FD76B7782275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+AppearanceEvents.swift"; sourceTree = "<group>"; };
 		FD76B77A2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+ViewContainmentEvents.swift"; sourceTree = "<group>"; };
@@ -203,13 +203,13 @@
 				FD67E5F12252AF0F0051786B /* Extensions */,
 				FD67E5C2225258840051786B /* StackViewController.swift */,
 				FD1B570A227D68CB00E005EC /* StackViewModel.swift */,
+				FD1B5706227D38B800E005EC /* TransitionHandler.swift */,
+				FD67E5F72254F2010051786B /* TransitionContext.swift */,
 				FD1B570C227DB9AF00E005EC /* Transition.swift */,
 				FD76B78D2279D26A0090EDB2 /* StackHandler.swift */,
 				FD76B7852278AFA20090EDB2 /* StackViewController+ObjectFactory.swift */,
 				FD76B7782275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift */,
 				FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */,
-				FD67E5F72254F2010051786B /* Transition.swift */,
-				FD76B7742275DE290090EDB2 /* StackViewController+Validation.swift */,
 				FD76B77A2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift */,
 				FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */,
 				FD22605E226E579D007E44CE /* StackViewControllerError.swift */,
@@ -427,11 +427,11 @@
 				FD76B7812276449F0090EDB2 /* PopAnimator.swift in Sources */,
 				FD22605F226E579D007E44CE /* StackViewControllerError.swift in Sources */,
 				FD67E5FA22552D3A0051786B /* UIView+Extensions.swift in Sources */,
-				FD76B7752275DE290090EDB2 /* StackViewController+Validation.swift in Sources */,
 				FD1B570B227D68CB00E005EC /* StackViewModel.swift in Sources */,
 				FD76B7792275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift in Sources */,
 				FD76B7772275F39C0090EDB2 /* StackViewController+Debug.swift in Sources */,
-				FD67E5F82254F2010051786B /* Transition.swift in Sources */,
+				FD1B5707227D38B800E005EC /* TransitionHandler.swift in Sources */,
+				FD67E5F82254F2010051786B /* TransitionContext.swift in Sources */,
 				FD1B56FE227CBD3C00E005EC /* CollectionDifference.swift in Sources */,
 				FD76B77B2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift in Sources */,
 				FD76B791227A5B7A0090EDB2 /* Array+Extensions.swift in Sources */,

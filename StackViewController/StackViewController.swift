@@ -167,11 +167,11 @@ extension StackViewController: StackViewModelDelegate {
             self.interactionController = nil
 
             if didComplete {
-                self.sendFinalViewAppearanceEvents(for: context)
-                self.sendFinalViewContainmentEvents(for: context)
+                self.sendFinalViewAppearanceEvents(using: context)
+                self.sendFinalViewContainmentEvents(using: context)
             } else {
-                self.sendInitialViewAppearanceEvents(for: context)
-                self.sendFinalViewAppearanceEvents(for: context)
+                self.sendInitialViewAppearanceEvents(using: context)
+                self.sendFinalViewAppearanceEvents(using: context)
             }
 
             animationController.animationEnded?(didComplete)
@@ -180,8 +180,8 @@ extension StackViewController: StackViewModelDelegate {
             self.debugEndTransition()
         }
 
-        sendInitialViewContainmentEvents(for: context)
-        sendInitialViewAppearanceEvents(for: context)
+        sendInitialViewContainmentEvents(using: context)
+        sendInitialViewAppearanceEvents(using: context)
 
         if context.isInteractive {
             startInteractiveTransition(animationController: animationController, context: context)

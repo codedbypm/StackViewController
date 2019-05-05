@@ -18,12 +18,12 @@ extension StackViewController {
         stack.forEach { $0.didMove(toParent: self) }
     }
 
-    func sendInitialViewContainmentEvents(for transition: Transition) {
+    func sendInitialViewContainmentEvents(using context: TransitionContext) {
 
-        let from = transition.viewController(forKey: .from)
-        let to = transition.viewController(forKey: .to)
+        let from = context.viewController(forKey: .from)
+        let to = context.viewController(forKey: .to)
 
-        switch transition.operation {
+        switch context.operation {
         case .pop:
             from?.willMove(toParent: nil)
         case .push:
@@ -32,12 +32,12 @@ extension StackViewController {
         }
     }
 
-    func sendFinalViewContainmentEvents(for transition: Transition) {
+    func sendFinalViewContainmentEvents(using context: TransitionContext) {
 
-        let from = transition.viewController(forKey: .from)
-        let to = transition.viewController(forKey: .to)
+        let from = context.viewController(forKey: .from)
+        let to = context.viewController(forKey: .to)
 
-        switch transition.operation {
+        switch context.operation {
         case .pop:
             from?.removeFromParent()
         case .push:

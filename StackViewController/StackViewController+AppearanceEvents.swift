@@ -10,18 +10,18 @@ import Foundation
 
 extension StackViewController {
 
-    func sendInitialViewAppearanceEvents(for transition: Transition) {
-        let isAnimated = transition.isAnimated
-        let from = transition.viewController(forKey: .from)
-        let to = transition.viewController(forKey: .to)
+    func sendInitialViewAppearanceEvents(using context: TransitionContext) {
+        let isAnimated = context.isAnimated
+        let from = context.viewController(forKey: .from)
+        let to = context.viewController(forKey: .to)
 
         from?.beginAppearanceTransition(false, animated: isAnimated)
         to?.beginAppearanceTransition(true, animated: isAnimated)
     }
 
-    func sendFinalViewAppearanceEvents(for transition: Transition) {
-        let from = transition.viewController(forKey: .from)
-        let to = transition.viewController(forKey: .to)
+    func sendFinalViewAppearanceEvents(using context: TransitionContext) {
+        let from = context.viewController(forKey: .from)
+        let to = context.viewController(forKey: .to)
 
         from?.endAppearanceTransition()
         to?.endAppearanceTransition()

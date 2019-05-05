@@ -12,7 +12,7 @@ extension Collection {
     // Utility method for collections that wish to implement
     // CustomStringConvertible and CustomDebugStringConvertible using a bracketed
     // list of elements, like an array.
-    internal func _makeCollectionDescription(
+    func _makeCollectionDescription(
         withTypeName type: String? = nil
         ) -> String {
         var result = ""

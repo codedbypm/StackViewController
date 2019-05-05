@@ -23,12 +23,13 @@ public class PushAnimator: Animator {
 
     override func transitionAnimations(using context: UIViewControllerContextTransitioning) -> Animations {
         return {
-            guard let from = context.viewController(forKey: .from) else { return }
+            // to
             guard let to = context.viewController(forKey: .to) else { return }
-            let containerView = context.containerView
-
             to.view.frame = context.finalFrame(for: to)
 
+            // from
+            guard let from = context.viewController(forKey: .from) else { return }
+            let containerView = context.containerView
             let initialOffsetX = containerView.frame.width * (-0.3)
             from.view.frame = from.view.frame.offsetBy(dx: initialOffsetX, dy: 0.0)
         }

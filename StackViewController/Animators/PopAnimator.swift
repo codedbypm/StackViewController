@@ -27,10 +27,11 @@ public class PopAnimator: Animator {
     override func transitionAnimations(using context: UIViewControllerContextTransitioning) -> Animations {
         return { [weak self] in
             guard let self = self else { return }
-            guard let from = context.viewController(forKey: .from) else { return }
-            guard let to = context.viewController(forKey: .to) else { return }
 
+            guard let from = context.viewController(forKey: .from) else { return }
             from.view.frame = self.frameOfViewWhenOffScreen
+
+            guard let to = context.viewController(forKey: .to) else { return }
             to.view.frame = context.finalFrame(for: to)
         }
     }

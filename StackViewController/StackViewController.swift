@@ -20,14 +20,14 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
     public var debugDelegate: DebugDelegate?
 
     public weak var delegate: StackViewControllerDelegate?
-
+    
     public var viewControllers: [UIViewController] {
-        get { return stackHandler.stack }
-        set { stackHandler.setStack(newValue, animated: false) }
+        get { return viewModel.stack }
+        set { viewModel.didSetStack(newValue, animated: false) }
     }
 
     public var topViewController: UIViewController? {
-        return stackHandler.topViewController
+        return viewModel.topViewController
     }
 
     public override var shouldAutomaticallyForwardAppearanceMethods: Bool {
@@ -36,7 +36,6 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
 
     // MARK: - Internal properties
 
-    let stackHandler: StackHandler
 
     lazy var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
         let recognizer = UIScreenEdgePanGestureRecognizer()
@@ -49,22 +48,22 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
 
     private(set) var interactionController: UIViewControllerInteractiveTransitioning?
 
-    private var viewControllerWrapperView: UIView {
-        return stackHandler.viewControllerWrapperView
-    }
+    private lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
+
+    internal var viewModel: StackViewModel
 
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {
-        stackHandler = StackHandler(stack: viewControllers)
+        viewModel = StackViewModel(stack: viewControllers)
         super.init(nibName: nil, bundle: nil)
 
-        stackHandler.delegate = self    
+        viewModel.delegate = self    
         addChildren(viewControllers)
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        stackHandler = StackHandler(stack: [])
+        viewModel = StackViewModel(stack: [])
         super.init(coder: aDecoder)
     }
 
@@ -76,7 +75,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
 
         view.addGestureRecognizer(screenEdgePanGestureRecognizer)
 
-        if let topViewController = stackHandler.topViewController {
+        if let topViewController = topViewController {
             view.addSubview(viewControllerWrapperView)
             viewControllerWrapperView.frame = view.bounds
             viewControllerWrapperView.addSubview(topViewController.view)
@@ -115,63 +114,79 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
 
     // MARK: - Public methods
 
+    // TODO: remove this one
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        stackHandler.pushViewController(viewController, animated: animated)
+        pushViewControllers([viewController], animated: animated)
+    }
+
+    public func pushViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
+        viewModel.didPush(viewControllers, animated: animated)
     }
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
-        return stackHandler.popViewController(animated: animated)
+        return viewModel.didPop(animated: animated)
     }
 
     @discardableResult
     public func popToRootViewController(animated: Bool) -> Stack? {
-        return stackHandler.popToRootViewController(animated: animated)
+        return viewModel.didPopToRoot(animated: animated)
     }
 
     @discardableResult
     public func popToViewController(_ viewController: UIViewController, animated: Bool) -> Stack? {
-        return stackHandler.popToViewController(viewController, animated: animated)
+        return viewModel.didPopToViewController(viewController, animated: animated)
     }
 
     public func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
-        stackHandler.setStack(viewControllers, animated: animated)
+        viewModel.didSetStack(viewControllers, animated: animated)
     }
 
     // MARK: - Private methods
 
     private func popViewControllerInteractively() -> Bool {
-        guard stackHandler.canPopInteractively() else { return false }
-        stackHandler.popViewController(animated: true, interactive: true)
-
+//        guard stackHandler.canPopInteractively() else { return false }
+//        transition = .interactiveAnimated()
+//        stackHandler.popLast()
+//
         return true
     }
 }
 
+extension StackViewController: StackViewModelDelegate {
 
-extension StackViewController: StackHandlerDelegate {
+    func didCreateTransition() {
+        guard let transition = viewModel.currentTransition else { return assertionFailure() }
 
-    func stackDidChange() {
-        guard let stackTransition = stackHandler.currentTransition else { return }
+        let animationController = self.animationController(for: transition)
 
-        if stackTransition.operation == .push {
-            if isInViewHierarchy {
-                performStackTransition(stackTransition) { [weak self] in
-                    self?.stackHandler.endStackTransition()
-                }
+        let context = viewModel.context(for: transition,
+                                        in: viewControllerWrapperView)
+
+        context.onTransitionFinished = { didComplete in
+            self.interactionController = nil
+
+            if didComplete {
+                self.sendFinalViewAppearanceEvents(for: context)
+                self.sendFinalViewContainmentEvents(for: context)
             } else {
-                addChild(stackTransition.viewController(forKey: .to)!)
-                stackHandler.endStackTransition()
+                self.sendInitialViewAppearanceEvents(for: context)
+                self.sendFinalViewAppearanceEvents(for: context)
             }
-        } else if stackTransition.operation == .pop {
-            if isInViewHierarchy {
-                // perform pop
-                performStackTransition(stackTransition) { [weak self] in
-                    self?.stackHandler.endStackTransition()
-                }
-            } else {
-                // notify willMove(to: nil)
-            }
+
+            animationController.animationEnded?(didComplete)
+
+            self.viewModel.transitionFinished(didComplete)
+            self.debugEndTransition()
+        }
+
+        sendInitialViewContainmentEvents(for: context)
+        sendInitialViewAppearanceEvents(for: context)
+
+        if context.isInteractive {
+            startInteractiveTransition(animationController: animationController, context: context)
+        } else {
+            startTransition(animationController: animationController, context: context)
         }
     }
 }
@@ -180,64 +195,64 @@ extension StackViewController: StackHandlerDelegate {
 
 private extension StackViewController {
 
-    func performStackTransition(_ transition: Transition,
+    func performStackTransition(_ transition: TransitionContext,
                                 whenCompleted: (() -> Void)? = nil) {
 
-        let from = transition.viewController(forKey: .from)
-        let to = transition.viewController(forKey: .to)
-
-        switch (from, to) {
-        case (.some(let from), .none):
-            performInstantPopTransition(of: from)
-            whenCompleted?()
-        case (.none, .some(let to)):
-            performInstantPushTransition(of: to)
-            whenCompleted?()
-        case (.some(let from), .some(let to)):
-            performTransition(transition,
-                              from: from,
-                              to: to,
-                              whenCompleted: whenCompleted)
-        case (.none, .none):
-            assertionFailure()
-        }
+//        let from = transition.viewController(forKey: .from)
+//        let to = transition.viewController(forKey: .to)
+//
+//        switch (from, to) {
+//        case (.some(let from), .none):
+//            performInstantPopTransition(of: from)
+//            whenCompleted?()
+//        case (.none, .some(let to)):
+//            performInstantPushTransition(of: to)
+//            whenCompleted?()
+//        case (.some(let from), .some(let to)):
+//            performTransition(transition,
+//                              from: from,
+//                              to: to,
+//                              whenCompleted: whenCompleted)
+//        case (.none, .none):
+//            assertionFailure()
+//        }
     }
 
-    func performTransition(_ transition: Transition,
-                           from: UIViewController,
-                           to: UIViewController,
-                           whenCompleted: (() -> Void)? = nil) {
-
-        assert(isInViewHierarchy)
-
-        let animationController = self.animationController(for: transition.operation, from: from, to: to)
-
-        transition.onTransitionFinished = { didComplete in
-            self.interactionController = nil
-
-            if didComplete {
-                self.sendFinalViewAppearanceEvents(for: transition)
-                self.sendFinalViewContainmentEvents(for: transition)
-                whenCompleted?()
-            } else {
-                self.sendInitialViewAppearanceEvents(for: transition)
-                self.sendFinalViewAppearanceEvents(for: transition)
-            }
-
-            animationController.animationEnded?(didComplete)
-
-            self.debugEndTransition()
-        }        
-
-        sendInitialViewContainmentEvents(for: transition)
-        sendInitialViewAppearanceEvents(for: transition)
-
-        if transition.isInteractive {
-            startInteractiveTransition(animationController: animationController, context: transition)
-        } else {
-            startTransition(animationController: animationController, context: transition)
-        }
-    }
+//    func performTransition(_ transition: TransitionContext,
+//                           from: UIViewController,
+//                           to: UIViewController,
+//                           whenCompleted: (() -> Void)? = nil) {
+//
+//        assert(isInViewHierarchy)
+//
+//        let animationController = self.animationController(for: transition.operation, from: from, to: to)
+//
+//        transition.onTransitionFinished = { didComplete in
+//            self.interactionController = nil
+//
+//            if didComplete {
+//                self.sendFinalViewAppearanceEvents(for: transition)
+//                self.sendFinalViewContainmentEvents(for: transition)
+//                whenCompleted?()
+//            } else {
+//                self.sendInitialViewAppearanceEvents(for: transition)
+//                self.sendFinalViewAppearanceEvents(for: transition)
+//            }
+//
+//            animationController.animationEnded?(didComplete)
+//
+//            self.debugEndTransition()
+//        }
+//
+//        sendInitialViewContainmentEvents(for: transition)
+//        sendInitialViewAppearanceEvents(for: transition)
+//
+//        if transition.isInteractive {
+//            startInteractiveTransition(animationController: animationController, context: transition)
+//        } else {
+//            startTransition(animationController: animationController, context: transition)
+//        }
+//    }
 
     func startTransition(animationController: UIViewControllerAnimatedTransitioning,
                          context: UIViewControllerContextTransitioning) {

@@ -10,10 +10,6 @@ import Foundation
 
 public typealias Stack = [UIViewController]
 
-protocol StackHandlerDelegate: class {
-    func stackDidChange()
-}
-
 /// StackHandler is responsible for storing and updating the view controllers array of a
 /// StackViewController instance.
 ///
@@ -24,24 +20,16 @@ protocol StackHandlerDelegate: class {
 
 class StackHandler: ExceptionThrowing {
 
-    private(set) lazy var viewControllerWrapperView = ViewControllerWrapperView()
-
-    private(set) var currentTransition: Transition? {
-        didSet {
-            if currentTransition != oldValue, currentTransition != nil {
-                delegate?.stackDidChange()
-            }
-        }
-    }
-
-    var topViewController: UIViewController? {
-        return stack.last
-    }
-
-    weak var delegate: StackHandlerDelegate?
-
     private(set) var stack = Stack()
 
+    var root: UIViewController? {
+        return stack.first
+    }
+
+    var top: UIViewController? {
+        return stack.last
+    }
+    
     init(stack: Stack) {
         guard !stack.hasDuplicates else {
             throwError(.duplicateViewControllers, userInfo: ["stack": stack])
@@ -51,98 +39,41 @@ class StackHandler: ExceptionThrowing {
         self.stack = stack
     }
 
-    func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        assert(currentTransition == nil)
-        guard canPush(viewController) else { return }
+    // MARK: - Public methods
 
-        let from = topViewController
-        let to = viewController
+    func push(_ viewControllers: Stack) {
+        guard canPush(viewControllers) else { return }
+        stack.append(contentsOf: viewControllers)
+    }
+    
+    func popLast(_ count: Int) -> Stack {
+        guard canPopLast(count) else { return [] }
 
-        stack.append(viewController)
-        
-        currentTransition = stackTransition(for: .push,
-                                            from: from,
-                                            to: to,
-                                            in: viewControllerWrapperView,
-                                            animated: animated,
-                                            interactive: false)
+        let popped = stack.suffix(count)
+        stack.removeLast(count)
+        return Array(popped)
     }
 
     @discardableResult
-    func popViewController(animated: Bool, interactive: Bool = false) -> UIViewController? {
-        return popToViewController(at: stack.endIndex - 2, animated: animated, interactive: interactive)?.first
+    func popAll() -> Stack {
+        return popLast(stack.count)
     }
 
-    func popToRootViewController(animated: Bool) -> Stack? {
-        return popToViewController(at: stack.startIndex, animated: animated)
+    func replaceStack(with newStack: Stack) {
+        popAll()
+        push(newStack)
     }
 
-    func popToViewController(_ viewController: UIViewController, animated: Bool) -> Stack? {
-        guard let targetIndex = stack.firstIndex(of: viewController) else { return nil }
-        return popToViewController(at: targetIndex, animated: animated)
+    // MARK: - Validation
+
+    func canPush(_ viewControllers: Stack) -> Bool {
+        guard !(stack + viewControllers).hasDuplicates else { return false }
+        return true
     }
 
-    private func popToViewController(at index: Int, animated: Bool, interactive: Bool = false) -> Stack? {
-        assert(currentTransition == nil)
-        guard canPop(to: index) else { return nil }
-
-        let from = topViewController
-        let to = stack[index]
-
-        let poppedStack = Array(stack[(index + 1)...])
-        let newStack = Array(stack[...index])
-
-        stack = newStack
-
-        currentTransition = stackTransition(for: .pop,
-                                            from: from,
-                                            to: to,
-                                            in: viewControllerWrapperView,
-                                            animated: animated,
-                                            interactive: interactive)
-        return poppedStack
-    }
-
-    func setStack(_ newStack: Stack, animated: Bool) {
-        assert(currentTransition == nil)
-
-        guard canReplaceStack(with: newStack) else { return }
-
-        let operation: StackViewController.Operation
-        let from = topViewController
-        let to = newStack.last
-
-        if newStack.isEmpty {
-            operation = .pop
-            stack.forEach {
-                $0.willMove(toParent: nil)
-                $0.removeFromParent()
-                $0.didMove(toParent: nil)
-            }
-        } else if stack.isEmpty {
-            operation = .push
-            newStack.forEach {
-
-                $0.didMove(toParent: nil)
-            }
-        } else if let to = newStack.last, stack.contains(to) {
-            operation = .pop
-        } else {
-            operation = .push
-        }
-
-
-        stack = newStack
-        currentTransition = stackTransition(for: operation,
-                                            from: from,
-                                            to: to,
-                                            in: viewControllerWrapperView,
-                                            animated: animated,
-                                            interactive: false)
-    }
-
-    func endStackTransition() {
-        currentTransition = nil
+    func canPopLast(_ count: Int) -> Bool {
+        guard (0...stack.count).contains(count) else { return false }
+        return true
     }
 }
 

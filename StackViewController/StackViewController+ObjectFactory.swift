@@ -8,14 +8,12 @@
 
 extension StackViewController {
 
-    func animationController(for operation: Operation,
-                             from: UIViewController,
-                             to: UIViewController) -> UIViewControllerAnimatedTransitioning {
+    func animationController(for transition: Transition) -> UIViewControllerAnimatedTransitioning {
 
-        if let controller = delegate?.animationController(for: operation, from: from, to: to) {
+        if let from = transition.from, let to = transition.to, let controller = delegate?.animationController(for: transition.operation, from: from, to: to) {
             return controller
         } else {
-            return stackHandler.animationController(for: operation)
+            return viewModel.animationController(for: transition)
         }
     }
 

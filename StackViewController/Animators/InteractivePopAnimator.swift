@@ -12,29 +12,28 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
     // MARK: - Internal properties
 
     let animationController: UIViewControllerAnimatedTransitioning
-    let context: UIViewControllerContextTransitioning
 
     // MARK: - Private properties
 
     private var didStartInteractively = false
     private var animationProgressInitialOffset: CGFloat = 0.0
 
-    private var interruptibleAnimator: UIViewImplicitlyAnimating? {
-        return animationController.interruptibleAnimator?(using: context)
-    }
+    private var context: UIViewControllerContextTransitioning?
+    private var interruptibleAnimator: UIViewImplicitlyAnimating?
 
     // MARK: - Init
 
-    public init(animationController: UIViewControllerAnimatedTransitioning,
-                context: UIViewControllerContextTransitioning) {
+    public init(animationController: UIViewControllerAnimatedTransitioning) {
         self.animationController = animationController
-        self.context = context
         super.init()
     }
 
     // MARK: - UIViewControllerInteractiveTransitioning
 
     public func startInteractiveTransition(_ context: UIViewControllerContextTransitioning) {
+        self.context = context
+        interruptibleAnimator = animationController.interruptibleAnimator?(using: context)
+
         animationController.animateTransition(using: context)
 
         if didStartInteractively {
@@ -47,37 +46,37 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
         return didStartInteractively
     }
 
-    func startInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {
-        didStartInteractively = true
-        let panGestureStartLocation = recognizer.location(in: context.containerView)
-        print("Interactive pop BEGAN at \(recognizer.location(in: context.containerView))")
-        animationProgressInitialOffset = animationProgressUpdate(for: panGestureStartLocation)
-        startInteractiveTransition(context)
-    }
+//    func startInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+//        didStartInteractively = true
+//        let panGestureStartLocation = recognizer.location(in: context.containerView)
+//        animationProgressInitialOffset = animationProgressUpdate(for: panGestureStartLocation)
+//        startInteractiveTransition(context)
+//    }
 
     func updateInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {
-        let translation = recognizer.translation(in: context.containerView)
-        let updatedProgress = animationProgressUpdate(for: translation)
+        guard let recognizerView = recognizer.view else { return assertionFailure() }
+
+        let updatedProgress = animationProgressUpdate(for: recognizer)
 
 //        print("Pan translation: \(translation.x) (\(updatedProgress) %)")
 //        print("fractionComplete: \(updatedProgress + animationProgressInitialOffset)\n")
 //
         interruptibleAnimator?.fractionComplete = updatedProgress
-        context.updateInteractiveTransition(updatedProgress)
+        context?.updateInteractiveTransition(updatedProgress)
     }
 
     func cancelInteractiveTransition() {
-        context.cancelInteractiveTransition()
+        context?.cancelInteractiveTransition()
         animate(to: .start)
     }
 
     func stopInteractiveTransition(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
-        guard completionPosition(gestureRecognizer) == .end else {
+        guard completionPosition(for: gestureRecognizer) == .end else {
             cancelInteractiveTransition()
             return
         }
 
-        context.finishInteractiveTransition()
+        context?.finishInteractiveTransition()
         animate(to: .end)
     }
 }
@@ -105,15 +104,26 @@ private extension InteractivePopAnimator {
         interruptibleAnimator?.continueAnimation?(withTimingParameters: nil, durationFactor: durationFraction)
     }
 
-    func animationProgressUpdate(for translation: CGPoint) -> CGFloat {
-        let maxTranslationX = context.containerView.bounds.width
-        let percentage = translation.x/maxTranslationX
+    func animationProgressUpdate(for recognizer: UIScreenEdgePanGestureRecognizer) -> CGFloat {
+        guard let recognizerView = recognizer.view else {
+            assertionFailure()
+            return 0.0
+        }
+
+        let translation = recognizer.translation(in: recognizerView)
+        let maximumTranslation = recognizerView.bounds.width
+        let percentage = translation.x/maximumTranslation
         return percentage
     }
 
-    func completionPosition(_ recognizer: UIScreenEdgePanGestureRecognizer) -> UIViewAnimatingPosition {
-        let panGestureTranslation = recognizer.translation(in: context.containerView)
-        let threshold = context.containerView.bounds.midX
+    func completionPosition(for recognizer: UIScreenEdgePanGestureRecognizer) -> UIViewAnimatingPosition {
+        guard let recognizerView = recognizer.view else {
+            assertionFailure()
+            return .start
+        }
+
+        let panGestureTranslation = recognizer.translation(in: recognizerView)
+        let threshold = recognizerView.bounds.midX
 
         if panGestureTranslation.x > threshold {
             return .end

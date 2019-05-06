@@ -154,17 +154,13 @@ class StackViewModel {
     }
 
     func prepareTransition(_ transition: Transition) {
-
-        let context = self.context(for: transition, in: viewControllerWrapperView)
-        self.context = context
+        context = self.context(for: transition, in: viewControllerWrapperView)
 
         let animationController = self.animationController(for: transition)
         self.animationController = animationController
 
         if transition.isInteractive {
-            let interactionController = self.interactionController(animationController: animationController,
-                                                                   context: context)
-            self.interactionController = interactionController
+            interactionController = self.interactionController(animationController: animationController)
         }
     }
 
@@ -216,14 +212,6 @@ class StackViewModel {
         }
     }
 
-    func defaultInteractionController(
-        animationController: UIViewControllerAnimatedTransitioning,
-        context: UIViewControllerContextTransitioning) -> InteractivePopAnimator {
-
-        return InteractivePopAnimator(animationController: animationController,
-                                      context: context)
-    }
-
     func animationController(for transition: Transition) -> UIViewControllerAnimatedTransitioning {
         guard let from = transition.from, let to = transition.to else {
             return defaultAnimationController(for: transition)
@@ -245,14 +233,13 @@ class StackViewModel {
     }
 
     func interactionController(
-        animationController: UIViewControllerAnimatedTransitioning,
-        context: UIViewControllerContextTransitioning) -> UIViewControllerInteractiveTransitioning {
+        animationController: UIViewControllerAnimatedTransitioning)
+        -> UIViewControllerInteractiveTransitioning {
 
         if let controller = delegate?.interactionController(for: animationController) {
             return controller
         } else {
-            return defaultInteractionController(animationController: animationController,
-                                                context: context)
+            return InteractivePopAnimator(animationController: animationController)
         }
     }
 }

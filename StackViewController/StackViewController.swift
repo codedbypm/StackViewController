@@ -180,13 +180,18 @@ extension StackViewController: StackViewModelDelegate {
             self.debugEndTransition()
         }
 
-        sendInitialViewContainmentEvents(using: context)
+    func willStartTransition(using context: TransitionContext) {
+        sendInitialViewControllerContainmentEvents(using: context)
         sendInitialViewAppearanceEvents(using: context)
+    }
 
-        if context.isInteractive {
-            startInteractiveTransition(animationController: animationController, context: context)
+    func didEndTransition(using context: TransitionContext, completed: Bool) {
+        if completed  {
+            sendFinalViewAppearanceEvents(using: context)
+            sendFinalViewControllerContainmentEvents(using: context)
         } else {
-            startTransition(animationController: animationController, context: context)
+            sendInitialViewAppearanceEvents(using: context)
+            sendFinalViewAppearanceEvents(using: context)
         }
     }
 }

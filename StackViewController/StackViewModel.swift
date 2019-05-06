@@ -8,8 +8,9 @@
 
 import Foundation
 
-protocol StackViewModelDelegate: class {
-    func didCreateTransition()
+protocol StackViewModelDelegate: StackViewControllerDelegate {
+    func willStartTransition(using context: TransitionContext)
+    func didEndTransition(using context: TransitionContext, completed: Bool)
 }
 
 class StackViewModel {
@@ -36,8 +37,7 @@ class StackViewModel {
             else { assert(transition == nil) }
         }
         didSet {
-            if transition != nil {
-                delegate?.didCreateTransition()
+            if let transition = transition {
             }
         }
     }

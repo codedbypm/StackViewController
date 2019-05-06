@@ -246,17 +246,6 @@ private extension StackViewController {
 //        }
 //    }
 
-    func startTransition(animationController: UIViewControllerAnimatedTransitioning,
-                         context: UIViewControllerContextTransitioning) {
-        animationController.animateTransition(using: context)
-    }
-
-    func startInteractiveTransition(animationController: UIViewControllerAnimatedTransitioning,
-                                    context: UIViewControllerContextTransitioning) {
-        interactionController = self.interactionController(animationController: animationController,
-                                                           context: context)
-    }
-
     func performInstantPushTransition(of viewController: UIViewController) {
         addChild(viewController)
         viewController.beginAppearanceTransition(true, animated: false)

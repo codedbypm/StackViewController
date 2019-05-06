@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class StackViewController: UIViewController, StackViewControllerHandling, UIGestureRecognizerDelegate {
+public class StackViewController: UIViewController, UIGestureRecognizerDelegate {
 
     public enum Operation {
         case push
@@ -36,12 +36,12 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
 
     // MARK: - Internal properties
 
-
     lazy var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
+        let selector = #selector(screenEdgeGestureRecognizerDidChangeState(_:))
         let recognizer = UIScreenEdgePanGestureRecognizer()
         recognizer.edges = .left
         recognizer.delegate = self
-        recognizer.addTarget(self, action: #selector(screenEdgeGestureRecognizerDidChangeState(_:)))
+        recognizer.addTarget(self, action: selector)
         return recognizer
     }()
 
@@ -115,13 +115,12 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
 
     // MARK: - Public methods
 
-    // TODO: remove this one
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        pushViewControllers([viewController], animated: animated)
+        pushStack([viewController], animated: animated)
     }
 
-    public func pushViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
-        viewModel.push(viewControllers, animated: animated)
+    public func pushStack(_ stack: Stack, animated: Bool) {
+        viewModel.push(stack, animated: animated)
     }
 
     @discardableResult
@@ -139,8 +138,8 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
         return viewModel.popTo(viewController, animated: animated)
     }
 
-    public func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
-        viewModel.setStack(viewControllers, animated: animated)
+    public func setStack(_ stack: Stack, animated: Bool) {
+        viewModel.setStack(stack, animated: animated)
     }
 
     @objc private func screenEdgeGestureRecognizerDidChangeState(_
@@ -235,5 +234,11 @@ private extension StackViewController {
 extension StackViewController: ConsoleDebuggable {
     public override var description: String {
         return "SVC"
+    }
+}
+
+extension StackViewController: StackViewControllerHandling {
+    public func setViewControllers(_ stack: [UIViewController], animated: Bool) {
+        setStack(stack, animated: animated)
     }
 }

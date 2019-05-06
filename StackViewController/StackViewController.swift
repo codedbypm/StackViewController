@@ -155,30 +155,19 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
 
 extension StackViewController: StackViewModelDelegate {
 
-    func didCreateTransition() {
-        guard let transition = viewModel.transition else { return assertionFailure() }
+    public func animationController(
+        for operation: StackViewController.Operation,
+        from: UIViewController,
+        to: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+        return delegate?.animationController(for: operation, from: from, to: to)
+    }
 
-        let animationController = self.animationController(for: transition)
-
-        let context = viewModel.context(for: transition,
-                                        in: viewControllerWrapperView)
-
-        context.onTransitionFinished = { didComplete in
-            self.interactionController = nil
-
-            if didComplete {
-                self.sendFinalViewAppearanceEvents(using: context)
-                self.sendFinalViewContainmentEvents(using: context)
-            } else {
-                self.sendInitialViewAppearanceEvents(using: context)
-                self.sendFinalViewAppearanceEvents(using: context)
-            }
-
-            animationController.animationEnded?(didComplete)
-
-            self.viewModel.transitionFinished(didComplete)
-            self.debugEndTransition()
-        }
+    public func interactionController(
+        for animationController: UIViewControllerAnimatedTransitioning
+    ) -> UIViewControllerInteractiveTransitioning? {
+        return delegate?.interactionController(for: animationController)
+    }
 
     func willStartTransition(using context: TransitionContext) {
         sendInitialViewControllerContainmentEvents(using: context)

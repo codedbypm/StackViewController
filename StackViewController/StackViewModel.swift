@@ -137,4 +137,36 @@ class StackViewModel {
         return InteractivePopAnimator(animationController: animationController,
                                       context: context)
     }
+
+    func animationController(for transition: Transition) -> UIViewControllerAnimatedTransitioning {
+        guard let from = transition.from, let to = transition.to else {
+            return defaultAnimationController(for: transition)
+        }
+
+        guard let delegate = delegate else {
+            return defaultAnimationController(for: transition)
+        }
+
+        let controller = delegate.animationController(for: transition.operation,
+                                                      from: from,
+                                                      to: to)
+
+        if let controller = controller {
+            return controller
+        } else {
+            return defaultAnimationController(for: transition)
+        }
+    }
+
+    func interactionController(
+        animationController: UIViewControllerAnimatedTransitioning,
+        context: UIViewControllerContextTransitioning) -> UIViewControllerInteractiveTransitioning {
+
+        if let controller = delegate?.interactionController(for: animationController) {
+            return controller
+        } else {
+            return defaultInteractionController(animationController: animationController,
+                                                context: context)
+        }
+    }
 }

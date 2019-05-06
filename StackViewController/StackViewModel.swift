@@ -174,6 +174,9 @@ class StackViewModel {
 
     func transitionFinished(_ didComplete: Bool) {
         transition = nil
+        interactionController = nil
+        animationController = nil
+        context = nil
     }
 
     // MARK: - Transition Actors creation

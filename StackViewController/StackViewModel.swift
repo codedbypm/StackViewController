@@ -44,6 +44,8 @@ class StackViewModel {
         }
         didSet {
             if let transition = transition {
+                prepareTransition(transition)
+                startTransition(transition)
             }
         }
     }

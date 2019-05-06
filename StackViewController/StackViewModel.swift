@@ -107,6 +107,7 @@ class StackViewModel {
 
     func canPopViewControllerInteractively() -> Bool {
         guard stackHandler.canPopLast(1) else { return false }
+        guard interactionController == nil else { return false }
         return true
     }
     

@@ -46,8 +46,6 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
 
     // MARK: - Private properties
 
-    private(set) var interactionController: UIViewControllerInteractiveTransitioning?
-
     private lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
     internal var viewModel: StackViewModel
@@ -58,7 +56,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
         viewModel = StackViewModel(stack: viewControllers)
         super.init(nibName: nil, bundle: nil)
 
-        viewModel.delegate = self    
+        viewModel.delegate = self
         addChildren(viewControllers)
     }
 

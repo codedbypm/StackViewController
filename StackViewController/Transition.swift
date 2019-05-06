@@ -37,7 +37,7 @@ protocol TransitionHandlerDelegate: class {
 
 class TransitionHandler {
 
-    private weak var delegate: TransitionHandlerDelegate?
+    weak var delegate: TransitionHandlerDelegate?
     private let transition: Transition
     private weak var stackViewControllerDelegate: StackViewControllerDelegate?
     private let context: TransitionContext

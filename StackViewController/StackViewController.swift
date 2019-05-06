@@ -53,6 +53,8 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 
     internal var viewModel: StackViewModel
 
+    private var transitionHandler: TransitionHandler?
+
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {
@@ -120,12 +122,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 
     public func pushStack(_ stack: Stack, animated: Bool) {
-        guard let transition = viewModel.transitionForPush(stack, animated: animated) else {
-            return
-        }
-
-        let transitionHandler = TransitionHandler(transition: transition, stackViewControllerDelegate: delegate)
-        transitionHandler.performTransition()
+        viewModel.push(stack, animated: animated)
     }
 
     @discardableResult
@@ -154,7 +151,35 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 }
 
+extension StackViewController: TransitionHandlerDelegate {
+
+    func willStartTransition(using context: TransitionContext) {
+        sendInitialViewControllerContainmentEvents(using: context)
+        sendInitialViewAppearanceEvents(using: context)
+    }
+
+    func didEndTransition(using context: TransitionContext, completed: Bool) {
+        transitionHandler = nil
+
+        if completed  {
+            sendFinalViewAppearanceEvents(using: context)
+            sendFinalViewControllerContainmentEvents(using: context)
+        } else {
+            sendInitialViewAppearanceEvents(using: context)
+            sendFinalViewAppearanceEvents(using: context)
+        }
+    }
+}
+
 extension StackViewController: StackViewModelDelegate {
+
+    func didCreateTransition(_ transition: Transition) {
+        assert(transitionHandler == nil)
+
+        transitionHandler = TransitionHandler(transition: transition, stackViewControllerDelegate: self)
+        transitionHandler?.delegate = self
+        transitionHandler?.performTransition()
+    }
 
     public func animationController(
         for operation: StackViewController.Operation,
@@ -170,20 +195,6 @@ extension StackViewController: StackViewModelDelegate {
         return delegate?.interactionController(for: animationController)
     }
 
-    func willStartTransition(using context: TransitionContext) {
-        sendInitialViewControllerContainmentEvents(using: context)
-        sendInitialViewAppearanceEvents(using: context)
-    }
-
-    func didEndTransition(using context: TransitionContext, completed: Bool) {
-        if completed  {
-            sendFinalViewAppearanceEvents(using: context)
-            sendFinalViewControllerContainmentEvents(using: context)
-        } else {
-            sendInitialViewAppearanceEvents(using: context)
-            sendFinalViewAppearanceEvents(using: context)
-        }
-    }
 }
 
 private extension StackViewController {

@@ -117,7 +117,6 @@
 		FD76B7872278E8D20090EDB2 /* UIViewController+Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extenstions.swift"; sourceTree = "<group>"; };
 		FD76B789227917320090EDB2 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleDebuggable.swift; sourceTree = "<group>"; };
-		FD76B78D2279D26A0090EDB2 /* StackHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackHandler.swift; sourceTree = "<group>"; };
 		FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -196,7 +195,6 @@
 				FD1B570A227D68CB00E005EC /* StackViewModel.swift */,
 				FD67E5F72254F2010051786B /* TransitionContext.swift */,
 				FD1B570C227DB9AF00E005EC /* Transition.swift */,
-				FD76B78D2279D26A0090EDB2 /* StackHandler.swift */,
 				FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */,
 				FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */,
 				FD22605E226E579D007E44CE /* StackViewControllerError.swift */,

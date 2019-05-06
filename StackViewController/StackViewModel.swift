@@ -9,6 +9,8 @@
 import Foundation
 
 protocol StackViewModelDelegate: StackViewControllerDelegate {
+    func didCreateTransition(_: Transition)
+
     func willStartTransition(using context: TransitionContext)
     func didEndTransition(using context: TransitionContext, completed: Bool)
 }
@@ -26,6 +28,8 @@ class StackViewModel: ExceptionThrowing {
     private var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
     private(set) var stack = Stack()
 
+    var topViewController: UIViewController? { return stack.last }
+
     init(stack: Stack) {
         guard !stack.hasDuplicates else {
             throwError(.duplicateViewControllers, userInfo: ["stack": stack])
@@ -35,30 +39,16 @@ class StackViewModel: ExceptionThrowing {
         self.stack = stack
     }
 
-    var topViewController: UIViewController? { return stack.last }
-
-    var transition: Transition? {
-        willSet {
-            if newValue == nil { assert(transition != nil) }
-            else { assert(transition == nil) }
-        }
-        didSet {
-            if let transition = transition {
-                prepareTransition(transition)
-                startTransition(transition)
-            }
-        }
-    }
-
-    func transitionForPush(_ viewControllers: Stack, animated: Bool) -> Transition? {
-        guard canPush(viewControllers) else { return nil }
+    func push(_ stack: Stack, animated: Bool) {
+        guard canPush(stack) else { return }
 
         let from = topViewController
-        let to = viewControllers.last
+        let to = stack.last
 
-        stack.append(contentsOf: viewControllers)
+        self.stack.append(contentsOf: stack)
 
-        return Transition(operation: .push, from: from, to: to, animated: animated)
+        let transition = Transition(operation: .push, from: from, to: to, animated: animated)
+        delegate?.didCreateTransition(transition)
     }
 
     func pop(animated: Bool) -> UIViewController? {
@@ -70,7 +60,7 @@ class StackViewModel: ExceptionThrowing {
     }
 
     func popTo(_ viewController: UIViewController, animated: Bool) -> Stack {
-        guard let index = stack.firstIndex(of: viewController) else { return [] }
+        let index = stack.firstIndex(of: viewController) ?? stack.endIndex
         return popToViewController(at: index, animated: animated)
     }
 
@@ -78,23 +68,27 @@ class StackViewModel: ExceptionThrowing {
     private func popToViewController(at index: Int,
                                      animated: Bool,
                                      interactive: Bool = false) -> Stack {
-        guard (0..<stack.endIndex).contains(index) else { return [] }
-
         let poppedCount = stack.endIndex - (index + 1)
+        guard canPopLast(poppedCount) else { return [] }
+
+        let from = topViewController
+        let to = stack[index]
         let poppedElements = stack.suffix(poppedCount)
 
         stack.removeLast(poppedCount)
-        transition = Transition(operation: .pop,
-                                from: poppedElements.last,
-                                to: topViewController,
-                                animated: animated,
-                                interactive: interactive)
+
+        let transition = Transition(operation: .pop,
+                                    from: from,
+                                    to: to,
+                                    animated: animated,
+                                    interactive: interactive)
+
+        delegate?.didCreateTransition(transition)
         return Array(poppedElements)
     }
 
     func setStack(_ newStack: Stack, animated: Bool) {
         guard canReplaceStack(with: newStack) else { return }
-
 
         let from = topViewController
         let to = newStack.last
@@ -116,7 +110,8 @@ class StackViewModel: ExceptionThrowing {
         }
 
         stack = newStack
-        transition = Transition(operation: operation, from: from, to: to, animated: animated)
+        let transition = Transition(operation: operation, from: from, to: to, animated: animated)
+        delegate?.didCreateTransition(transition)
     }
 
     func screenEdgeGestureRecognizerDidChangeState(
@@ -175,7 +170,6 @@ class StackViewModel: ExceptionThrowing {
     }
 
     func transitionFinished(_ didComplete: Bool) {
-        transition = nil
         interactionController = nil
         animationController = nil
         context = nil

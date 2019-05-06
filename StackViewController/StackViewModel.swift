@@ -42,26 +42,26 @@ class StackViewModel {
         }
     }
 
-    func didPush(_ viewControllers: [UIViewController], animated: Bool) {
+    func push(_ viewControllers: [UIViewController], animated: Bool) {
         let from = topViewController
         stackHandler.push(viewControllers)
         transition = Transition(operation: .push, from: from, to: viewControllers.last)
     }
 
-    func didPop(animated: Bool) -> UIViewController? {
-        return didPopToViewController(at: stack.endIndex.advanced(by: -2), animated: animated).first
+    func pop(animated: Bool) -> UIViewController? {
+        return popToViewController(at: stack.endIndex.advanced(by: -2), animated: animated).first
     }
 
-    func didPopToRoot(animated: Bool) -> Stack {
-        return didPopToViewController(at: stack.startIndex, animated: animated)
+    func popToRoot(animated: Bool) -> Stack {
+        return popToViewController(at: stack.startIndex, animated: animated)
     }
 
-    func didPopToViewController(_ viewController: UIViewController, animated: Bool) -> Stack {
+    func popTo(_ viewController: UIViewController, animated: Bool) -> Stack {
         guard let index = stack.firstIndex(of: viewController) else { return [] }
-        return didPopToViewController(at: index, animated: animated)
+        return popToViewController(at: index, animated: animated)
     }
 
-    func didPopToViewController(at index: Int, animated: Bool) -> Stack {
+    private func popToViewController(at index: Int, animated: Bool) -> Stack {
         guard (0..<stack.endIndex).contains(index) else { return [] }
 
         let poppedCount = stack.endIndex - (index + 1)
@@ -71,7 +71,7 @@ class StackViewModel {
         return poppedElements
     }
 
-    func didSetStack(_ newStack: Stack, animated: Bool) {
+    func setStack(_ newStack: Stack, animated: Bool) {
 
         let from = topViewController
         let to = newStack.last
@@ -84,7 +84,7 @@ class StackViewModel {
                 operation = .push
             }
         } else {
-            if let from = from {
+            if from != nil {
                 operation = .pop
             } else {
                 return

@@ -23,7 +23,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
     
     public var viewControllers: [UIViewController] {
         get { return viewModel.stack }
-        set { viewModel.didSetStack(newValue, animated: false) }
+        set { viewModel.setStack(newValue, animated: false) }
     }
 
     public var topViewController: UIViewController? {
@@ -120,26 +120,26 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
     }
 
     public func pushViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
-        viewModel.didPush(viewControllers, animated: animated)
+        viewModel.push(viewControllers, animated: animated)
     }
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
-        return viewModel.didPop(animated: animated)
+        return viewModel.pop(animated: animated)
     }
 
     @discardableResult
     public func popToRootViewController(animated: Bool) -> Stack? {
-        return viewModel.didPopToRoot(animated: animated)
+        return viewModel.popToRoot(animated: animated)
     }
 
     @discardableResult
     public func popToViewController(_ viewController: UIViewController, animated: Bool) -> Stack? {
-        return viewModel.didPopToViewController(viewController, animated: animated)
+        return viewModel.popTo(viewController, animated: animated)
     }
 
     public func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
-        viewModel.didSetStack(viewControllers, animated: animated)
+        viewModel.setStack(viewControllers, animated: animated)
     }
 
     // MARK: - Private methods

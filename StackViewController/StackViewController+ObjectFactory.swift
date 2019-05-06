@@ -24,9 +24,10 @@ extension StackViewController {
         if let controller = delegate?.interactionController(for: animationController) {
             return controller
         } else {
-            return interactionController(animationController: animationController,
-                                         gestureRecognizer: screenEdgePanGestureRecognizer,
-                                         context: context)
+            return viewModel.defaultInteractionController(
+                animationController: animationController,
+                gestureRecognizer: screenEdgePanGestureRecognizer,
+                context: context)
         }
     }
 }

@@ -157,6 +157,19 @@ class StackViewModel {
             self.interactionController = interactionController
         }
     }
+
+    private func startTransition(_ transition: Transition) {
+        guard let context = context else { return assertionFailure() }
+
+        delegate?.willStartTransition(using: context)
+
+        if context.isInteractive {
+            interactionController?.startInteractiveTransition(context)
+        } else {
+            animationController?.animateTransition(using: context)
+        }
+    }
+
     func transitionFinished(_ didComplete: Bool) {
         transition = nil
     }

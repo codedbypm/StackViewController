@@ -22,12 +22,12 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     public weak var delegate: StackViewControllerDelegate?
     
     public var viewControllers: [UIViewController] {
-        get { return viewModel.stack }
-        set { viewModel.setStack(newValue, animated: false) }
+        get { return interactor.stack }
+        set { interactor.setStack(newValue, animated: false) }
     }
 
     public var topViewController: UIViewController? {
-        return viewModel.topViewController
+        return interactor.topViewController
     }
 
     public override var shouldAutomaticallyForwardAppearanceMethods: Bool {
@@ -48,25 +48,25 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     // MARK: - Private properties
 
     var viewControllerWrapperView: UIView {
-        return viewModel.viewControllerWrapperView
+        return interactor.viewControllerWrapperView
     }
 
-    internal var viewModel: StackViewModel
+    internal var interactor: StackInteractor
 
     private var transitionHandler: TransitionHandler?
 
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {
-        viewModel = StackViewModel(stack: viewControllers)
+        interactor = StackInteractor(stack: viewControllers)
         super.init(nibName: nil, bundle: nil)
 
-        viewModel.delegate = self
+        interactor.delegate = self
         addChildren(viewControllers)
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        viewModel = StackViewModel(stack: [])
+        interactor = StackInteractor(stack: [])
         super.init(coder: aDecoder)
     }
 
@@ -112,7 +112,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard gestureRecognizer === screenEdgePanGestureRecognizer else { return false }
 
-        return viewModel.canPopViewControllerInteractively()
+        return interactor.canPopViewControllerInteractively()
     }
 
     // MARK: - Public methods
@@ -122,32 +122,32 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 
     public func pushStack(_ stack: Stack, animated: Bool) {
-        viewModel.push(stack, animated: animated)
+        interactor.push(stack, animated: animated)
     }
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
-        return viewModel.pop(animated: animated)
+        return interactor.pop(animated: animated)
     }
 
     @discardableResult
     public func popToRootViewController(animated: Bool) -> Stack? {
-        return viewModel.popToRoot(animated: animated)
+        return interactor.popToRoot(animated: animated)
     }
 
     @discardableResult
     public func popToViewController(_ viewController: UIViewController, animated: Bool) -> Stack? {
-        return viewModel.popTo(viewController, animated: animated)
+        return interactor.popTo(viewController, animated: animated)
     }
 
     public func setStack(_ stack: Stack, animated: Bool) {
-        viewModel.setStack(stack, animated: animated)
+        interactor.setStack(stack, animated: animated)
     }
 
     @objc private func screenEdgeGestureRecognizerDidChangeState(_
         gestureRecognizer: UIScreenEdgePanGestureRecognizer) {        
         guard gestureRecognizer === screenEdgePanGestureRecognizer else { return }
-        viewModel.screenEdgeGestureRecognizerDidChangeState(gestureRecognizer)
+        interactor.screenEdgeGestureRecognizerDidChangeState(gestureRecognizer)
     }
 }
 

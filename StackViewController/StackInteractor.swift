@@ -14,7 +14,7 @@ protocol StackViewModelDelegate: class {
 
 public typealias Stack = [UIViewController]
 
-class StackViewModel: ExceptionThrowing {
+class StackInteractor: ExceptionThrowing {
 
     weak var delegate: StackViewModelDelegate?
     lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()

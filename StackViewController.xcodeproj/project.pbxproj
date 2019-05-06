@@ -18,6 +18,7 @@
 		FD226059226B6359007E44CE /* StackCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD226058226B6359007E44CE /* StackCoordinator.swift */; };
 		FD22605B226B6363007E44CE /* UIKitCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD22605A226B6363007E44CE /* UIKitCoordinator.swift */; };
 		FD22605F226E579D007E44CE /* StackViewControllerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD22605E226E579D007E44CE /* StackViewControllerError.swift */; };
+		FD5259842280F25A0072C6B8 /* TransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5259832280F25A0072C6B8 /* TransitionHandler.swift */; };
 		FD67E57A225250E10051786B /* StackViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD67E578225250E10051786B /* StackViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD67E5B3225257DA0051786B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67E5B2225257DA0051786B /* AppDelegate.swift */; };
 		FD67E5BD225257DB0051786B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */; };
@@ -89,6 +90,7 @@
 		FD226058226B6359007E44CE /* StackCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackCoordinator.swift; sourceTree = "<group>"; };
 		FD22605A226B6363007E44CE /* UIKitCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitCoordinator.swift; sourceTree = "<group>"; };
 		FD22605E226E579D007E44CE /* StackViewControllerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerError.swift; sourceTree = "<group>"; };
+		FD5259832280F25A0072C6B8 /* TransitionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionHandler.swift; sourceTree = "<group>"; };
 		FD67E575225250E10051786B /* StackViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StackViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD67E578225250E10051786B /* StackViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StackViewController.h; sourceTree = "<group>"; };
 		FD67E579225250E10051786B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				FD1B570A227D68CB00E005EC /* StackInteractor.swift */,
 				FD67E5F72254F2010051786B /* TransitionContext.swift */,
 				FD1B570C227DB9AF00E005EC /* Transition.swift */,
+				FD5259832280F25A0072C6B8 /* TransitionHandler.swift */,
 				FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */,
 				FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */,
 				FD22605E226E579D007E44CE /* StackViewControllerError.swift */,
@@ -401,6 +404,7 @@
 				FD76B7882278E8D20090EDB2 /* UIViewController+Extenstions.swift in Sources */,
 				FD00021F2260CC9100A87FFB /* InteractivePopAnimator.swift in Sources */,
 				FD1B56FB227C870600E005EC /* ViewControllerWrapperView.swift in Sources */,
+				FD5259842280F25A0072C6B8 /* TransitionHandler.swift in Sources */,
 				FD1B5703227CBEF900E005EC /* Collection+Extensions.swift in Sources */,
 				FD1B570D227DB9AF00E005EC /* Transition.swift in Sources */,
 				FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */,

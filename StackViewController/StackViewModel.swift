@@ -132,11 +132,9 @@ class StackViewModel {
 
     func defaultInteractionController(
         animationController: UIViewControllerAnimatedTransitioning,
-        gestureRecognizer: UIScreenEdgePanGestureRecognizer,
         context: UIViewControllerContextTransitioning) -> InteractivePopAnimator {
 
         return InteractivePopAnimator(animationController: animationController,
-                                      gestureRecognizer: gestureRecognizer,
                                       context: context)
     }
 }

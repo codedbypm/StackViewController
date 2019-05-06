@@ -16,7 +16,6 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
 
     // MARK: - Private properties
 
-    private let gestureRecognizer: UIScreenEdgePanGestureRecognizer
     private var didStartInteractively = false
     private var animationProgressInitialOffset: CGFloat = 0.0
 
@@ -27,20 +26,15 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
     // MARK: - Init
 
     public init(animationController: UIViewControllerAnimatedTransitioning,
-                gestureRecognizer: UIScreenEdgePanGestureRecognizer,
                 context: UIViewControllerContextTransitioning) {
         self.animationController = animationController
-        self.gestureRecognizer = gestureRecognizer
         self.context = context
         super.init()
-
-        gestureRecognizer.addTarget(self, action: #selector(didDetectPanningFromEdge(_:)))
     }
 
     // MARK: - UIViewControllerInteractiveTransitioning
 
     public func startInteractiveTransition(_ context: UIViewControllerContextTransitioning) {
-
         animationController.animateTransition(using: context)
 
         if didStartInteractively {
@@ -57,21 +51,6 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
 private extension InteractivePopAnimator {
     
     @objc func didDetectPanningFromEdge(_ recognizer: UIScreenEdgePanGestureRecognizer) {
-        switch recognizer.state {
-        case .began:
-            didStartInteractively = true
-            let panGestureStartLocation = recognizer.location(in: context.containerView)
-            animationProgressInitialOffset = animationProgressUpdate(for: panGestureStartLocation)
-            startInteractiveTransition(context)
-        case .changed:
-            updateInteractiveTransition(recognizer)
-        case .cancelled:
-            cancelInteractiveTransition()
-        case .ended:
-            stopInteractiveTransition()
-        default:
-            break
-        }
     }
 
     func updateInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {

@@ -16,6 +16,7 @@ protocol StackViewModelDelegate: StackViewControllerDelegate {
 class StackViewModel {
 
     weak var delegate: StackViewModelDelegate?
+    lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
     private let stackHandler: StackHandler
 

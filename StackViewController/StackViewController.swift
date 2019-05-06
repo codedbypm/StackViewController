@@ -46,7 +46,9 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
 
     // MARK: - Private properties
 
-    private lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
+    var viewControllerWrapperView: UIView {
+        return viewModel.viewControllerWrapperView
+    }
 
     internal var viewModel: StackViewModel
 

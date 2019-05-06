@@ -160,7 +160,7 @@ class StackViewModel {
         let animationController = self.animationController(for: transition)
         self.animationController = animationController
 
-        if transition.interactive {
+        if transition.isInteractive {
             let interactionController = self.interactionController(animationController: animationController,
                                                                    context: context)
             self.interactionController = interactionController
@@ -189,17 +189,15 @@ class StackViewModel {
     // MARK: - Transition Actors creation
 
     func context(for transition: Transition,
-                 in containerView: UIView,
-                 animated: Bool = true,
-                 interactive: Bool = false) -> TransitionContext {
+                 in containerView: UIView) -> TransitionContext {
 
 
         assert(transition.from != nil || transition.to != nil)
 
         let animationsEnabled = (transition.from != nil && transition.to != nil)
         let context = TransitionContext(transition: transition, in: containerView)
-        context.isAnimated = animated && animationsEnabled
-        context.isInteractive = interactive
+        context.isAnimated = transition.isAnimated && animationsEnabled
+        context.isInteractive = transition.isInteractive
         context.onTransitionFinished = { [weak self] didComplete in
             self?.animationController?.animationEnded?(didComplete)
             self?.transitionFinished(didComplete)

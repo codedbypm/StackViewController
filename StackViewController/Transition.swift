@@ -12,8 +12,8 @@ struct Transition {
     let operation: StackViewController.Operation
     let from: UIViewController?
     let to: UIViewController?
-    let animated: Bool
-    let interactive: Bool
+    let isAnimated: Bool
+    let isInteractive: Bool
 
     init(operation: StackViewController.Operation,
          from: UIViewController?,
@@ -24,7 +24,7 @@ struct Transition {
         self.operation = operation
         self.from = from
         self.to = to
-        self.animated = animated
-        self.interactive = interactive
+        self.isAnimated = animated
+        self.isInteractive = interactive
     }
 }

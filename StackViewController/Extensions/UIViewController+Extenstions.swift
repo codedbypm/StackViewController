@@ -15,4 +15,8 @@ extension UIViewController {
     var isInViewHierarchy: Bool {
         return isViewLoaded && view.window != nil
     }
+
+    func addChildren(_ viewControllers: [UIViewController]) {
+        viewControllers.forEach { addChild($0) }
+    }
 }

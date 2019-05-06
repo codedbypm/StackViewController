@@ -202,6 +202,36 @@ private extension StackViewController {
     }
 }
 
+private extension StackViewController {
+    
+    func sendInitialViewControllerContainmentEvents(using context: TransitionContext) {
+
+        let from = context.viewController(forKey: .from)
+        let to = context.viewController(forKey: .to)
+
+        switch context.operation {
+        case .pop:
+            from?.willMove(toParent: nil)
+        case .push:
+            guard let to = to else { return assertionFailure() }
+            addChild(to)
+        }
+    }
+
+    func sendFinalViewControllerContainmentEvents(using context: TransitionContext) {
+
+        let from = context.viewController(forKey: .from)
+        let to = context.viewController(forKey: .to)
+
+        switch context.operation {
+        case .pop:
+            from?.removeFromParent()
+        case .push:
+            to?.didMove(toParent: self)
+        }
+    }
+}
+
 extension StackViewController: ConsoleDebuggable {
     public override var description: String {
         return "SVC"

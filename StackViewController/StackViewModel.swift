@@ -193,6 +193,12 @@ class StackViewModel {
         let context = TransitionContext(transition: transition, in: containerView)
         context.isAnimated = animated && animationsEnabled
         context.isInteractive = interactive
+        context.onTransitionFinished = { [weak self] didComplete in
+            self?.animationController?.animationEnded?(didComplete)
+            self?.transitionFinished(didComplete)
+//            self?.debugEndTransition()
+        }
+
 
         return context
     }

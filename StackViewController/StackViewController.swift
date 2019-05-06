@@ -120,7 +120,12 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 
     public func pushStack(_ stack: Stack, animated: Bool) {
-        viewModel.push(stack, animated: animated)
+        guard let transition = viewModel.transitionForPush(stack, animated: animated) else {
+            return
+        }
+
+        let transitionHandler = TransitionHandler(transition: transition, stackViewControllerDelegate: delegate)
+        transitionHandler.performTransition()
     }
 
     @discardableResult

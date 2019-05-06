@@ -42,7 +42,6 @@
 		FD76B7812276449F0090EDB2 /* PopAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7802276449F0090EDB2 /* PopAnimator.swift */; };
 		FD76B7882278E8D20090EDB2 /* UIViewController+Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7872278E8D20090EDB2 /* UIViewController+Extenstions.swift */; };
 		FD76B78A227917320090EDB2 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B789227917320090EDB2 /* NavigationController.swift */; };
-		FD76B78E2279D26A0090EDB2 /* StackHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B78D2279D26A0090EDB2 /* StackHandler.swift */; };
 		FD76B78F2279E0950090EDB2 /* ConsoleDebuggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */; };
 		FD76B791227A5B7A0090EDB2 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */; };
 /* End PBXBuildFile section */
@@ -405,7 +404,6 @@
 				FD00021F2260CC9100A87FFB /* InteractivePopAnimator.swift in Sources */,
 				FD1B56FB227C870600E005EC /* ViewControllerWrapperView.swift in Sources */,
 				FD1B5703227CBEF900E005EC /* Collection+Extensions.swift in Sources */,
-				FD76B78E2279D26A0090EDB2 /* StackHandler.swift in Sources */,
 				FD1B570D227DB9AF00E005EC /* Transition.swift in Sources */,
 				FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */,
 				FD76B78F2279E0950090EDB2 /* ConsoleDebuggable.swift in Sources */,

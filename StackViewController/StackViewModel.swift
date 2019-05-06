@@ -13,29 +13,29 @@ protocol StackViewModelDelegate: StackViewControllerDelegate {
     func didEndTransition(using context: TransitionContext, completed: Bool)
 }
 
-class StackViewModel {
+public typealias Stack = [UIViewController]
+
+class StackViewModel: ExceptionThrowing {
 
     weak var delegate: StackViewModelDelegate?
     lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
-
-    private let stackHandler: StackHandler
 
     private var context: TransitionContext?
     private var animationController: UIViewControllerAnimatedTransitioning?
     private var interactionController: UIViewControllerInteractiveTransitioning?
     private var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
+    private(set) var stack = Stack()
 
     init(stack: Stack) {
-        stackHandler = StackHandler(stack: stack)
+        guard !stack.hasDuplicates else {
+            throwError(.duplicateViewControllers, userInfo: ["stack": stack])
+            return
+        }
+
+        self.stack = stack
     }
 
-    var stack: Stack {
-        return stackHandler.stack
-    }
-
-    var topViewController: UIViewController? {
-        return stackHandler.top
-    }
+    var topViewController: UIViewController? { return stack.last }
 
     var transition: Transition? {
         willSet {
@@ -50,13 +50,15 @@ class StackViewModel {
         }
     }
 
-    func push(_ viewControllers: [UIViewController], animated: Bool) {
+    func transitionForPush(_ viewControllers: Stack, animated: Bool) -> Transition? {
+        guard canPush(viewControllers) else { return nil }
+
         let from = topViewController
-        stackHandler.push(viewControllers)
-        transition = Transition(operation: .push,
-                                from: from,
-                                to: viewControllers.last,
-                                animated: animated)
+        let to = viewControllers.last
+
+        stack.append(contentsOf: viewControllers)
+
+        return Transition(operation: .push, from: from, to: to, animated: animated)
     }
 
     func pop(animated: Bool) -> UIViewController? {
@@ -79,18 +81,20 @@ class StackViewModel {
         guard (0..<stack.endIndex).contains(index) else { return [] }
 
         let poppedCount = stack.endIndex - (index + 1)
-        let poppedElements = stackHandler.popLast(poppedCount)
+        let poppedElements = stack.suffix(poppedCount)
 
+        stack.removeLast(poppedCount)
         transition = Transition(operation: .pop,
                                 from: poppedElements.last,
                                 to: topViewController,
                                 animated: animated,
                                 interactive: interactive)
-        return poppedElements
+        return Array(poppedElements)
     }
 
     func setStack(_ newStack: Stack, animated: Bool) {
-        
+        guard canReplaceStack(with: newStack) else { return }
+
 
         let from = topViewController
         let to = newStack.last
@@ -111,14 +115,8 @@ class StackViewModel {
             }
         }
 
-        stackHandler.replaceStack(with: newStack)
+        stack = newStack
         transition = Transition(operation: operation, from: from, to: to, animated: animated)
-    }
-
-    func canPopViewControllerInteractively() -> Bool {
-        guard stackHandler.canPopLast(1) else { return false }
-        guard interactionController == nil else { return false }
-        return true
     }
 
     func screenEdgeGestureRecognizerDidChangeState(
@@ -188,7 +186,6 @@ class StackViewModel {
     func context(for transition: Transition,
                  in containerView: UIView) -> TransitionContext {
 
-
         assert(transition.from != nil || transition.to != nil)
 
         let animationsEnabled = (transition.from != nil && transition.to != nil)
@@ -241,5 +238,27 @@ class StackViewModel {
         } else {
             return InteractivePopAnimator(animationController: animationController)
         }
+    }
+
+    private func canPush(_ stack: Stack) -> Bool {
+        guard !(self.stack + stack).hasDuplicates else { return false }
+        return true
+    }
+
+    func canPopLast(_ count: Int) -> Bool {
+        guard (0...stack.count).contains(count) else { return false }
+        return true
+    }
+
+    private func canReplaceStack(with newStack: Stack) -> Bool {
+        guard !stack.elementsEqual(newStack) else { return false }
+        guard !newStack.hasDuplicates else { return false }
+        return true
+    }
+
+    func canPopViewControllerInteractively() -> Bool {
+        guard canPopLast(1) else { return false }
+        guard interactionController == nil else { return false }
+        return true
     }
 }

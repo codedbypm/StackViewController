@@ -8,7 +8,6 @@
 
 import Foundation
 
-public typealias Stack = [UIViewController]
 
 /// StackHandler is responsible for storing and updating the view controllers array of a
 /// StackViewController instance.
@@ -48,7 +47,7 @@ class StackHandler: ExceptionThrowing {
     
     func popLast(_ count: Int) -> Stack {
         guard canPopLast(count) else { return [] }
-
+        
         let popped = stack.suffix(count)
         stack.removeLast(count)
         return Array(popped)
@@ -67,20 +66,7 @@ class StackHandler: ExceptionThrowing {
 
     // MARK: - Validation
 
-    func canPush(_ viewControllers: Stack) -> Bool {
-        guard !(stack + viewControllers).hasDuplicates else { return false }
-        return true
-    }
 
-    func canPopLast(_ count: Int) -> Bool {
-        guard (0...stack.count).contains(count) else { return false }
-        return true
-    }
 
-    func canReplaceStack(with newStack: Stack) -> Bool {
-        guard !stack.elementsEqual(newStack) else { return false }
-        guard !newStack.hasDuplicates else { return false }
-        return true
-    }
 }
 

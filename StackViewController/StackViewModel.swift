@@ -110,7 +110,38 @@ class StackViewModel {
         guard interactionController == nil else { return false }
         return true
     }
-    
+
+    func screenEdgeGestureRecognizerDidChangeState(
+        _ gestureRecognizer: UIScreenEdgePanGestureRecognizer
+    ) {
+        switch gestureRecognizer.state {
+        case .possible:
+            print("Possible")
+        case .began:
+            print("Began")
+            screenEdgePanGestureRecognizer = gestureRecognizer
+            popToViewController(at: stack.endIndex.advanced(by: -2),
+                                animated: true,
+                                interactive: true)
+        case .changed:
+            print("Changed")
+
+        case .ended:
+            screenEdgePanGestureRecognizer = nil
+            print("Ended")
+
+        case .cancelled:
+            screenEdgePanGestureRecognizer = nil
+            print("Cancelled")
+
+        case .failed:
+            screenEdgePanGestureRecognizer = nil
+            print("Failed")
+
+        @unknown default:
+            break
+        }
+    }
     func transitionFinished(_ didComplete: Bool) {
         transition = nil
     }

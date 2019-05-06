@@ -20,6 +20,11 @@ class StackViewModel {
 
     private let stackHandler: StackHandler
 
+    private var context: TransitionContext?
+    private var animationController: UIViewControllerAnimatedTransitioning?
+    private var interactionController: UIViewControllerInteractiveTransitioning?
+    private var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
+
     init(stack: Stack) {
         stackHandler = StackHandler(stack: stack)
     }

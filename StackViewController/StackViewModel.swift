@@ -67,7 +67,10 @@ class StackViewModel {
         return popToViewController(at: index, animated: animated)
     }
 
-    private func popToViewController(at index: Int, animated: Bool) -> Stack {
+    @discardableResult
+    private func popToViewController(at index: Int,
+                                     animated: Bool,
+                                     interactive: Bool = false) -> Stack {
         guard (0..<stack.endIndex).contains(index) else { return [] }
 
         let poppedCount = stack.endIndex - (index + 1)

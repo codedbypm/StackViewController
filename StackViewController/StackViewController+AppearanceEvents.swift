@@ -10,7 +10,7 @@ import Foundation
 
 extension StackViewController {
 
-    func sendInitialViewAppearanceEvents(using context: TransitionContext) {
+    func sendInitialViewAppearanceEvents(using context: UIViewControllerContextTransitioning) {
         let isAnimated = context.isAnimated
         let from = context.viewController(forKey: .from)
         let to = context.viewController(forKey: .to)
@@ -19,7 +19,7 @@ extension StackViewController {
         to?.beginAppearanceTransition(true, animated: isAnimated)
     }
 
-    func sendFinalViewAppearanceEvents(using context: TransitionContext) {
+    func sendFinalViewAppearanceEvents(using context: UIViewControllerContextTransitioning) {
         let from = context.viewController(forKey: .from)
         let to = context.viewController(forKey: .to)
 

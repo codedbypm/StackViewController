@@ -18,7 +18,7 @@ extension StackViewController {
         stack.forEach { $0.didMove(toParent: self) }
     }
 
-    func sendInitialViewContainmentEvents(using context: TransitionContext) {
+    func sendInitialViewControllerContainmentEvents(using context: TransitionContext) {
 
         let from = context.viewController(forKey: .from)
         let to = context.viewController(forKey: .to)
@@ -32,7 +32,7 @@ extension StackViewController {
         }
     }
 
-    func sendFinalViewContainmentEvents(using context: TransitionContext) {
+    func sendFinalViewControllerContainmentEvents(using context: TransitionContext) {
 
         let from = context.viewController(forKey: .from)
         let to = context.viewController(forKey: .to)

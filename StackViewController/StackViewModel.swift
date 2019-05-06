@@ -96,6 +96,11 @@ class StackViewModel {
         transition = Transition(operation: operation, from: from, to: to)
     }
 
+    func canPopViewControllerInteractively() -> Bool {
+        guard stackHandler.canPopLast(1) else { return false }
+        return true
+    }
+    
     func transitionFinished(_ didComplete: Bool) {
         transition = nil
     }

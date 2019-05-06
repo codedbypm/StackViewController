@@ -109,7 +109,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard gestureRecognizer === screenEdgePanGestureRecognizer else { return false }
 
-        return popViewControllerInteractively()
+        return viewModel.canPopViewControllerInteractively()
     }
 
     // MARK: - Public methods

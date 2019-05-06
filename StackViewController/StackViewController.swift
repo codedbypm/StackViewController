@@ -182,83 +182,23 @@ extension StackViewController: StackViewModelDelegate {
     }
 }
 
-// MARK: - Transition
-
 private extension StackViewController {
 
-    func performStackTransition(_ transition: TransitionContext,
-                                whenCompleted: (() -> Void)? = nil) {
+    func sendInitialViewAppearanceEvents(using context: UIViewControllerContextTransitioning) {
+        let isAnimated = context.isAnimated
+        let from = context.viewController(forKey: .from)
+        let to = context.viewController(forKey: .to)
 
-//        let from = transition.viewController(forKey: .from)
-//        let to = transition.viewController(forKey: .to)
-//
-//        switch (from, to) {
-//        case (.some(let from), .none):
-//            performInstantPopTransition(of: from)
-//            whenCompleted?()
-//        case (.none, .some(let to)):
-//            performInstantPushTransition(of: to)
-//            whenCompleted?()
-//        case (.some(let from), .some(let to)):
-//            performTransition(transition,
-//                              from: from,
-//                              to: to,
-//                              whenCompleted: whenCompleted)
-//        case (.none, .none):
-//            assertionFailure()
-//        }
+        from?.beginAppearanceTransition(false, animated: isAnimated)
+        to?.beginAppearanceTransition(true, animated: isAnimated)
     }
 
-//    func performTransition(_ transition: TransitionContext,
-//                           from: UIViewController,
-//                           to: UIViewController,
-//                           whenCompleted: (() -> Void)? = nil) {
-//
-//        assert(isInViewHierarchy)
-//
-//        let animationController = self.animationController(for: transition.operation, from: from, to: to)
-//
-//        transition.onTransitionFinished = { didComplete in
-//            self.interactionController = nil
-//
-//            if didComplete {
-//                self.sendFinalViewAppearanceEvents(for: transition)
-//                self.sendFinalViewContainmentEvents(for: transition)
-//                whenCompleted?()
-//            } else {
-//                self.sendInitialViewAppearanceEvents(for: transition)
-//                self.sendFinalViewAppearanceEvents(for: transition)
-//            }
-//
-//            animationController.animationEnded?(didComplete)
-//
-//            self.debugEndTransition()
-//        }
-//
-//        sendInitialViewContainmentEvents(for: transition)
-//        sendInitialViewAppearanceEvents(for: transition)
-//
-//        if transition.isInteractive {
-//            startInteractiveTransition(animationController: animationController, context: transition)
-//        } else {
-//            startTransition(animationController: animationController, context: transition)
-//        }
-//    }
+    func sendFinalViewAppearanceEvents(using context: UIViewControllerContextTransitioning) {
+        let from = context.viewController(forKey: .from)
+        let to = context.viewController(forKey: .to)
 
-    func performInstantPushTransition(of viewController: UIViewController) {
-        addChild(viewController)
-        viewController.beginAppearanceTransition(true, animated: false)
-        view.addSubview(viewController.view)
-        viewController.endAppearanceTransition()
-        viewController.didMove(toParent: self)
-    }
-
-    func performInstantPopTransition(of viewController: UIViewController) {
-        viewController.willMove(toParent: nil)
-        viewController.beginAppearanceTransition(false, animated: false)
-        viewController.view.removeFromSuperview()
-        viewController.endAppearanceTransition()
-        viewController.removeFromParent()
+        from?.endAppearanceTransition()
+        to?.endAppearanceTransition()
     }
 }
 

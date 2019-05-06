@@ -38,7 +38,6 @@
 		FD76B7692270EA010090EDB2 /* StackViewControllerTests+Push.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */; };
 		FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */; };
 		FD76B7772275F39C0090EDB2 /* StackViewController+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */; };
-		FD76B7792275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7782275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift */; };
 		FD76B77B2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B77A2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift */; };
 		FD76B77D227614D60090EDB2 /* ViewControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B77C227614D60090EDB2 /* ViewControllerFactory.swift */; };
 		FD76B77F227643600090EDB2 /* PushAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B77E227643600090EDB2 /* PushAnimator.swift */; };
@@ -116,7 +115,6 @@
 		FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+Push.swift"; sourceTree = "<group>"; };
 		FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerDelegate.swift; sourceTree = "<group>"; };
 		FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+Debug.swift"; sourceTree = "<group>"; };
-		FD76B7782275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+AppearanceEvents.swift"; sourceTree = "<group>"; };
 		FD76B77A2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+ViewContainmentEvents.swift"; sourceTree = "<group>"; };
 		FD76B77C227614D60090EDB2 /* ViewControllerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerFactory.swift; sourceTree = "<group>"; };
 		FD76B77E227643600090EDB2 /* PushAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushAnimator.swift; sourceTree = "<group>"; };
@@ -205,7 +203,6 @@
 				FD67E5F72254F2010051786B /* TransitionContext.swift */,
 				FD1B570C227DB9AF00E005EC /* Transition.swift */,
 				FD76B78D2279D26A0090EDB2 /* StackHandler.swift */,
-				FD76B7782275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift */,
 				FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */,
 				FD76B77A2275F7650090EDB2 /* StackViewController+ViewContainmentEvents.swift */,
 				FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */,
@@ -424,7 +421,6 @@
 				FD22605F226E579D007E44CE /* StackViewControllerError.swift in Sources */,
 				FD67E5FA22552D3A0051786B /* UIView+Extensions.swift in Sources */,
 				FD1B570B227D68CB00E005EC /* StackViewModel.swift in Sources */,
-				FD76B7792275F6FD0090EDB2 /* StackViewController+AppearanceEvents.swift in Sources */,
 				FD76B7772275F39C0090EDB2 /* StackViewController+Debug.swift in Sources */,
 				FD1B5707227D38B800E005EC /* TransitionHandler.swift in Sources */,
 				FD67E5F82254F2010051786B /* TransitionContext.swift in Sources */,

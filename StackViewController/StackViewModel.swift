@@ -142,6 +142,21 @@ class StackViewModel {
             break
         }
     }
+
+    func prepareTransition(_ transition: Transition) {
+
+        let context = self.context(for: transition, in: viewControllerWrapperView)
+        self.context = context
+
+        let animationController = self.animationController(for: transition)
+        self.animationController = animationController
+
+        if transition.interactive {
+            let interactionController = self.interactionController(animationController: animationController,
+                                                                   context: context)
+            self.interactionController = interactionController
+        }
+    }
     func transitionFinished(_ didComplete: Bool) {
         transition = nil
     }

@@ -90,6 +90,7 @@ class StackViewModel {
     }
 
     func setStack(_ newStack: Stack, animated: Bool) {
+        
 
         let from = topViewController
         let to = newStack.last

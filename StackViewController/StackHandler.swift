@@ -60,6 +60,7 @@ class StackHandler: ExceptionThrowing {
     }
 
     func replaceStack(with newStack: Stack) {
+        guard canReplaceStack(with: newStack) else { return }
         popAll()
         push(newStack)
     }
@@ -73,6 +74,12 @@ class StackHandler: ExceptionThrowing {
 
     func canPopLast(_ count: Int) -> Bool {
         guard (0...stack.count).contains(count) else { return false }
+        return true
+    }
+
+    func canReplaceStack(with newStack: Stack) -> Bool {
+        guard !stack.elementsEqual(newStack) else { return false }
+        guard !newStack.hasDuplicates else { return false }
         return true
     }
 }

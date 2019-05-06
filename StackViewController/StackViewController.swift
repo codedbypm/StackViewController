@@ -41,6 +41,7 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
         let recognizer = UIScreenEdgePanGestureRecognizer()
         recognizer.edges = .left
         recognizer.delegate = self
+        recognizer.addTarget(self, action: #selector(screenEdgeGestureRecognizerDidChangeState(_:)))
         return recognizer
     }()
 
@@ -142,14 +143,10 @@ public class StackViewController: UIViewController, StackViewControllerHandling,
         viewModel.setStack(viewControllers, animated: animated)
     }
 
-    // MARK: - Private methods
-
-    private func popViewControllerInteractively() -> Bool {
-//        guard stackHandler.canPopInteractively() else { return false }
-//        transition = .interactiveAnimated()
-//        stackHandler.popLast()
-//
-        return true
+    @objc private func screenEdgeGestureRecognizerDidChangeState(_
+        gestureRecognizer: UIScreenEdgePanGestureRecognizer) {        
+        guard gestureRecognizer === screenEdgePanGestureRecognizer else { return }
+        viewModel.screenEdgeGestureRecognizerDidChangeState(gestureRecognizer)
     }
 }
 

@@ -53,7 +53,10 @@ class StackViewModel {
     func push(_ viewControllers: [UIViewController], animated: Bool) {
         let from = topViewController
         stackHandler.push(viewControllers)
-        transition = Transition(operation: .push, from: from, to: viewControllers.last)
+        transition = Transition(operation: .push,
+                                from: from,
+                                to: viewControllers.last,
+                                animated: animated)
     }
 
     func pop(animated: Bool) -> UIViewController? {
@@ -78,7 +81,11 @@ class StackViewModel {
         let poppedCount = stack.endIndex - (index + 1)
         let poppedElements = stackHandler.popLast(poppedCount)
 
-        transition = Transition(operation: .pop, from: poppedElements.last, to: topViewController)
+        transition = Transition(operation: .pop,
+                                from: poppedElements.last,
+                                to: topViewController,
+                                animated: animated,
+                                interactive: interactive)
         return poppedElements
     }
 
@@ -104,7 +111,7 @@ class StackViewModel {
         }
 
         stackHandler.replaceStack(with: newStack)
-        transition = Transition(operation: operation, from: from, to: to)
+        transition = Transition(operation: operation, from: from, to: to, animated: animated)
     }
 
     func canPopViewControllerInteractively() -> Bool {

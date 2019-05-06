@@ -176,25 +176,10 @@ extension StackViewController: StackViewModelDelegate {
     func didCreateTransition(_ transition: Transition) {
         assert(transitionHandler == nil)
 
-        transitionHandler = TransitionHandler(transition: transition, stackViewControllerDelegate: self)
+        transitionHandler = TransitionHandler(transition: transition, stackViewControllerDelegate: delegate)
         transitionHandler?.delegate = self
         transitionHandler?.performTransition()
     }
-
-    public func animationController(
-        for operation: StackViewController.Operation,
-        from: UIViewController,
-        to: UIViewController
-    ) -> UIViewControllerAnimatedTransitioning? {
-        return delegate?.animationController(for: operation, from: from, to: to)
-    }
-
-    public func interactionController(
-        for animationController: UIViewControllerAnimatedTransitioning
-    ) -> UIViewControllerInteractiveTransitioning? {
-        return delegate?.interactionController(for: animationController)
-    }
-
 }
 
 private extension StackViewController {

@@ -8,11 +8,8 @@
 
 import Foundation
 
-protocol StackViewModelDelegate: StackViewControllerDelegate {
+protocol StackViewModelDelegate: class {
     func didCreateTransition(_: Transition)
-
-    func willStartTransition(using context: TransitionContext)
-    func didEndTransition(using context: TransitionContext, completed: Bool)
 }
 
 public typealias Stack = [UIViewController]
@@ -22,9 +19,6 @@ class StackViewModel: ExceptionThrowing {
     weak var delegate: StackViewModelDelegate?
     lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
-    private var context: TransitionContext?
-    private var animationController: UIViewControllerAnimatedTransitioning?
-    private var interactionController: UIViewControllerInteractiveTransitioning?
     private var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
     private(set) var stack = Stack()
 
@@ -151,94 +145,6 @@ class StackViewModel: ExceptionThrowing {
         }
     }
 
-    func prepareTransition(_ transition: Transition) {
-        context = self.context(for: transition, in: viewControllerWrapperView)
-
-        let animationController = self.animationController(for: transition)
-        self.animationController = animationController
-
-        if transition.isInteractive {
-            interactionController = self.interactionController(animationController: animationController)
-        }
-    }
-
-    private func startTransition(_ transition: Transition) {
-        guard let context = context else { return assertionFailure() }
-
-        delegate?.willStartTransition(using: context)
-
-        if context.isInteractive {
-            interactionController?.startInteractiveTransition(context)
-        } else {
-            animationController?.animateTransition(using: context)
-        }
-    }
-
-    func transitionFinished(_ didComplete: Bool) {
-        interactionController = nil
-        animationController = nil
-        context = nil
-    }
-
-    // MARK: - Transition Actors creation
-
-    func context(for transition: Transition,
-                 in containerView: UIView) -> TransitionContext {
-
-        assert(transition.from != nil || transition.to != nil)
-
-        let animationsEnabled = (transition.from != nil && transition.to != nil)
-        let context = TransitionContext(transition: transition, in: containerView)
-        context.isAnimated = transition.isAnimated && animationsEnabled
-        context.isInteractive = transition.isInteractive
-        context.onTransitionFinished = { [weak self] didComplete in
-            self?.animationController?.animationEnded?(didComplete)
-            self?.transitionFinished(didComplete)
-//            self?.debugEndTransition()
-        }
-
-
-        return context
-    }
-
-    func defaultAnimationController(for transition: Transition) -> Animator {
-        switch transition.operation {
-        case .pop: return PopAnimator()
-        case .push: return PushAnimator()
-        }
-    }
-
-    func animationController(for transition: Transition) -> UIViewControllerAnimatedTransitioning {
-        guard let from = transition.from, let to = transition.to else {
-            return defaultAnimationController(for: transition)
-        }
-
-        guard let delegate = delegate else {
-            return defaultAnimationController(for: transition)
-        }
-
-        let controller = delegate.animationController(for: transition.operation,
-                                                      from: from,
-                                                      to: to)
-
-        if let controller = controller {
-            return controller
-        } else {
-            return defaultAnimationController(for: transition)
-        }
-    }
-
-    func interactionController(
-        animationController: UIViewControllerAnimatedTransitioning)
-        -> UIViewControllerInteractiveTransitioning {
-
-        if let controller = delegate?.interactionController(for: animationController) {
-            return controller
-        } else {
-            return InteractivePopAnimator(animationController: animationController)
-        }
-    }
-
     private func canPush(_ stack: Stack) -> Bool {
         guard !(self.stack + stack).hasDuplicates else { return false }
         return true
@@ -257,7 +163,6 @@ class StackViewModel: ExceptionThrowing {
 
     func canPopViewControllerInteractively() -> Bool {
         guard canPopLast(1) else { return false }
-        guard interactionController == nil else { return false }
         return true
     }
 }

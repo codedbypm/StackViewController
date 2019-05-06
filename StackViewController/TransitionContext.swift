@@ -43,6 +43,8 @@ class TransitionContext: NSObject, UIViewControllerContextTransitioning {
         self.operation = transition.operation
         self.viewControllers = [.from: transition.from, .to: transition.to]
         self.containerView = containerView
+        self.isAnimated = transition.isAnimated && (transition.from != nil && transition.to != nil)
+        self.isInteractive = transition.isInteractive
     }
 
     deinit {

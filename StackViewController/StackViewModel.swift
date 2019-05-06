@@ -47,7 +47,7 @@ class StackViewModel: ExceptionThrowing {
 
         self.stack.append(contentsOf: stack)
 
-        let transition = Transition(operation: .push, from: from, to: to, animated: animated)
+        let transition = Transition(operation: .push, from: from, to: to, containerView: viewControllerWrapperView, animated: animated)
         delegate?.didCreateTransition(transition)
     }
 
@@ -80,6 +80,7 @@ class StackViewModel: ExceptionThrowing {
         let transition = Transition(operation: .pop,
                                     from: from,
                                     to: to,
+                                    containerView: viewControllerWrapperView,
                                     animated: animated,
                                     interactive: interactive)
 
@@ -110,7 +111,11 @@ class StackViewModel: ExceptionThrowing {
         }
 
         stack = newStack
-        let transition = Transition(operation: operation, from: from, to: to, animated: animated)
+        let transition = Transition(operation: operation,
+                                    from: from,
+                                    to: to,
+                                    containerView: viewControllerWrapperView,
+                                    animated: animated)
         delegate?.didCreateTransition(transition)
     }
 
@@ -240,7 +245,7 @@ class StackViewModel: ExceptionThrowing {
     }
 
     func canPopLast(_ count: Int) -> Bool {
-        guard (0...stack.count).contains(count) else { return false }
+        guard (1..<stack.count).contains(count) else { return false }
         return true
     }
 

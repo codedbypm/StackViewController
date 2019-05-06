@@ -46,11 +46,13 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
     public var wantsInteractiveStart: Bool {
         return didStartInteractively
     }
-}
 
-private extension InteractivePopAnimator {
-    
-    @objc func didDetectPanningFromEdge(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+    func startInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        didStartInteractively = true
+        let panGestureStartLocation = recognizer.location(in: context.containerView)
+        print("Interactive pop BEGAN at \(recognizer.location(in: context.containerView))")
+        animationProgressInitialOffset = animationProgressUpdate(for: panGestureStartLocation)
+        startInteractiveTransition(context)
     }
 
     func updateInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {
@@ -69,8 +71,8 @@ private extension InteractivePopAnimator {
         animate(to: .start)
     }
 
-    func stopInteractiveTransition() {
-        guard completionPosition() == .end else {
+    func stopInteractiveTransition(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+        guard completionPosition(gestureRecognizer) == .end else {
             cancelInteractiveTransition()
             return
         }
@@ -78,7 +80,10 @@ private extension InteractivePopAnimator {
         context.finishInteractiveTransition()
         animate(to: .end)
     }
+}
 
+private extension InteractivePopAnimator {
+    
     func animate(to position: UIViewAnimatingPosition) {
         let durationFraction: CGFloat
         let isReversed: Bool
@@ -106,8 +111,8 @@ private extension InteractivePopAnimator {
         return percentage
     }
 
-    func completionPosition() -> UIViewAnimatingPosition {
-        let panGestureTranslation = gestureRecognizer.translation(in: context.containerView)
+    func completionPosition(_ recognizer: UIScreenEdgePanGestureRecognizer) -> UIViewAnimatingPosition {
+        let panGestureTranslation = recognizer.translation(in: context.containerView)
         let threshold = context.containerView.bounds.midX
 
         if panGestureTranslation.x > threshold {

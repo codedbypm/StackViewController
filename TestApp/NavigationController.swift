@@ -35,6 +35,7 @@ class NavigationController: UINavigationController, ConsoleDebuggable {
     override func viewDidLoad() {
         super.viewDidLoad()
         debugFunc(#function, allowed: true)
+        interactivePopGestureRecognizer?.delegate = self
     }
 
     override var description: String {
@@ -55,6 +56,14 @@ class NavigationController: UINavigationController, ConsoleDebuggable {
         return returned
     }
 }
+
+extension NavigationController: UIGestureRecognizerDelegate {
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+}
+
 
 extension NavigationController: UINavigationControllerDelegate {
 

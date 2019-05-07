@@ -9,6 +9,7 @@
 import Foundation
 
 protocol StackViewModelDelegate: class {
+    func didReplaceStack(oldStack: Stack, with newStack: Stack)
     func didCreateTransition(_: Transition)
 }
 
@@ -106,7 +107,10 @@ class StackInteractor: ExceptionThrowing {
             }
         }
 
+        let oldStack = stack
         stack = newStack
+        delegate?.didReplaceStack(oldStack: oldStack, with: newStack)
+        
         let transition = Transition(operation: operation,
                                     from: from,
                                     to: to,

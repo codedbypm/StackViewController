@@ -47,7 +47,6 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
     }
 
 //    func startInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {
-//        didStartInteractively = true
 //        let panGestureStartLocation = recognizer.location(in: context.containerView)
 //        animationProgressInitialOffset = animationProgressUpdate(for: panGestureStartLocation)
 //        startInteractiveTransition(context)
@@ -58,9 +57,9 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
 
         let updatedProgress = animationProgressUpdate(for: recognizer)
 
-//        print("Pan translation: \(translation.x) (\(updatedProgress) %)")
+//        print("Pan translation: \(recognizer.translation(in: recognizer.view!).x) (\(updatedProgress) %)")
 //        print("fractionComplete: \(updatedProgress + animationProgressInitialOffset)\n")
-//
+
         interruptibleAnimator?.fractionComplete = updatedProgress
         context?.updateInteractiveTransition(updatedProgress)
     }

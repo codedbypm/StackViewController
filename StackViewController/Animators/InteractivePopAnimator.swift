@@ -38,14 +38,12 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
 
         animationController.animateTransition(using: context)
 
-        if didStartInteractively {
-            interruptibleAnimator?.pauseAnimation()
-            context.pauseInteractiveTransition()
-        }
+        interruptibleAnimator?.pauseAnimation()
+        context.pauseInteractiveTransition()
     }
 
     public var wantsInteractiveStart: Bool {
-        return didStartInteractively
+        return true
     }
 
 //    func startInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {

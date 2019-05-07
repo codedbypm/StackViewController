@@ -147,7 +147,20 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     @objc private func screenEdgeGestureRecognizerDidChangeState(_
         gestureRecognizer: UIScreenEdgePanGestureRecognizer) {        
         guard gestureRecognizer === screenEdgePanGestureRecognizer else { return }
-        interactor.screenEdgeGestureRecognizerDidChangeState(gestureRecognizer)
+        switch gestureRecognizer.state {
+        case .began:
+            interactor.pop(animated: true, interactive: true)
+        case .changed:
+            transitionHandler?.updateInteractiveTransition(gestureRecognizer)
+        case .cancelled:
+            transitionHandler?.cancelInteractiveTransition()
+        case .ended:
+            transitionHandler?.stopInteractiveTransition(gestureRecognizer)
+        case .possible, .failed:
+            break
+        @unknown default:
+            assertionFailure()
+        }
     }
 }
 
@@ -165,7 +178,7 @@ extension StackViewController: TransitionHandlerDelegate {
             sendFinalViewAppearanceEvents(using: context)
             sendFinalViewControllerContainmentEvents(using: context)
         } else {
-            sendInitialViewAppearanceEvents(using: context)
+            sendInitialViewAppearanceEvents(using: context, swapElements: true)
             sendFinalViewAppearanceEvents(using: context)
         }
     }
@@ -184,10 +197,13 @@ extension StackViewController: StackViewModelDelegate {
 
 private extension StackViewController {
 
-    func sendInitialViewAppearanceEvents(using context: UIViewControllerContextTransitioning) {
+    func sendInitialViewAppearanceEvents(using context: UIViewControllerContextTransitioning, swapElements: Bool = false) {
         let isAnimated = context.isAnimated
-        let from = context.viewController(forKey: .from)
-        let to = context.viewController(forKey: .to)
+        let fromKey:UITransitionContextViewControllerKey = swapElements ? .to : .from
+        let toKey:UITransitionContextViewControllerKey = swapElements ? .from : .to
+
+        let from = context.viewController(forKey: fromKey)
+        let to = context.viewController(forKey: toKey)
 
         from?.beginAppearanceTransition(false, animated: isAnimated)
         to?.beginAppearanceTransition(true, animated: isAnimated)

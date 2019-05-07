@@ -45,15 +45,17 @@ class StackInteractor: ExceptionThrowing {
         delegate?.didCreateTransition(transition)
     }
 
-    func pop(animated: Bool) -> UIViewController? {
-        return popToViewController(at: stack.endIndex.advanced(by: -2), animated: animated).first
+    @discardableResult
+    func pop(animated: Bool, interactive: Bool = false) -> UIViewController? {
+        let index = stack.endIndex.advanced(by: -2)
+        return popToViewController(at: index, animated: animated, interactive: interactive).first
     }
 
     func popToRoot(animated: Bool) -> Stack {
         return popToViewController(at: stack.startIndex, animated: animated)
     }
 
-    func popTo(_ viewController: UIViewController, animated: Bool) -> Stack {
+    func popTo(_ viewController: UIViewController, animated: Bool, interactive: Bool = false) -> Stack {
         let index = stack.firstIndex(of: viewController) ?? stack.endIndex
         return popToViewController(at: index, animated: animated)
     }
@@ -121,10 +123,6 @@ class StackInteractor: ExceptionThrowing {
             print("Possible")
         case .began:
             print("Began")
-            screenEdgePanGestureRecognizer = gestureRecognizer
-            popToViewController(at: stack.endIndex.advanced(by: -2),
-                                animated: true,
-                                interactive: true)
         case .changed:
             print("Changed")
 

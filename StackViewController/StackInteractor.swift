@@ -20,7 +20,6 @@ class StackInteractor: ExceptionThrowing {
     weak var delegate: StackViewModelDelegate?
     lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
-    private var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
     private(set) var stack = Stack()
     private var lastTransition: Transition?
 

@@ -36,9 +36,9 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 
     // MARK: - Internal properties
 
-    lazy var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer = {
+    lazy var screenEdgePanGestureRecognizer: ScreenEdgePanGestureRecognizer = {
         let selector = #selector(screenEdgeGestureRecognizerDidChangeState(_:))
-        let recognizer = UIScreenEdgePanGestureRecognizer()
+        let recognizer = ScreenEdgePanGestureRecognizer()
         recognizer.edges = .left
         recognizer.delegate = self
         recognizer.addTarget(self, action: selector)
@@ -145,24 +145,13 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 
     @objc private func screenEdgeGestureRecognizerDidChangeState(_
-        gestureRecognizer: UIScreenEdgePanGestureRecognizer) {        
+        gestureRecognizer: ScreenEdgePanGestureRecognizer) {        
 
         guard gestureRecognizer === screenEdgePanGestureRecognizer else { return }
+        guard case .began = gestureRecognizer.state else { return }
 
-        switch gestureRecognizer.state {
-        case .began:
-            interactor.pop(animated: true, interactive: true)
-        case .changed:
-            transitionHandler?.updateInteractiveTransition(gestureRecognizer)
-        case .cancelled:
-            transitionHandler?.cancelInteractiveTransition()
-        case .ended:
-            transitionHandler?.stopInteractiveTransition(gestureRecognizer)
-        case .possible, .failed:
-            break
-        @unknown default:
-            assertionFailure()
-        }
+        print("Edge pop started at \(gestureRecognizer.initialTouchLocation)")
+        interactor.pop(animated: true, interactive: true)
     }
 }
 
@@ -200,7 +189,7 @@ extension StackViewController: StackViewModelDelegate {
     func didCreateTransition(_ transition: Transition) {
         assert(transitionHandler == nil)
 
-        transitionHandler = TransitionHandler(transition: transition, stackViewControllerDelegate: delegate)
+        transitionHandler = TransitionHandler(transition: transition, stackViewControllerDelegate: delegate, screenEdgeGestureRecognizer: screenEdgePanGestureRecognizer)
         transitionHandler?.delegate = self
         transitionHandler?.performTransition()
     }

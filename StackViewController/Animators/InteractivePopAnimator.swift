@@ -52,9 +52,7 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
 //        startInteractiveTransition(context)
 //    }
 
-    func updateInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {
-        guard let recognizerView = recognizer.view else { return assertionFailure() }
-
+    func updateInteractiveTransition(_ recognizer: ScreenEdgePanGestureRecognizer) {
         let updatedProgress = animationProgressUpdate(for: recognizer)
 
 //        print("Pan translation: \(recognizer.translation(in: recognizer.view!).x) (\(updatedProgress) %)")
@@ -69,7 +67,7 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
         animate(to: .start)
     }
 
-    func stopInteractiveTransition(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+    func stopInteractiveTransition(_ gestureRecognizer: ScreenEdgePanGestureRecognizer) {
         guard completionPosition(for: gestureRecognizer) == .end else {
             cancelInteractiveTransition()
             return
@@ -103,7 +101,7 @@ private extension InteractivePopAnimator {
         interruptibleAnimator?.continueAnimation?(withTimingParameters: nil, durationFactor: durationFraction)
     }
 
-    func animationProgressUpdate(for recognizer: UIScreenEdgePanGestureRecognizer) -> CGFloat {
+    func animationProgressUpdate(for recognizer: ScreenEdgePanGestureRecognizer) -> CGFloat {
         guard let recognizerView = recognizer.view else {
             assertionFailure()
             return 0.0
@@ -115,7 +113,7 @@ private extension InteractivePopAnimator {
         return percentage
     }
 
-    func completionPosition(for recognizer: UIScreenEdgePanGestureRecognizer) -> UIViewAnimatingPosition {
+    func completionPosition(for recognizer: ScreenEdgePanGestureRecognizer) -> UIViewAnimatingPosition {
         guard let recognizerView = recognizer.view else {
             assertionFailure()
             return .start

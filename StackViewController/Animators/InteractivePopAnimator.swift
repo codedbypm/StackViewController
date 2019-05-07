@@ -19,7 +19,10 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
     private var animationProgressInitialOffset: CGFloat = 0.0
 
     private var context: UIViewControllerContextTransitioning?
-    private var interruptibleAnimator: UIViewImplicitlyAnimating?
+    private var interruptibleAnimator: UIViewImplicitlyAnimating? {
+        guard let context = context else { return nil }
+        return animationController.interruptibleAnimator?(using: context)
+    }
 
     // MARK: - Init
 
@@ -32,7 +35,6 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
 
     public func startInteractiveTransition(_ context: UIViewControllerContextTransitioning) {
         self.context = context
-        interruptibleAnimator = animationController.interruptibleAnimator?(using: context)
 
         animationController.animateTransition(using: context)
 

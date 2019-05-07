@@ -146,7 +146,9 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 
     @objc private func screenEdgeGestureRecognizerDidChangeState(_
         gestureRecognizer: UIScreenEdgePanGestureRecognizer) {        
+
         guard gestureRecognizer === screenEdgePanGestureRecognizer else { return }
+
         switch gestureRecognizer.state {
         case .began:
             interactor.pop(animated: true, interactive: true)
@@ -166,22 +168,23 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 
 extension StackViewController: TransitionHandlerDelegate {
 
-    func willStartTransition(using context: TransitionContext) {
-        sendInitialViewControllerContainmentEvents(using: context)
-        sendInitialViewAppearanceEvents(using: context)
+    func willStartTransition(_ transition: Transition) {
+        sendInitialViewControllerContainmentEvents(for: transition)
+        sendInitialViewAppearanceEvents(for: transition)
     }
 
-    func didEndTransition(using context: TransitionContext, completed: Bool) {
-        transitionHandler = nil
-
-        if completed  {
-            sendFinalViewAppearanceEvents(using: context)
-            sendFinalViewControllerContainmentEvents(using: context)
+    func didEndTransition(_ transition: Transition, didComplete: Bool) {
+        if didComplete  {
+            sendFinalViewAppearanceEvents(for: transition)
+            sendFinalViewControllerContainmentEvents(for: transition)
         } else {
-            sendInitialViewAppearanceEvents(using: context, swapElements: true)
-            sendFinalViewAppearanceEvents(using: context)
+            sendInitialViewAppearanceEvents(for: transition, swapElements: true)
+            sendFinalViewAppearanceEvents(for: transition)
+
+            transition.undo?()
         }
 
+        transitionHandler = nil
         debugEndTransition()
     }
 }
@@ -205,53 +208,40 @@ extension StackViewController: StackViewModelDelegate {
 
 private extension StackViewController {
 
-    func sendInitialViewAppearanceEvents(using context: UIViewControllerContextTransitioning, swapElements: Bool = false) {
-        let isAnimated = context.isAnimated
-        let fromKey:UITransitionContextViewControllerKey = swapElements ? .to : .from
-        let toKey:UITransitionContextViewControllerKey = swapElements ? .from : .to
+    func sendInitialViewAppearanceEvents(for transition: Transition, swapElements: Bool = false) {
+        let isAnimated = transition.isAnimated
 
-        let from = context.viewController(forKey: fromKey)
-        let to = context.viewController(forKey: toKey)
+        let from = (swapElements ? transition.to : transition.from)
+        let to = (swapElements ? transition.from : transition.to)
 
         from?.beginAppearanceTransition(false, animated: isAnimated)
         to?.beginAppearanceTransition(true, animated: isAnimated)
     }
 
-    func sendFinalViewAppearanceEvents(using context: UIViewControllerContextTransitioning) {
-        let from = context.viewController(forKey: .from)
-        let to = context.viewController(forKey: .to)
-
-        from?.endAppearanceTransition()
-        to?.endAppearanceTransition()
+    func sendFinalViewAppearanceEvents(for transition: Transition) {
+        transition.from?.endAppearanceTransition()
+        transition.to?.endAppearanceTransition()
     }
 }
 
 private extension StackViewController {
     
-    func sendInitialViewControllerContainmentEvents(using context: TransitionContext) {
-
-        let from = context.viewController(forKey: .from)
-        let to = context.viewController(forKey: .to)
-
-        switch context.operation {
+    func sendInitialViewControllerContainmentEvents(for transition: Transition) {
+        switch transition.operation {
         case .pop:
-            from?.willMove(toParent: nil)
+            transition.from?.willMove(toParent: nil)
         case .push:
-            guard let to = to else { return assertionFailure() }
+            guard let to = transition.to else { return assertionFailure() }
             addChild(to)
         }
     }
 
-    func sendFinalViewControllerContainmentEvents(using context: TransitionContext) {
-
-        let from = context.viewController(forKey: .from)
-        let to = context.viewController(forKey: .to)
-
-        switch context.operation {
+    func sendFinalViewControllerContainmentEvents(for transition: Transition) {
+        switch transition.operation {
         case .pop:
-            from?.removeFromParent()
+            transition.from?.removeFromParent()
         case .push:
-            to?.didMove(toParent: self)
+            transition.to?.didMove(toParent: self)
         }
     }
 }

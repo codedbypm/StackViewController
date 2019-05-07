@@ -22,6 +22,7 @@ class StackInteractor: ExceptionThrowing {
 
     private var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
     private(set) var stack = Stack()
+    private var lastTransition: Transition?
 
     var topViewController: UIViewController? { return stack.last }
 
@@ -42,7 +43,13 @@ class StackInteractor: ExceptionThrowing {
 
         self.stack.append(contentsOf: stack)
 
-        let transition = Transition(operation: .push, from: from, to: to, containerView: viewControllerWrapperView, animated: animated)
+        let transition = Transition(operation: .push,
+                                    from: from,
+                                    to: to,
+                                    containerView: viewControllerWrapperView,
+                                    animated: animated,
+                                    undo: { self.stack.removeLast() })
+        lastTransition = transition
         delegate?.didCreateTransition(transition)
     }
 
@@ -79,8 +86,10 @@ class StackInteractor: ExceptionThrowing {
                                     to: to,
                                     containerView: viewControllerWrapperView,
                                     animated: animated,
-                                    interactive: interactive)
+                                    interactive: interactive,
+                                    undo: { self.stack.append(contentsOf: poppedElements) })
 
+        lastTransition = transition
         delegate?.didCreateTransition(transition)
         return Array(poppedElements)
     }
@@ -115,7 +124,9 @@ class StackInteractor: ExceptionThrowing {
                                     from: from,
                                     to: to,
                                     containerView: viewControllerWrapperView,
-                                    animated: animated)
+                                    animated: animated,
+                                    undo: { self.stack = oldStack })
+        lastTransition = transition
         delegate?.didCreateTransition(transition)
     }
 

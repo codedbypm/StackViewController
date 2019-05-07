@@ -9,8 +9,8 @@
 import Foundation
 
 protocol TransitionHandlerDelegate: class {
-    func willStartTransition(using context: TransitionContext)
-    func didEndTransition(using context: TransitionContext, completed: Bool)
+    func willStartTransition(_: Transition)
+    func didEndTransition(_: Transition, didComplete: Bool)
 }
 
 class TransitionHandler {
@@ -48,7 +48,7 @@ class TransitionHandler {
     }
 
     func performTransition() {
-        delegate?.willStartTransition(using: context)
+        delegate?.willStartTransition(transition)
 
         if context.isInteractive {
             interactionController?.startInteractiveTransition(context)
@@ -58,7 +58,7 @@ class TransitionHandler {
     }
 
     func transitionFinished(_ didComplete: Bool) {
-        delegate?.didEndTransition(using: context, completed: didComplete)
+        delegate?.didEndTransition(transition, didComplete: didComplete)
         interactionController = nil
         animationController = nil
     }

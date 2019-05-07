@@ -20,7 +20,7 @@ class TransitionHandler {
     private weak var stackViewControllerDelegate: StackViewControllerDelegate?
     private let context: TransitionContext
     private var animationController: UIViewControllerAnimatedTransitioning?
-    private var interactiveController: UIViewControllerInteractiveTransitioning?
+    private var interactionController: UIViewControllerInteractiveTransitioning?
 
     init(transition: Transition, stackViewControllerDelegate: StackViewControllerDelegate?) {
         self.transition = transition
@@ -34,10 +34,10 @@ class TransitionHandler {
         }
 
         if transition.isInteractive, let animationController = animationController {
-            if let interactiveController = stackViewControllerDelegate?.interactionController(for: animationController) {
-                self.interactiveController = interactiveController
+            if let interactionController = stackViewControllerDelegate?.interactionController(for: animationController) {
+                self.interactionController = interactionController
             } else {
-                self.interactiveController = InteractivePopAnimator(animationController: animationController)
+                self.interactionController = InteractivePopAnimator(animationController: animationController)
             }
         }
 
@@ -51,7 +51,7 @@ class TransitionHandler {
         delegate?.willStartTransition(using: context)
 
         if context.isInteractive {
-            interactiveController?.startInteractiveTransition(context)
+            interactionController?.startInteractiveTransition(context)
         } else {
             animationController?.animateTransition(using: context)
         }
@@ -59,7 +59,28 @@ class TransitionHandler {
 
     func transitionFinished(_ didComplete: Bool) {
         delegate?.didEndTransition(using: context, completed: didComplete)
-        interactiveController = nil
+        interactionController = nil
         animationController = nil
+    }
+
+    func updateInteractiveTransition(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+        guard let interactionController = interactionController as? InteractivePopAnimator else {
+            return
+        }
+        interactionController.updateInteractiveTransition(gestureRecognizer)
+    }
+
+    func cancelInteractiveTransition() {
+        guard let interactionController = interactionController as? InteractivePopAnimator else {
+            return
+        }
+        interactionController.cancelInteractiveTransition()
+    }
+
+    func stopInteractiveTransition(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+        guard let interactionController = interactionController as? InteractivePopAnimator else {
+            return
+        }
+        interactionController.stopInteractiveTransition(gestureRecognizer)
     }
 }

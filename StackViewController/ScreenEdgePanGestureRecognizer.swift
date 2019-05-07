@@ -9,10 +9,10 @@
 import UIKit.UIGestureRecognizer
 
 class ScreenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer {
-    var initialTouchLocation: CGPoint!
+    var initialTouchLocation: CGPoint?
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
         super.touchesBegan(touches, with: event)
-        initialTouchLocation = touches.first!.location(in: view)
+        initialTouchLocation = touches.first?.location(in: view)
     }
 }

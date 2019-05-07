@@ -16,7 +16,6 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
     // MARK: - Private properties
 
     private var didStartInteractively = false
-    private var animationProgressInitialOffset: CGFloat = 0.0
 
     private var context: UIViewControllerContextTransitioning?
     private var interruptibleAnimator: UIViewImplicitlyAnimating? {
@@ -46,17 +45,13 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
         return true
     }
 
-//    func startInteractiveTransition(_ recognizer: UIScreenEdgePanGestureRecognizer) {
-//        let panGestureStartLocation = recognizer.location(in: context.containerView)
-//        animationProgressInitialOffset = animationProgressUpdate(for: panGestureStartLocation)
-//        startInteractiveTransition(context)
-//    }
-
     func updateInteractiveTransition(_ recognizer: ScreenEdgePanGestureRecognizer) {
         let updatedProgress = animationProgressUpdate(for: recognizer)
 
-//        print("Pan translation: \(recognizer.translation(in: recognizer.view!).x) (\(updatedProgress) %)")
-//        print("fractionComplete: \(updatedProgress + animationProgressInitialOffset)\n")
+//        print("Pan translation: \(recognizer.translation(in: recognizer.view!).x)")
+//        print("Initial offset: \(recognizer.initialTouchLocation?.x)")
+//        print("Total X covered: \(recognizer.translation(in: recognizer.view!).x + recognizer.initialTouchLocation!.x)")
+//        print("fractionComplete: \(updatedProgress)\n")
 
         interruptibleAnimator?.fractionComplete = updatedProgress
         context?.updateInteractiveTransition(updatedProgress)
@@ -107,9 +102,10 @@ private extension InteractivePopAnimator {
             return 0.0
         }
 
+        let initialTouchLocationX = recognizer.initialTouchLocation?.x ?? 0
         let translation = recognizer.translation(in: recognizerView)
         let maximumTranslation = recognizerView.bounds.width
-        let percentage = translation.x/maximumTranslation
+        let percentage = (initialTouchLocationX + translation.x)/maximumTranslation
         return percentage
     }
 

@@ -150,7 +150,6 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
         guard gestureRecognizer === screenEdgePanGestureRecognizer else { return }
         guard case .began = gestureRecognizer.state else { return }
 
-        print("Edge pop started at \(gestureRecognizer.initialTouchLocation)")
         interactor.pop(animated: true, interactive: true)
     }
 }

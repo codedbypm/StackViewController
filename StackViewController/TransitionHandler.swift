@@ -15,17 +15,27 @@ protocol TransitionHandlerDelegate: class {
 
 class TransitionHandler {
 
+    // MARK: - Internal properties
+
     weak var delegate: TransitionHandlerDelegate?
+
+    // MARK: - Private properties
+
     private let transition: Transition
     private weak var stackViewControllerDelegate: StackViewControllerDelegate?
     private let context: TransitionContext
     private var animationController: UIViewControllerAnimatedTransitioning?
     private var interactionController: UIViewControllerInteractiveTransitioning?
 
-    init(transition: Transition, stackViewControllerDelegate: StackViewControllerDelegate?, screenEdgeGestureRecognizer: ScreenEdgePanGestureRecognizer? = nil) {
+    // MARK: - Init
+
+    init(transition: Transition,
+         stackViewControllerDelegate: StackViewControllerDelegate?,
+         screenEdgeGestureRecognizer: ScreenEdgePanGestureRecognizer?
+    ) {
         self.transition = transition
         self.stackViewControllerDelegate = stackViewControllerDelegate
-        context = TransitionContext(transition: transition, in: transition.containerView)
+        self.context = TransitionContext(transition: transition, in: transition.containerView)
 
         if let from = transition.from, let to = transition.to, let animatioController = stackViewControllerDelegate?.animationController(for: transition.operation, from: from, to: to) {
             self.animationController = animatioController

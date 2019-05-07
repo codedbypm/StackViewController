@@ -17,6 +17,16 @@ extension UIViewController {
     }
 
     func addChildren(_ viewControllers: [UIViewController]) {
-        viewControllers.forEach { addChild($0) }
+        viewControllers.forEach {
+            addChild($0)
+            $0.didMove(toParent: self)
+        }
+    }
+
+    func removeChildren(_ viewControllers: [UIViewController]) {
+        viewControllers.forEach {
+            $0.willMove(toParent: nil)
+            $0.removeFromParent()
+        }
     }
 }

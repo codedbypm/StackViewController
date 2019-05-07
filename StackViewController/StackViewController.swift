@@ -181,6 +181,8 @@ extension StackViewController: TransitionHandlerDelegate {
             sendInitialViewAppearanceEvents(using: context, swapElements: true)
             sendFinalViewAppearanceEvents(using: context)
         }
+
+        debugEndTransition()
     }
 }
 

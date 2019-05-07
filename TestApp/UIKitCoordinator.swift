@@ -22,24 +22,11 @@ class UIKitCoordinator: NSObject {
                                             color: .yellow)
         navController.viewControllers = [root]
         navController.delegate = navController
-        navController.interactivePopGestureRecognizer?.delegate = self
         navController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
-//        navController.viewControllers = [
-//            UIViewController.stacked(on: navController, delegate: self, color: .black),
-//            UIViewController.stacked(on: navController, delegate: self, color: .red),
-//            UIViewController.stacked(on: navController, delegate: self, color: .green),
-//        ]
         return navController
     }()
 
     var interactionController: InteractivePopAnimator?
-}
-
-extension UIKitCoordinator: UIGestureRecognizerDelegate {
-
-//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return false
-//    }
 }
 
 extension UIKitCoordinator: DebugDelegate {

@@ -115,34 +115,6 @@ class StackInteractor: ExceptionThrowing {
         delegate?.didCreateTransition(transition)
     }
 
-    func screenEdgeGestureRecognizerDidChangeState(
-        _ gestureRecognizer: UIScreenEdgePanGestureRecognizer
-    ) {
-        switch gestureRecognizer.state {
-        case .possible:
-            print("Possible")
-        case .began:
-            print("Began")
-        case .changed:
-            print("Changed")
-
-        case .ended:
-            screenEdgePanGestureRecognizer = nil
-            print("Ended")
-
-        case .cancelled:
-            screenEdgePanGestureRecognizer = nil
-            print("Cancelled")
-
-        case .failed:
-            screenEdgePanGestureRecognizer = nil
-            print("Failed")
-
-        @unknown default:
-            break
-        }
-    }
-
     private func canPush(_ stack: Stack) -> Bool {
         guard !(self.stack + stack).hasDuplicates else { return false }
         return true

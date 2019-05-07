@@ -22,7 +22,7 @@ class TransitionHandler {
     private var animationController: UIViewControllerAnimatedTransitioning?
     private var interactionController: UIViewControllerInteractiveTransitioning?
 
-    init(transition: Transition, stackViewControllerDelegate: StackViewControllerDelegate?) {
+    init(transition: Transition, stackViewControllerDelegate: StackViewControllerDelegate?, screenEdgeGestureRecognizer: UIScreenEdgePanGestureRecognizer? = nil) {
         self.transition = transition
         self.stackViewControllerDelegate = stackViewControllerDelegate
         context = TransitionContext(transition: transition, in: transition.containerView)
@@ -40,6 +40,9 @@ class TransitionHandler {
                 self.interactionController = InteractivePopAnimator(animationController: animationController)
             }
         }
+
+        let selector = #selector(screenEdgeGestureRecognizerDidChangeState(_:))
+        screenEdgeGestureRecognizer?.addTarget(self, action: selector)
 
         context.onTransitionFinished = { [weak self] didComplete in
             self?.animationController?.animationEnded?(didComplete)
@@ -82,5 +85,22 @@ class TransitionHandler {
             return
         }
         interactionController.stopInteractiveTransition(gestureRecognizer)
+    }
+
+    @objc
+    func screenEdgeGestureRecognizerDidChangeState(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        switch recognizer.state {
+        case .changed:
+            updateInteractiveTransition(recognizer)
+        case .cancelled:
+            cancelInteractiveTransition()
+        case .ended:
+            stopInteractiveTransition(recognizer)
+        case .possible, .failed, .began:
+            break
+        @unknown default:
+            assertionFailure()
+        }
+
     }
 }

@@ -156,6 +156,10 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 // MARK: - StackInteractorDelegate
 
 extension StackViewController: StackInteractorDelegate {
+    func didAddStackElements(_ additions: Stack) {
+        additions.forEach { addChild($0) }
+        additions.dropLast().forEach { $0.didMove(toParent: self) }
+    }
 
     func didReplaceStack(oldStack: Stack, with newStack: Stack) {
         removeChildren(oldStack)

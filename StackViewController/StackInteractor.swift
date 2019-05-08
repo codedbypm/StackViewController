@@ -33,6 +33,10 @@ class StackInteractor: ExceptionThrowing {
         self.stack = stack
     }
 
+    func push(_ viewController: UIViewController, animated: Bool) {
+        push([viewController], animated: animated)
+    }
+    
     func push(_ stack: Stack, animated: Bool) {
         guard canPush(stack) else { return }
 

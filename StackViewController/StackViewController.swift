@@ -144,6 +144,8 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
         interactor.setStack(stack, animated: animated)
     }
 
+    // MARK: - Actions
+
     @objc private func screenEdgeGestureRecognizerDidChangeState(_
         gestureRecognizer: ScreenEdgePanGestureRecognizer) {        
 
@@ -153,6 +155,26 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
         interactor.pop(animated: true, interactive: true)
     }
 }
+
+// MARK: - StackInteractorDelegate
+
+extension StackViewController: StackInteractorDelegate {
+
+    func didReplaceStack(oldStack: Stack, with newStack: Stack) {
+        removeChildren(oldStack)
+        addChildren(newStack)
+    }
+
+    func didCreateTransition(_ transition: Transition) {
+        assert(transitionHandler == nil)
+
+        transitionHandler = TransitionHandler(transition: transition, stackViewControllerDelegate: delegate, screenEdgeGestureRecognizer: screenEdgePanGestureRecognizer)
+        transitionHandler?.delegate = self
+        transitionHandler?.performTransition()
+    }
+}
+
+// MARK: - TransitionHandlerDelegate
 
 extension StackViewController: TransitionHandlerDelegate {
 
@@ -177,42 +199,10 @@ extension StackViewController: TransitionHandlerDelegate {
     }
 }
 
-extension StackViewController: StackInteractorDelegate {
-    
-    func didReplaceStack(oldStack: Stack, with newStack: Stack) {
-        removeChildren(oldStack)
-        addChildren(newStack)
-    }
-
-    func didCreateTransition(_ transition: Transition) {
-        assert(transitionHandler == nil)
-
-        transitionHandler = TransitionHandler(transition: transition, stackViewControllerDelegate: delegate, screenEdgeGestureRecognizer: screenEdgePanGestureRecognizer)
-        transitionHandler?.delegate = self
-        transitionHandler?.performTransition()
-    }
-}
+// MARK: - Contaiment and Appearance events
 
 private extension StackViewController {
 
-    func sendInitialViewAppearanceEvents(for transition: Transition, swapElements: Bool = false) {
-        let isAnimated = transition.isAnimated
-
-        let from = (swapElements ? transition.to : transition.from)
-        let to = (swapElements ? transition.from : transition.to)
-
-        from?.beginAppearanceTransition(false, animated: isAnimated)
-        to?.beginAppearanceTransition(true, animated: isAnimated)
-    }
-
-    func sendFinalViewAppearanceEvents(for transition: Transition) {
-        transition.from?.endAppearanceTransition()
-        transition.to?.endAppearanceTransition()
-    }
-}
-
-private extension StackViewController {
-    
     func sendInitialViewControllerContainmentEvents(for transition: Transition) {
         switch transition.operation {
         case .pop:
@@ -230,6 +220,21 @@ private extension StackViewController {
         case .push:
             transition.to?.didMove(toParent: self)
         }
+    }
+
+    func sendInitialViewAppearanceEvents(for transition: Transition, swapElements: Bool = false) {
+        let isAnimated = transition.isAnimated
+
+        let from = (swapElements ? transition.to : transition.from)
+        let to = (swapElements ? transition.from : transition.to)
+
+        from?.beginAppearanceTransition(false, animated: isAnimated)
+        to?.beginAppearanceTransition(true, animated: isAnimated)
+    }
+
+    func sendFinalViewAppearanceEvents(for transition: Transition) {
+        transition.from?.endAppearanceTransition()
+        transition.to?.endAppearanceTransition()
     }
 }
 

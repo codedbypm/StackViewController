@@ -17,7 +17,7 @@ class StackCoordinator {
         var first: BaseViewController = UIViewController.stacked(on: nil,
                                                                  delegate: self,
                                                                  color: .yellow)
-        let stackViewController = StackViewController(viewControllers: [first])
+        let stackViewController = StackViewController(viewControllers: [])
         first.stack = stackViewController
 
         stackViewController.debugDelegate = self

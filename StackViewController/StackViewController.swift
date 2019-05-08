@@ -92,7 +92,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
         super.viewDidAppear(animated)
         topViewController?.endAppearanceTransition()
         topViewController?.didMove(toParent: self)
-        debugEndTransition()
+        debugTransitionEnded()
     }
 
     override public func viewWillDisappear(_ animated: Bool) {
@@ -164,7 +164,7 @@ extension StackViewController: StackInteractorDelegate {
     }
 
     func didCreateTransition(_ transition: Transition) {
-        debugStartTransition()
+        debugTransitionStarted()
         assert(transitionHandler == nil)
 
         transitionHandler = TransitionHandler(
@@ -199,11 +199,11 @@ extension StackViewController: TransitionHandlerDelegate {
         }
 
         transitionHandler = nil
-        debugEndTransition()
+        debugTransitionEnded()
     }
 }
 
-// MARK: - Contaiment and Appearance events
+// MARK: - Containment and Appearance events
 
 private extension StackViewController {
 

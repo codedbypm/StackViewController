@@ -20,7 +20,7 @@ class UIKitCoordinator: NSObject {
         let root = UIViewController.stacked(on: navController,
                                             delegate: self,
                                             color: .yellow)
-        navController.viewControllers = [root]
+//        navController.viewControllers = [root]
         navController.delegate = navController
         navController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
         navController.viewControllers = [

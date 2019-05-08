@@ -10,32 +10,28 @@ import Foundation
 
 extension StackViewController {
 
-    func debugStartTransition() {
+    func debug(_ text: String) {
         print(
             """
 
-            =========== Transition started ===========
+            =========== \(text) ===========
             """
         )
     }
 
-    func debugWillSetStack() {
-        print(
-            """
-            =========== willSet Stack ===========
-            """
-        )
+    func debugTransitionStarted() { debug("Transition started") }
+    func debugTransitionEnded() {
+        debug("Transition ended")
+        debugRecap()
     }
 
-    func debugEndTransition() {
+    func debugRecap() {
         print(
             """
 
-            =========== Transition completed ===========
             Stack \(viewControllers.isEmpty ? "is empty" : "contains \(viewControllers.count) view controllers")
             StackViewControllers has \(children.isEmpty ? "no child" : "\(children.count) children")
             TopViewController is \(topViewController == nil ? "nil" : "\(String(describing: topViewController!))")
-
             """
         )
     }

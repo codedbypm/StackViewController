@@ -1,5 +1,5 @@
 //
-//  StackHandlerTests.swift
+//  StackInteractorTests.swift
 //  StackViewControllerTests
 //
 //  Created by Paolo Moroni on 03/05/2019.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import StackViewController
 
-class StackHandlerTests: XCTestCase {
+class StackInteractorTests: XCTestCase {
     var sut: StackHandler!
 
     override func setUp() {

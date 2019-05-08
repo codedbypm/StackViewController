@@ -59,7 +59,6 @@ class StackInteractor: ExceptionThrowing {
         let to = stack.last
 
         self.stack.append(contentsOf: stack)
-        delegate?.didAddStackElements(stack)
 
         let transition = Transition(operation: .push,
                                     from: from,

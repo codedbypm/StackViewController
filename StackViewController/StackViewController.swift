@@ -165,6 +165,10 @@ extension StackViewController: StackInteractorDelegate {
         removals.forEach { $0.willMove(toParent: nil) }
         removals.dropFirst().forEach { $0.removeFromParent() }
     }
+
+    func didReplaceStack(_ oldStack: Stack, with newStack: Stack) {
+        didRemoveStackElements(oldStack)
+        didAddStackElements(newStack)
     }
 
     func didCreateTransition(_ transition: Transition) {

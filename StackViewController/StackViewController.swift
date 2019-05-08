@@ -47,9 +47,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 
     // MARK: - Private properties
 
-    var viewControllerWrapperView: UIView {
-        return interactor.viewControllerWrapperView
-    }
+    private var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
     internal var interactor: StackInteractor
 

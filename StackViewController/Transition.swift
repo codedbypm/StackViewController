@@ -12,7 +12,6 @@ struct Transition {
     let operation: StackViewController.Operation
     let from: UIViewController?
     let to: UIViewController?
-    let containerView: UIView
     let isAnimated: Bool
     let isInteractive: Bool
     var undo: (() -> Void)?
@@ -20,7 +19,6 @@ struct Transition {
     init(operation: StackViewController.Operation,
          from: UIViewController?,
          to: UIViewController?,
-         containerView: UIView,
          animated: Bool = true,
          interactive: Bool = false,
          undo: (() -> Void)? = nil) {
@@ -28,7 +26,6 @@ struct Transition {
         self.operation = operation
         self.from = from
         self.to = to
-        self.containerView = containerView
         self.isAnimated = animated
         self.isInteractive = interactive
         self.undo = undo

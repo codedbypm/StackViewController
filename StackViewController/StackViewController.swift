@@ -166,7 +166,12 @@ extension StackViewController: StackInteractorDelegate {
     func didCreateTransition(_ transition: Transition) {
         assert(transitionHandler == nil)
 
-        transitionHandler = TransitionHandler(transition: transition, stackViewControllerDelegate: delegate, screenEdgeGestureRecognizer: screenEdgePanGestureRecognizer)
+        transitionHandler = TransitionHandler(
+            transition: transition,
+            containerView: viewControllerWrapperView,
+            stackViewControllerDelegate: delegate,
+            screenEdgeGestureRecognizer: screenEdgePanGestureRecognizer
+        )
         transitionHandler?.delegate = self
         transitionHandler?.performTransition()
     }

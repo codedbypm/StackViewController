@@ -30,12 +30,13 @@ class TransitionHandler {
     // MARK: - Init
 
     init(transition: Transition,
+         containerView: UIView,
          stackViewControllerDelegate: StackViewControllerDelegate?,
          screenEdgeGestureRecognizer: ScreenEdgePanGestureRecognizer?
     ) {
         self.transition = transition
         self.stackViewControllerDelegate = stackViewControllerDelegate
-        self.context = TransitionContext(transition: transition, in: transition.containerView)
+        self.context = TransitionContext(transition: transition, in: containerView)
 
         if let from = transition.from, let to = transition.to, let animatioController = stackViewControllerDelegate?.animationController(for: transition.operation, from: from, to: to) {
             self.animationController = animatioController

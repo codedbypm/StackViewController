@@ -18,7 +18,6 @@ protocol StackInteractorDelegate: class {
 class StackInteractor: ExceptionThrowing {
 
     weak var delegate: StackInteractorDelegate?
-    lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
     private(set) var stack = Stack()
     private var lastTransition: Transition?
@@ -45,7 +44,6 @@ class StackInteractor: ExceptionThrowing {
         let transition = Transition(operation: .push,
                                     from: from,
                                     to: to,
-                                    containerView: viewControllerWrapperView,
                                     animated: animated,
                                     undo: { self.stack.removeLast() })
         lastTransition = transition
@@ -83,7 +81,6 @@ class StackInteractor: ExceptionThrowing {
         let transition = Transition(operation: .pop,
                                     from: from,
                                     to: to,
-                                    containerView: viewControllerWrapperView,
                                     animated: animated,
                                     interactive: interactive,
                                     undo: { self.stack.append(contentsOf: poppedElements) })
@@ -122,7 +119,6 @@ class StackInteractor: ExceptionThrowing {
         let transition = Transition(operation: operation,
                                     from: from,
                                     to: to,
-                                    containerView: viewControllerWrapperView,
                                     animated: animated,
                                     undo: { self.stack = oldStack })
         lastTransition = transition

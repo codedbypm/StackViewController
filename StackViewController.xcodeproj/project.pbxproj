@@ -245,9 +245,9 @@
 				FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */,
 				FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */,
 				FD76B7622270DA340090EDB2 /* StackViewController+Extensions.swift */,
+				FD1B56F8227C525B00E005EC /* StackInteractorTests.swift */,
 				FD76B7042270C9530090EDB2 /* Info.plist */,
 				FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */,
-				FD1B56F8227C525B00E005EC /* StackInteractorTests.swift */,
 			);
 			path = StackViewControllerTests;
 			sourceTree = "<group>";

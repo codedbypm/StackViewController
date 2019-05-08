@@ -10,10 +10,10 @@ import XCTest
 @testable import StackViewController
 
 class StackInteractorTests: XCTestCase {
-    var sut: StackHandler!
+    var sut: StackInteractor!
 
     override func setUp() {
-
+        sut = StackInteractor(stack: StackViewController.knownViewControllers)
     }
 
     override func tearDown() {
@@ -22,24 +22,23 @@ class StackInteractorTests: XCTestCase {
     }
 
 
-    // MARK: - init(stack:)
+     // MARK: - init(stack:)
 
-//    func testThat_whenPassingAStackContainingDuplicates_initThrowsErrorDuplicateViewControllers() {
-//        // Arrange
-//        let viewController = UIViewController()
-//        let stack = [viewController, viewController]
-//
-//        // Act
-//
-//        // Assert
-//
-//        XCTAssertThrows((StackHandler(stack: stack)), "") { error in
-//            guard let stackError = error as? StackViewControllerError else {
-//                XCTFail("Wrong error type: expected \(StackViewControllerError.self), but got \(type(of: error))")
-//                return
-//            }
-//
-//            XCTAssertEqual(stackError, StackViewControllerError.duplicateViewControllers)
-//        }
-//    }
+    func testThat_whenPassingAStackContainingDuplicates_initThrowsErrorDuplicateViewControllers() {
+        // Arrange
+        let viewController = UIViewController()
+        let stack = [viewController, viewController]
+
+        // Act
+        sut = StackInteractor(stack: stack)
+
+        // Assert
+
+        XCTAssertThrowsError(
+            sut = StackInteractor(stack: stack),
+            "StackInteractor init should throw when passing a stack containing duplicate elements as its input"
+        ) { error in
+            XCTAssertEqual(error as? StackViewControllerError, StackViewControllerError.duplicateViewControllers)
+        }
+    }
 }

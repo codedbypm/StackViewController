@@ -11,7 +11,9 @@ import Foundation
 public typealias Stack = [UIViewController]
 
 protocol StackInteractorDelegate: class {
-    func didReplaceStack(oldStack: Stack, with newStack: Stack)
+    func didAddStackElements(_: Stack)
+    func didRemoveStackElements(_: Stack)
+    func didReplaceStack(_ oldStack: Stack, with newStack: Stack)
     func didCreateTransition(_: Transition)
 }
 
@@ -36,7 +38,7 @@ class StackInteractor: ExceptionThrowing {
     func push(_ viewController: UIViewController, animated: Bool) {
         push([viewController], animated: animated)
     }
-    
+
     func push(_ stack: Stack, animated: Bool) {
         guard canPush(stack) else { return }
 
@@ -44,6 +46,7 @@ class StackInteractor: ExceptionThrowing {
         let to = stack.last
 
         self.stack.append(contentsOf: stack)
+        delegate?.didAddStackElements(stack)
 
         let transition = Transition(operation: .push,
                                     from: from,
@@ -78,9 +81,10 @@ class StackInteractor: ExceptionThrowing {
 
         let from = topViewController
         let to = stack[index]
-        let poppedElements = stack.suffix(poppedCount)
+        let poppedElements = Array(stack.suffix(poppedCount))
 
         stack.removeLast(poppedCount)
+        delegate?.didRemoveStackElements(poppedElements)
 
         let transition = Transition(operation: .pop,
                                     from: from,
@@ -118,8 +122,8 @@ class StackInteractor: ExceptionThrowing {
 
         let oldStack = stack
         stack = newStack
-        delegate?.didReplaceStack(oldStack: oldStack, with: newStack)
-        
+        delegate?.didReplaceStack(oldStack, with: newStack)
+
         let transition = Transition(operation: operation,
                                     from: from,
                                     to: to,

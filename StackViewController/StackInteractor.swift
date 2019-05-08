@@ -8,16 +8,16 @@
 
 import Foundation
 
-protocol StackViewModelDelegate: class {
+public typealias Stack = [UIViewController]
+
+protocol StackInteractorDelegate: class {
     func didReplaceStack(oldStack: Stack, with newStack: Stack)
     func didCreateTransition(_: Transition)
 }
 
-public typealias Stack = [UIViewController]
-
 class StackInteractor: ExceptionThrowing {
 
-    weak var delegate: StackViewModelDelegate?
+    weak var delegate: StackInteractorDelegate?
     lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
     private(set) var stack = Stack()

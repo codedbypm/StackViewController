@@ -177,13 +177,12 @@ extension StackViewController: TransitionHandlerDelegate {
     }
 }
 
-extension StackViewController: StackViewModelDelegate {
+extension StackViewController: StackInteractorDelegate {
     
     func didReplaceStack(oldStack: Stack, with newStack: Stack) {
         removeChildren(oldStack)
         addChildren(newStack)
     }
-
 
     func didCreateTransition(_ transition: Transition) {
         assert(transitionHandler == nil)

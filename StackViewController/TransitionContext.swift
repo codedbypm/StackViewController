@@ -48,7 +48,11 @@ class TransitionContext: NSObject, UIViewControllerContextTransitioning {
     }
 
     deinit {
-        print(#function)
+        print("\(String(describing: self)): \(#function)")
+    }
+
+    public override var description: String {
+        return String(describing: type(of: self))
     }
 
     func setViewController(_ viewController: UIViewController?,

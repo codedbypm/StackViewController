@@ -30,6 +30,14 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
         super.init()
     }
 
+    deinit {
+        print("\(String(describing: self)): \(#function)")
+    }
+
+    public override var description: String {
+        return String(describing: type(of: self))
+    }
+
     // MARK: - UIViewControllerInteractiveTransitioning
 
     public func startInteractiveTransition(_ context: UIViewControllerContextTransitioning) {

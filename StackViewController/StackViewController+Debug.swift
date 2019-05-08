@@ -10,6 +10,15 @@ import Foundation
 
 extension StackViewController {
 
+    func debugStartTransition() {
+        print(
+            """
+
+            =========== Transition started ===========
+            """
+        )
+    }
+
     func debugWillSetStack() {
         print(
             """

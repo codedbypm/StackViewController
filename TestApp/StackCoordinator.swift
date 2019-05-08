@@ -22,11 +22,11 @@ class StackCoordinator {
 
         stackViewController.debugDelegate = self
         stackViewController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
-//        stackViewController.viewControllers = [
-//            UIViewController.stacked(on: stackViewController, delegate: self, color: .black),
-//            UIViewController.stacked(on: stackViewController, delegate: self, color: .red),
-//            UIViewController.stacked(on: stackViewController, delegate: self, color: .green),
-//        ]
+        stackViewController.viewControllers = [
+            UIViewController.stacked(on: stackViewController, delegate: self, color: .black),
+            UIViewController.stacked(on: stackViewController, delegate: self, color: .red),
+            UIViewController.stacked(on: stackViewController, delegate: self, color: .green),
+        ]
         return stackViewController
     }()
 }

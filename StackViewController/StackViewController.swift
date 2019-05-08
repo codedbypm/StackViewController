@@ -164,6 +164,7 @@ extension StackViewController: StackInteractorDelegate {
     }
 
     func didCreateTransition(_ transition: Transition) {
+        debugStartTransition()
         assert(transitionHandler == nil)
 
         transitionHandler = TransitionHandler(

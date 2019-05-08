@@ -23,6 +23,11 @@ class UIKitCoordinator: NSObject {
         navController.viewControllers = [root]
         navController.delegate = navController
         navController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
+        navController.viewControllers = [
+            UIViewController.stacked(on: navController, delegate: self, color: .black),
+            UIViewController.stacked(on: navController, delegate: self, color: .red),
+            UIViewController.stacked(on: navController, delegate: self, color: .green),
+        ]
         return navController
     }()
 

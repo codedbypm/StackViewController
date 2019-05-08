@@ -22,7 +22,11 @@ public class Animator: NSObject, UIViewControllerAnimatedTransitioning {
     private var propertyAnimator: UIViewPropertyAnimator?
 
     deinit {
-        print(#function)
+        print("\(String(describing: self)): \(#function)")
+    }
+
+    public override var description: String {
+        return String(describing: type(of: self))
     }
 
     // MARK: - UIViewControllerAnimatedTransitioning

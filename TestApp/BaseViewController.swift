@@ -35,7 +35,6 @@ enum Color: String, CaseIterable {
         switch self {
         case .red, .yellow, .magenta, .green : return .darkText
         case .blue, .black, .gray: return .lightText
-
         }
     }
 

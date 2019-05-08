@@ -19,12 +19,19 @@ protocol StackInteractorDelegate: class {
 
 class StackInteractor: ExceptionThrowing {
 
+    // MARK: - Internal properties
+
     weak var delegate: StackInteractorDelegate?
 
+    var topViewController: UIViewController? { return stack.last }
+
+    // MARK: - Private properties
+
     private(set) var stack = Stack()
+
     private var lastTransition: Transition?
 
-    var topViewController: UIViewController? { return stack.last }
+    // MARK: - Init
 
     init(stack: Stack) {
         guard !stack.hasDuplicates else {
@@ -34,6 +41,8 @@ class StackInteractor: ExceptionThrowing {
 
         self.stack = stack
     }
+
+    // MARK: - Internal methods
 
     func push(_ viewController: UIViewController, animated: Bool) {
         push([viewController], animated: animated)
@@ -72,6 +81,43 @@ class StackInteractor: ExceptionThrowing {
         return popToViewController(at: index, animated: animated)
     }
 
+    func setStack(_ newStack: Stack, animated: Bool) {
+        guard canReplaceStack(with: newStack) else { return }
+
+        let from = topViewController
+        let to = newStack.last
+        let operation: StackViewController.Operation
+
+        if let to = to {
+            if stack.contains(to) {
+                operation = .pop
+            } else {
+                operation = .push
+            }
+        } else {
+            if from != nil {
+                operation = .pop
+            } else {
+                return
+                //                operation = .none
+            }
+        }
+
+        let oldStack = stack
+        stack = newStack
+        delegate?.didReplaceStack(oldStack, with: newStack)
+
+        let transition = Transition(operation: operation,
+                                    from: from,
+                                    to: to,
+                                    animated: animated,
+                                    undo: { self.stack = oldStack })
+        lastTransition = transition
+        delegate?.didCreateTransition(transition)
+    }
+
+    // MARK: - Private methods
+
     @discardableResult
     private func popToViewController(at index: Int,
                                      animated: Bool,
@@ -96,41 +142,6 @@ class StackInteractor: ExceptionThrowing {
         lastTransition = transition
         delegate?.didCreateTransition(transition)
         return Array(poppedElements)
-    }
-
-    func setStack(_ newStack: Stack, animated: Bool) {
-        guard canReplaceStack(with: newStack) else { return }
-
-        let from = topViewController
-        let to = newStack.last
-        let operation: StackViewController.Operation
-
-        if let to = to {
-            if stack.contains(to) {
-                operation = .pop
-            } else {
-                operation = .push
-            }
-        } else {
-            if from != nil {
-                operation = .pop
-            } else {
-                return
-//                operation = .none
-            }
-        }
-
-        let oldStack = stack
-        stack = newStack
-        delegate?.didReplaceStack(oldStack, with: newStack)
-
-        let transition = Transition(operation: operation,
-                                    from: from,
-                                    to: to,
-                                    animated: animated,
-                                    undo: { self.stack = oldStack })
-        lastTransition = transition
-        delegate?.didCreateTransition(transition)
     }
 
     private func canPush(_ stack: Stack) -> Bool {

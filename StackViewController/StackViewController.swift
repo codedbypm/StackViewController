@@ -60,7 +60,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
         super.init(nibName: nil, bundle: nil)
 
         interactor.delegate = self
-        addChildren(viewControllers)
+        viewControllers.forEach { addChild($0) }
     }
 
     public required init?(coder aDecoder: NSCoder) {

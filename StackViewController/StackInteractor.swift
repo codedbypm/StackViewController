@@ -14,6 +14,8 @@ protocol StackInteractorDelegate: class {
     func didAddStackElements(_: Stack)
     func didRemoveStackElements(_: Stack)
     func didReplaceStack(_ oldStack: Stack, with newStack: Stack)
+
+    func stackDidChange(_ change: CollectionDifference<Stack.Element>)
     func didCreateTransition(_: Transition)
 }
 

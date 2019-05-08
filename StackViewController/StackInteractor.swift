@@ -34,11 +34,8 @@ class StackInteractor: ExceptionThrowing {
     // MARK: - Init
 
     init(stack: Stack) {
-        guard !stack.hasDuplicates else {
-            throwError(.duplicateViewControllers, userInfo: ["stack": stack])
-            return
-        }
-
+        //TODO: handle this guard in a better way
+        guard !stack.hasDuplicates else { return }
         self.stack = stack
     }
 

@@ -29,7 +29,12 @@ class StackInteractor: ExceptionThrowing {
 
     // MARK: - Private properties
 
-    private(set) var stack = Stack()
+    private(set) var stack = Stack() {
+        didSet {
+            let difference = stack.difference(from: oldValue)
+            delegate?.stackDidChange(difference)
+        }
+    }
 
     private var lastTransition: Transition?
 

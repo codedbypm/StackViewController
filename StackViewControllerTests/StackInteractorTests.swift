@@ -11,9 +11,13 @@ import XCTest
 
 class StackInteractorTests: XCTestCase {
     var sut: StackInteractor!
+    var interactorDelegate: InteractorDelegate!
 
     override func setUp() {
+        interactorDelegate = InteractorDelegate()
+
         sut = StackInteractor(stack: StackViewController.knownViewControllers)
+        sut.delegate = interactorDelegate
     }
 
     override func tearDown() {
@@ -48,9 +52,6 @@ class StackInteractorTests: XCTestCase {
 
     func testThat_whenPushingAViewController_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheCollectionDifferenceAsInput() {
         // Arrange
-        let interactorDelegate = InteractorDelegate()
-        sut.delegate = interactorDelegate
-
         let currentStack = sut.stack
         let pushedViewController = UIViewController()
         let insertions: [CollectionDifference<Stack.Element>.Change] = [
@@ -96,9 +97,6 @@ class StackInteractorTests: XCTestCase {
 
     func testThat_whenPushingAValidStack_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheCollectionDifferenceAsInput() {
         // Arrange
-        let interactorDelegate = InteractorDelegate()
-        sut.delegate = interactorDelegate
-
         let currentStack = sut.stack
         let pushedViewController = UIViewController()
         let insertions: [CollectionDifference<Stack.Element>.Change] = [
@@ -144,9 +142,6 @@ class StackInteractorTests: XCTestCase {
 
     func testThat_whenPoppingAViewController_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheCollectionDifferenceAsInput() {
         // Arrange
-        let interactorDelegate = InteractorDelegate()
-        sut.delegate = interactorDelegate
-
         let currentStack = sut.stack
         guard let poppedViewController = currentStack.last else {
             XCTFail("The stack should contain at least 2 view controllers")
@@ -196,9 +191,6 @@ class StackInteractorTests: XCTestCase {
 
     func testThat_whenPoppingToRoot_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheCollectionDifferenceAsInput() {
         // Arrange
-        let interactorDelegate = InteractorDelegate()
-        sut.delegate = interactorDelegate
-
         let currentStack = sut.stack
         let poppedViewControllers = Array(currentStack.suffix(2))
         let removals: [CollectionDifference<Stack.Element>.Change] = [
@@ -246,9 +238,6 @@ class StackInteractorTests: XCTestCase {
 
     func testThat_whenPoppingToAViewControllerAlreadyOnTheStack_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheCollectionDifferenceAsInput() {
         // Arrange
-        let interactorDelegate = InteractorDelegate()
-        sut.delegate = interactorDelegate
-
         let currentStack = sut.stack
         let targetViewController = StackViewController.knwownViewControllerB
         let poppedViewControllers = Array(currentStack.suffix(1))

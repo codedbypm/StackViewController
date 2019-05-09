@@ -142,6 +142,18 @@ class StackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.stack, currentStack.dropLast())
     }
 
+    func testThat_whenTheStackContainsOnlyOneElement_whenPoppingAViewController_theCurrentStackIsNotChangedAndTheMethodReturnsNil() {
+        // Arrange
+        let oneElementStack = [StackViewController.knwownViewControllerA]
+        sut = StackInteractor(stack: oneElementStack)
+
+        // Act
+        let poppedViewController = sut.pop(animated: true)
+
+        // Assert
+        XCTAssertNil(poppedViewController)
+        XCTAssertEqual(sut.stack, oneElementStack)
+    }
 }
 
 

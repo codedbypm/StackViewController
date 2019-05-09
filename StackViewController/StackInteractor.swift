@@ -75,6 +75,7 @@ class StackInteractor: ExceptionThrowing {
         return popToViewController(at: index, animated: animated, interactive: interactive).first
     }
 
+    @discardableResult
     func popToRoot(animated: Bool) -> Stack {
         return popToViewController(at: stack.startIndex, animated: animated)
     }

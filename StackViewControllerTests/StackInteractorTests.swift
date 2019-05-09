@@ -179,6 +179,59 @@ class StackInteractorTests: XCTestCase {
         XCTAssertNil(poppedViewController)
         XCTAssertEqual(sut.stack, oneElementStack)
     }
+
+    // MARK: - popToRoot(animated: Bool) -> Stack
+
+    func testThat_whenPoppingToRoot_allElementsAfterRootAreRemovedFromTheCurrentStackAndReturnedToTheCaller() {
+        // Arrange
+        let currentStack = sut.stack
+
+        // Act
+        let poppedViewControllers = sut.popToRoot(animated: true)
+
+        // Assert
+        XCTAssertEqual(poppedViewControllers, Array(currentStack.dropFirst()))
+        XCTAssertEqual(sut.stack, [currentStack.first])
+    }
+
+    func testThat_whenPoppingToRoot_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheCollectionDifferenceAsInput() {
+        // Arrange
+        let interactorDelegate = InteractorDelegate()
+        sut.delegate = interactorDelegate
+
+        let currentStack = sut.stack
+        let poppedViewControllers = Array(currentStack.suffix(2))
+        let removals: [CollectionDifference<Stack.Element>.Change] = [
+            .remove(offset: (currentStack.endIndex - 1), element: poppedViewControllers[1], associatedWith: nil),
+            .remove(offset: (currentStack.endIndex - 2), element: poppedViewControllers[0], associatedWith: nil)
+        ]
+        let expectedDifference = CollectionDifference<UIViewController>.init(removals)
+
+        // Act
+        sut.popToRoot(animated: true)
+
+        // Assert
+
+        XCTAssertTrue(sut.delegate === interactorDelegate)
+        XCTAssertTrue(interactorDelegate.didCallStackDidChange)
+        XCTAssertEqual(interactorDelegate.change, expectedDifference)
+    }
+
+    func testThat_whenTheStackContainsOnlyOneElement_whenPoppingToRoot_theCurrentStackIsNotChangedAndTheMethodReturnsEmptyArray() {
+        // Arrange
+        let oneElementStack = [StackViewController.knwownViewControllerA]
+        sut = StackInteractor(stack: oneElementStack)
+
+        // Act
+        let poppedViewControllers = sut.popToRoot(animated: true)
+
+        // Assert
+        XCTAssertTrue(poppedViewControllers.isEmpty)
+        XCTAssertEqual(sut.stack, oneElementStack)
+    }
+    
+    // MARK: - popTo(_: UIViewController, animated: Bool, interactive: Bool) -> Stack
+
 }
 
 

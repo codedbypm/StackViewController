@@ -142,6 +142,31 @@ class StackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.stack, currentStack.dropLast())
     }
 
+    func testThat_whenPoppingAViewController_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheCollectionDifferenceAsInput() {
+        // Arrange
+        let interactorDelegate = InteractorDelegate()
+        sut.delegate = interactorDelegate
+
+        let currentStack = sut.stack
+        guard let poppedViewController = currentStack.last else {
+            XCTFail("The stack should contain at least 2 view controllers")
+            return
+        }
+        let removals: [CollectionDifference<Stack.Element>.Change] = [
+            .remove(offset: (currentStack.endIndex - 1), element: poppedViewController, associatedWith: nil)
+        ]
+        let expectedDifference = CollectionDifference<UIViewController>.init(removals)
+
+        // Act
+        sut.pop(animated: true)
+
+        // Assert
+
+        XCTAssertTrue(sut.delegate === interactorDelegate)
+        XCTAssertTrue(interactorDelegate.didCallStackDidChange)
+        XCTAssertEqual(interactorDelegate.change, expectedDifference)
+    }
+
     func testThat_whenTheStackContainsOnlyOneElement_whenPoppingAViewController_theCurrentStackIsNotChangedAndTheMethodReturnsNil() {
         // Arrange
         let oneElementStack = [StackViewController.knwownViewControllerA]

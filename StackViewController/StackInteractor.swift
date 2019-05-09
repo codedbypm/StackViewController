@@ -154,7 +154,7 @@ class StackInteractor: ExceptionThrowing {
         return true
     }
 
-    func canPopLast(_ count: Int) -> Bool {
+    private func canPopLast(_ count: Int) -> Bool {
         guard (1..<stack.count).contains(count) else { return false }
         return true
     }
@@ -165,6 +165,7 @@ class StackInteractor: ExceptionThrowing {
         return true
     }
 
+    //TODO: make this private?
     func canPopViewControllerInteractively() -> Bool {
         guard canPopLast(1) else { return false }
         return true

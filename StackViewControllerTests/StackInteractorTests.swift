@@ -211,7 +211,6 @@ class StackInteractorTests: XCTestCase {
         sut.popToRoot(animated: true)
 
         // Assert
-
         XCTAssertTrue(sut.delegate === interactorDelegate)
         XCTAssertTrue(interactorDelegate.didCallStackDidChange)
         XCTAssertEqual(interactorDelegate.change, expectedDifference)
@@ -232,6 +231,52 @@ class StackInteractorTests: XCTestCase {
     
     // MARK: - popTo(_: UIViewController, animated: Bool, interactive: Bool) -> Stack
 
+    func testThat_whenPoppingToAViewControllerAlreadyOnTheStack_allElementsAfterThatViewControllerAreRemovedFromTheCurrentStackAndReturnedToTheCaller() {
+        // Arrange
+        let currentStack = sut.stack
+        let targetViewController = StackViewController.knwownViewControllerB
+
+        // Act
+        let poppedViewControllers = sut.popTo(targetViewController, animated: true)
+
+        // Assert
+        XCTAssertEqual(poppedViewControllers, Array(currentStack.dropFirst(2)))
+        XCTAssertEqual(sut.stack, currentStack.dropLast())
+    }
+
+    func testThat_whenPoppingToAViewControllerAlreadyOnTheStack_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheCollectionDifferenceAsInput() {
+        // Arrange
+        let interactorDelegate = InteractorDelegate()
+        sut.delegate = interactorDelegate
+
+        let currentStack = sut.stack
+        let targetViewController = StackViewController.knwownViewControllerB
+        let poppedViewControllers = Array(currentStack.suffix(1))
+        let removals: [CollectionDifference<Stack.Element>.Change] = [
+            .remove(offset: (currentStack.endIndex - 1), element: poppedViewControllers[0], associatedWith: nil),
+        ]
+        let expectedDifference = CollectionDifference<UIViewController>.init(removals)
+
+        // Act
+        sut.popTo(targetViewController, animated: true)
+
+        // Assert
+        XCTAssertTrue(sut.delegate === interactorDelegate)
+        XCTAssertTrue(interactorDelegate.didCallStackDidChange)
+        XCTAssertEqual(interactorDelegate.change, expectedDifference)
+    }
+
+    func testThat_whenPoppingToAViewControllerWhichIsNotOnTheStack_theCurrentStackIsNotChangedAndTheMethodReturnsEmptyArray() {
+        // Arrange
+        let targetViewController = UIViewController()
+
+        // Act
+        let poppedViewControllers = sut.popTo(targetViewController, animated: true)
+
+        // Assert
+        XCTAssertTrue(poppedViewControllers.isEmpty)
+        XCTAssertEqual(sut.stack, StackViewController.knownViewControllers)
+    }
 }
 
 

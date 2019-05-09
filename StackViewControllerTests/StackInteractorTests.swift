@@ -127,6 +127,21 @@ class StackInteractorTests: XCTestCase {
         // Assert
         XCTAssertEqual(sut.stack, currentStack)
     }
+
+    // MARK: - pop(animated:, interactive: Bool) -> UIViewController?
+
+    func testThat_whenPoppingAViewController_thisIsRemovedFromTheCurrentStackAndReturnedToTheCaller() {
+        // Arrange
+        let currentStack = sut.stack
+
+        // Act
+        let poppedViewController = sut.pop(animated: true)
+
+        // Assert
+        XCTAssertTrue(poppedViewController === currentStack.last)
+        XCTAssertEqual(sut.stack, currentStack.dropLast())
+    }
+
 }
 
 
@@ -137,5 +152,4 @@ extension StackInteractorDelegate {
 
     func stackDidChange(_ change: CollectionDifference<Stack.Element>) {}
     func didCreateTransition(_: Transition) {}
-
 }

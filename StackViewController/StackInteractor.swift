@@ -61,18 +61,7 @@ class StackInteractor: ExceptionThrowing {
     func push(_ stack: Stack, animated: Bool) {
         guard canPush(stack) else { return }
 
-        let from = topViewController
-        let to = stack.last
-
         self.stack.append(contentsOf: stack)
-
-        let transition = Transition(operation: .push,
-                                    from: from,
-                                    to: to,
-                                    animated: animated,
-                                    undo: { self.stack.removeLast() })
-        lastTransition = transition
-        delegate?.didCreateTransition(transition)
     }
 
     @discardableResult
@@ -110,21 +99,11 @@ class StackInteractor: ExceptionThrowing {
                 operation = .pop
             } else {
                 return
-                //                operation = .none
             }
         }
 
         let oldStack = stack
         stack = newStack
-        delegate?.didReplaceStack(oldStack, with: newStack)
-
-        let transition = Transition(operation: operation,
-                                    from: from,
-                                    to: to,
-                                    animated: animated,
-                                    undo: { self.stack = oldStack })
-        lastTransition = transition
-        delegate?.didCreateTransition(transition)
     }
 
     // MARK: - Private methods
@@ -136,23 +115,10 @@ class StackInteractor: ExceptionThrowing {
         let poppedCount = stack.endIndex - (index + 1)
         guard canPopLast(poppedCount) else { return [] }
 
-        let from = topViewController
-        let to = stack[index]
         let poppedElements = Array(stack.suffix(poppedCount))
-
         stack.removeLast(poppedCount)
-        delegate?.didRemoveStackElements(poppedElements)
-
-        let transition = Transition(operation: .pop,
-                                    from: from,
-                                    to: to,
-                                    animated: animated,
-                                    interactive: interactive,
-                                    undo: { self.stack.append(contentsOf: poppedElements) })
-
-        lastTransition = transition
-        delegate?.didCreateTransition(transition)
-        return Array(poppedElements)
+        
+        return poppedElements
     }
 
     private func canPush(_ stack: Stack) -> Bool {

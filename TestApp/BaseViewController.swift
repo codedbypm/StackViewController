@@ -48,9 +48,9 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
     weak var debugDelegate: DebugDelegate?
     weak var stack: StackViewControllerHandling?
     
-    let debugAppearance = true
+    let debugAppearance = false
     let debugViewControllerContainment = true
-    let debugTraitCollection = true
+    let debugTraitCollection = false
 
     var onPopAnimated: (() -> Void)?
     var onPopNonAnimated: (() -> Void)?

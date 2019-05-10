@@ -10,8 +10,8 @@ import Foundation
 
 struct Transition {
     let operation: StackViewController.Operation
-    let from: UIViewController?
-    let to: UIViewController?
+    var from: UIViewController?
+    var to: UIViewController?
     let isAnimated: Bool
     let isInteractive: Bool
     var undo: (() -> Void)?

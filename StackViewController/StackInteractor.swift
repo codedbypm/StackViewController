@@ -20,7 +20,7 @@ protocol StackInteractorDelegate: class {
     func didRemoveStackElements(_: Stack)
     func didReplaceStack(_ oldStack: Stack, with newStack: Stack)
 
-    func stackDidChange(_ change: CollectionDifference<Stack.Element>)
+    func stackDidChange(inserts: Stack.Inserts, removals: Stack.Removals)
     func didCreateTransition(_: Transition)
 }
 
@@ -37,7 +37,8 @@ class StackInteractor: ExceptionThrowing {
     private(set) var stack = Stack() {
         didSet {
             let difference = stack.difference(from: oldValue)
-            delegate?.stackDidChange(difference)
+            delegate?.stackDidChange(inserts: difference.insertions,
+                                     removals: difference.removals)
         }
     }
 

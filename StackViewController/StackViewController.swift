@@ -156,7 +156,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 // MARK: - StackInteractorDelegate
 
 extension StackViewController: StackInteractorDelegate {
-    func stackDidChange(_ change: CollectionDifference<Stack.Element>) {
+    func stackDidChange(inserts: Stack.Inserts, removals: Stack.Removals) {
         
     }
 

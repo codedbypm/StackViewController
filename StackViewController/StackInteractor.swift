@@ -16,12 +16,7 @@ extension Stack {
 }
 
 protocol StackInteractorDelegate: class {
-    func didAddStackElements(_: Stack)
-    func didRemoveStackElements(_: Stack)
-    func didReplaceStack(_ oldStack: Stack, with newStack: Stack)
-
     func stackDidChange(inserts: Stack.Inserts, removals: Stack.Removals)
-    func didCreateTransition(_: Transition)
 }
 
 class StackInteractor: ExceptionThrowing {

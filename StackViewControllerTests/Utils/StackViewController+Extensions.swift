@@ -24,8 +24,8 @@ extension StackViewController {
         return StackViewController(viewControllers: viewControllers)
     }
 
-    static func withKnownStack() -> StackViewController {
-        return StackViewController(viewControllers: knownViewControllers)
+    static func withDefaultStack() -> StackViewController {
+        return StackViewController(viewControllers: Stack.default)
     }
 }
 

@@ -13,22 +13,22 @@ extension StackViewControllerTests {
 
     // MARK: - pushViewController(_: animated:)
 
-    func testThat_whenPushingViewControllerWhichIsAlreadyOnTheStack_theViewControllerIsNotAddedToTheStack() {
-        // Arrange
-        sut = StackViewController.withKnownStack()
-        let pushedViewController = StackViewController.knwownViewControllerB
-
-        // Act
-        sut.pushViewController(pushedViewController, animated: true)
-
-        // Assert
-        XCTAssertEqual(sut.viewControllers, StackViewController.knownViewControllers)
-    }
+//    func testThat_whenPushingViewControllerWhichIsAlreadyOnTheStack_theViewControllerIsNotAddedToTheStack() {
+//        // Arrange
+//        sut = StackViewController.withDefaultStack()
+//        let pushedViewController = StackViewController.second
+//
+//        // Act
+//        sut.pushViewController(pushedViewController, animated: true)
+//
+//        // Assert
+//        XCTAssertEqual(sut.viewControllers, StackViewController.defaultStack)
+//    }
 
 //    func testThat_whenPushingViewControllerOnAnEmptyStack_thePushedControllerIsImmediatelyAddedToTheStack() {
 //        // Arrange
 //        sut = StackViewController.withEmptyStack()
-//        let pushedViewController = StackViewController.knwownViewControllerB
+//        let pushedViewController = StackViewController.defaultViewControllerB
 //
 //        XCTAssertTrue(sut.viewControllers.isEmpty)
 //

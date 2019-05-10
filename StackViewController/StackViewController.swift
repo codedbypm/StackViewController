@@ -53,6 +53,8 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 
     private var transitionHandler: TransitionHandler?
 
+    private var currentTransition: Transition?
+
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {

@@ -83,26 +83,6 @@ class StackInteractor: ExceptionThrowing {
 
     func setStack(_ newStack: Stack, animated: Bool) {
         guard canReplaceStack(with: newStack) else { return }
-
-        let from = topViewController
-        let to = newStack.last
-        let operation: StackViewController.Operation
-
-        if let to = to {
-            if stack.contains(to) {
-                operation = .pop
-            } else {
-                operation = .push
-            }
-        } else {
-            if from != nil {
-                operation = .pop
-            } else {
-                return
-            }
-        }
-
-        let oldStack = stack
         stack = newStack
     }
 

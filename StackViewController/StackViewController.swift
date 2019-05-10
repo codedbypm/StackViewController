@@ -144,6 +144,19 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
         interactor.setStack(stack, animated: animated)
     }
 
+    private func stackOperation(whenReplacing oldStack: Stack, with newStack: Stack) -> Operation {
+        let from = topViewController
+        let to = newStack.last
+
+        if let to = to {
+            if oldStack.contains(to) { return .pop }
+            else { return .push }
+        } else {
+            if from != nil { return .pop }
+            else { return .none }
+        }
+    }
+
     // MARK: - Actions
 
     @objc private func screenEdgeGestureRecognizerDidChangeState(_

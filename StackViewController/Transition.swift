@@ -17,6 +17,13 @@ struct Transition {
     var undo: (() -> Void)?
 
     init(operation: StackViewController.Operation,
+         animated: Bool = true,
+         interactive: Bool = false) {
+        self.operation = operation
+        self.isAnimated = animated
+        self.isInteractive = interactive
+    }
+    init(operation: StackViewController.Operation,
          from: UIViewController?,
          to: UIViewController?,
          animated: Bool = true,

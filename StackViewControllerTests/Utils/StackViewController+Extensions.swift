@@ -11,16 +11,6 @@ import Foundation
 
 extension StackViewController {
 
-    static let knwownViewControllerA = UIViewController()
-    static let knwownViewControllerB = UIViewController()
-    static let knwownViewControllerC = UIViewController()
-
-    static let knownViewControllers = [
-        knwownViewControllerA,
-        knwownViewControllerB,
-        knwownViewControllerC
-    ]
-
     static var dummy: StackViewController {
         return StackViewController(viewControllers: [])
     }

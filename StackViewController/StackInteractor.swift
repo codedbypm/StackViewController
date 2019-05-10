@@ -116,10 +116,4 @@ class StackInteractor: ExceptionThrowing {
         guard !newStack.hasDuplicates else { return false }
         return true
     }
-
-    //TODO: make this private?
-    func canPopViewControllerInteractively() -> Bool {
-        guard canPopLast(1) else { return false }
-        return true
-    }
 }

@@ -16,6 +16,16 @@ struct Transition {
     let isInteractive: Bool
     var undo: (() -> Void)?
 
+    static func push() -> Transition { return Transition(operation: .push) }
+
+    static func pop() -> Transition { return Transition(operation: .pop) }
+
+    static func instantPush() -> Transition { return Transition(operation: .push, animated: false) }
+
+    static func instantPop() -> Transition { return Transition(operation: .pop, animated: false) }
+
+    static func interactivePop() -> Transition { return Transition(operation: .pop, interactive: true) }
+
     init(operation: StackViewController.Operation,
          animated: Bool = true,
          interactive: Bool = false) {
@@ -23,6 +33,7 @@ struct Transition {
         self.isAnimated = animated
         self.isInteractive = interactive
     }
+
     init(operation: StackViewController.Operation,
          from: UIViewController?,
          to: UIViewController?,

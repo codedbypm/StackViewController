@@ -12,7 +12,7 @@
 
 // MARK: Diff application to RangeReplaceableCollection
 
-@available(macOS 9999, iOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
+@available(macOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
 extension CollectionDifference {
     fileprivate func _fastEnumeratedApply(
         _ consume: (Change) -> Void
@@ -64,7 +64,7 @@ extension RangeReplaceableCollection {
     ///
     /// - Complexity: O(*n* + *c*), where *n* is `self.count` and *c* is the
     ///   number of changes contained by the parameter.
-    @available(macOS 9999, iOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
+    @available(macOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
     public func applying(_ difference: CollectionDifference<Element>) -> Self? {
         var result = Self()
         var enumeratedRemoves = 0

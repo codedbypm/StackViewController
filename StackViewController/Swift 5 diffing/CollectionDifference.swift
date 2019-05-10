@@ -290,19 +290,19 @@ extension CollectionDifference.Index: Hashable {
     }
 }
 
-@available(macOS 9999, iOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
+@available(macOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
 extension CollectionDifference.Change: Equatable where ChangeElement: Equatable {}
 
-@available(macOS 9999, iOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
+@available(macOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
 extension CollectionDifference: Equatable where ChangeElement: Equatable {}
 
-@available(macOS 9999, iOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
+@available(macOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
 extension CollectionDifference.Change: Hashable where ChangeElement: Hashable {}
 
-@available(macOS 9999, iOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
+@available(macOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
 extension CollectionDifference: Hashable where ChangeElement: Hashable {}
 
-@available(macOS 9999, iOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
+@available(macOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
 extension CollectionDifference where ChangeElement: Hashable {
     /// Infers which `ChangeElement`s have been both inserted and removed only
     /// once and returns a new difference with those associations.
@@ -396,5 +396,5 @@ extension CollectionDifference.Change: Codable where ChangeElement: Codable {
     }
 }
 
-@available(macOS 9999, iOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
+@available(macOS 9999, tvOS 9999, watchOS 9999, *) // FIXME(availability-5.1)
 extension CollectionDifference: Codable where ChangeElement: Codable {}

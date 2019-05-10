@@ -35,23 +35,3 @@ extension Collection {
         return result
     }
 }
-
-extension Collection {
-    func commonPrefix<Other: Collection>(
-        with other: Other,
-        by areEquivalent: (Element, Other.Element) -> Bool
-        ) -> SubSequence
-        where Element == Other.Element {
-
-            let (startIndexA, startIndexB) = (startIndex, other.startIndex)
-            let (endIndexA, endIndexB) = (endIndex, other.endIndex)
-
-            var (indexA, indexB) = (startIndexA, startIndexB)
-            while indexA != endIndexA && indexB != endIndexB {
-                if !areEquivalent(self[indexA], other[indexB]) { break }
-                formIndex(after: &indexA)
-                other.formIndex(after: &indexB)
-            }
-            return self[startIndexA..<indexA]
-    }
-}

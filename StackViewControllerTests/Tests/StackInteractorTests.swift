@@ -23,6 +23,7 @@ class StackInteractorTests: XCTestCase {
 
     override func tearDown() {
         sut = nil
+        interactorDelegate = nil
         super.tearDown()
     }
 

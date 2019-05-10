@@ -13,6 +13,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     public enum Operation {
         case push
         case pop
+        case none
     }
 
     // MARK: - Public properties
@@ -228,6 +229,8 @@ private extension StackViewController {
         case .push:
             guard let to = transition.to else { return assertionFailure() }
             addChild(to)
+        case .none:
+            break
         }
     }
 
@@ -237,6 +240,8 @@ private extension StackViewController {
             transition.from?.removeFromParent()
         case .push:
             transition.to?.didMove(toParent: self)
+        case .none:
+            break
         }
     }
 

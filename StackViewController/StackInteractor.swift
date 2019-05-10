@@ -9,8 +9,8 @@
 import Foundation
 
 public typealias Stack = [UIViewController]
+
 extension Stack {
-    typealias Difference = CollectionDifference<UIViewController>
     typealias Inserts = [CollectionDifference<UIViewController>.Change]
     typealias Removals = [CollectionDifference<UIViewController>.Change]
 }

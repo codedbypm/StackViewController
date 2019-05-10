@@ -315,12 +315,3 @@ fileprivate extension StackInteractorTests {
         return (difference.insertions, difference.removals)
     }
 }
-
-extension StackInteractorDelegate {
-    func didAddStackElements(_: Stack) {}
-    func didRemoveStackElements(_: Stack) {}
-    func didReplaceStack(_ oldStack: Stack, with newStack: Stack) {}
-
-    func stackDidChange(_ change: Stack.Difference) {}
-    func didCreateTransition(_: Transition) {}
-}

@@ -122,25 +122,31 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 
     public func pushStack(_ stack: Stack, animated: Bool) {
+        currentTransition = Transition(operation: .push, animated: animated)
         interactor.push(stack, animated: animated)
     }
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
+        currentTransition = Transition(operation: .pop, animated: animated)
         return interactor.pop(animated: animated)
     }
 
     @discardableResult
     public func popToRootViewController(animated: Bool) -> Stack? {
+        currentTransition = Transition(operation: .pop, animated: animated)
         return interactor.popToRoot(animated: animated)
     }
 
     @discardableResult
     public func popToViewController(_ viewController: UIViewController, animated: Bool) -> Stack? {
+        currentTransition = Transition(operation: .pop, animated: animated)
         return interactor.popTo(viewController, animated: animated)
     }
 
     public func setStack(_ stack: Stack, animated: Bool) {
+        let operation = stackOperation(whenReplacing: interactor.stack, with: stack)
+        currentTransition = Transition(operation: operation, animated: animated)
         interactor.setStack(stack, animated: animated)
     }
 

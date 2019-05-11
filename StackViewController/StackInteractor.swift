@@ -16,7 +16,7 @@ extension Stack {
 }
 
 protocol StackInteractorDelegate: class {
-    func stackDidChange(inserts: Stack.Inserts, removals: Stack.Removals)
+    func stackDidChange(_ difference: Stack.Difference)
 }
 
 class StackInteractor: ExceptionThrowing {
@@ -32,8 +32,7 @@ class StackInteractor: ExceptionThrowing {
     private(set) var stack = Stack() {
         didSet {
             let difference = stack.difference(from: oldValue)
-            delegate?.stackDidChange(inserts: difference.insertions,
-                                     removals: difference.removals)
+            delegate?.stackDidChange(difference)
         }
     }
 

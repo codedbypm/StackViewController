@@ -54,8 +54,6 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 
     private var transitionHandler: TransitionHandler?
 
-    private var currentTransition: Transition?
-
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {
@@ -126,45 +124,26 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 
     public func pushStack(_ stack: Stack, animated: Bool) {
-        currentTransition = Transition(operation: .push, animated: animated)
         viewModel.push(stack, animated: animated)
     }
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
-        currentTransition = Transition(operation: .pop, animated: animated)
         return viewModel.pop(animated: animated)
     }
 
     @discardableResult
     public func popToRootViewController(animated: Bool) -> Stack? {
-        currentTransition = Transition(operation: .pop, animated: animated)
         return viewModel.popToRoot(animated: animated)
     }
 
     @discardableResult
     public func popToViewController(_ viewController: UIViewController, animated: Bool) -> Stack? {
-        currentTransition = Transition(operation: .pop, animated: animated)
         return viewModel.popTo(viewController, animated: animated)
     }
 
     public func setStack(_ stack: Stack, animated: Bool) {
-        let operation = stackOperation(whenReplacing: viewModel.stack, with: stack)
-        currentTransition = Transition(operation: operation, animated: animated)
         viewModel.setStack(stack, animated: animated)
-    }
-
-    private func stackOperation(whenReplacing oldStack: Stack, with newStack: Stack) -> Operation {
-        let from = topViewController
-        let to = newStack.last
-
-        if let to = to {
-            if oldStack.contains(to) { return .pop }
-            else { return .push }
-        } else {
-            if from != nil { return .pop }
-            else { return .none }
-        }
     }
 
     // MARK: - Actions

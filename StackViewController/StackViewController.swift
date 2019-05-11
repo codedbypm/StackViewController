@@ -79,10 +79,10 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
         debugFunc(#function, allowed: true)
 
         view.addGestureRecognizer(screenEdgePanGestureRecognizer)
+        view.addSubview(viewControllerWrapperView)
+        viewControllerWrapperView.frame = view.bounds
 
         if let topViewController = topViewController {
-            view.addSubview(viewControllerWrapperView)
-            viewControllerWrapperView.frame = view.bounds
             viewControllerWrapperView.addSubview(topViewController.view)
         }
     }

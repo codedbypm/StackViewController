@@ -47,33 +47,33 @@ class StackInteractor: ExceptionThrowing {
 
     // MARK: - Internal methods
 
-    func push(_ viewController: UIViewController, animated: Bool) {
-        push([viewController], animated: animated)
+    func push(_ viewController: UIViewController) {
+        push([viewController])
     }
 
-    func push(_ stack: Stack, animated: Bool) {
+    func push(_ stack: Stack) {
         guard canPush(stack) else { return }
         self.stack.append(contentsOf: stack)
     }
 
     @discardableResult
-    func pop(animated: Bool, interactive: Bool = false) -> UIViewController? {
+    func pop() -> UIViewController? {
         let index = stack.endIndex.advanced(by: -2)
-        return popToViewController(at: index, animated: animated, interactive: interactive).first
+        return popToViewController(at: index).first
     }
 
     @discardableResult
-    func popToRoot(animated: Bool) -> Stack {
-        return popToViewController(at: stack.startIndex, animated: animated)
+    func popToRoot() -> Stack {
+        return popToViewController(at: stack.startIndex)
     }
 
     @discardableResult
-    func popTo(_ viewController: UIViewController, animated: Bool, interactive: Bool = false) -> Stack {
+    func popTo(_ viewController: UIViewController) -> Stack {
         let index = stack.firstIndex(of: viewController) ?? stack.endIndex
-        return popToViewController(at: index, animated: animated)
+        return popToViewController(at: index)
     }
 
-    func setStack(_ newStack: Stack, animated: Bool) {
+    func setStack(_ newStack: Stack) {
         guard canReplaceStack(with: newStack) else { return }
         stack = newStack
     }
@@ -81,9 +81,7 @@ class StackInteractor: ExceptionThrowing {
     // MARK: - Private methods
 
     @discardableResult
-    private func popToViewController(at index: Int,
-                                     animated: Bool,
-                                     interactive: Bool = false) -> Stack {
+    private func popToViewController(at index: Int) -> Stack {
         let poppedCount = stack.endIndex - (index + 1)
         guard canPopLast(poppedCount) else { return [] }
 

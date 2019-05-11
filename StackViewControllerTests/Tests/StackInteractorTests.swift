@@ -33,9 +33,10 @@ class StackInteractorTests: XCTestCase {
         var inserts: Stack.Inserts = []
         var removals: Stack.Removals = []
         var didCallStackDidChange = false
-        func stackDidChange(inserts: Stack.Inserts, removals: Stack.Removals) {
-            self.inserts = inserts
-            self.removals = removals
+
+        func stackDidChange(_ difference: Stack.Difference) {
+            self.inserts = difference.insertions
+            self.removals = difference.removals
             self.didCallStackDidChange = true
         }
     }
@@ -47,7 +48,7 @@ class StackInteractorTests: XCTestCase {
         let pushedViewController = UIViewController()
 
         // Act
-        sut.push(pushedViewController, animated: true)
+        sut.push(pushedViewController)
 
         // Assert
         XCTAssertEqual(sut.stack, initialStack + [pushedViewController])
@@ -60,7 +61,7 @@ class StackInteractorTests: XCTestCase {
         let expectedStackChanges = self.expectedStackChanges(for: testScenario)
 
         // Act
-        sut.push(pushedViewController, animated: true)
+        sut.push(pushedViewController)
 
         // Assert
         XCTAssertTrue(interactorDelegate.didCallStackDidChange)
@@ -73,7 +74,7 @@ class StackInteractorTests: XCTestCase {
         let pushedViewController = Stack.firstViewController
 
         // Act
-        sut.push(pushedViewController, animated: true)
+        sut.push(pushedViewController)
 
         // Assert
         XCTAssertEqual(sut.stack, initialStack)
@@ -86,7 +87,7 @@ class StackInteractorTests: XCTestCase {
         let pushedStack = [UIViewController()]
 
         // Act
-        sut.push(pushedStack, animated: true)
+        sut.push(pushedStack)
 
         // Assert
         XCTAssertEqual(sut.stack, initialStack + pushedStack)
@@ -99,7 +100,7 @@ class StackInteractorTests: XCTestCase {
         let expectedStackChanges = self.expectedStackChanges(for: testScenario)
 
         // Act
-        sut.push(pushedStack, animated: true)
+        sut.push(pushedStack)
 
         // Assert
         XCTAssertTrue(interactorDelegate.didCallStackDidChange)
@@ -112,7 +113,7 @@ class StackInteractorTests: XCTestCase {
         let pushedStack = [Stack.firstViewController]
 
         // Act
-        sut.push(pushedStack, animated: true)
+        sut.push(pushedStack)
 
         // Assert
         XCTAssertEqual(sut.stack, initialStack)
@@ -125,7 +126,7 @@ class StackInteractorTests: XCTestCase {
         let currentStack = sut.stack
 
         // Act
-        let poppedViewController = sut.pop(animated: true)
+        let poppedViewController = sut.pop()
 
         // Assert
         XCTAssertEqual(poppedViewController, currentStack.last)
@@ -138,7 +139,7 @@ class StackInteractorTests: XCTestCase {
         let expectedStackChanges = self.expectedStackChanges(for: testScenario)
 
         // Act
-        sut.pop(animated: true)
+        sut.pop()
 
         // Assert
 
@@ -153,7 +154,7 @@ class StackInteractorTests: XCTestCase {
         sut = StackInteractor(stack: oneElementStack)
 
         // Act
-        let poppedViewController = sut.pop(animated: true)
+        let poppedViewController = sut.pop()
 
         // Assert
         XCTAssertNil(poppedViewController)
@@ -166,7 +167,7 @@ class StackInteractorTests: XCTestCase {
         // Arrange
 
         // Act
-        let poppedViewControllers = sut.popToRoot(animated: true)
+        let poppedViewControllers = sut.popToRoot()
 
         // Assert
         XCTAssertEqual(poppedViewControllers, Array(initialStack.dropFirst()))
@@ -179,7 +180,7 @@ class StackInteractorTests: XCTestCase {
         let expectedStackChanges = self.expectedStackChanges(for: testScenario)
 
         // Act
-        sut.popToRoot(animated: true)
+        sut.popToRoot()
 
         // Assert
         XCTAssertTrue(interactorDelegate.didCallStackDidChange)
@@ -193,7 +194,7 @@ class StackInteractorTests: XCTestCase {
         sut = StackInteractor(stack: oneElementStack)
 
         // Act
-        let poppedViewControllers = sut.popToRoot(animated: true)
+        let poppedViewControllers = sut.popToRoot()
 
         // Assert
         XCTAssertTrue(poppedViewControllers.isEmpty)
@@ -207,7 +208,7 @@ class StackInteractorTests: XCTestCase {
         let targetViewController = Stack.middleViewController
 
         // Act
-        let poppedViewControllers = sut.popTo(targetViewController, animated: true)
+        let poppedViewControllers = sut.popTo(targetViewController)
 
         // Assert
         XCTAssertEqual(poppedViewControllers, Array(initialStack.dropFirst(2)))
@@ -220,7 +221,7 @@ class StackInteractorTests: XCTestCase {
         let expectedStackChanges = self.expectedStackChanges(for: testScenario)
 
         // Act
-        sut.popTo(Stack.middleViewController, animated: true)
+        sut.popTo(Stack.middleViewController)
 
         // Assert
         XCTAssertTrue(interactorDelegate.didCallStackDidChange)
@@ -233,7 +234,7 @@ class StackInteractorTests: XCTestCase {
         let targetViewController = UIViewController()
 
         // Act
-        let poppedViewControllers = sut.popTo(targetViewController, animated: true)
+        let poppedViewControllers = sut.popTo(targetViewController)
 
         // Assert
         XCTAssertTrue(poppedViewControllers.isEmpty)
@@ -248,7 +249,7 @@ class StackInteractorTests: XCTestCase {
         let sameStack = sut.stack
 
         // Act
-        sut.setStack(sameStack, animated: true)
+        sut.setStack(sameStack)
 
         // Assert
         XCTAssertFalse(interactorDelegate.didCallStackDidChange)
@@ -265,7 +266,7 @@ class StackInteractorTests: XCTestCase {
         ]
 
         // Act
-        sut.setStack(duplicatesStack, animated: true)
+        sut.setStack(duplicatesStack)
 
         // Assert
         XCTAssertFalse(interactorDelegate.didCallStackDidChange)
@@ -279,7 +280,7 @@ class StackInteractorTests: XCTestCase {
         let expectedStackChanges = self.expectedStackChanges(for: testScenario)
 
         // Act
-        sut.setStack(newStack, animated: true)
+        sut.setStack(newStack)
 
         // Assert
         XCTAssertTrue(interactorDelegate.didCallStackDidChange)

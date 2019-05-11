@@ -35,8 +35,6 @@ class StackInteractor: ExceptionThrowing {
         }
     }
 
-    private var lastTransition: Transition?
-
     // MARK: - Init
 
     init(stack: Stack) {

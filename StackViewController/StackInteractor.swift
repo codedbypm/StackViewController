@@ -53,7 +53,6 @@ class StackInteractor: ExceptionThrowing {
 
     func push(_ stack: Stack, animated: Bool) {
         guard canPush(stack) else { return }
-
         self.stack.append(contentsOf: stack)
     }
 

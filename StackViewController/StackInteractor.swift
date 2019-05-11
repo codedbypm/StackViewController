@@ -31,10 +31,14 @@ class StackInteractor: ExceptionThrowing {
     private(set) var stack = Stack() {
         didSet {
             guard oldValue != stack else { return }
+            guard shouldNotifyDelegate else { return }
+
             let difference = stack.difference(from: oldValue)
             delegate?.stackDidChange(difference)
         }
     }
+
+    private var shouldNotifyDelegate: Bool = true
 
     // MARK: - Init
 

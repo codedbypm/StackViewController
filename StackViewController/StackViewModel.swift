@@ -22,7 +22,7 @@ class StackViewModel: StackInteractorDelegate  {
 
     weak var delegate: StackViewModelDelegate?
 
-    private(set) var stack = Stack()
+    var stack: Stack { return stackInteractor.stack }
     
     var topViewController: UIViewController? { return stack.last }
 

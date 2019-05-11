@@ -12,7 +12,7 @@ import Foundation
 class TransitionContext: NSObject, UIViewControllerContextTransitioning {
 
     let containerView: UIView
-    var isAnimated: Bool = false
+    var isAnimated: Bool = true
     var isInteractive: Bool = false
     var transitionWasCancelled: Bool = false
     var presentationStyle: UIModalPresentationStyle = .custom

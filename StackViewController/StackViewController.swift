@@ -23,8 +23,8 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     public weak var delegate: StackViewControllerDelegate?
     
     public var viewControllers: [UIViewController] {
-        get { return interactor.stack }
-        set { interactor.setStack(newValue, animated: false) }
+        get { return viewModel.stack }
+        set { viewModel.setStack(newValue, animated: false) }
     }
 
     public var topViewController: UIViewController? {
@@ -50,7 +50,6 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 
     private var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
-    internal var interactor: StackInteractor
     private let viewModel: StackViewModel
 
     private var transitionHandler: TransitionHandler?
@@ -60,7 +59,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {
-        interactor = StackInteractor(stack: viewControllers)
+        let interactor = StackInteractor(stack: viewControllers)
         viewModel = StackViewModel(stackInteractor: interactor)
         super.init(nibName: nil, bundle: nil)
 
@@ -70,7 +69,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        interactor = StackInteractor(stack: [])
+        let interactor = StackInteractor(stack: [])
         viewModel = StackViewModel(stackInteractor: interactor)
         super.init(coder: aDecoder)
     }
@@ -116,7 +115,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard gestureRecognizer === screenEdgePanGestureRecognizer else { return false }
 
-        let poppedController = interactor.pop(animated: true, interactive: true)
+        let poppedController = viewModel.pop(animated: true, interactive: true)
         return (poppedController != nil)
     }
 
@@ -128,31 +127,31 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 
     public func pushStack(_ stack: Stack, animated: Bool) {
         currentTransition = Transition(operation: .push, animated: animated)
-        interactor.push(stack, animated: animated)
+        viewModel.push(stack, animated: animated)
     }
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
         currentTransition = Transition(operation: .pop, animated: animated)
-        return interactor.pop(animated: animated)
+        return viewModel.pop(animated: animated)
     }
 
     @discardableResult
     public func popToRootViewController(animated: Bool) -> Stack? {
         currentTransition = Transition(operation: .pop, animated: animated)
-        return interactor.popToRoot(animated: animated)
+        return viewModel.popToRoot(animated: animated)
     }
 
     @discardableResult
     public func popToViewController(_ viewController: UIViewController, animated: Bool) -> Stack? {
         currentTransition = Transition(operation: .pop, animated: animated)
-        return interactor.popTo(viewController, animated: animated)
+        return viewModel.popTo(viewController, animated: animated)
     }
 
     public func setStack(_ stack: Stack, animated: Bool) {
-        let operation = stackOperation(whenReplacing: interactor.stack, with: stack)
+        let operation = stackOperation(whenReplacing: viewModel.stack, with: stack)
         currentTransition = Transition(operation: operation, animated: animated)
-        interactor.setStack(stack, animated: animated)
+        viewModel.setStack(stack, animated: animated)
     }
 
     private func stackOperation(whenReplacing oldStack: Stack, with newStack: Stack) -> Operation {
@@ -176,7 +175,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
         guard gestureRecognizer === screenEdgePanGestureRecognizer else { return }
         guard case .began = gestureRecognizer.state else { return }
 
-        interactor.pop(animated: true, interactive: true)
+        viewModel.pop(animated: true, interactive: true)
     }
 }
 

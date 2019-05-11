@@ -28,7 +28,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 
     public var topViewController: UIViewController? {
-        return interactor.topViewController
+        return viewModel.topViewController
     }
 
     public override var shouldAutomaticallyForwardAppearanceMethods: Bool {

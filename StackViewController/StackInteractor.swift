@@ -26,8 +26,6 @@ class StackInteractor: ExceptionThrowing {
 
     weak var delegate: StackInteractorDelegate?
 
-    var topViewController: UIViewController? { return stack.last }
-
     // MARK: - Private properties
 
     private(set) var stack = Stack() {

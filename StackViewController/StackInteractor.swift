@@ -81,6 +81,14 @@ class StackInteractor: ExceptionThrowing {
         stack = newStack
     }
 
+    func revertLastChange(_ difference: Stack.Difference) {
+        guard let oldStack = stack.applying(difference.inverted) else { return assertionFailure() }
+
+        shouldNotifyDelegate = false
+        stack = oldStack
+        shouldNotifyDelegate = true
+    }
+
     // MARK: - Private methods
 
     @discardableResult

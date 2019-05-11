@@ -27,16 +27,8 @@ struct Transition {
     static func interactivePop() -> Transition { return Transition(operation: .pop, interactive: true) }
 
     init(operation: StackViewController.Operation,
-         animated: Bool = true,
-         interactive: Bool = false) {
-        self.operation = operation
-        self.isAnimated = animated
-        self.isInteractive = interactive
-    }
-
-    init(operation: StackViewController.Operation,
-         from: UIViewController?,
-         to: UIViewController?,
+         from: UIViewController? = nil,
+         to: UIViewController? = nil,
          animated: Bool = true,
          interactive: Bool = false,
          undo: (() -> Void)? = nil) {

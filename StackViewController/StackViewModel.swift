@@ -12,6 +12,8 @@ protocol StackViewModelDelegate: class {
     func didAddStackElements(_ additions: Stack)
     func didRemoveStackElements(_ removals: Stack)
     func didReplaceStack(_ oldStack: Stack, with newStack: Stack)
+
+    func didCreateTransition(_: Transition)
 }
 
 class StackViewModel: StackInteractorDelegate  {

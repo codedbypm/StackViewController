@@ -80,6 +80,11 @@ class StackViewModel: StackInteractorDelegate  {
         notifyDelegateAboutChanges(difference)
 
         currentTransition?.to = stackInteractor.stack.last
+        currentTransition?.undo = { [weak self] in
+            guard let self = self else { return }
+            self.stackInteractor.revertLastChange(difference)
+        }
+
         if let transition = currentTransition {
             delegate?.didCreateTransition(transition)
         }

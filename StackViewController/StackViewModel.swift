@@ -20,6 +20,10 @@ class StackViewModel: StackInteractorDelegate  {
 
     weak var delegate: StackViewModelDelegate?
 
+    var stack: Stack { return stackInteractor.stack }
+    
+    var topViewController: UIViewController? { return stack.last }
+
     // MARK: - Private properties
 
     private let stackInteractor: StackInteractor

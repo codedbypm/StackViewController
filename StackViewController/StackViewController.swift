@@ -51,6 +51,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     private var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
     internal var interactor: StackInteractor
+    private let viewModel: StackViewModel
 
     private var transitionHandler: TransitionHandler?
 
@@ -60,14 +61,17 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 
     public required init(viewControllers: [UIViewController]) {
         interactor = StackInteractor(stack: viewControllers)
+        viewModel = StackViewModel(stackInteractor: interactor)
         super.init(nibName: nil, bundle: nil)
 
-        interactor.delegate = self
+        interactor.delegate = viewModel
+        viewModel.delegate = self
         viewControllers.forEach { addChild($0) }
     }
 
     public required init?(coder aDecoder: NSCoder) {
         interactor = StackInteractor(stack: [])
+        viewModel = StackViewModel(stackInteractor: interactor)
         super.init(coder: aDecoder)
     }
 
@@ -176,12 +180,9 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 }
 
-// MARK: - StackInteractorDelegate
+// MARK: - StackViewModelDelegate
 
-extension StackViewController: StackInteractorDelegate {
-    func stackDidChange(inserts: Stack.Inserts, removals: Stack.Removals) {
-        
-    }
+extension StackViewController: StackViewModelDelegate {
 
     func didAddStackElements(_ additions: Stack) {
         additions.forEach { addChild($0) }

@@ -37,31 +37,33 @@ class StackViewModel: StackInteractorDelegate  {
     // MARK: - Internal methods
 
     func push(_ viewController: UIViewController, animated: Bool) {
-        stackInteractor.push(viewController, animated: animated)
+        stackInteractor.push(viewController)
     }
 
     func push(_ stack: Stack, animated: Bool) {
-        stackInteractor.push(stack, animated: animated)
+        stackInteractor.push(stack)
     }
 
     @discardableResult
     func pop(animated: Bool, interactive: Bool = false) -> UIViewController? {
-        return stackInteractor.pop(animated: animated, interactive: interactive)
+        return stackInteractor.pop()
     }
 
     @discardableResult
     func popToRoot(animated: Bool) -> Stack {
-        return stackInteractor.popToRoot(animated: animated)
+        return stackInteractor.popToRoot()
     }
 
     @discardableResult
     func popTo(_ viewController: UIViewController, animated: Bool, interactive: Bool = false) -> Stack {
-        return stackInteractor.popTo(viewController, animated: animated, interactive: interactive)
+        return stackInteractor.popTo(viewController)
     }
 
     func setStack(_ newStack: Stack, animated: Bool) {
-        stackInteractor.setStack(newStack, animated: animated)
+        stackInteractor.setStack(newStack)
     }
+
+    // MARK: - StackInteractorDelegate
 
     func stackDidChange(_ difference: Stack.Difference) {
 //        didRemoveStackElements(removals.map { $0._element } )

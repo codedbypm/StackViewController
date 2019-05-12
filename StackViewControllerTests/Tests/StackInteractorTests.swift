@@ -148,7 +148,7 @@ class StackInteractorTests: XCTestCase {
         let expectedStackChanges = stack.dropLast().difference(from: stack)
 
         // Act
-        sut.pop()
+        let _ = sut.pop()
 
         // Assert
         XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
@@ -195,7 +195,7 @@ class StackInteractorTests: XCTestCase {
         let expectedStackChanges = stack.dropLast(9).difference(from: stack)
 
         // Act
-        sut.popToRoot()
+        let _ = sut.popToRoot()
 
         // Assert
         XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
@@ -248,7 +248,7 @@ class StackInteractorTests: XCTestCase {
         let expectedStackChanges = stack.dropLast(2).difference(from: stack)
 
         // Act
-        sut.popTo(targetViewController)
+        let _ = sut.popTo(targetViewController)
 
         // Assert
         XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)

@@ -56,18 +56,15 @@ class StackHandler: ExceptionThrowing {
         self.stack.append(contentsOf: stack)
     }
 
-    @discardableResult
     func pop() -> UIViewController? {
         let index = stack.endIndex.advanced(by: -2)
         return popToViewController(at: index).first
     }
 
-    @discardableResult
     func popToRoot() -> Stack {
         return popToViewController(at: stack.startIndex)
     }
 
-    @discardableResult
     func popTo(_ viewController: UIViewController) -> Stack {
         let index = stack.firstIndex(of: viewController) ?? stack.endIndex
         return popToViewController(at: index)

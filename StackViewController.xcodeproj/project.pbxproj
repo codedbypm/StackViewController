@@ -202,10 +202,10 @@
 		FD52598A2284E8DD0072C6B8 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				FD76B7622270DA340090EDB2 /* StackViewController+Extensions.swift */,
-				FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */,
 				FD52598B2284E9070072C6B8 /* Stack+Extensions.swift */,
 				FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */,
+				FD76B7622270DA340090EDB2 /* StackViewController+Extensions.swift */,
+				FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";

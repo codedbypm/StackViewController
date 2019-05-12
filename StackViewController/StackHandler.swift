@@ -1,5 +1,5 @@
 //
-//  StackViewModel.swift
+//  StackHandler.swift
 //  StackViewController
 //
 //  Created by Paolo Moroni on 04/05/2019.
@@ -12,19 +12,19 @@ public typealias Stack = [UIViewController]
 
 extension Stack {
     typealias Difference = CollectionDifference<UIViewController>
-    typealias Inserts = [CollectionDifference<UIViewController>.Change]
+    typealias Insertions = [CollectionDifference<UIViewController>.Change]
     typealias Removals = [CollectionDifference<UIViewController>.Change]
 }
 
-protocol StackInteractorDelegate: class {
+protocol StackHandlerDelegate: class {
     func stackDidChange(_ difference: Stack.Difference)
 }
 
-class StackInteractor: ExceptionThrowing {
+class StackHandler: ExceptionThrowing {
 
     // MARK: - Internal properties
 
-    weak var delegate: StackInteractorDelegate?
+    weak var delegate: StackHandlerDelegate?
 
     // MARK: - Private properties
 

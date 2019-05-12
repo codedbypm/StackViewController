@@ -1,5 +1,5 @@
 //
-//  StackInteractorTests.swift
+//  StackHandlerTests.swift
 //  StackViewControllerTests
 //
 //  Created by Paolo Moroni on 03/05/2019.
@@ -10,40 +10,26 @@ import XCTest
 @testable import StackViewController
 
 class StackInteractorTests: XCTestCase {
-    var sut: StackInteractor!
-    var interactorDelegate: InteractorDelegate!
+    var sut: StackHandler!
+    var mockStackHandlerDelegate: MockStackHandlerDelegate!
     var initialStack = Stack.default
 
     override func setUp() {
-        interactorDelegate = InteractorDelegate()
+        mockStackHandlerDelegate = MockStackHandlerDelegate()
 
-        sut = StackInteractor(stack: initialStack)
-        sut.delegate = interactorDelegate
+        sut = StackHandler(stack: initialStack)
+        sut.delegate = mockStackHandlerDelegate
     }
 
     override func tearDown() {
+        mockStackHandlerDelegate = nil
         sut = nil
-        interactorDelegate = nil
         super.tearDown()
-    }
-
-    // MARK: - Inner helper class
-
-    class InteractorDelegate: StackInteractorDelegate {
-        var inserts: Stack.Inserts = []
-        var removals: Stack.Removals = []
-        var didCallStackDidChange = false
-
-        func stackDidChange(_ difference: Stack.Difference) {
-            self.inserts = difference.insertions
-            self.removals = difference.removals
-            self.didCallStackDidChange = true
-        }
     }
 
     // MARK: - push(_ : UIViewController, animated: Bool)
 
-    func testThat_whenPushingAViewController_thisIsAppendedToTheCurrentStack() {
+    func testThat_whenPushingAViewControllerWhichIsNotInTheStack_thisIsAppendedToTheCurrentStack() {
         // Arrange
         let pushedViewController = UIViewController()
 
@@ -54,22 +40,26 @@ class StackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.stack, initialStack + [pushedViewController])
     }
 
-    func testThat_whenPushingANonDuplicateViewController_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheInsertsAndRemovalsAsInput() {
+    func testThat_whenPushingAViewControllerWhichIsNotInTheStack_theDelegateReceivesTheInsertionsAndRemovals() {
         // Arrange
+        let stack = Stack.distinctElements(10)
+        sut = StackHandler(stack: stack)
+        sut.delegate = mockStackHandlerDelegate
+
         let pushedViewController = UIViewController()
-        let testScenario: Scenario = .pushNonDuplicate(pushedViewController)
-        let expectedStackChanges = self.expectedStackChanges(for: testScenario)
+
+        let expectedStackChanges = (stack + [pushedViewController]).difference(from: stack)
 
         // Act
         sut.push(pushedViewController)
 
         // Assert
-        XCTAssertTrue(interactorDelegate.didCallStackDidChange)
-        XCTAssertEqual(interactorDelegate.inserts, expectedStackChanges.inserts)
-        XCTAssertEqual(interactorDelegate.removals, expectedStackChanges.removals)
+        XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertEqual(mockStackHandlerDelegate.insertions, expectedStackChanges.insertions)
+        XCTAssertEqual(mockStackHandlerDelegate.removals, expectedStackChanges.removals)
     }
 
-    func testThat_whenPushingAViewControllerAlreadyPresentInTheStack_theCurrentStackIsNotChanged() {
+    func testThat_whenPushingAViewControllerWhichIsAlreadyInTheStack_theCurrentStackIsNotChanged() {
         // Arrange
         let pushedViewController = Stack.firstViewController
 
@@ -82,9 +72,9 @@ class StackInteractorTests: XCTestCase {
 
     // MARK: - push(_: Stack, animated: Bool)
 
-    func testThat_whenPushingAValidStack_thisIsAppendedToTheCurrentStack() {
+    func testThat_whenPushingAStackContainingDistinctElements_thisIsAppendedToTheCurrentStack() {
         // Arrange
-        let pushedStack = [UIViewController()]
+        let pushedStack = Stack.distinctElements(3)
 
         // Act
         sut.push(pushedStack)
@@ -93,24 +83,28 @@ class StackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.stack, initialStack + pushedStack)
     }
 
-    func testThat_whenPushingAValidStack_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheInsertsAndRemovalsAsInput() {
+    func testThat_whenPushingAStackContainingDistinctElements_theDelegateReceivesTheInsertionsAndRemovals() {
         // Arrange
-        let pushedStack = Stack.any(ofSize: 3)
-        let testScenario: Scenario = .pushStackWithoutDuplicates(pushedStack)
-        let expectedStackChanges = self.expectedStackChanges(for: testScenario)
+        let stack = Stack.distinctElements(10)
+        sut = StackHandler(stack: stack)
+        sut.delegate = mockStackHandlerDelegate
+
+        let pushedStack = Stack.distinctElements(3)
+
+        let expectedStackChanges = (stack + pushedStack).difference(from: stack)
 
         // Act
         sut.push(pushedStack)
 
         // Assert
-        XCTAssertTrue(interactorDelegate.didCallStackDidChange)
-        XCTAssertEqual(interactorDelegate.inserts, expectedStackChanges.inserts)
-        XCTAssertEqual(interactorDelegate.removals, expectedStackChanges.removals)
+        XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertEqual(mockStackHandlerDelegate.insertions, expectedStackChanges.insertions)
+        XCTAssertEqual(mockStackHandlerDelegate.removals, expectedStackChanges.removals)
     }
 
     func testThat_whenPushingAStackResultingInANewStackWithDuplicates_theCurrentStackIsNotChanged() {
         // Arrange
-        let pushedStack = [Stack.firstViewController]
+        let pushedStack = [Stack.firstViewController, UIViewController()]
 
         // Act
         sut.push(pushedStack)
@@ -122,36 +116,35 @@ class StackInteractorTests: XCTestCase {
     // MARK: - pop(animated:, interactive: Bool) -> UIViewController?
 
     func testThat_whenPoppingAViewController_thisIsRemovedFromTheCurrentStackAndReturnedToTheCaller() {
-        // Arrange
-        let currentStack = sut.stack
-
         // Act
         let poppedViewController = sut.pop()
 
         // Assert
-        XCTAssertEqual(poppedViewController, currentStack.last)
-        XCTAssertEqual(sut.stack, currentStack.dropLast())
+        XCTAssertEqual(poppedViewController, initialStack.last)
+        XCTAssertEqual(sut.stack, initialStack.dropLast())
     }
 
-    func testThat_whenPoppingAViewController_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheInsertsAndRemovalsAsInput() {
+    func testThat_whenPoppingAViewController_theDelegateReceivesTheInsertionsAndRemovals() {
         // Arrange
-        let testScenario: Scenario = .popViewController
-        let expectedStackChanges = self.expectedStackChanges(for: testScenario)
+        let stack = Stack.distinctElements(10)
+        sut = StackHandler(stack: stack)
+        sut.delegate = mockStackHandlerDelegate
+
+        let expectedStackChanges = stack.dropLast().difference(from: stack)
 
         // Act
         sut.pop()
 
         // Assert
-
-        XCTAssertTrue(interactorDelegate.didCallStackDidChange)
-        XCTAssertEqual(interactorDelegate.inserts, expectedStackChanges.inserts)
-        XCTAssertEqual(interactorDelegate.removals, expectedStackChanges.removals)
+        XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertEqual(mockStackHandlerDelegate.insertions, expectedStackChanges.insertions)
+        XCTAssertEqual(mockStackHandlerDelegate.removals, expectedStackChanges.removals)
     }
 
-    func testThat_whenTheStackContainsOnlyOneElement_whenPoppingAViewController_theCurrentStackIsNotChangedAndTheMethodReturnsNil() {
+    func testThat_whenPoppingAViewControllerFromAStackHavingOnlyOneElement_theCurrentStackIsNotChangedAndTheMethodReturnsNil() {
         // Arrange
-        let oneElementStack = [Stack.firstViewController]
-        sut = StackInteractor(stack: oneElementStack)
+        let oneElementStack = Stack.distinctElements(1)
+        sut = StackHandler(stack: oneElementStack)
 
         // Act
         let poppedViewController = sut.pop()
@@ -174,24 +167,27 @@ class StackInteractorTests: XCTestCase {
         XCTAssertEqual(sut.stack, [initialStack.first])
     }
 
-    func testThat_whenPoppingToRoot_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheInsertsAndRemovalsAsInput() {
+    func testThat_whenPoppingToRoot_theDelegateReceivesTheInsertionsAndRemovals() {
         // Arrange
-        let testScenario: Scenario = .popToRoot
-        let expectedStackChanges = self.expectedStackChanges(for: testScenario)
+        let stack = Stack.distinctElements(10)
+        sut = StackHandler(stack: stack)
+        sut.delegate = mockStackHandlerDelegate
+
+        let expectedStackChanges = stack.dropLast(9).difference(from: stack)
 
         // Act
         sut.popToRoot()
 
         // Assert
-        XCTAssertTrue(interactorDelegate.didCallStackDidChange)
-        XCTAssertEqual(interactorDelegate.inserts, expectedStackChanges.inserts)
-        XCTAssertEqual(interactorDelegate.removals, expectedStackChanges.removals)
+        XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertEqual(mockStackHandlerDelegate.insertions, expectedStackChanges.insertions)
+        XCTAssertEqual(mockStackHandlerDelegate.removals, expectedStackChanges.removals)
     }
 
-    func testThat_whenTheStackContainsOnlyOneElement_whenPoppingToRoot_theCurrentStackIsNotChangedAndTheMethodReturnsEmptyArray() {
+    func testThat_whenPoppingToRootFromAStackHavingOnlyOneElement_theCurrentStackIsNotChangedAndTheMethodReturnsEmptyArray() {
         // Arrange
-        let oneElementStack = [Stack.firstViewController]
-        sut = StackInteractor(stack: oneElementStack)
+        let oneElementStack = Stack.distinctElements(1)
+        sut = StackHandler(stack: oneElementStack)
 
         // Act
         let poppedViewControllers = sut.popToRoot()
@@ -205,28 +201,38 @@ class StackInteractorTests: XCTestCase {
 
     func testThat_whenPoppingToAViewControllerAlreadyOnTheStack_allElementsAfterThatViewControllerAreRemovedFromTheCurrentStackAndReturnedToTheCaller() {
         // Arrange
-        let targetViewController = Stack.middleViewController
+        let stack = Stack.distinctElements(10)
+        sut = StackHandler(stack: stack)
+
+        let targetIndex = 7
+        let targetViewController = stack[targetIndex]
 
         // Act
         let poppedViewControllers = sut.popTo(targetViewController)
 
         // Assert
-        XCTAssertEqual(poppedViewControllers, Array(initialStack.dropFirst(2)))
-        XCTAssertEqual(sut.stack, initialStack.dropLast())
+        XCTAssertEqual(poppedViewControllers, stack.suffix(2))
+        XCTAssertEqual(sut.stack, stack.dropLast(2))
     }
 
-    func testThat_whenPoppingToAViewControllerAlreadyOnTheStack_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheInsertsAndRemovalsAsInput() {
+    func testThat_whenPoppingToAViewControllerWhichIsOnTheStack_theDelegateReceivesTheInsertionsAndRemovals() {
         // Arrange
-        let testScenario: Scenario = .popToViewControllerAlreadyOnStack
-        let expectedStackChanges = self.expectedStackChanges(for: testScenario)
+        let stack = Stack.distinctElements(10)
+        sut = StackHandler(stack: stack)
+        sut.delegate = mockStackHandlerDelegate
+
+        let targetIndex = 7
+        let targetViewController = stack[targetIndex]
+
+        let expectedStackChanges = stack.dropLast(2).difference(from: stack)
 
         // Act
-        sut.popTo(Stack.middleViewController)
+        sut.popTo(targetViewController)
 
         // Assert
-        XCTAssertTrue(interactorDelegate.didCallStackDidChange)
-        XCTAssertEqual(interactorDelegate.inserts, expectedStackChanges.inserts)
-        XCTAssertEqual(interactorDelegate.removals, expectedStackChanges.removals)
+        XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertEqual(mockStackHandlerDelegate.insertions, expectedStackChanges.insertions)
+        XCTAssertEqual(mockStackHandlerDelegate.removals, expectedStackChanges.removals)
     }
 
     func testThat_whenPoppingToAViewControllerWhichIsNotOnTheStack_theCurrentStackIsNotChangedAndTheMethodReturnsEmptyArray() {
@@ -252,7 +258,7 @@ class StackInteractorTests: XCTestCase {
         sut.setStack(sameStack)
 
         // Assert
-        XCTAssertFalse(interactorDelegate.didCallStackDidChange)
+        XCTAssertFalse(mockStackHandlerDelegate.didCallStackDidChange)
         XCTAssertEqual(sut.stack, currentStack)
     }
 
@@ -269,50 +275,26 @@ class StackInteractorTests: XCTestCase {
         sut.setStack(duplicatesStack)
 
         // Assert
-        XCTAssertFalse(interactorDelegate.didCallStackDidChange)
+        XCTAssertFalse(mockStackHandlerDelegate.didCallStackDidChange)
         XCTAssertEqual(sut.stack, initialStack)
     }
 
-    func testThat_ReplacingCurrentStackWithAValidStack_theStackDidChangeMethodIsInvokedOnTheDelegateWithTheInsertsAndRemovalsAsInput() {
+    func testThat_ReplacingCurrentStackWithAStackContainingDistinctElements_theDelegateReceivesTheInsertionsAndRemovals() {
         // Arrange
-        let newStack = Stack.any(ofSize: 5)
-        let testScenario: Scenario = .replaceStackWithValidStack(newStack)
-        let expectedStackChanges = self.expectedStackChanges(for: testScenario)
+        let stack = Stack.distinctElements(10)
+        sut = StackHandler(stack: stack)
+        sut.delegate = mockStackHandlerDelegate
+
+        let newStack = Stack.distinctElements(4)
+
+        let expectedStackChanges = newStack.difference(from: stack)
 
         // Act
         sut.setStack(newStack)
 
         // Assert
-        XCTAssertTrue(interactorDelegate.didCallStackDidChange)
-        XCTAssertEqual(interactorDelegate.inserts, expectedStackChanges.inserts)
-        XCTAssertEqual(interactorDelegate.removals, expectedStackChanges.removals)
-    }
-}
-
-fileprivate extension StackInteractorTests {
-
-    enum Scenario {
-        case pushNonDuplicate(UIViewController)
-        case pushStackWithoutDuplicates(Stack)
-        case popViewController
-        case popToViewControllerAlreadyOnStack
-        case popToRoot
-        case replaceStackWithValidStack(Stack)
-    }
-
-    func expectedStack(after scenario: Scenario) -> Stack {
-        switch scenario {
-        case .pushNonDuplicate(let element): return initialStack + [element]
-        case .pushStackWithoutDuplicates(let stack): return initialStack + stack
-        case .popViewController: return initialStack.dropLast()
-        case .popToViewControllerAlreadyOnStack: return initialStack.dropLast()
-        case .popToRoot: return initialStack.dropLast(2)
-        case .replaceStackWithValidStack(let stack): return stack
-        }
-    }
-
-    func expectedStackChanges(for scenario: Scenario) -> (inserts: Stack.Inserts, removals: Stack.Removals) {
-        let difference = expectedStack(after: scenario).difference(from: initialStack)
-        return (difference.insertions, difference.removals)
+        XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertEqual(mockStackHandlerDelegate.insertions, expectedStackChanges.insertions)
+        XCTAssertEqual(mockStackHandlerDelegate.removals, expectedStackChanges.removals)
     }
 }

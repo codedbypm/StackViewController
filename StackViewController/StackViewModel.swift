@@ -85,7 +85,9 @@ class StackViewModel: StackHandlerDelegate  {
             guard let invertedDifference = difference.inverted else { return }
             guard let oldStack = self.stack.applying(invertedDifference) else { return }
 
+            self.stackHandler.delegate = nil
             self.stackHandler.setStack(oldStack)
+            self.stackHandler.delegate = self
         }
 
         if let transition = currentTransition {

@@ -31,14 +31,11 @@ class StackHandler: ExceptionThrowing {
     private(set) var stack = Stack() {
         didSet {
             guard oldValue != stack else { return }
-            guard shouldNotifyDelegate else { return }
 
             let difference = stack.difference(from: oldValue)
             delegate?.stackDidChange(difference)
         }
     }
-
-    private var shouldNotifyDelegate: Bool = true
 
     // MARK: - Init
 
@@ -81,17 +78,8 @@ class StackHandler: ExceptionThrowing {
         stack = newStack
     }
 
-    func revertLastChange(_ difference: Stack.Difference) {
-        guard let oldStack = stack.applying(difference.inverted) else { return assertionFailure() }
-
-        shouldNotifyDelegate = false
-        stack = oldStack
-        shouldNotifyDelegate = true
-    }
-
     // MARK: - Private methods
 
-    @discardableResult
     private func popToViewController(at index: Int) -> Stack {
         let poppedCount = stack.endIndex - (index + 1)
         guard canPopLast(poppedCount) else { return [] }

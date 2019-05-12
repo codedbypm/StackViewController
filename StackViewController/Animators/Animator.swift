@@ -35,7 +35,9 @@ public class Animator: NSObject, UIViewControllerAnimatedTransitioning {
         return animationsDuration
     }
 
-    public func animateTransition(using context: UIViewControllerContextTransitioning) {
+    public func animateTransition(
+        using context: UIViewControllerContextTransitioning
+    ) {
         prepareTransition(using: context)
 
         propertyAnimator = createPropertyAnimator(using: context)
@@ -47,7 +49,9 @@ public class Animator: NSObject, UIViewControllerAnimatedTransitioning {
         }
     }
 
-    public func interruptibleAnimator(using context: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
+    public func interruptibleAnimator(
+        using context: UIViewControllerContextTransitioning
+    ) -> UIViewImplicitlyAnimating {
         if let propertyAnimator = propertyAnimator {
             return propertyAnimator
         } else {

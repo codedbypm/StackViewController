@@ -57,18 +57,18 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {
-        let interactor = StackInteractor(stack: viewControllers)
-        viewModel = StackViewModel(stackInteractor: interactor)
+        let stackHandler = StackHandler(stack: viewControllers)
+        viewModel = StackViewModel(stackHandler: stackHandler)
         super.init(nibName: nil, bundle: nil)
 
-        interactor.delegate = viewModel
+        stackHandler.delegate = viewModel
         viewModel.delegate = self
         viewControllers.forEach { addChild($0) }
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        let interactor = StackInteractor(stack: [])
-        viewModel = StackViewModel(stackInteractor: interactor)
+        let stackHandler = StackHandler(stack: [])
+        viewModel = StackViewModel(stackHandler: stackHandler)
         super.init(coder: aDecoder)
     }
 

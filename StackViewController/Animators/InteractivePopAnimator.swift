@@ -113,7 +113,8 @@ private extension InteractivePopAnimator {
         let initialTouchLocationX = recognizer.initialTouchLocation?.x ?? 0
         let translation = recognizer.translation(in: recognizerView)
         let maximumTranslation = recognizerView.bounds.width
-        let percentage = (initialTouchLocationX + translation.x)/maximumTranslation
+        let totalTranslation = initialTouchLocationX + translation.x
+        let percentage = totalTranslation/maximumTranslation
         return percentage
     }
 

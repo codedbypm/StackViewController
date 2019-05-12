@@ -16,7 +16,7 @@ extension StackViewController {
     }
 
     static func withEmptyStack() -> StackViewController {
-        return .withNumberOfViewControllers(0)
+        return StackViewController(viewControllers: .empty)
     }
 
     static func withNumberOfViewControllers(_ count: UInt) -> StackViewController {
@@ -25,7 +25,7 @@ extension StackViewController {
     }
 
     static func withDefaultStack() -> StackViewController {
-        return StackViewController(viewControllers: Stack.default)
+        return StackViewController(viewControllers: .default)
     }
 }
 

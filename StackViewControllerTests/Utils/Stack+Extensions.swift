@@ -6,25 +6,22 @@
 //  Copyright © 2019 codedby.pm. All rights reserved.
 //
 
-import Foundation
-
 @testable import StackViewController
+
+extension UIViewController {
+    static let first = UIViewController()
+    static let middle = UIViewController()
+    static let last = UIViewController()
+}
 
 extension Stack {
     static let empty: Stack = []
+
+    static let `default`: Stack = [.first, .middle, .last]
 
     static func distinctElements(_ size: Int) -> Stack {
         guard size > 0 else { return .empty }
         return (0..<size).map { _ in return UIViewController() }
     }
 
-    static let firstViewController = UIViewController()
-    static let middleViewController = UIViewController()
-    static let lastViewController = UIViewController()
-    
-    static let `default` = [
-        firstViewController,
-        middleViewController,
-        lastViewController
-    ]
 }

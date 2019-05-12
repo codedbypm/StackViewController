@@ -21,6 +21,7 @@
 		FD44FF362286515000DA2AEB /* StackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF352286515000DA2AEB /* StackViewModel.swift */; };
 		FD44FF3922888DF600DA2AEB /* MockStackHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3822888DF600DA2AEB /* MockStackHandlerDelegate.swift */; };
 		FD44FF3B22889FA200DA2AEB /* StackHandler+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */; };
+		FD44FF3D2288CFA900DA2AEB /* MockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */; };
 		FD5259842280F25A0072C6B8 /* TransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5259832280F25A0072C6B8 /* TransitionHandler.swift */; };
 		FD5259862281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */; };
 		FD52598C2284E9070072C6B8 /* Stack+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52598B2284E9070072C6B8 /* Stack+Extensions.swift */; };
@@ -99,6 +100,7 @@
 		FD44FF352286515000DA2AEB /* StackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewModel.swift; sourceTree = "<group>"; };
 		FD44FF3822888DF600DA2AEB /* MockStackHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackHandlerDelegate.swift; sourceTree = "<group>"; };
 		FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackHandler+Extensions.swift"; sourceTree = "<group>"; };
+		FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockViewController.swift; sourceTree = "<group>"; };
 		FD5259832280F25A0072C6B8 /* TransitionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionHandler.swift; sourceTree = "<group>"; };
 		FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEdgePanGestureRecognizer.swift; sourceTree = "<group>"; };
 		FD52598B2284E9070072C6B8 /* Stack+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stack+Extensions.swift"; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				FD44FF3822888DF600DA2AEB /* MockStackHandlerDelegate.swift */,
+				FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -487,6 +490,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD44FF3D2288CFA900DA2AEB /* MockViewController.swift in Sources */,
 				FD76B7692270EA010090EDB2 /* StackViewControllerTests+Push.swift in Sources */,
 				FD76B7672270E9C60090EDB2 /* StackViewControllerTests+Properties.swift in Sources */,
 				FD44FF3922888DF600DA2AEB /* MockStackHandlerDelegate.swift in Sources */,

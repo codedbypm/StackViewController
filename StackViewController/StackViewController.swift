@@ -168,8 +168,10 @@ extension StackViewController: StackViewModelDelegate {
     }
 
     func didRemoveStackElements(_ removals: Stack) {
-        removals.forEach { $0.willMove(toParent: nil) }
-        removals.dropFirst().forEach { $0.removeFromParent() }
+        removals.forEach {
+            $0.willMove(toParent: nil)
+            $0.removeFromParent()
+        }
     }
 
     func didReplaceStack(_ oldStack: Stack, with newStack: Stack) {

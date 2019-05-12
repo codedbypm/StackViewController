@@ -14,8 +14,8 @@ extension CollectionDifference {
         return CollectionDifference([])!
     }
 
-    var inverted: CollectionDifference {
-        return CollectionDifference(map { $0.inverted })!
+    var inverted: CollectionDifference? {
+        return CollectionDifference(map { $0.inverted })
     }
 }
 

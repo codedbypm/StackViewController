@@ -82,9 +82,10 @@ class StackViewModel: StackHandlerDelegate  {
         currentTransition?.to = stackHandler.stack.last
         currentTransition?.undo = { [weak self] in
             guard let self = self else { return }
+            guard let invertedDifference = difference.inverted else { return }
+            guard let oldStack = self.stack.applying(invertedDifference) else { return }
 
-            let oldStack = self.stack.applying(difference.inverted)
-            self.stackHandler.setStack(oldStack!)
+            self.stackHandler.setStack(oldStack)
         }
 
         if let transition = currentTransition {

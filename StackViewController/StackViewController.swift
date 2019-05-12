@@ -160,8 +160,11 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 extension StackViewController: StackViewModelDelegate {
 
     func didAddStackElements(_ additions: Stack) {
-        additions.forEach { addChild($0) }
-        additions.dropLast().forEach { $0.didMove(toParent: self) }
+        additions.dropLast().forEach {
+            addChild($0)
+            $0.didMove(toParent: self)
+        }
+        additions.suffix(1).forEach { addChild($0) }
     }
 
     func didRemoveStackElements(_ removals: Stack) {

@@ -19,9 +19,8 @@ extension Stack {
 
     static let `default`: Stack = [.first, .middle, .last]
 
-    static func distinctElements(_ size: Int) -> Stack {
-        guard size > 0 else { return .empty }
-        return (0..<size).map { _ in return UIViewController() }
+    static func distinctElements<T: UIViewController>(_ size: Int) -> [T] {
+        guard size > 0 else { return [] }
+        return (0..<size).map { _ in return T.init() }
     }
-
 }

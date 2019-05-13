@@ -9,8 +9,11 @@
 import Foundation
 
 protocol StackViewModelDelegate: class {
-    func didAddStackElements(_ additions: Stack)
-    func didRemoveStackElements(_ removals: Stack)
+    func prepareToMoveToParent(for _: UIViewController) // after this sends willMoveToParent self
+    func finalizeMoveToParent(for _: UIViewController) // after this sends didMoveToParent self
+
+    func prepareToRemoveFromParent(for _: UIViewController) // after this sends willMoveToParent nil
+    func finalizeRemoveFromParent(for _: UIViewController) // after this sends didMoveToParent nil
     func didReplaceStack(_ oldStack: Stack, with newStack: Stack)
 
     func didCreateTransition(_: Transition)
@@ -77,7 +80,7 @@ class StackViewModel: StackHandlerDelegate  {
     // MARK: - StackHandlerDelegate
 
     func stackDidChange(_ difference: Stack.Difference) {
-        notifyDelegateAboutChanges(difference)
+        notifyControllerAboutStackChanges(difference)
 
         currentTransition?.to = stackHandler.stack.last
         currentTransition?.undo = { [weak self] in
@@ -97,12 +100,32 @@ class StackViewModel: StackHandlerDelegate  {
 
     // MARK: - Private methods
 
-    private func notifyDelegateAboutChanges(_ difference: Stack.Difference) {
+    private func notifyControllerAboutStackChanges(_ difference: Stack.Difference) {
         let insertedViewControllers = difference.insertions.map { $0._element }
-        delegate?.didAddStackElements(insertedViewControllers)
+        notifyControllerOfInsertions(insertedViewControllers)
 
         let removedViewControllers = difference.removals.map { $0._element }
-        delegate?.didRemoveStackElements(removedViewControllers)
+        notifyControllerOfRemovals(removedViewControllers)
+    }
+
+    private func notifyControllerOfInsertions(_ insertions: Stack) {
+        insertions.dropLast().forEach {
+            self.delegate?.prepareToMoveToParent(for: $0)
+            self.delegate?.finalizeMoveToParent(for: $0)
+        }
+        insertions.suffix(1).forEach {
+            self.delegate?.prepareToMoveToParent(for: $0)
+        }
+    }
+
+    private func notifyControllerOfRemovals(_ removals: Stack) {
+        removals.dropLast().forEach {
+            self.delegate?.prepareToRemoveFromParent(for: $0)
+            self.delegate?.finalizeRemoveFromParent(for: $0)
+        }
+        removals.suffix(1).forEach {
+            self.delegate?.prepareToRemoveFromParent(for: $0)
+        }
     }
 
     private func stackOperation(whenReplacing oldStack: Stack, with newStack: Stack) -> StackViewController.Operation {

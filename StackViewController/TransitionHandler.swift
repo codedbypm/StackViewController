@@ -88,21 +88,4 @@ class TransitionHandler {
         }
         interactionController.stopInteractiveTransition(gestureRecognizer)
     }
-
-    @objc
-    func screenEdgeGestureRecognizerDidChangeState(_ recognizer: ScreenEdgePanGestureRecognizer) {
-        switch recognizer.state {
-        case .changed:
-            updateInteractiveTransition(recognizer)
-        case .cancelled:
-            cancelInteractiveTransition()
-        case .ended:
-            stopInteractiveTransition(recognizer)
-        case .possible, .failed, .began:
-            break
-        @unknown default:
-            assertionFailure()
-        }
-
-    }
 }

@@ -10,8 +10,6 @@ import UIKit
 
 public class StackViewController: UIViewController, UIGestureRecognizerDelegate {
 
-    let debugAppearance = true
-
     public enum Operation {
         case push
         case pop
@@ -212,9 +210,9 @@ extension StackViewController {
 }
 
 extension StackViewController: ConsoleDebuggable {
-    public override var description: String {
-        return "SVC"
-    }
+    public override var description: String { return "SVC" }
+    var debugAppearance: Bool { return true }
+
 }
 
 extension StackViewController: StackViewControllerHandling {

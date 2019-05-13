@@ -14,6 +14,11 @@ protocol StackViewModelDelegate: UIViewController {
 
     func prepareRemovingChild(_: UIViewController) // after this sends willMoveToParent nil
     func finishRemovingChild(_: UIViewController) // after this sends didMoveToParent nil
+
+    func prepareAppearance(of _: UIViewController, animated: Bool)
+    func finishAppearance(of _: UIViewController)
+    func prepareDisappearance(of _: UIViewController, animated: Bool)
+    func finishDisappearance(of _: UIViewController)
 }
 
 class StackViewModel: StackHandlerDelegate, TransitionHandlerDelegate  {
@@ -127,22 +132,53 @@ class StackViewModel: StackHandlerDelegate, TransitionHandlerDelegate  {
 
     // MARK: - TransitionHandlerDelegate
 
-    func willStartTransition(using _: TransitionContext) {
-//        sendInitialViewAppearanceEvents(for: transition)
+    func willStartTransition(using context: TransitionContext) {
+        if let from = context.viewController(forKey: .from) {
+            delegate?.prepareDisappearance(of: from, animated: context.isAnimated)
+        }
+        if let to = context.viewController(forKey: .to) {
+            delegate?.prepareAppearance(of: to, animated: context.isAnimated)
+        }
     }
 
-    func didEndTransition(using _: TransitionContext, didComplete: Bool) {
-//        if didComplete  {
-//            sendFinalViewAppearanceEvents(for: transition)
-//            sendFinalViewControllerContainmentEvents(for: transition)
-//        } else {
-//            sendInitialViewAppearanceEvents(for: transition, swapElements: true)
-//            sendFinalViewAppearanceEvents(for: transition)
-//
-//            transition.undo?()
-//        }
-//
-//        transitionHandler = nil
+    func didEndTransition(using context: TransitionContext, didComplete: Bool) {
+        if didComplete {
+            if let from = context.viewController(forKey: .from) {
+                delegate?.finishDisappearance(of: from)
+            }
+            if let to = context.viewController(forKey: .to) {
+                delegate?.finishAppearance(of: to)
+            }
+
+            if let from = context.viewController(forKey: .from) {
+                if case .pop = context.operation {
+                    delegate?.finishRemovingChild(from)
+                }
+            }
+
+            if let to = context.viewController(forKey: .to) {
+                if case .push = context.operation {
+                    delegate?.finishAddingChild(to)
+                }
+            }
+        } else {
+            if let from = context.viewController(forKey: .from) {
+                delegate?.prepareAppearance(of: from, animated: context.isAnimated)
+            }
+            if let to = context.viewController(forKey: .to) {
+                delegate?.prepareDisappearance(of: to, animated: context.isAnimated)
+            }
+            if let from = context.viewController(forKey: .from) {
+                delegate?.finishAppearance(of: from)
+            }
+            if let to = context.viewController(forKey: .to) {
+                delegate?.finishAppearance(of: to)
+            }
+
+            currentTransition?.undo?()
+        }
+
+        transitionHandler = nil
 //        debugTransitionEnded()
     }
     // MARK: - Actions

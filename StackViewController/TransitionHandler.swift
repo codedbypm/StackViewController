@@ -19,6 +19,8 @@ class TransitionHandler {
 
     weak var delegate: TransitionHandlerDelegate?
 
+    let transition: Transition
+
     // MARK: - Private properties
 
     private let context: TransitionContext
@@ -27,24 +29,16 @@ class TransitionHandler {
 
     // MARK: - Init
 
-    init(context: TransitionContext,
-         transitioningDelegate: StackViewControllerDelegate?
+    init(transition: Transition,
+         context: TransitionContext,
+         animationController: UIViewControllerAnimatedTransitioning,
+         interactionController: UIViewControllerInteractiveTransitioning?
     ) {
+        self.transition = transition
         self.context = context
+        self.animationController = animationController
+        self.interactionController = interactionController
 
-        if let from = context.viewController(forKey: .from), let to = context.viewController(forKey: .to), let animatioController = transitioningDelegate?.animationController(for: context.operation, from: from, to: to) {
-            self.animationController = animatioController
-        } else {
-            animationController = (context.operation == .push ? PushAnimator() : PopAnimator())
-        }
-
-        if context.isInteractive, let animationController = animationController {
-            if let interactionController = transitioningDelegate?.interactionController(for: animationController) {
-                self.interactionController = interactionController
-            } else {
-                self.interactionController = InteractivePopAnimator(animationController: animationController)
-            }
-        }
 
         context.onTransitionFinished = { [weak self] didComplete in
             self?.animationController?.animationEnded?(didComplete)

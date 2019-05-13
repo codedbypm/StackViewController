@@ -38,9 +38,10 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
 
     private let stackHandler: StackHandler
 
+    private var transitionHandler: TransitionHandler?
+
     private var currentTransition: Transition?
 
-    private var transitionHandler: TransitionHandler?
 
     // MARK: - Init
 
@@ -105,9 +106,12 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
     // MARK: - StackHandlerDelegate
 
     func stackDidChange(_ difference: Stack.Difference) {
+        print(difference)
         notifyControllerAboutStackChanges(difference)
 
-        currentTransition?.undo = { [weak self] in
+        guard var currentTransition = currentTransition else { return }
+
+        currentTransition.undo = { [weak self] in
             guard let self = self else { return }
             guard let invertedDifference = difference.inverted else { return }
             guard let oldStack = self.stack.applying(invertedDifference) else { return }
@@ -117,11 +121,34 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
             self.stackHandler.delegate = self
         }
 
-        if let transition = currentTransition, let delegate = delegate, delegate.isInViewHierarchy {
-            let context = TransitionContext(transition: transition, in: viewControllerWrapperView)
+        let animationController: UIViewControllerAnimatedTransitioning?
+
+        if let from = currentTransition.from, let to = currentTransition.to, let controller = transitioningDelegate?.animationController(for: currentTransition.operation, from: from, to: to) {
+            animationController = controller
+        } else {
+            
+            animationController = (currentTransition.operation == .push ? PushAnimator() : PopAnimator())
+        }
+
+        let interactionController: UIViewControllerInteractiveTransitioning?
+        if currentTransition.isInteractive, let animationController = animationController {
+            if let controller = transitioningDelegate?.interactionController(for: animationController) {
+                interactionController = controller
+            } else {
+                interactionController = InteractivePopAnimator(animationController: animationController)
+            }
+        } else {
+            interactionController = nil
+        }
+
+
+        if let delegate = delegate, delegate.isInViewHierarchy, let animationController = animationController {
+            let context = TransitionContext(transition: currentTransition, in: viewControllerWrapperView)
             transitionHandler = TransitionHandler(
+                transition: currentTransition,
                 context: context,
-                transitioningDelegate: transitioningDelegate
+                animationController: animationController,
+                interactionController: interactionController
             )
             transitionHandler?.delegate = self
             transitionHandler?.performTransition()

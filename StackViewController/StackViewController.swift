@@ -177,15 +177,8 @@ extension StackViewController: StackViewModelDelegate {
     func finalizeRemoveFromParent(for viewController: UIViewController) {
         viewController.removeFromParent()
     }
-        removals.forEach {
-            $0.willMove(toParent: nil)
-            $0.removeFromParent()
-        }
-    }
 
     func didReplaceStack(_ oldStack: Stack, with newStack: Stack) {
-        didRemoveStackElements(oldStack)
-        didAddStackElements(newStack)
     }
 
     func didCreateTransition(_ transition: Transition) {

@@ -95,7 +95,6 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         topViewController?.endAppearanceTransition()
-        topViewController?.didMove(toParent: self)
     }
 
     override public func viewWillDisappear(_ animated: Bool) {

@@ -78,4 +78,32 @@ class StackViewControllerTests: XCTestCase {
         XCTAssertEqual(flattenedDates, flattenedDates.sorted())
         XCTAssertEqual(flattenedDates.count, 8)
     }
+
+
+//    Start NC with 3 VCs
+//    [UIKit] Black    =>    willMove(toParent:)
+//    [UIKit] Black    =>    didMove(toParent:)
+//    [UIKit] Red    =>    willMove(toParent:)
+//    [UIKit] Red    =>    didMove(toParent:)
+//    [UIKit] Green    =>    willMove(toParent:)
+    func testThat_whenInitWithANonEmptyStack_itSendsCorrectSequenceOfEventsToHisChildren() {
+        // Arrange
+        let stack: [MockViewController] = Stack.distinctElements(3)
+
+        // Act
+        sut = StackViewController(viewControllers: stack)
+
+        // Assert
+        let willMoveDates = stack.compactMap { $0.willMoveToParentDate }
+        XCTAssertEqual(willMoveDates.count, 3)
+
+        let didMoveDates = stack.compactMap { $0.didMoveToParentDate }
+        XCTAssertEqual(didMoveDates.count, 2)
+
+        var flattenedDates = zip(willMoveDates, didMoveDates).flatMap({ return [$0, $1] })
+        flattenedDates.append(contentsOf: willMoveDates.suffix(1))
+        XCTAssertEqual(flattenedDates, flattenedDates.sorted())
+        XCTAssertEqual(flattenedDates.count, 5)
+    }
+
 }

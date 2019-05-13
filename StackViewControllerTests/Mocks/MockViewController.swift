@@ -9,6 +9,7 @@
 import UIKit
 
 class MockViewController: UIViewController {
+    
     var willMoveToParentDate: Date?
     var didMoveToParentDate: Date?
     override func willMove(toParent parent: UIViewController?) { willMoveToParentDate = Date() }

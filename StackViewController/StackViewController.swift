@@ -63,7 +63,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 
         stackHandler.delegate = viewModel
         viewModel.delegate = self
-        viewControllers.forEach { addChild($0) }
+        viewModel.setStack(viewControllers, animated: false)
     }
 
     public required init?(coder aDecoder: NSCoder) {

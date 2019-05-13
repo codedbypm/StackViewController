@@ -88,21 +88,26 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 
     override public func viewWillAppear(_ animated: Bool) {
+        debugFunc(#function, allowed: true)
+
         super.viewWillAppear(animated)
         topViewController?.beginAppearanceTransition(true, animated: animated)
     }
 
     override public func viewDidAppear(_ animated: Bool) {
+        debugFunc(#function, allowed: true)
         super.viewDidAppear(animated)
         topViewController?.endAppearanceTransition()
     }
 
     override public func viewWillDisappear(_ animated: Bool) {
+        debugFunc(#function, allowed: true)
         super.viewWillDisappear(animated)
         topViewController?.beginAppearanceTransition(false, animated: animated)
     }
 
     override public func viewDidDisappear(_ animated: Bool) {
+        debugFunc(#function, allowed: true)
         super.viewDidDisappear(animated)
         topViewController?.endAppearanceTransition()
     }

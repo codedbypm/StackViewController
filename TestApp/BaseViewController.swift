@@ -48,7 +48,7 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
     weak var debugDelegate: DebugDelegate?
     weak var stack: StackViewControllerHandling?
     
-    let debugAppearance = false
+    let debugAppearance = true
     let debugViewControllerContainment = true
     let debugTraitCollection = false
 
@@ -141,23 +141,23 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         debugFunc(#function, allowed: debugAppearance)
+        super.viewWillAppear(animated)
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         debugFunc(#function, allowed: debugAppearance)
+        super.viewDidAppear(animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         debugFunc(#function, allowed: debugAppearance)
+        super.viewWillDisappear(animated)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
         debugFunc(#function, allowed: debugAppearance)
+        super.viewDidDisappear(animated)
     }
 
     override func willMove(toParent parent: UIViewController?) {

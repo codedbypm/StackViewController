@@ -12,6 +12,7 @@ import StackViewController
 class NavigationController: UINavigationController, ConsoleDebuggable {
 
     var debugDelegate: DebugDelegate?
+    let debugAppearance = true
 
 
     init() {
@@ -54,6 +55,26 @@ class NavigationController: UINavigationController, ConsoleDebuggable {
     override func popViewController(animated: Bool) -> UIViewController? {
         let returned = super.popViewController(animated: animated)
         return returned
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        debugFunc(#function, allowed: debugAppearance)
+        super.viewWillAppear(animated)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        debugFunc(#function, allowed: debugAppearance)
+        super.viewDidAppear(animated)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        debugFunc(#function, allowed: debugAppearance)
+        super.viewWillDisappear(animated)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        debugFunc(#function, allowed: debugAppearance)
+        super.viewDidDisappear(animated)
     }
 }
 

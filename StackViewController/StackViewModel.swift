@@ -101,11 +101,11 @@ class StackViewModel: StackHandlerDelegate  {
     // MARK: - Private methods
 
     private func notifyControllerAboutStackChanges(_ difference: Stack.Difference) {
-        let insertedViewControllers = difference.insertions.map { $0._element }
-        notifyControllerOfInsertions(insertedViewControllers)
-
         let removedViewControllers = difference.removals.map { $0._element }
         notifyControllerOfRemovals(removedViewControllers)
+
+        let insertedViewControllers = difference.insertions.map { $0._element }
+        notifyControllerOfInsertions(insertedViewControllers)
     }
 
     private func notifyControllerOfInsertions(_ insertions: Stack) {

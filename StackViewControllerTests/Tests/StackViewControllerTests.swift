@@ -80,7 +80,8 @@ class StackViewControllerTests: XCTestCase {
 //    }
 
 
-//    Start NC with 3 VCs
+//    Start NC with stack = [Black, Red, Green]
+//  
 //    [UIKit] Black    =>    willMove(toParent:)
 //    [UIKit] Black    =>    didMove(toParent:)
 //    [UIKit] Red    =>    willMove(toParent:)

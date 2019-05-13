@@ -44,36 +44,56 @@ class StackViewModel: StackHandlerDelegate  {
     // MARK: - Internal methods
 
     func push(_ viewController: UIViewController, animated: Bool) {
-        currentTransition = Transition(operation: .push, from: topViewController, animated: animated)
+        currentTransition = Transition(operation: .push,
+                                       from: topViewController,
+                                       to: viewController,
+                                       animated: animated)
         stackHandler.push(viewController)
     }
 
     func push(_ stack: Stack, animated: Bool) {
-        currentTransition = Transition(operation: .push, from: topViewController, animated: animated)
+        currentTransition = Transition(operation: .push,
+                                       from: topViewController,
+                                       to: stack.last,
+                                       animated: animated)
         stackHandler.push(stack)
     }
 
     @discardableResult
     func pop(animated: Bool, interactive: Bool = false) -> UIViewController? {
-        currentTransition = Transition(operation: .pop, from: topViewController, animated: animated, interactive: interactive)
+        currentTransition = Transition(operation: .pop,
+                                       from: topViewController,
+                                       to: stack[stack.endIndex - 2],
+                                       animated: animated,
+                                       interactive: interactive)
         return stackHandler.pop()
     }
 
     @discardableResult
     func popToRoot(animated: Bool) -> Stack {
-        currentTransition = Transition(operation: .pop, from: topViewController, animated: animated)
+        currentTransition = Transition(operation: .pop,
+                                       from: topViewController,
+                                       to: stack.first,
+                                       animated: animated)
         return stackHandler.popToRoot()
     }
 
     @discardableResult
     func popTo(_ viewController: UIViewController, animated: Bool, interactive: Bool = false) -> Stack {
-        currentTransition = Transition(operation: .pop, from: topViewController, animated: animated, interactive: interactive)
+        currentTransition = Transition(operation: .pop,
+                                       from: topViewController,
+                                       to: viewController,
+                                       animated: animated,
+                                       interactive: interactive)
         return stackHandler.popTo(viewController)
     }
 
     func setStack(_ newStack: Stack, animated: Bool) {
         let operation = stackOperation(whenReplacing: stack, with: newStack)
-        currentTransition = Transition(operation: operation, from: topViewController, animated: animated)
+        currentTransition = Transition(operation: operation,
+                                       from: topViewController,
+                                       to: newStack.last,
+                                       animated: animated)
         stackHandler.setStack(newStack)
     }
 
@@ -82,7 +102,6 @@ class StackViewModel: StackHandlerDelegate  {
     func stackDidChange(_ difference: Stack.Difference) {
         notifyControllerAboutStackChanges(difference)
 
-        currentTransition?.to = stackHandler.stack.last
         currentTransition?.undo = { [weak self] in
             guard let self = self else { return }
             guard let invertedDifference = difference.inverted else { return }

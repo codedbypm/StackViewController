@@ -162,23 +162,20 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 // MARK: - StackViewModelDelegate
 
 extension StackViewController: StackViewModelDelegate {
-    func prepareToMoveToParent(for viewController: UIViewController) {
+    func prepareAddingChild(_ viewController: UIViewController) {
         addChild(viewController)
     }
 
-    func finalizeMoveToParent(for viewController: UIViewController) {
+    func finishAddingChild(_ viewController: UIViewController) {
         viewController.didMove(toParent: self)
     }
 
-    func prepareToRemoveFromParent(for viewController: UIViewController) {
+    func prepareRemovingChild(_ viewController: UIViewController) {
         viewController.willMove(toParent: nil)
     }
 
-    func finalizeRemoveFromParent(for viewController: UIViewController) {
+    func finishRemovingChild(_ viewController: UIViewController) {
         viewController.removeFromParent()
-    }
-
-    func didReplaceStack(_ oldStack: Stack, with newStack: Stack) {
     }
 
     func didCreateTransition(_ transition: Transition) {

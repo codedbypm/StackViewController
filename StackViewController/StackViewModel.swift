@@ -8,13 +8,12 @@
 
 import Foundation
 
-protocol StackViewModelDelegate: class {
-    func prepareToMoveToParent(for _: UIViewController) // after this sends willMoveToParent self
-    func finalizeMoveToParent(for _: UIViewController) // after this sends didMoveToParent self
+protocol StackViewModelDelegate: UIViewController {
+    func prepareAddingChild(_: UIViewController) // after this sends willMoveToParent self
+    func finishAddingChild(_: UIViewController) // after this sends didMoveToParent self
 
-    func prepareToRemoveFromParent(for _: UIViewController) // after this sends willMoveToParent nil
-    func finalizeRemoveFromParent(for _: UIViewController) // after this sends didMoveToParent nil
-    func didReplaceStack(_ oldStack: Stack, with newStack: Stack)
+    func prepareRemovingChild(_: UIViewController) // after this sends willMoveToParent nil
+    func finishRemovingChild(_: UIViewController) // after this sends didMoveToParent nil
 
     func didCreateTransition(_: Transition)
 }
@@ -129,21 +128,21 @@ class StackViewModel: StackHandlerDelegate  {
 
     private func notifyControllerOfInsertions(_ insertions: Stack) {
         insertions.dropLast().forEach {
-            self.delegate?.prepareToMoveToParent(for: $0)
-            self.delegate?.finalizeMoveToParent(for: $0)
+            self.delegate?.prepareAddingChild($0)
+            self.delegate?.finishAddingChild($0)
         }
         insertions.suffix(1).forEach {
-            self.delegate?.prepareToMoveToParent(for: $0)
+            self.delegate?.prepareAddingChild($0)
         }
     }
 
     private func notifyControllerOfRemovals(_ removals: Stack) {
         removals.dropLast().forEach {
-            self.delegate?.prepareToRemoveFromParent(for: $0)
-            self.delegate?.finalizeRemoveFromParent(for: $0)
+            self.delegate?.prepareRemovingChild($0)
+            self.delegate?.finishRemovingChild($0)
         }
         removals.suffix(1).forEach {
-            self.delegate?.prepareToRemoveFromParent(for: $0)
+            self.delegate?.prepareRemovingChild($0)
         }
     }
 

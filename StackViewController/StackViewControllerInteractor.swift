@@ -76,7 +76,6 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
         return stackHandler.pop()
     }
 
-    @discardableResult
     func popToRoot(animated: Bool) -> Stack {
         currentTransition = Transition(operation: .pop,
                                        from: topViewController,
@@ -85,7 +84,6 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
         return stackHandler.popToRoot()
     }
 
-    @discardableResult
     func popTo(_ viewController: UIViewController, animated: Bool, interactive: Bool = false) -> Stack {
         currentTransition = Transition(operation: .pop,
                                        from: topViewController,

@@ -228,26 +228,9 @@ extension StackViewController: TransitionHandlerDelegate {
 private extension StackViewController {
 
     func sendInitialViewControllerContainmentEvents(for transition: Transition) {
-        switch transition.operation {
-        case .pop:
-            transition.from?.willMove(toParent: nil)
-        case .push:
-            guard let to = transition.to else { return assertionFailure() }
-            addChild(to)
-        case .none:
-            break
-        }
     }
 
     func sendFinalViewControllerContainmentEvents(for transition: Transition) {
-        switch transition.operation {
-        case .pop:
-            transition.from?.removeFromParent()
-        case .push:
-            transition.to?.didMove(toParent: self)
-        case .none:
-            break
-        }
     }
 
     func sendInitialViewAppearanceEvents(for transition: Transition, swapElements: Bool = false) {

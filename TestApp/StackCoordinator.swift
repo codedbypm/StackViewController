@@ -14,11 +14,20 @@ class StackCoordinator {
     let canPrint = true
 
     lazy var stackViewController: StackViewController = {
-        var first: BaseViewController = UIViewController.stacked(on: nil,
+        var yellow: BaseViewController = UIViewController.stacked(on: nil,
                                                                  delegate: self,
                                                                  color: .yellow)
-        let stackViewController = StackViewController(viewControllers: [])
-        first.stack = stackViewController
+        var black: BaseViewController = UIViewController.stacked(on: nil,
+                                                                 delegate: self,
+                                                                 color: .black)
+        var green: BaseViewController = UIViewController.stacked(on: nil,
+                                                                 delegate: self,
+                                                                 color: .green)
+
+        let stackViewController = StackViewController(viewControllers: [yellow, black, green])
+        yellow.stack = stackViewController
+        black.stack = stackViewController
+        green.stack = stackViewController
 
         stackViewController.debugDelegate = self
         stackViewController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)

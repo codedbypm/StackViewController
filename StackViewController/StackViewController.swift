@@ -10,6 +10,8 @@ import UIKit
 
 public class StackViewController: UIViewController, UIGestureRecognizerDelegate {
 
+    let debugAppearance = true
+
     public enum Operation {
         case push
         case pop
@@ -20,8 +22,11 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     
     public var debugDelegate: DebugDelegate?
 
-    public weak var delegate: StackViewControllerDelegate?
-    
+    public weak var delegate: StackViewControllerDelegate? {
+        get { return viewModel.transitioningDelegate }
+        set { viewModel.transitioningDelegate = newValue }
+    }
+
     public var viewControllers: [UIViewController] {
         get { return viewModel.stack }
         set { viewModel.setStack(newValue, animated: false) }
@@ -38,17 +43,19 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     // MARK: - Internal properties
 
     lazy var screenEdgePanGestureRecognizer: ScreenEdgePanGestureRecognizer = {
-        let selector = #selector(screenEdgeGestureRecognizerDidChangeState(_:))
+        let selector = #selector(StackViewModel.screenEdgeGestureRecognizerDidChangeState(_:))
         let recognizer = ScreenEdgePanGestureRecognizer()
         recognizer.edges = .left
         recognizer.delegate = self
-        recognizer.addTarget(self, action: selector)
+        recognizer.addTarget(viewModel, action: selector)
         return recognizer
     }()
 
     // MARK: - Private properties
 
-    private var viewControllerWrapperView: UIView = ViewControllerWrapperView()
+    private var viewControllerWrapperView: UIView {
+        return viewModel.viewControllerWrapperView
+    }
 
     private let viewModel: StackViewModel
 
@@ -76,7 +83,7 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        debugFunc(#function, allowed: true)
+        debugFunc(#function, allowed: debugAppearance)
 
         view.addGestureRecognizer(screenEdgePanGestureRecognizer)
         view.addSubview(viewControllerWrapperView)
@@ -88,26 +95,25 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 
     override public func viewWillAppear(_ animated: Bool) {
-        debugFunc(#function, allowed: true)
-
+        debugFunc(#function, allowed: debugAppearance)
         super.viewWillAppear(animated)
         topViewController?.beginAppearanceTransition(true, animated: animated)
     }
 
     override public func viewDidAppear(_ animated: Bool) {
-        debugFunc(#function, allowed: true)
+        debugFunc(#function, allowed: debugAppearance)
         super.viewDidAppear(animated)
         topViewController?.endAppearanceTransition()
     }
 
     override public func viewWillDisappear(_ animated: Bool) {
-        debugFunc(#function, allowed: true)
+        debugFunc(#function, allowed: debugAppearance)
         super.viewWillDisappear(animated)
         topViewController?.beginAppearanceTransition(false, animated: animated)
     }
 
     override public func viewDidDisappear(_ animated: Bool) {
-        debugFunc(#function, allowed: true)
+        debugFunc(#function, allowed: debugAppearance)
         super.viewDidDisappear(animated)
         topViewController?.endAppearanceTransition()
     }
@@ -146,17 +152,6 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     public func setStack(_ stack: Stack, animated: Bool) {
         viewModel.setStack(stack, animated: animated)
     }
-
-    // MARK: - Actions
-
-    @objc private func screenEdgeGestureRecognizerDidChangeState(_
-        gestureRecognizer: ScreenEdgePanGestureRecognizer) {        
-
-        guard gestureRecognizer === screenEdgePanGestureRecognizer else { return }
-        guard case .began = gestureRecognizer.state else { return }
-
-        viewModel.pop(animated: true, interactive: true)
-    }
 }
 
 // MARK: - StackViewModelDelegate
@@ -178,44 +173,45 @@ extension StackViewController: StackViewModelDelegate {
         viewController.removeFromParent()
     }
 
-    func didCreateTransition(_ transition: Transition) {
-        debugTransitionStarted()
-        assert(transitionHandler == nil)
-
-        transitionHandler = TransitionHandler(
-            transition: transition,
-            containerView: viewControllerWrapperView,
-            stackViewControllerDelegate: delegate,
-            screenEdgeGestureRecognizer: screenEdgePanGestureRecognizer
-        )
-        transitionHandler?.delegate = self
-        transitionHandler?.performTransition()
-    }
+//    func didCreateTransition(_ transition: Transition) {
+//        debugTransitionStarted()
+//        assert(transitionHandler == nil)
+//        assert(isViewLoaded == true)
+//        assert(view.window != nil)
+//
+//        transitionHandler = TransitionHandler(
+//            transition: transition,
+//            containerView: viewControllerWrapperView,
+//            stackViewControllerDelegate: delegate,
+//            screenEdgeGestureRecognizer: screenEdgePanGestureRecognizer
+//        )
+//        transitionHandler?.delegate = self
+//        transitionHandler?.performTransition()
+//    }
 }
 
 // MARK: - TransitionHandlerDelegate
 
-extension StackViewController: TransitionHandlerDelegate {
+extension StackViewController {
 
-    func willStartTransition(_ transition: Transition) {
-        sendInitialViewControllerContainmentEvents(for: transition)
-        sendInitialViewAppearanceEvents(for: transition)
-    }
-
-    func didEndTransition(_ transition: Transition, didComplete: Bool) {
-        if didComplete  {
-            sendFinalViewAppearanceEvents(for: transition)
-            sendFinalViewControllerContainmentEvents(for: transition)
-        } else {
-            sendInitialViewAppearanceEvents(for: transition, swapElements: true)
-            sendFinalViewAppearanceEvents(for: transition)
-
-            transition.undo?()
-        }
-
-        transitionHandler = nil
-        debugTransitionEnded()
-    }
+//    func willStartTransition(_ transition: Transition) {
+//        sendInitialViewAppearanceEvents(for: transition)
+//    }
+//
+//    func didEndTransition(_ transition: Transition, didComplete: Bool) {
+//        if didComplete  {
+//            sendFinalViewAppearanceEvents(for: transition)
+//            sendFinalViewControllerContainmentEvents(for: transition)
+//        } else {
+//            sendInitialViewAppearanceEvents(for: transition, swapElements: true)
+//            sendFinalViewAppearanceEvents(for: transition)
+//
+//            transition.undo?()
+//        }
+//
+//        transitionHandler = nil
+//        debugTransitionEnded()
+//    }
 }
 
 // MARK: - Containment and Appearance events

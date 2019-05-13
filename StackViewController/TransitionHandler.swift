@@ -9,8 +9,8 @@
 import Foundation
 
 protocol TransitionHandlerDelegate: class {
-    func willStartTransition(_: Transition)
-    func didEndTransition(_: Transition, didComplete: Bool)
+    func willStartTransition(using _: TransitionContext)
+    func didEndTransition(using _: TransitionContext, didComplete: Bool)
 }
 
 class TransitionHandler {
@@ -21,39 +21,30 @@ class TransitionHandler {
 
     // MARK: - Private properties
 
-    private let transition: Transition
-    private weak var stackViewControllerDelegate: StackViewControllerDelegate?
     private let context: TransitionContext
     private var animationController: UIViewControllerAnimatedTransitioning?
     private var interactionController: UIViewControllerInteractiveTransitioning?
 
     // MARK: - Init
 
-    init(transition: Transition,
-         containerView: UIView,
-         stackViewControllerDelegate: StackViewControllerDelegate?,
-         screenEdgeGestureRecognizer: ScreenEdgePanGestureRecognizer?
+    init(context: TransitionContext,
+         transitioningDelegate: StackViewControllerDelegate?
     ) {
-        self.transition = transition
-        self.stackViewControllerDelegate = stackViewControllerDelegate
-        self.context = TransitionContext(transition: transition, in: containerView)
+        self.context = context
 
-        if let from = transition.from, let to = transition.to, let animatioController = stackViewControllerDelegate?.animationController(for: transition.operation, from: from, to: to) {
+        if let from = context.viewController(forKey: .from), let to = context.viewController(forKey: .to), let animatioController = transitioningDelegate?.animationController(for: context.operation, from: from, to: to) {
             self.animationController = animatioController
         } else {
-            animationController = (transition.operation == .push ? PushAnimator() : PopAnimator())
+            animationController = (context.operation == .push ? PushAnimator() : PopAnimator())
         }
 
-        if transition.isInteractive, let animationController = animationController {
-            if let interactionController = stackViewControllerDelegate?.interactionController(for: animationController) {
+        if context.isInteractive, let animationController = animationController {
+            if let interactionController = transitioningDelegate?.interactionController(for: animationController) {
                 self.interactionController = interactionController
             } else {
                 self.interactionController = InteractivePopAnimator(animationController: animationController)
             }
         }
-
-        let selector = #selector(screenEdgeGestureRecognizerDidChangeState(_:))
-        screenEdgeGestureRecognizer?.addTarget(self, action: selector)
 
         context.onTransitionFinished = { [weak self] didComplete in
             self?.animationController?.animationEnded?(didComplete)
@@ -62,7 +53,7 @@ class TransitionHandler {
     }
 
     func performTransition() {
-        delegate?.willStartTransition(transition)
+        delegate?.willStartTransition(using: context)
 
         if context.isInteractive {
             interactionController?.startInteractiveTransition(context)
@@ -72,7 +63,7 @@ class TransitionHandler {
     }
 
     func transitionFinished(_ didComplete: Bool) {
-        delegate?.didEndTransition(transition, didComplete: didComplete)
+        delegate?.didEndTransition(using: context, didComplete: didComplete)
         interactionController = nil
         animationController = nil
     }

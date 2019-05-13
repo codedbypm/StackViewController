@@ -14,26 +14,29 @@ protocol StackViewModelDelegate: UIViewController {
 
     func prepareRemovingChild(_: UIViewController) // after this sends willMoveToParent nil
     func finishRemovingChild(_: UIViewController) // after this sends didMoveToParent nil
-
-    func didCreateTransition(_: Transition)
 }
 
-class StackViewModel: StackHandlerDelegate  {
+class StackViewModel: StackHandlerDelegate, TransitionHandlerDelegate  {
 
     // MARK: - Internal properties
 
     weak var delegate: StackViewModelDelegate?
+    weak var transitioningDelegate: StackViewControllerDelegate?
 
     var stack: Stack { return stackHandler.stack }
     
     var topViewController: UIViewController? { return stack.last }
+
+    lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
     // MARK: - Private properties
 
     private let stackHandler: StackHandler
 
     private var currentTransition: Transition?
- 
+
+    private var transitionHandler: TransitionHandler?
+
     // MARK: - Init
 
     init(stackHandler: StackHandler) {
@@ -111,9 +114,57 @@ class StackViewModel: StackHandlerDelegate  {
             self.stackHandler.delegate = self
         }
 
-        if let transition = currentTransition {
-            delegate?.didCreateTransition(transition)
+        if let transition = currentTransition, let delegate = delegate, delegate.isInViewHierarchy {
+            let context = TransitionContext(transition: transition, in: viewControllerWrapperView)
+            transitionHandler = TransitionHandler(
+                context: context,
+                transitioningDelegate: transitioningDelegate
+            )
+            transitionHandler?.delegate = self
+            transitionHandler?.performTransition()
         }
+    }
+
+    // MARK: - TransitionHandlerDelegate
+
+    func willStartTransition(using _: TransitionContext) {
+//        sendInitialViewAppearanceEvents(for: transition)
+    }
+
+    func didEndTransition(using _: TransitionContext, didComplete: Bool) {
+//        if didComplete  {
+//            sendFinalViewAppearanceEvents(for: transition)
+//            sendFinalViewControllerContainmentEvents(for: transition)
+//        } else {
+//            sendInitialViewAppearanceEvents(for: transition, swapElements: true)
+//            sendFinalViewAppearanceEvents(for: transition)
+//
+//            transition.undo?()
+//        }
+//
+//        transitionHandler = nil
+//        debugTransitionEnded()
+    }
+    // MARK: - Actions
+
+    @objc func screenEdgeGestureRecognizerDidChangeState(_
+        gestureRecognizer: ScreenEdgePanGestureRecognizer) {
+
+        switch gestureRecognizer.state {
+        case .began:
+            pop(animated: true, interactive: true)
+        case .changed:
+            transitionHandler?.updateInteractiveTransition(gestureRecognizer)
+        case .ended:
+            transitionHandler?.stopInteractiveTransition(gestureRecognizer)
+        case .cancelled:
+            transitionHandler?.cancelInteractiveTransition()
+        case .failed, .possible:
+            break
+        @unknown default:
+            assertionFailure()
+        }
+
     }
 
     // MARK: - Private methods

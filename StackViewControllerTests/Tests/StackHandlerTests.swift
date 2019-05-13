@@ -9,7 +9,7 @@
 import XCTest
 @testable import StackViewController
 
-class StackInteractorTests: XCTestCase {
+class StackHandlerTests: XCTestCase {
     var sut: StackHandler!
 
     override func setUp() {

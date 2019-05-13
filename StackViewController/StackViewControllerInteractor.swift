@@ -1,5 +1,5 @@
 //
-//  StackViewModel.swift
+//  StackViewControllerInteractor.swift
 //  StackViewController
 //
 //  Created by Paolo Moroni on 11/05/2019.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol StackViewModelDelegate: UIViewController {
+protocol StackViewControllerInteractorDelegate: UIViewController {
     func prepareAddingChild(_: UIViewController) // after this sends willMoveToParent self
     func finishAddingChild(_: UIViewController) // after this sends didMoveToParent self
 
@@ -21,11 +21,11 @@ protocol StackViewModelDelegate: UIViewController {
     func finishDisappearance(of _: UIViewController)
 }
 
-class StackViewModel: StackHandlerDelegate, TransitionHandlerDelegate  {
+class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDelegate  {
 
     // MARK: - Internal properties
 
-    weak var delegate: StackViewModelDelegate?
+    weak var delegate: StackViewControllerInteractorDelegate?
     weak var transitioningDelegate: StackViewControllerDelegate?
 
     var stack: Stack { return stackHandler.stack }

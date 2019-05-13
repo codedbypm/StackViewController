@@ -23,17 +23,17 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     public var debugDelegate: DebugDelegate?
 
     public weak var delegate: StackViewControllerDelegate? {
-        get { return viewModel.transitioningDelegate }
-        set { viewModel.transitioningDelegate = newValue }
+        get { return interactor.transitioningDelegate }
+        set { interactor.transitioningDelegate = newValue }
     }
 
     public var viewControllers: [UIViewController] {
-        get { return viewModel.stack }
-        set { viewModel.setStack(newValue, animated: false) }
+        get { return interactor.stack }
+        set { interactor.setStack(newValue, animated: false) }
     }
 
     public var topViewController: UIViewController? {
-        return viewModel.topViewController
+        return interactor.topViewController
     }
 
     public override var shouldAutomaticallyForwardAppearanceMethods: Bool {
@@ -43,39 +43,37 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     // MARK: - Internal properties
 
     lazy var screenEdgePanGestureRecognizer: ScreenEdgePanGestureRecognizer = {
-        let selector = #selector(StackViewModel.screenEdgeGestureRecognizerDidChangeState(_:))
+        let selector = #selector(StackViewControllerInteractor.screenEdgeGestureRecognizerDidChangeState(_:))
         let recognizer = ScreenEdgePanGestureRecognizer()
         recognizer.edges = .left
         recognizer.delegate = self
-        recognizer.addTarget(viewModel, action: selector)
+        recognizer.addTarget(interactor, action: selector)
         return recognizer
     }()
 
     // MARK: - Private properties
 
     private var viewControllerWrapperView: UIView {
-        return viewModel.viewControllerWrapperView
+        return interactor.viewControllerWrapperView
     }
 
-    private let viewModel: StackViewModel
-
-    private var transitionHandler: TransitionHandler?
+    private let interactor: StackViewControllerInteractor
 
     // MARK: - Init
 
     public required init(viewControllers: [UIViewController]) {
         let stackHandler = StackHandler()
-        viewModel = StackViewModel(stackHandler: stackHandler)
+        interactor = StackViewControllerInteractor(stackHandler: stackHandler)
         super.init(nibName: nil, bundle: nil)
 
-        stackHandler.delegate = viewModel
-        viewModel.delegate = self
-        viewModel.setStack(viewControllers, animated: false)
+        stackHandler.delegate = interactor
+        interactor.delegate = self
+        interactor.setStack(viewControllers, animated: false)
     }
 
     public required init?(coder aDecoder: NSCoder) {
         let stackHandler = StackHandler()
-        viewModel = StackViewModel(stackHandler: stackHandler)
+        interactor = StackViewControllerInteractor(stackHandler: stackHandler)
         super.init(coder: aDecoder)
     }
 
@@ -127,36 +125,36 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     // MARK: - Public methods
 
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        pushStack([viewController], animated: animated)
+        interactor.push(viewController, animated: animated)
     }
 
     public func pushStack(_ stack: Stack, animated: Bool) {
-        viewModel.push(stack, animated: animated)
+        interactor.push(stack, animated: animated)
     }
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
-        return viewModel.pop(animated: animated)
+        return interactor.pop(animated: animated)
     }
 
     @discardableResult
     public func popToRootViewController(animated: Bool) -> Stack? {
-        return viewModel.popToRoot(animated: animated)
+        return interactor.popToRoot(animated: animated)
     }
 
     @discardableResult
     public func popToViewController(_ viewController: UIViewController, animated: Bool) -> Stack? {
-        return viewModel.popTo(viewController, animated: animated)
+        return interactor.popTo(viewController, animated: animated)
     }
 
     public func setStack(_ stack: Stack, animated: Bool) {
-        viewModel.setStack(stack, animated: animated)
+        interactor.setStack(stack, animated: animated)
     }
 }
 
-// MARK: - StackViewModelDelegate
+// MARK: - StackViewControllerInteractorDelegate
 
-extension StackViewController: StackViewModelDelegate {
+extension StackViewController: StackViewControllerInteractorDelegate {
 
     func prepareAddingChild(_ viewController: UIViewController) {
         addChild(viewController)
@@ -189,25 +187,7 @@ extension StackViewController: StackViewModelDelegate {
     func finishDisappearance(of viewController: UIViewController) {
         viewController.endAppearanceTransition()
     }
-
-//    func didCreateTransition(_ transition: Transition) {
-//        debugTransitionStarted()
-//        assert(transitionHandler == nil)
-//        assert(isViewLoaded == true)
-//        assert(view.window != nil)
-//
-//        transitionHandler = TransitionHandler(
-//            transition: transition,
-//            containerView: viewControllerWrapperView,
-//            stackViewControllerDelegate: delegate,
-//            screenEdgeGestureRecognizer: screenEdgePanGestureRecognizer
-//        )
-//        transitionHandler?.delegate = self
-//        transitionHandler?.performTransition()
-//    }
 }
-
-// MARK: - TransitionHandlerDelegate
 
 extension StackViewController {
 
@@ -229,32 +209,6 @@ extension StackViewController {
 //        transitionHandler = nil
 //        debugTransitionEnded()
 //    }
-}
-
-// MARK: - Containment and Appearance events
-
-private extension StackViewController {
-
-    func sendInitialViewControllerContainmentEvents(for transition: Transition) {
-    }
-
-    func sendFinalViewControllerContainmentEvents(for transition: Transition) {
-    }
-
-    func sendInitialViewAppearanceEvents(for transition: Transition, swapElements: Bool = false) {
-        let isAnimated = transition.isAnimated
-
-        let from = (swapElements ? transition.to : transition.from)
-        let to = (swapElements ? transition.from : transition.to)
-
-        from?.beginAppearanceTransition(false, animated: isAnimated)
-        to?.beginAppearanceTransition(true, animated: isAnimated)
-    }
-
-    func sendFinalViewAppearanceEvents(for transition: Transition) {
-        transition.from?.endAppearanceTransition()
-        transition.to?.endAppearanceTransition()
-    }
 }
 
 extension StackViewController: ConsoleDebuggable {

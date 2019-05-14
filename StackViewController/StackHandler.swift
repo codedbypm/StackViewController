@@ -12,6 +12,8 @@ public typealias Stack = [UIViewController]
 
 extension Stack {
     typealias Difference = CollectionDifference<UIViewController>
+    typealias Insertion = CollectionDifference<UIViewController>.Change
+    typealias Removal = CollectionDifference<UIViewController>.Change
     typealias Insertions = [CollectionDifference<UIViewController>.Change]
     typealias Removals = [CollectionDifference<UIViewController>.Change]
 }

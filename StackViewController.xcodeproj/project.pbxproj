@@ -23,7 +23,7 @@
 		FD44FF3B22889FA200DA2AEB /* StackHandler+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */; };
 		FD44FF3D2288CFA900DA2AEB /* MockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */; };
 		FD44FF3F228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3E228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift */; };
-		FD5259842280F25A0072C6B8 /* TransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5259832280F25A0072C6B8 /* TransitionHandler.swift */; };
+		FD44FF44228B06DD00DA2AEB /* TransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5259832280F25A0072C6B8 /* TransitionHandler.swift */; };
 		FD5259862281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */; };
 		FD52598C2284E9070072C6B8 /* Stack+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52598B2284E9070072C6B8 /* Stack+Extensions.swift */; };
 		FD52598E22855CFC0072C6B8 /* CollectionDifference+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52598D22855CFC0072C6B8 /* CollectionDifference+Extensions.swift */; };
@@ -243,8 +243,8 @@
 				FD1B56FC227C876700E005EC /* Custom views */,
 				FD67E5F12252AF0F0051786B /* Extensions */,
 				FD67E5C2225258840051786B /* StackViewController.swift */,
-				FD1B570A227D68CB00E005EC /* StackHandler.swift */,
 				FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */,
+				FD1B570A227D68CB00E005EC /* StackHandler.swift */,
 				FD67E5F72254F2010051786B /* TransitionContext.swift */,
 				FD1B570C227DB9AF00E005EC /* Transition.swift */,
 				FD5259832280F25A0072C6B8 /* TransitionHandler.swift */,
@@ -453,11 +453,11 @@
 				FD5259862281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift in Sources */,
 				FD00021F2260CC9100A87FFB /* InteractivePopAnimator.swift in Sources */,
 				FD1B56FB227C870600E005EC /* ViewControllerWrapperView.swift in Sources */,
-				FD5259842280F25A0072C6B8 /* TransitionHandler.swift in Sources */,
 				FD1B5703227CBEF900E005EC /* Collection+Extensions.swift in Sources */,
 				FD1B570D227DB9AF00E005EC /* Transition.swift in Sources */,
 				FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */,
 				FD76B78F2279E0950090EDB2 /* ConsoleDebuggable.swift in Sources */,
+				FD44FF44228B06DD00DA2AEB /* TransitionHandler.swift in Sources */,
 				FD67E5C8225260C40051786B /* Animator.swift in Sources */,
 				FD76B77F227643600090EDB2 /* PushAnimator.swift in Sources */,
 				FD76B7812276449F0090EDB2 /* PopAnimator.swift in Sources */,

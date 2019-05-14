@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class StackViewController: UIViewController {
+public final class StackViewController: UIViewController {
 
     public enum Operation {
         case push

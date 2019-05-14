@@ -45,6 +45,46 @@ extension StackViewControllerTests {
         XCTAssertTrue(delegate === mockDelegate)
     }
 
+    // MARK: - viewControllers
+
+    func testThat_whenSettingViewControllers_itCallsSetViewControllersNonAninmatedMethodOfInteractor() {
+        // Arrange
+        let stack = Stack.distinctElements(4)
+        let stackHandler = StackHandler(stack: [])
+        let mockInteractor = MockStackViewControllerInteractor(stackHandler: stackHandler)
+        sut = StackViewController(interactor: mockInteractor)
+
+        XCTAssertFalse(mockInteractor.didCallSetStackAnimated)
+        XCTAssertNil(mockInteractor.passedStack)
+        XCTAssertNil(mockInteractor.passedAnimated)
+
+        // Act
+        sut.viewControllers = stack
+
+        // Assert
+        XCTAssertTrue(mockInteractor.didCallSetStackAnimated)
+        XCTAssertEqual(mockInteractor.passedStack, stack)
+        XCTAssertEqual(mockInteractor.passedAnimated, false)
+    }
+
+    func testThat_whenGettingViewControllers_itCallsTheGetterOfStackPropertyOfInteractor() {
+        // Arrange
+        let stack = Stack.distinctElements(1)
+        let stackHandler = StackHandler(stack: stack)
+        let mockInteractor = MockStackViewControllerInteractor(stackHandler: stackHandler)
+        sut = StackViewController(interactor: mockInteractor)
+
+        XCTAssertFalse(mockInteractor.didCallStackGetter)
+
+        // Act
+        _ = sut.viewControllers
+
+        // Assert
+        XCTAssertTrue(mockInteractor.didCallStackGetter)
+    }
+
+
+
 
     // MARK: - screenEdgePanGestureRecognizer
 

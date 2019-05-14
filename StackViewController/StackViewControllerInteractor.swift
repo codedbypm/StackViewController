@@ -52,6 +52,7 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
 
     init(stackHandler: StackHandler) {
         self.stackHandler = stackHandler
+        self.stackHandler.delegate = self
     }
 
     // MARK: - Internal methods

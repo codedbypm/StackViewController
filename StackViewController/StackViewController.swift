@@ -40,6 +40,8 @@ public class StackViewController: UIViewController {
 
     // MARK: - Internal properties
 
+    let interactor: StackViewControllerInteractor
+
     lazy var screenEdgePanGestureRecognizer: ScreenEdgePanGestureRecognizer = {
         let selector = #selector(screenEdgeGestureRecognizerDidChangeState(_:))
         let recognizer = ScreenEdgePanGestureRecognizer()
@@ -54,16 +56,13 @@ public class StackViewController: UIViewController {
         return interactor.viewControllerWrapperView
     }
 
-    private let interactor: StackViewControllerInteractor
-
     // MARK: - Init
 
-    public required init(viewControllers: [UIViewController]) {
-        let stackHandler = StackHandler()
-        interactor = StackViewControllerInteractor(stackHandler: stackHandler)
-        super.init(nibName: nil, bundle: nil)
+    public convenience init(viewControllers: [UIViewController]) {
+        let stackHandler = StackHandler(stack: [])
+        let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        self.init(interactor: interactor)
 
-        stackHandler.delegate = interactor
         interactor.delegate = self
         interactor.setStack(viewControllers, animated: false)
     }
@@ -74,6 +73,11 @@ public class StackViewController: UIViewController {
         super.init(coder: aDecoder)
     }
 
+    init(interactor: StackViewControllerInteractor) {
+        self.interactor = interactor
+        super.init(nibName: nil, bundle: nil)
+    }
+    
     // MARK: - UIViewController
 
     override public func viewDidLoad() {

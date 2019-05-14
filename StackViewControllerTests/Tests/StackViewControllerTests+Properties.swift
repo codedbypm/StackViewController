@@ -83,8 +83,18 @@ extension StackViewControllerTests {
         XCTAssertTrue(mockInteractor.didCallStackGetter)
     }
 
+    // MARK: - shouldAutomaticallyForwardAppearanceMethods
 
+    func testThat_shouldAutomaticallyForwardAppearanceMethods_isFalse() {
+        // Arrange
+        sut = StackViewController.dummy
 
+        // Act
+        let value = sut.shouldAutomaticallyForwardAppearanceMethods
+
+        // Assert
+        XCTAssertFalse(value)
+    }
 
     // MARK: - screenEdgePanGestureRecognizer
 

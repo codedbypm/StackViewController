@@ -26,6 +26,7 @@
 		FD44FF44228B06DD00DA2AEB /* TransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5259832280F25A0072C6B8 /* TransitionHandler.swift */; };
 		FD44FF46228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF45228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift */; };
 		FD44FF48228B65CF00DA2AEB /* MockStackViewControllerInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF47228B65CF00DA2AEB /* MockStackViewControllerInteractor.swift */; };
+		FD44FF4A228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF49228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift */; };
 		FD5259862281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */; };
 		FD52598C2284E9070072C6B8 /* Stack+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52598B2284E9070072C6B8 /* Stack+Extensions.swift */; };
 		FD52598E22855CFC0072C6B8 /* CollectionDifference+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52598D22855CFC0072C6B8 /* CollectionDifference+Extensions.swift */; };
@@ -107,6 +108,7 @@
 		FD44FF3E228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerInteractorTests.swift; sourceTree = "<group>"; };
 		FD44FF45228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackViewControllerDelegate.swift; sourceTree = "<group>"; };
 		FD44FF47228B65CF00DA2AEB /* MockStackViewControllerInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackViewControllerInteractor.swift; sourceTree = "<group>"; };
+		FD44FF49228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+ViewEvents.swift"; sourceTree = "<group>"; };
 		FD5259832280F25A0072C6B8 /* TransitionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionHandler.swift; sourceTree = "<group>"; };
 		FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEdgePanGestureRecognizer.swift; sourceTree = "<group>"; };
 		FD52598B2284E9070072C6B8 /* Stack+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stack+Extensions.swift"; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 			isa = PBXGroup;
 			children = (
 				FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */,
+				FD44FF49228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift */,
 				FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */,
 				FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */,
 				FD1B56F8227C525B00E005EC /* StackHandlerTests.swift */,
@@ -512,6 +515,7 @@
 				FD1B56F9227C525B00E005EC /* StackHandlerTests.swift in Sources */,
 				FD52598C2284E9070072C6B8 /* Stack+Extensions.swift in Sources */,
 				FD44FF3B22889FA200DA2AEB /* StackHandler+Extensions.swift in Sources */,
+				FD44FF4A228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

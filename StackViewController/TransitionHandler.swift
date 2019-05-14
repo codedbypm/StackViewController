@@ -19,45 +19,91 @@ class TransitionHandler {
 
     weak var delegate: TransitionHandlerDelegate?
 
-    let transition: Transition
-
     // MARK: - Private properties
 
-    private let context: TransitionContext
+    private weak var stackViewControllerDelegate: StackViewControllerDelegate?
+    private let transitionContext: TransitionContext
     private var animationController: UIViewControllerAnimatedTransitioning?
     private var interactionController: UIViewControllerInteractiveTransitioning?
+    private let screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
+    private let transitionId = UUID()
 
     // MARK: - Init
 
-    init(transition: Transition,
-         context: TransitionContext,
-         animationController: UIViewControllerAnimatedTransitioning,
-         interactionController: UIViewControllerInteractiveTransitioning?
-    ) {
-        self.transition = transition
-        self.context = context
-        self.animationController = animationController
-        self.interactionController = interactionController
+    init(operation: StackViewController.Operation,
+         from: UIViewController?,
+         to: UIViewController?,
+         containerView: UIView,
+         animated: Bool,
+         interactive: Bool = false,
+         screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer? = nil) {
 
+        self.screenEdgePanGestureRecognizer = screenEdgePanGestureRecognizer
 
-        context.onTransitionFinished = { [weak self] didComplete in
+        transitionContext = TransitionContext(operation: operation,
+                                              from: from,
+                                              to: to,
+                                              containerView: containerView,
+                                              animated: animated,
+                                              interactive: interactive)
+
+        transitionContext.onTransitionFinished = { [weak self] didComplete in
             self?.animationController?.animationEnded?(didComplete)
             self?.transitionFinished(didComplete)
         }
+
+        transitionContext.onTransitionCancelled = { _ in
+
+        }
+    }
+
+    deinit {
+        print("\(String(describing: self)): \(#function)")
     }
 
     func performTransition() {
-        delegate?.willStartTransition(using: context)
+        delegate?.willStartTransition(using: transitionContext)
 
-        if context.isInteractive {
-            interactionController?.startInteractiveTransition(context)
+        if transitionContext.isAnimated {
+            let animationController: UIViewControllerAnimatedTransitioning
+            let interactionController: UIViewControllerInteractiveTransitioning?
+
+            if let from = transitionContext.from, let to = transitionContext.to {
+                if let controller = stackViewControllerDelegate?.animationController(for: transitionContext.operation, from: from, to: to) {
+                    animationController = controller
+                } else {
+                    animationController = defaultAnimationController(for: transitionContext.operation)
+                }
+            } else {
+                animationController = defaultAnimationController(for: transitionContext.operation)
+            }
+            self.animationController = animationController
+
+
+            if transitionContext.isInteractive {
+                if let controller = stackViewControllerDelegate?.interactionController(for: animationController) {
+                    interactionController = controller
+                } else {
+                    interactionController = InteractivePopAnimator(animationController: animationController,
+                                                                   screenEdgePanGestureRecognizer: screenEdgePanGestureRecognizer!)
+                }
+                self.interactionController = interactionController
+                interactionController?.startInteractiveTransition(transitionContext)
+            } else {
+                self.interactionController = nil
+                animationController.animateTransition(using: transitionContext)
+            }
         } else {
-            animationController?.animateTransition(using: context)
+            delegate?.willStartTransition(using: transitionContext)
+            let animator = defaultAnimationController(for: transitionContext.operation)
+            animator.prepareTransition(using: transitionContext)
+            animator.transitionAnimations(using: transitionContext)()
+            animator.transitionCompletion(using: transitionContext)(.end)
         }
     }
 
     func transitionFinished(_ didComplete: Bool) {
-        delegate?.didEndTransition(using: context, didComplete: didComplete)
+        delegate?.didEndTransition(using: transitionContext, didComplete: didComplete)
         interactionController = nil
         animationController = nil
     }
@@ -81,5 +127,21 @@ class TransitionHandler {
             return
         }
         interactionController.stopInteractiveTransition(gestureRecognizer)
+    }
+
+    func defaultAnimationController(for operation: StackViewController.Operation) -> Animator {
+        switch operation {
+        case .pop: return PopAnimator()
+        case .push: return PushAnimator()
+        case .none: return NoTransitionAnimator()
+        }
+    }
+
+}
+
+extension TransitionHandler: CustomStringConvertible {
+
+    var description: String {
+        return String(describing: type(of: self)).appending(" \(transitionId)")
     }
 }

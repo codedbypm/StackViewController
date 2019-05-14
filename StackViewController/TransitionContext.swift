@@ -21,6 +21,9 @@ class TransitionContext: NSObject, UIViewControllerContextTransitioning {
     var onTransitionCancelled: ((Bool) -> Void)?
     var operation: StackViewController.Operation
 
+    var from: UIViewController? { return viewController(forKey: .from) }
+    var to: UIViewController? { return viewController(forKey: .to) }
+
     // MARK: - Private properties
 
     private var viewControllers: [UITransitionContextViewControllerKey: UIViewController?] = [:]
@@ -39,20 +42,12 @@ class TransitionContext: NSObject, UIViewControllerContextTransitioning {
 
     // MARK: - Init
 
-    init(transition: Transition, in containerView: UIView) {
-        self.operation = transition.operation
-        self.viewControllers = [.from: transition.from, .to: transition.to]
+    init(operation: StackViewController.Operation, from: UIViewController?, to: UIViewController?, containerView: UIView, animated: Bool, interactive: Bool = false) {
+        self.operation = operation
+        self.viewControllers = [.from: from, .to: to]
         self.containerView = containerView
-        self.isAnimated = transition.isAnimated && (transition.from != nil && transition.to != nil)
-        self.isInteractive = transition.isInteractive
-    }
-
-    deinit {
-        print("\(String(describing: self)): \(#function)")
-    }
-
-    public override var description: String {
-        return String(describing: type(of: self))
+        self.isAnimated = animated && (from != nil && to != nil)
+        self.isInteractive = interactive
     }
 
     func setViewController(_ viewController: UIViewController?,

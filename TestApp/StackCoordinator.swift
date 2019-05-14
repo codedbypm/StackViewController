@@ -32,9 +32,10 @@ class StackCoordinator {
         stackViewController.debugDelegate = self
         stackViewController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
         stackViewController.viewControllers = [
-            UIViewController.stacked(on: stackViewController, delegate: self, color: .black),
-            UIViewController.stacked(on: stackViewController, delegate: self, color: .red),
+            yellow,
             UIViewController.stacked(on: stackViewController, delegate: self, color: .green),
+            black,
+            green
         ]
         return stackViewController
     }()

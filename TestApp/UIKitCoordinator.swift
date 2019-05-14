@@ -12,7 +12,7 @@ extension UINavigationController: StackViewControllerHandling {}
 
 class UIKitCoordinator: NSObject {
 
-    let canPrint = true
+    let canPrint = false
 
     lazy var navigationController: NavigationController = {
         let navController = NavigationController()

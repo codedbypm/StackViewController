@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class StackViewController: UIViewController, UIGestureRecognizerDelegate {
+public class StackViewController: UIViewController {
 
     public enum Operation {
         case push
@@ -21,8 +21,8 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     public var debugDelegate: DebugDelegate?
 
     public weak var delegate: StackViewControllerDelegate? {
-        get { return interactor.transitioningDelegate }
-        set { interactor.transitioningDelegate = newValue }
+        get { return interactor.stackViewControllerDelegate }
+        set { interactor.stackViewControllerDelegate = newValue }
     }
 
     public var viewControllers: [UIViewController] {
@@ -41,11 +41,10 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
     // MARK: - Internal properties
 
     lazy var screenEdgePanGestureRecognizer: ScreenEdgePanGestureRecognizer = {
-        let selector = #selector(StackViewControllerInteractor.screenEdgeGestureRecognizerDidChangeState(_:))
+        let selector = #selector(screenEdgeGestureRecognizerDidChangeState(_:))
         let recognizer = ScreenEdgePanGestureRecognizer()
         recognizer.edges = .left
-        recognizer.delegate = self
-        recognizer.addTarget(interactor, action: selector)
+        recognizer.addTarget(self, action: selector)
         return recognizer
     }()
 
@@ -114,12 +113,6 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
         topViewController?.endAppearanceTransition()
     }
 
-    // MARK: - UIGestureRecognizerDelegate
-
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return (gestureRecognizer === screenEdgePanGestureRecognizer)
-    }
-
     // MARK: - Public methods
 
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
@@ -153,6 +146,10 @@ public class StackViewController: UIViewController, UIGestureRecognizerDelegate 
 // MARK: - StackViewControllerInteractorDelegate
 
 extension StackViewController: StackViewControllerInteractorDelegate {
+
+    func startInteractivePopTransition() {
+        interactor.pop(animated: true, interactive: true)
+    }
 
     func prepareAddingChild(_ viewController: UIViewController) {
         addChild(viewController)
@@ -188,6 +185,10 @@ extension StackViewController: StackViewControllerInteractorDelegate {
 }
 
 extension StackViewController {
+
+    @objc func screenEdgeGestureRecognizerDidChangeState(_ gestureRecognizer: ScreenEdgePanGestureRecognizer) {
+        interactor.handleScreenEdgePanGestureRecognizerStateChange(gestureRecognizer)
+    }
 
 //    func willStartTransition(_ transition: Transition) {
 //        sendInitialViewAppearanceEvents(for: transition)

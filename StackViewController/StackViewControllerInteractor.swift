@@ -113,18 +113,6 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
 
     // MARK: - StackHandlerDelegate
 
-    func transitionUndo(for difference: Stack.Difference) -> (() -> Void)? {
-        return { [weak self] in
-            guard let self = self else { return }
-            guard let invertedDifference = difference.inverted else { return }
-            guard let oldStack = self.stack.applying(invertedDifference) else { return }
-
-            self.stackHandler.delegate = nil
-            self.stackHandler.setStack(oldStack)
-            self.stackHandler.delegate = self
-        }
-    }
-
     func stackDidChange(_ difference: Stack.Difference) {
         assert(transitionHandler != nil)
 
@@ -205,6 +193,18 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
     }
 
     // MARK: - Private methods
+
+    private func transitionUndo(for difference: Stack.Difference) -> (() -> Void)? {
+        return { [weak self] in
+            guard let self = self else { return }
+            guard let invertedDifference = difference.inverted else { return }
+            guard let oldStack = self.stack.applying(invertedDifference) else { return }
+
+            self.stackHandler.delegate = nil
+            self.stackHandler.setStack(oldStack)
+            self.stackHandler.delegate = self
+        }
+    }
 
     private func notifyControllerAboutStackChanges(_ difference: Stack.Difference) {
         let removedViewControllers = difference.removals.map { $0._element }

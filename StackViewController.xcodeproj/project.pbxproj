@@ -24,6 +24,7 @@
 		FD44FF3D2288CFA900DA2AEB /* MockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */; };
 		FD44FF3F228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3E228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift */; };
 		FD44FF44228B06DD00DA2AEB /* TransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5259832280F25A0072C6B8 /* TransitionHandler.swift */; };
+		FD44FF46228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF45228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift */; };
 		FD5259862281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */; };
 		FD52598C2284E9070072C6B8 /* Stack+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52598B2284E9070072C6B8 /* Stack+Extensions.swift */; };
 		FD52598E22855CFC0072C6B8 /* CollectionDifference+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52598D22855CFC0072C6B8 /* CollectionDifference+Extensions.swift */; };
@@ -103,6 +104,7 @@
 		FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackHandler+Extensions.swift"; sourceTree = "<group>"; };
 		FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockViewController.swift; sourceTree = "<group>"; };
 		FD44FF3E228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerInteractorTests.swift; sourceTree = "<group>"; };
+		FD44FF45228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackViewControllerDelegate.swift; sourceTree = "<group>"; };
 		FD5259832280F25A0072C6B8 /* TransitionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionHandler.swift; sourceTree = "<group>"; };
 		FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEdgePanGestureRecognizer.swift; sourceTree = "<group>"; };
 		FD52598B2284E9070072C6B8 /* Stack+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stack+Extensions.swift"; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				FD44FF3822888DF600DA2AEB /* MockStackHandlerDelegate.swift */,
+				FD44FF45228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift */,
 				FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */,
 			);
 			path = Mocks;
@@ -499,6 +502,7 @@
 				FD44FF3922888DF600DA2AEB /* MockStackHandlerDelegate.swift in Sources */,
 				FD76B7032270C9530090EDB2 /* StackViewControllerTests.swift in Sources */,
 				FD76B7652270E3B70090EDB2 /* TimeInterval+Extensions.swift in Sources */,
+				FD44FF46228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift in Sources */,
 				FD44FF3F228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift in Sources */,
 				FD76B7632270DA340090EDB2 /* StackViewController+Extensions.swift in Sources */,
 				FD1B56F9227C525B00E005EC /* StackHandlerTests.swift in Sources */,

@@ -73,25 +73,19 @@ public class Animator: NSObject, UIViewControllerAnimatedTransitioning {
         frameOfViewWhenOffScreen = containerView.bounds.offsetBy(dx: horizontalOffset, dy: 0.0)
     }
 
-    func transitionAnimations(using context: UIViewControllerContextTransitioning) -> Animations? {
+    func transitionAnimations(using context: UIViewControllerContextTransitioning) -> Animations {
         assertionFailure("Error: prepareTransition(using:) must be overriden")
-        return nil
+        return {}
     }
 
     func createPropertyAnimator(using context: UIViewControllerContextTransitioning) -> UIViewPropertyAnimator {
         let animations = transitionAnimations(using: context)
+        let animationsCompletion = transitionCompletion(using: context)
+
         let propertyAnimator = UIViewPropertyAnimator(duration: animationsDuration,
                                                       curve: .easeInOut,
                                                       animations: animations)
-        propertyAnimator.addCompletion { position in
-            let completed = (position == .end)
-            if completed {
-                let from = context.viewController(forKey: .from)
-                from?.view.removeFromSuperview()
-            }
-            context.completeTransition(completed)
-        }
-
+        propertyAnimator.addCompletion(animationsCompletion)
         return propertyAnimator
     }
 
@@ -100,5 +94,16 @@ public class Animator: NSObject, UIViewControllerAnimatedTransitioning {
 
         to.view.frame = context.finalFrame(for: to)
         context.completeTransition(true)
+    }
+
+    func transitionCompletion(using context: UIViewControllerContextTransitioning) -> ((UIViewAnimatingPosition) -> Void) {
+        return { position in
+            let completed = (position == .end)
+            if completed {
+                let from = context.viewController(forKey: .from)
+                from?.view.removeFromSuperview()
+            }
+            context.completeTransition(completed)
+        }
     }
 }

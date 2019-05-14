@@ -25,9 +25,14 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
 
     // MARK: - Init
 
-    public init(animationController: UIViewControllerAnimatedTransitioning) {
+    public init(animationController: UIViewControllerAnimatedTransitioning,
+                screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer) {
         self.animationController = animationController
+
         super.init()
+
+        let selector = #selector(screenEdgeGestureRecognizerDidChangeState(_:))
+        screenEdgePanGestureRecognizer.addTarget(self, action: selector)
     }
 
     deinit {
@@ -79,6 +84,24 @@ public class InteractivePopAnimator: NSObject, UIViewControllerInteractiveTransi
         context?.finishInteractiveTransition()
         animate(to: .end)
     }
+
+    @objc
+    func screenEdgeGestureRecognizerDidChangeState(_ recognizer: ScreenEdgePanGestureRecognizer) {
+        switch recognizer.state {
+        case .changed:
+            updateInteractiveTransition(recognizer)
+        case .cancelled:
+            cancelInteractiveTransition()
+        case .ended:
+            stopInteractiveTransition(recognizer)
+        case .possible, .failed, .began:
+            break
+        @unknown default:
+            assertionFailure()
+        }
+
+    }
+
 }
 
 private extension InteractivePopAnimator {

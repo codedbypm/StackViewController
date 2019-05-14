@@ -9,24 +9,26 @@
 import Foundation
 
 protocol StackViewControllerInteractorDelegate: UIViewController {
-    func prepareAddingChild(_: UIViewController) // after this sends willMoveToParent self
-    func finishAddingChild(_: UIViewController) // after this sends didMoveToParent self
+    func prepareAddingChild(_: UIViewController)
+    func finishAddingChild(_: UIViewController)
 
-    func prepareRemovingChild(_: UIViewController) // after this sends willMoveToParent nil
-    func finishRemovingChild(_: UIViewController) // after this sends didMoveToParent nil
+    func prepareRemovingChild(_: UIViewController)
+    func finishRemovingChild(_: UIViewController)
 
     func prepareAppearance(of _: UIViewController, animated: Bool)
     func finishAppearance(of _: UIViewController)
     func prepareDisappearance(of _: UIViewController, animated: Bool)
     func finishDisappearance(of _: UIViewController)
+
+    func startInteractivePopTransition()
 }
 
-class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDelegate  {
+class StackViewControllerInteractor: StackHandlerDelegate  {
 
     // MARK: - Internal properties
 
     weak var delegate: StackViewControllerInteractorDelegate?
-    weak var transitioningDelegate: StackViewControllerDelegate?
+    weak var stackViewControllerDelegate: StackViewControllerDelegate?
 
     var stack: Stack { return stackHandler.stack }
     
@@ -38,10 +40,13 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
 
     private let stackHandler: StackHandler
 
+    private var transitionContext: TransitionContext?
+
     private var transitionHandler: TransitionHandler?
 
-    private var currentTransition: Transition?
+    private var undoLastStackChange: (() -> Void)?
 
+    private var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
 
     // MARK: - Init
 
@@ -52,66 +57,63 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
     // MARK: - Internal methods
 
     func push(_ viewController: UIViewController, animated: Bool) {
-        currentTransition = Transition(operation: .push,
-                                       from: topViewController,
-                                       to: viewController,
-                                       animated: animated)
-        stackHandler.push(viewController)
+        push([viewController], animated: animated)
     }
 
     func push(_ stack: Stack, animated: Bool) {
-        currentTransition = Transition(operation: .push,
-                                       from: topViewController,
-                                       to: stack.last,
-                                       animated: animated)
+        transitionHandler = TransitionHandler(operation: .push,
+                                              from: topViewController,
+                                              to: stack.last,
+                                              containerView: viewControllerWrapperView,
+                                              animated: animated)
         stackHandler.push(stack)
     }
 
     @discardableResult
     func pop(animated: Bool, interactive: Bool = false) -> UIViewController? {
-        currentTransition = Transition(operation: .pop,
-                                       from: topViewController,
-                                       to: stack[stack.endIndex - 2],
-                                       animated: animated,
-                                       interactive: interactive)
+        transitionHandler = TransitionHandler(operation: .pop,
+                                              from: topViewController,
+                                              to: stack.dropLast().last,
+                                              containerView: viewControllerWrapperView,
+                                              animated: animated,
+                                              interactive: interactive,
+                                              screenEdgePanGestureRecognizer: screenEdgePanGestureRecognizer)
         return stackHandler.pop()
     }
 
     func popToRoot(animated: Bool) -> Stack {
-        currentTransition = Transition(operation: .pop,
-                                       from: topViewController,
-                                       to: stack.first,
-                                       animated: animated)
+        transitionHandler = TransitionHandler(operation: .pop,
+                                              from: topViewController,
+                                              to: stack.first,
+                                              containerView: viewControllerWrapperView,
+                                              animated: animated)
         return stackHandler.popToRoot()
     }
 
     func popTo(_ viewController: UIViewController, animated: Bool, interactive: Bool = false) -> Stack {
-        currentTransition = Transition(operation: .pop,
-                                       from: topViewController,
-                                       to: viewController,
-                                       animated: animated,
-                                       interactive: interactive)
+        transitionHandler = TransitionHandler(operation: .pop,
+                                              from: topViewController,
+                                              to: viewController,
+                                              containerView: viewControllerWrapperView,
+                                              animated: animated,
+                                              interactive: interactive)
         return stackHandler.popTo(viewController)
     }
 
     func setStack(_ newStack: Stack, animated: Bool) {
         let operation = stackOperation(whenReplacing: stack, with: newStack)
-        currentTransition = Transition(operation: operation,
-                                       from: topViewController,
-                                       to: newStack.last,
-                                       animated: animated)
+        transitionHandler = TransitionHandler(operation: operation,
+                                              from: topViewController,
+                                              to: newStack.last,
+                                              containerView: viewControllerWrapperView,
+                                              animated: animated)
         stackHandler.setStack(newStack)
     }
 
     // MARK: - StackHandlerDelegate
 
-    func stackDidChange(_ difference: Stack.Difference) {
-        print(difference)
-        notifyControllerAboutStackChanges(difference)
-
-        guard var currentTransition = currentTransition else { return }
-
-        currentTransition.undo = { [weak self] in
+    func transitionUndo(for difference: Stack.Difference) -> (() -> Void)? {
+        return { [weak self] in
             guard let self = self else { return }
             guard let invertedDifference = difference.inverted else { return }
             guard let oldStack = self.stack.applying(invertedDifference) else { return }
@@ -120,39 +122,21 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
             self.stackHandler.setStack(oldStack)
             self.stackHandler.delegate = self
         }
+    }
 
-        let animationController: UIViewControllerAnimatedTransitioning?
+    func stackDidChange(_ difference: Stack.Difference) {
+        assert(transitionHandler != nil)
 
-        if let from = currentTransition.from, let to = currentTransition.to, let controller = transitioningDelegate?.animationController(for: currentTransition.operation, from: from, to: to) {
-            animationController = controller
-        } else {
-            
-            animationController = (currentTransition.operation == .push ? PushAnimator() : PopAnimator())
+        notifyControllerAboutStackChanges(difference)
+
+        guard let delegate = delegate, delegate.isInViewHierarchy else {
+            transitionHandler = nil
+            return
         }
 
-        let interactionController: UIViewControllerInteractiveTransitioning?
-        if currentTransition.isInteractive, let animationController = animationController {
-            if let controller = transitioningDelegate?.interactionController(for: animationController) {
-                interactionController = controller
-            } else {
-                interactionController = InteractivePopAnimator(animationController: animationController)
-            }
-        } else {
-            interactionController = nil
-        }
+        undoLastStackChange = transitionUndo(for: difference)
 
-
-        if let delegate = delegate, delegate.isInViewHierarchy, let animationController = animationController {
-            let context = TransitionContext(transition: currentTransition, in: viewControllerWrapperView)
-            transitionHandler = TransitionHandler(
-                transition: currentTransition,
-                context: context,
-                animationController: animationController,
-                interactionController: interactionController
-            )
-            transitionHandler?.delegate = self
-            transitionHandler?.performTransition()
-        }
+        transitionHandler?.performTransition()
     }
 
     // MARK: - TransitionHandlerDelegate
@@ -200,32 +184,23 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
                 delegate?.finishAppearance(of: to)
             }
 
-            currentTransition?.undo?()
+            undoLastStackChange?()
         }
-
-        transitionHandler = nil
-//        debugTransitionEnded()
+        //        debugTransitionEnded()
     }
+
     // MARK: - Actions
 
-    @objc func screenEdgeGestureRecognizerDidChangeState(_
-        gestureRecognizer: ScreenEdgePanGestureRecognizer) {
-
+    func handleScreenEdgePanGestureRecognizerStateChange(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
         switch gestureRecognizer.state {
         case .began:
-            pop(animated: true, interactive: true)
-        case .changed:
-            transitionHandler?.updateInteractiveTransition(gestureRecognizer)
-        case .ended:
-            transitionHandler?.stopInteractiveTransition(gestureRecognizer)
-        case .cancelled:
-            transitionHandler?.cancelInteractiveTransition()
-        case .failed, .possible:
+            screenEdgePanGestureRecognizer = gestureRecognizer
+            delegate?.startInteractivePopTransition()
+        case .changed, .ended, .cancelled, .failed, .possible:
             break
         @unknown default:
             assertionFailure()
         }
-
     }
 
     // MARK: - Private methods
@@ -270,4 +245,12 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
             else { return .none }
         }
     }
+}
+
+public class NoTransitionAnimator: Animator {
+    public override func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return 0.0
+    }
+
+    public override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {}
 }

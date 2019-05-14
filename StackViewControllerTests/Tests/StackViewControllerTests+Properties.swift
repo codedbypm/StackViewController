@@ -22,7 +22,6 @@ extension StackViewControllerTests {
 
         // Assert
         XCTAssertEqual(gestureRecognizer.edges, .left)
-        XCTAssert(gestureRecognizer.delegate === sut)
     }
 
 

@@ -9,13 +9,11 @@
 @testable import StackViewController
 
 class MockStackHandlerDelegate: StackHandlerDelegate {
-    var insertions: Stack.Insertions = []
-    var removals: Stack.Removals = []
-    var didCallStackDidChange = false
 
+    var didCallStackDidChange: Bool?
+    var stackDidChangeDifference: Stack.Difference?
     func stackDidChange(_ difference: Stack.Difference) {
-        self.insertions = difference.insertions
-        self.removals = difference.removals
         self.didCallStackDidChange = true
+        self.stackDidChangeDifference = difference
     }
 }

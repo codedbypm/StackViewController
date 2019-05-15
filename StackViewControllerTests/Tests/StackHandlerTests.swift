@@ -49,13 +49,15 @@ class StackHandlerTests: XCTestCase {
 
         let expectedStackChanges = (stack + [pushedViewController]).difference(from: stack)
 
+        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
+
         // Act
         sut.push(pushedViewController)
 
         // Assert
-        XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertEqual(mockStackHandlerDelegate.insertions, expectedStackChanges.insertions)
-        XCTAssertEqual(mockStackHandlerDelegate.removals, expectedStackChanges.removals)
+        XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
+        XCTAssertEqual(mockStackHandlerDelegate.stackDidChangeDifference, expectedStackChanges)
     }
 
     func testThat_whenPushingAViewControllerWhichIsAlreadyInTheStack_theCurrentStackIsNotChanged() {
@@ -100,13 +102,15 @@ class StackHandlerTests: XCTestCase {
 
         let expectedStackChanges = (stack + pushedStack).difference(from: stack)
 
+        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
+
         // Act
         sut.push(pushedStack)
 
         // Assert
-        XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertEqual(mockStackHandlerDelegate.insertions, expectedStackChanges.insertions)
-        XCTAssertEqual(mockStackHandlerDelegate.removals, expectedStackChanges.removals)
+        XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
+        XCTAssertEqual(mockStackHandlerDelegate.stackDidChangeDifference, expectedStackChanges)
     }
 
     func testThat_whenPushingAStackResultingInANewStackWithDuplicates_theCurrentStackIsNotChanged() {
@@ -147,13 +151,15 @@ class StackHandlerTests: XCTestCase {
 
         let expectedStackChanges = stack.dropLast().difference(from: stack)
 
+        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
+
         // Act
         let _ = sut.pop()
 
         // Assert
-        XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertEqual(mockStackHandlerDelegate.insertions, expectedStackChanges.insertions)
-        XCTAssertEqual(mockStackHandlerDelegate.removals, expectedStackChanges.removals)
+        XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
+        XCTAssertEqual(mockStackHandlerDelegate.stackDidChangeDifference, expectedStackChanges)
     }
 
     func testThat_whenPoppingAViewControllerFromAStackHavingOnlyOneElement_theCurrentStackIsNotChangedAndTheMethodReturnsNil() {
@@ -194,13 +200,15 @@ class StackHandlerTests: XCTestCase {
 
         let expectedStackChanges = stack.dropLast(9).difference(from: stack)
 
+        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
+
         // Act
         let _ = sut.popToRoot()
 
         // Assert
-        XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertEqual(mockStackHandlerDelegate.insertions, expectedStackChanges.insertions)
-        XCTAssertEqual(mockStackHandlerDelegate.removals, expectedStackChanges.removals)
+        XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
+        XCTAssertEqual(mockStackHandlerDelegate.stackDidChangeDifference, expectedStackChanges)
     }
 
     func testThat_whenPoppingToRootFromAStackHavingOnlyOneElement_theCurrentStackIsNotChangedAndTheMethodReturnsEmptyArray() {
@@ -247,13 +255,15 @@ class StackHandlerTests: XCTestCase {
 
         let expectedStackChanges = stack.dropLast(2).difference(from: stack)
 
+        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
+
         // Act
         let _ = sut.popTo(targetViewController)
 
         // Assert
-        XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertEqual(mockStackHandlerDelegate.insertions, expectedStackChanges.insertions)
-        XCTAssertEqual(mockStackHandlerDelegate.removals, expectedStackChanges.removals)
+        XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
+        XCTAssertEqual(mockStackHandlerDelegate.stackDidChangeDifference, expectedStackChanges)
     }
 
     func testThat_whenPoppingToAViewControllerWhichIsNotOnTheStack_theCurrentStackIsNotChangedAndTheMethodReturnsEmptyArray() {
@@ -283,11 +293,15 @@ class StackHandlerTests: XCTestCase {
 
         let sameStack = stack
 
+        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
+
         // Act
         sut.setStack(sameStack)
 
         // Assert
-        XCTAssertFalse(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
         XCTAssertEqual(sut.stack, stack)
     }
 
@@ -302,11 +316,15 @@ class StackHandlerTests: XCTestCase {
         let duplicateViewController = UIViewController()
         let duplicatesStack = [duplicateViewController] + Stack.distinctElements(4) + [duplicateViewController]
 
+        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
+
         // Act
         sut.setStack(duplicatesStack)
 
         // Assert
-        XCTAssertFalse(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
+        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
         XCTAssertEqual(sut.stack, stack)
     }
 
@@ -326,8 +344,7 @@ class StackHandlerTests: XCTestCase {
         sut.setStack(newStack)
 
         // Assert
-        XCTAssertTrue(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertEqual(mockStackHandlerDelegate.insertions, expectedStackChanges.insertions)
-        XCTAssertEqual(mockStackHandlerDelegate.removals, expectedStackChanges.removals)
+        XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
+        XCTAssertEqual(mockStackHandlerDelegate.stackDidChangeDifference, expectedStackChanges)
     }
 }

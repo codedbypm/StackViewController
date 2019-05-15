@@ -33,7 +33,6 @@ class StackHandler: ExceptionThrowing {
     private(set) var stack = Stack() {
         didSet {
             guard oldValue != stack else { return }
-
             let difference = stack.difference(from: oldValue)
             delegate?.stackDidChange(difference)
         }

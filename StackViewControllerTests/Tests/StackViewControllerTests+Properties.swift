@@ -54,17 +54,17 @@ extension StackViewControllerTests {
         let mockInteractor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: mockInteractor)
 
-        XCTAssertFalse(mockInteractor.didCallSetStackAnimated)
-        XCTAssertNil(mockInteractor.passedStack)
-        XCTAssertNil(mockInteractor.passedAnimated)
+        XCTAssertNil(mockInteractor.didCallSetStackAnimated)
+        XCTAssertNil(mockInteractor.setStackStack)
+        XCTAssertNil(mockInteractor.setStackAnimated)
 
         // Act
         sut.viewControllers = stack
 
         // Assert
-        XCTAssertTrue(mockInteractor.didCallSetStackAnimated)
-        XCTAssertEqual(mockInteractor.passedStack, stack)
-        XCTAssertEqual(mockInteractor.passedAnimated, false)
+        XCTAssertEqual(mockInteractor.didCallSetStackAnimated, true)
+        XCTAssertEqual(mockInteractor.setStackStack, stack)
+        XCTAssertEqual(mockInteractor.setStackAnimated, false)
     }
 
     func testThat_whenGettingViewControllers_itCallsTheGetterOfStackPropertyOfInteractor() {
@@ -74,13 +74,13 @@ extension StackViewControllerTests {
         let mockInteractor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: mockInteractor)
 
-        XCTAssertFalse(mockInteractor.didCallStackGetter)
+        XCTAssertNil(mockInteractor.didCallStackGetter)
 
         // Act
         _ = sut.viewControllers
 
         // Assert
-        XCTAssertTrue(mockInteractor.didCallStackGetter)
+        XCTAssertEqual(mockInteractor.didCallStackGetter, true)
     }
 
     // MARK: - shouldAutomaticallyForwardAppearanceMethods

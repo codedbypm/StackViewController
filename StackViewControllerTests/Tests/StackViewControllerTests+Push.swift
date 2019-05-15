@@ -11,35 +11,152 @@ import XCTest
 
 extension StackViewControllerTests {
 
-    // MARK: - pushViewController(_: animated:)
+    // MARK: - pushViewController(_:animated)
 
-//    func testThat_whenPushingViewControllerWhichIsAlreadyOnTheStack_theViewControllerIsNotAddedToTheStack() {
-//        // Arrange
-//        sut = StackViewController.withDefaultStack()
-//        let pushedViewController = StackViewController.second
-//
-//        // Act
-//        sut.pushViewController(pushedViewController, animated: true)
-//
-//        // Assert
-//        XCTAssertEqual(sut.viewControllers, StackViewController.defaultStack)
-//    }
+    func testThat_whenAViewControllerIsPushed_itCallsInteractorMethod() {
+        // Arrange
+        let stackHandler = StackHandler(stack: [])
+        let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
+        sut = StackViewController(interactor: interactor)
+        let pushedViewController = UIViewController()
+        let animated = true
 
-//    func testThat_whenPushingViewControllerOnAnEmptyStack_thePushedControllerIsImmediatelyAddedToTheStack() {
-//        // Arrange
-//        sut = StackViewController.withEmptyStack()
-//        let pushedViewController = StackViewController.defaultViewControllerB
-//
-//        XCTAssertTrue(sut.viewControllers.isEmpty)
-//
-//        // Act
-//        sut.pushViewController(pushedViewController, animated: true)
-//
-//        // Assert
-//        XCTAssertEqual(pushedViewController.view.superview, sut.view)
-//        XCTAssertEqual(pushedViewController.parent, sut)
-//        XCTAssertEqual(sut.viewControllers, [pushedViewController])
-//
-//    }
+        XCTAssertNil(interactor.didCallPushViewControllerAnimated)
+        XCTAssertNil(interactor.pushedViewController)
+        XCTAssertNil(interactor.pushedViewControllerAnimated)
 
+        // Act
+        sut.pushViewController(pushedViewController, animated: animated)
+
+        // Assert
+        XCTAssertTrue(interactor === sut.interactor)
+        XCTAssertEqual(interactor.didCallPushViewControllerAnimated, true)
+        XCTAssertEqual(interactor.pushedViewController, pushedViewController)
+        XCTAssertEqual(interactor.pushedViewControllerAnimated, animated)
+    }
+
+    // MARK: - pushStack(_:animated)
+
+    func testThat_whenAStackIsPushed_itCallsInteractorMethod() {
+        // Arrange
+        let stackHandler = StackHandler(stack: [])
+        let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
+        sut = StackViewController(interactor: interactor)
+        let pushedStack = [UIViewController(), UIViewController()]
+        let animated = true
+
+        XCTAssertNil(interactor.didCallPushStackAnimated)
+        XCTAssertNil(interactor.pushedStack)
+        XCTAssertNil(interactor.pushedStackAnimated)
+
+        // Act
+        sut.pushStack(pushedStack, animated: animated)
+
+        // Assert
+        XCTAssertTrue(interactor === sut.interactor)
+        XCTAssertEqual(interactor.didCallPushStackAnimated, true)
+        XCTAssertEqual(interactor.pushedStack, pushedStack)
+        XCTAssertEqual(interactor.pushedStackAnimated, animated)
+    }
+
+    // MARK: - popViewController(animated:interactive:)
+
+    func testThat_whenPopAnimatedIsCalled_itCallsInteractorMethod_and_keepsTheDefaultValues() {
+        // Arrange
+        let viewController = UIViewController()
+        let stackHandler = StackHandler(stack: [viewController])
+        let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
+        sut = StackViewController(interactor: interactor)
+        let animated = true
+
+        XCTAssertNil(interactor.didCallPopAnimatedInteractive)
+        XCTAssertNil(interactor.popAnimated)
+        XCTAssertNil(interactor.popInteractive)
+        interactor.popReturnValue = viewController
+        
+        // Act
+        let poppedViewController = sut.popViewController(animated: animated)
+
+        // Assert
+        XCTAssertTrue(interactor === sut.interactor)
+        XCTAssertEqual(interactor.didCallPopAnimatedInteractive, true)
+        XCTAssertEqual(interactor.popAnimated, animated)
+        XCTAssertEqual(interactor.popInteractive, false)
+        XCTAssertEqual(poppedViewController, viewController)
+    }
+
+    // MARK: - popToRootViewController(animated:)
+
+    func testThat_whenPoppingToRootViewController_itCallsInteractorMethod() {
+        // Arrange
+        let stackHandler = StackHandler(stack: Stack.default)
+        let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
+        sut = StackViewController(interactor: interactor)
+        let animated = true
+        let poppedViewControllers = Stack.distinctElements(3)
+
+        XCTAssertNil(interactor.didCallPopToRootAnimated)
+        XCTAssertNil(interactor.popToRootAnimated)
+        interactor.popToRootReturnValue = poppedViewControllers
+
+        // Act
+        let popped = sut.popToRootViewController(animated: animated)
+
+        // Assert
+        XCTAssertTrue(interactor === sut.interactor)
+        XCTAssertEqual(interactor.didCallPopToRootAnimated, true)
+        XCTAssertEqual(interactor.popToRootAnimated, animated)
+        XCTAssertEqual(popped, poppedViewControllers)
+    }
+
+    // MARK: - popToViewController(_:animated:)
+
+    func testThat_whenPoppingToAViewController_itCallsInteractorMethod() {
+        // Arrange
+        let stackHandler = StackHandler(stack: Stack.default)
+        let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
+        sut = StackViewController(interactor: interactor)
+        let animated = true
+        let toViewController = UIViewController()
+        let poppedViewControllers = Stack.distinctElements(3)
+
+        XCTAssertNil(interactor.didCallPopToViewControllerAnimated)
+        XCTAssertNil(interactor.popToViewControllerViewController)
+        XCTAssertNil(interactor.popToViewControllerAnimated)
+        interactor.popToViewControllerReturnValue = poppedViewControllers
+
+        // Act
+        let popped = sut.popToViewController(toViewController, animated: animated)
+
+        // Assert
+        XCTAssertTrue(interactor === sut.interactor)
+        XCTAssertEqual(interactor.didCallPopToViewControllerAnimated, true)
+        XCTAssertEqual(interactor.popToViewControllerViewController, toViewController)
+        XCTAssertEqual(interactor.popToViewControllerAnimated, animated)
+        XCTAssertEqual(popped, poppedViewControllers)
+    }
+
+    // MARK: - setStack(_,animated:)
+
+    func testThat_whenSettingStack_itCallsInteractorMethod() {
+        // Arrange
+        let stackHandler = StackHandler(stack: Stack.default)
+        let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
+        sut = StackViewController(interactor: interactor)
+        let animated = true
+        let stack = Stack.distinctElements(3)
+
+        XCTAssertNil(interactor.didCallSetStackAnimated)
+        XCTAssertNil(interactor.setStackStack)
+        XCTAssertNil(interactor.setStackAnimated)
+
+        // Act
+        sut.setStack(stack, animated: animated)
+
+        // Assert
+        XCTAssertTrue(interactor === sut.interactor)
+        XCTAssertEqual(interactor.didCallSetStackAnimated, true)
+        XCTAssertEqual(interactor.setStackStack, stack)
+        XCTAssertEqual(interactor.setStackAnimated, animated)
+    }
 }

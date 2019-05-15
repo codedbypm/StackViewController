@@ -91,13 +91,12 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
         return stackHandler.popToRoot()
     }
 
-    func popTo(_ viewController: UIViewController, animated: Bool, interactive: Bool = false) -> Stack {
+    func popTo(_ viewController: UIViewController, animated: Bool) -> Stack {
         transitionHandler = TransitionHandler(operation: .pop,
                                               from: topViewController,
                                               to: viewController,
                                               containerView: viewControllerWrapperView,
-                                              animated: animated,
-                                              interactive: interactive)
+                                              animated: animated)
         return stackHandler.popTo(viewController)
     }
 

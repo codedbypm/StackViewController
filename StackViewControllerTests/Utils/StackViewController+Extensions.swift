@@ -27,6 +27,12 @@ extension StackViewController {
     static func withDefaultStack() -> StackViewController {
         return StackViewController(viewControllers: .default)
     }
+
+    static func withMockInteractor() -> StackViewController {
+        let stackHandler = StackHandler(stack: [])
+        let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
+        return StackViewController(interactor: interactor)
+    }
 }
 
 

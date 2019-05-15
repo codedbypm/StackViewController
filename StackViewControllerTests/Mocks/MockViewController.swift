@@ -11,12 +11,12 @@ import UIKit
 class MockViewController: UIViewController {
 
     var didCallBeginAppearance: Bool? = nil
-    var passedIsAppearing: Bool? = nil
-    var passedAnimated: Bool? = nil
+    var beginAppearanceIsAppearing: Bool? = nil
+    var beginAppearanceAnimated: Bool? = nil
     override func beginAppearanceTransition(_ isAppearing: Bool, animated: Bool) {
         didCallBeginAppearance = true
-        passedIsAppearing = isAppearing
-        passedAnimated = animated
+        beginAppearanceIsAppearing = isAppearing
+        beginAppearanceAnimated = animated
     }
 
     var didCallEndAppearance: Bool? = nil
@@ -24,14 +24,27 @@ class MockViewController: UIViewController {
         didCallEndAppearance = true
     }
 
+    var didCallWillMoveToParent: Bool?
     var willMoveToParentDate: Date?
+    var willMoveToParentParent: UIViewController?
     override func willMove(toParent parent: UIViewController?) {
+        didCallWillMoveToParent = true
         willMoveToParentDate = Date()
+        willMoveToParentParent = parent
     }
 
+    var didCallDidMoveToParent: Bool?
     var didMoveToParentDate: Date?
+    var didMoveToParentParent: UIViewController?
     override func didMove(toParent parent: UIViewController?) {
-        didMoveToParentDate = Date()        
+        didCallDidMoveToParent = true
+        didMoveToParentDate = Date()
+        didMoveToParentParent = parent
+    }
+
+    var didCallRemoveFromParent: Bool?
+    override func removeFromParent() {
+        didCallRemoveFromParent = true
     }
 }
 

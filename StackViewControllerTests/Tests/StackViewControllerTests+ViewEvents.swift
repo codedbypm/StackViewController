@@ -24,8 +24,8 @@ extension StackViewControllerTests {
         let animated = true
 
         XCTAssertNil(viewControllerB.didCallBeginAppearance)
-        XCTAssertNil(viewControllerB.passedIsAppearing)
-        XCTAssertNil(viewControllerB.passedAnimated)
+        XCTAssertNil(viewControllerB.beginAppearanceIsAppearing)
+        XCTAssertNil(viewControllerB.beginAppearanceAnimated)
 
         // Act
         sut.viewWillAppear(animated)
@@ -33,8 +33,8 @@ extension StackViewControllerTests {
         // Assert
         XCTAssertEqual(sut.topViewController, viewControllerB)
         XCTAssertEqual(viewControllerB.didCallBeginAppearance, true)
-        XCTAssertEqual(viewControllerB.passedIsAppearing, true)
-        XCTAssertEqual(viewControllerB.passedAnimated, animated)
+        XCTAssertEqual(viewControllerB.beginAppearanceIsAppearing, true)
+        XCTAssertEqual(viewControllerB.beginAppearanceAnimated, animated)
     }
 
     // MARK: - viewDidAppear
@@ -72,8 +72,8 @@ extension StackViewControllerTests {
         let animated = true
 
         XCTAssertNil(viewControllerB.didCallBeginAppearance)
-        XCTAssertNil(viewControllerB.passedIsAppearing)
-        XCTAssertNil(viewControllerB.passedAnimated)
+        XCTAssertNil(viewControllerB.beginAppearanceIsAppearing)
+        XCTAssertNil(viewControllerB.beginAppearanceAnimated)
 
         // Act
         sut.viewWillDisappear(animated)
@@ -81,8 +81,8 @@ extension StackViewControllerTests {
         // Assert
         XCTAssertEqual(sut.topViewController, viewControllerB)
         XCTAssertEqual(viewControllerB.didCallBeginAppearance, true)
-        XCTAssertEqual(viewControllerB.passedIsAppearing, false)
-        XCTAssertEqual(viewControllerB.passedAnimated, animated)
+        XCTAssertEqual(viewControllerB.beginAppearanceIsAppearing, false)
+        XCTAssertEqual(viewControllerB.beginAppearanceAnimated, animated)
     }
 
     // MARK: - viewDidDisappear

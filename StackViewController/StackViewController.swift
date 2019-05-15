@@ -50,10 +50,8 @@ public final class StackViewController: UIViewController {
         return recognizer
     }()
 
-    // MARK: - Private properties
-
-    private var viewControllerWrapperView: UIView {
-        return interactor.viewControllerWrapperView
+    var viewControllerWrapperView: UIView {
+        return interactor.viewControllerWrapperView        
     }
 
     // MARK: - Init

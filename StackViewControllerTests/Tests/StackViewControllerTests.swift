@@ -23,6 +23,48 @@ class StackViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - viewDidLoad()
+
+    func testThat_whenViewDidLoadIsCalled_itAddsGesgtureRecognizerToTheView() {
+        // Arrange
+        sut = StackViewController.dummy
+
+        XCTAssertNil(sut.screenEdgePanGestureRecognizer.view)
+
+        // Act
+        _ = sut.view
+
+        // Assert
+        XCTAssertNotNil(sut.screenEdgePanGestureRecognizer.view)
+        XCTAssertEqual(sut.screenEdgePanGestureRecognizer.view, sut.view)
+    }
+
+    func testThat_whenViewDidLoadIsCalled_itAddsWrapperViewAsSubview() {
+        // Arrange
+        sut = StackViewController.dummy
+
+        // Act
+        _ = sut.view
+
+        // Assert
+        XCTAssertEqual(sut.viewControllerWrapperView.superview, sut.view)
+        XCTAssertNotEqual(sut.viewControllerWrapperView.frame, CGRect.zero)
+        XCTAssertEqual(sut.viewControllerWrapperView.frame, sut.view.bounds)
+    }
+
+    func testThat_whenViewDidLoadIsCalled_andTheStackIsNotEmpty_itAddsTopViewControllerViewAsSubviewOfWrapperView() {
+        // Arrange
+        sut = StackViewController.withDefaultStack()
+
+        // Act
+        _ = sut.view
+
+        // Assert
+        XCTAssertEqual(sut.topViewController?.view.superview, sut.viewControllerWrapperView)
+    }
+
+    // MARK: - screenEdgeGestureRecognizerDidChangeState(_:)
+
     func testThat_whenTheGestureRecognizerSendItsAction_itCallshandleScreenEdgePanGestureRecognizerStateChangeOnTheInteractor() {
         // Arrange
         let gestureRecognizer = ScreenEdgePanGestureRecognizer(target: nil, action: nil)

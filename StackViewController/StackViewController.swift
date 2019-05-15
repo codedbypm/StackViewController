@@ -193,25 +193,6 @@ extension StackViewController {
     @objc func screenEdgeGestureRecognizerDidChangeState(_ gestureRecognizer: ScreenEdgePanGestureRecognizer) {
         interactor.handleScreenEdgePanGestureRecognizerStateChange(gestureRecognizer)
     }
-
-//    func willStartTransition(_ transition: Transition) {
-//        sendInitialViewAppearanceEvents(for: transition)
-//    }
-//
-//    func didEndTransition(_ transition: Transition, didComplete: Bool) {
-//        if didComplete  {
-//            sendFinalViewAppearanceEvents(for: transition)
-//            sendFinalViewControllerContainmentEvents(for: transition)
-//        } else {
-//            sendInitialViewAppearanceEvents(for: transition, swapElements: true)
-//            sendFinalViewAppearanceEvents(for: transition)
-//
-//            transition.undo?()
-//        }
-//
-//        transitionHandler = nil
-//        debugTransitionEnded()
-//    }
 }
 
 extension StackViewController: ConsoleDebuggable {

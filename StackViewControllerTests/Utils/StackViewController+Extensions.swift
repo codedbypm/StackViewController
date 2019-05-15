@@ -35,7 +35,6 @@ extension StackViewController {
     }
 }
 
-
 extension StackViewController {
 
     func loadingTopViewControllerView() -> StackViewController {

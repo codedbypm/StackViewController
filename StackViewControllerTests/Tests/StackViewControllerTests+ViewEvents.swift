@@ -48,11 +48,59 @@ extension StackViewControllerTests {
         let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
         let dontcare = true
-        
+
         XCTAssertNil(viewControllerB.didCallEndAppearance)
 
         // Act
         sut.viewDidAppear(dontcare)
+
+        // Assert
+        XCTAssertEqual(sut.topViewController, viewControllerB)
+        XCTAssertEqual(viewControllerB.didCallEndAppearance, true)
+    }
+
+    // MARK: - viewWillDisappear
+
+    func testThat_whenViewWillDisappear_beginAppearanceTransitionIsCalledOnTopViewController() {
+        // Arrange
+        let viewControllerA = MockViewController()
+        let viewControllerB = MockViewController()
+        let stack = [viewControllerA, viewControllerB]
+        let stackHandler = StackHandler(stack: stack)
+        let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        sut = StackViewController(interactor: interactor)
+        let animated = true
+
+        XCTAssertNil(viewControllerB.didCallBeginAppearance)
+        XCTAssertNil(viewControllerB.passedIsAppearing)
+        XCTAssertNil(viewControllerB.passedAnimated)
+
+        // Act
+        sut.viewWillDisappear(animated)
+
+        // Assert
+        XCTAssertEqual(sut.topViewController, viewControllerB)
+        XCTAssertEqual(viewControllerB.didCallBeginAppearance, true)
+        XCTAssertEqual(viewControllerB.passedIsAppearing, false)
+        XCTAssertEqual(viewControllerB.passedAnimated, animated)
+    }
+
+    // MARK: - viewDidDisappear
+
+    func testThat_whenViewDidDisappear_endAppearanceTransitionIsCalledOnTopViewController() {
+        // Arrange
+        let viewControllerA = MockViewController()
+        let viewControllerB = MockViewController()
+        let stack = [viewControllerA, viewControllerB]
+        let stackHandler = StackHandler(stack: stack)
+        let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        sut = StackViewController(interactor: interactor)
+        let dontcare = true
+
+        XCTAssertNil(viewControllerB.didCallEndAppearance)
+
+        // Act
+        sut.viewDidDisappear(dontcare)
 
         // Assert
         XCTAssertEqual(sut.topViewController, viewControllerB)

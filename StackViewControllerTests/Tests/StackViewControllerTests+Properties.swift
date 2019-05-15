@@ -47,7 +47,7 @@ extension StackViewControllerTests {
 
     // MARK: - viewControllers
 
-    func testThat_whenSettingViewControllers_itCallsSetViewControllersNonAninmatedMethodOfInteractor() {
+    func testThat_whenSettingViewControllers_itCallsSetViewControllersNonAnimatedMethodOfInteractor() {
         // Arrange
         let stack = Stack.distinctElements(4)
         let stackHandler = StackHandler(stack: [])

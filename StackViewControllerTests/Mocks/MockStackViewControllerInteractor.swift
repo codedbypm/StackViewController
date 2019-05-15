@@ -73,4 +73,11 @@ class MockStackViewControllerInteractor: StackViewControllerInteractor {
         setStackStack = newStack
         setStackAnimated = animated
     }
+
+    var didCallHandleScreenEdgePanGestureRecognizerStateChange: Bool?
+    var gestureRecognizer: UIScreenEdgePanGestureRecognizer?
+    override func handleScreenEdgePanGestureRecognizerStateChange(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+        didCallHandleScreenEdgePanGestureRecognizerStateChange = true
+        self.gestureRecognizer = gestureRecognizer
+    }
 }

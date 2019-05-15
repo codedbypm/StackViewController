@@ -46,7 +46,7 @@
 		FD76B7632270DA340090EDB2 /* StackViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7622270DA340090EDB2 /* StackViewController+Extensions.swift */; };
 		FD76B7652270E3B70090EDB2 /* TimeInterval+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */; };
 		FD76B7672270E9C60090EDB2 /* StackViewControllerTests+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */; };
-		FD76B7692270EA010090EDB2 /* StackViewControllerTests+Push.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */; };
+		FD76B7692270EA010090EDB2 /* StackViewControllerTests+StackActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7682270EA010090EDB2 /* StackViewControllerTests+StackActions.swift */; };
 		FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */; };
 		FD76B7772275F39C0090EDB2 /* StackViewController+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */; };
 		FD76B77D227614D60090EDB2 /* ViewControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B77C227614D60090EDB2 /* ViewControllerFactory.swift */; };
@@ -132,7 +132,7 @@
 		FD76B7622270DA340090EDB2 /* StackViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+Extensions.swift"; sourceTree = "<group>"; };
 		FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extensions.swift"; sourceTree = "<group>"; };
 		FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+Properties.swift"; sourceTree = "<group>"; };
-		FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+Push.swift"; sourceTree = "<group>"; };
+		FD76B7682270EA010090EDB2 /* StackViewControllerTests+StackActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewControllerTests+StackActions.swift"; sourceTree = "<group>"; };
 		FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerDelegate.swift; sourceTree = "<group>"; };
 		FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackViewController+Debug.swift"; sourceTree = "<group>"; };
 		FD76B77C227614D60090EDB2 /* ViewControllerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerFactory.swift; sourceTree = "<group>"; };
@@ -205,9 +205,9 @@
 			isa = PBXGroup;
 			children = (
 				FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */,
-				FD44FF49228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift */,
 				FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */,
-				FD76B7682270EA010090EDB2 /* StackViewControllerTests+Push.swift */,
+				FD76B7682270EA010090EDB2 /* StackViewControllerTests+StackActions.swift */,
+				FD44FF49228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift */,
 				FD1B56F8227C525B00E005EC /* StackHandlerTests.swift */,
 				FD44FF3E228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift */,
 			);
@@ -503,7 +503,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD44FF3D2288CFA900DA2AEB /* MockViewController.swift in Sources */,
-				FD76B7692270EA010090EDB2 /* StackViewControllerTests+Push.swift in Sources */,
+				FD76B7692270EA010090EDB2 /* StackViewControllerTests+StackActions.swift in Sources */,
 				FD76B7672270E9C60090EDB2 /* StackViewControllerTests+Properties.swift in Sources */,
 				FD44FF3922888DF600DA2AEB /* MockStackHandlerDelegate.swift in Sources */,
 				FD76B7032270C9530090EDB2 /* StackViewControllerTests.swift in Sources */,

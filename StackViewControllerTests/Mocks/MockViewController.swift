@@ -10,6 +10,18 @@ import UIKit
 
 class MockViewController: UIViewController {
 
+    var appearanceEventDates: [Date?] {
+        return [beginAppearanceTransitionDate, endAppearanceTransitionDate]
+    }
+
+    var viewContainmentEventDates: [Date?] {
+        return [willMoveToParentDate, didMoveToParentDate]
+    }
+
+    var events: [Date?] {
+        return appearanceEventDates + viewContainmentEventDates
+    }
+    
     var didCallBeginAppearance: Bool? = nil
     var beginAppearanceIsAppearing: Bool? = nil
     var beginAppearanceAnimated: Bool? = nil

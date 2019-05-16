@@ -65,7 +65,13 @@ public final class StackViewController: UIViewController {
         interactor.setStack([rootViewController], animated: false)
     }
 
-    public convenience init(viewControllers: [UIViewController]) {
+    public required init?(coder aDecoder: NSCoder) {
+        let stackHandler = StackHandler()
+        interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        super.init(coder: aDecoder)
+    }
+
+    convenience init(viewControllers: [UIViewController]) {
         let stackHandler = StackHandler(stack: [])
         let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
         self.init(interactor: interactor)
@@ -74,17 +80,11 @@ public final class StackViewController: UIViewController {
         interactor.setStack(viewControllers, animated: false)
     }
 
-    public required init?(coder aDecoder: NSCoder) {
-        let stackHandler = StackHandler()
-        interactor = StackViewControllerInteractor(stackHandler: stackHandler)
-        super.init(coder: aDecoder)
-    }
-
     init(interactor: StackViewControllerInteractor) {
         self.interactor = interactor
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     // MARK: - UIViewController
 
     override public func viewDidLoad() {

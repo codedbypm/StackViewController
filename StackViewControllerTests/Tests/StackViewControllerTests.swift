@@ -23,6 +23,27 @@ class StackViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - init(rootViewController:)
+
+    //    StackVC with stack = [Yellow]
+    //
+    //    Yellow   =>  willMove(toParent:)
+    //    StackVC  =>  viewDidLoad()
+    //    StackVC  =>  viewWillAppear(_:)
+    //    Yellow   =>  viewWillAppear(_:)
+    //    StackVC  =>  viewDidAppear(_:)
+    //    Yellow   =>  viewDidAppear(_:)
+    //    StackVC  =>  didMoveToParent(_:)
+    func testThat_whenInitWithARootViewController_itSendsCorrectSequenceOfEvents() {
+        // Arrange
+        let yellow = MockViewController()
+
+        // Act
+        sut = StackViewController(rootViewController: yellow)
+
+        // Assert
+    }
+
     // MARK: - viewDidLoad()
 
     func testThat_whenViewDidLoadIsCalled_itAddsGesgtureRecognizerToTheView() {

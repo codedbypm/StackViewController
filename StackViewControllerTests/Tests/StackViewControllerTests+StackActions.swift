@@ -35,30 +35,6 @@ extension StackViewControllerTests {
         XCTAssertEqual(interactor.pushedViewControllerAnimated, animated)
     }
 
-    // MARK: - pushStack(_:animated)
-
-    func testThat_whenAStackIsPushed_itCallsInteractorMethod() {
-        // Arrange
-        let stackHandler = StackHandler(stack: [])
-        let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
-        sut = StackViewController(interactor: interactor)
-        let pushedStack = [UIViewController(), UIViewController()]
-        let animated = true
-
-        XCTAssertNil(interactor.didCallPushStackAnimated)
-        XCTAssertNil(interactor.pushedStack)
-        XCTAssertNil(interactor.pushedStackAnimated)
-
-        // Act
-        sut.pushStack(pushedStack, animated: animated)
-
-        // Assert
-        XCTAssertTrue(interactor === sut.interactor)
-        XCTAssertEqual(interactor.didCallPushStackAnimated, true)
-        XCTAssertEqual(interactor.pushedStack, pushedStack)
-        XCTAssertEqual(interactor.pushedStackAnimated, animated)
-    }
-
     // MARK: - popViewController(animated:interactive:)
 
     func testThat_whenPopAnimatedIsCalled_itCallsInteractorMethod_and_keepsTheDefaultValues() {

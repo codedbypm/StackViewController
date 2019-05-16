@@ -52,12 +52,8 @@ class StackHandler: ExceptionThrowing {
     // MARK: - Internal methods
 
     func push(_ viewController: UIViewController) {
-        push([viewController])
-    }
-
-    func push(_ stack: Stack) {
-        guard canPush(stack) else { return }
-        self.stack.append(contentsOf: stack)
+        guard canPush(viewController) else { return }
+        self.stack.append(viewController)
     }
 
     func pop() -> UIViewController? {
@@ -91,8 +87,8 @@ class StackHandler: ExceptionThrowing {
         return poppedElements
     }
 
-    private func canPush(_ stack: Stack) -> Bool {
-        guard !(self.stack + stack).hasDuplicates else { return false }
+    private func canPush(_ viewController: UIViewController) -> Bool {
+        guard !stack.contains(viewController) else { return false }
         return true
     }
 

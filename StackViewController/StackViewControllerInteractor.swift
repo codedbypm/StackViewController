@@ -58,16 +58,12 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
     // MARK: - Internal methods
 
     func push(_ viewController: UIViewController, animated: Bool) {
-        push([viewController], animated: animated)
-    }
-
-    func push(_ stack: Stack, animated: Bool) {
         transitionHandler = TransitionHandler(operation: .push,
                                               from: topViewController,
-                                              to: stack.last,
+                                              to: viewController,
                                               containerView: viewControllerWrapperView,
                                               animated: animated)
-        stackHandler.push(stack)
+        stackHandler.push(viewController)
     }
 
     @discardableResult

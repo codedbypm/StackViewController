@@ -74,59 +74,6 @@ class StackHandlerTests: XCTestCase {
         XCTAssertEqual(sut.stack, stack)
     }
 
-    // MARK: - push(_: Stack, animated: Bool)
-
-    func testThat_whenPushingAStackContainingDistinctElements_thisIsAppendedToTheCurrentStack() {
-        // Arrange
-        let stack = Stack.distinctElements(10)
-        sut = StackHandler(stack: stack)
-
-        let pushedStack = Stack.distinctElements(3)
-
-        // Act
-        sut.push(pushedStack)
-
-        // Assert
-        XCTAssertEqual(sut.stack, stack + pushedStack)
-    }
-
-    func testThat_whenPushingAStackContainingDistinctElements_theDelegateReceivesTheInsertionsAndRemovals() {
-        // Arrange
-        let stack = Stack.distinctElements(10)
-        sut = StackHandler(stack: stack)
-
-        let mockStackHandlerDelegate = MockStackHandlerDelegate()
-        sut.delegate = mockStackHandlerDelegate
-
-        let pushedStack = Stack.distinctElements(3)
-
-        let expectedStackChanges = (stack + pushedStack).difference(from: stack)
-
-        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
-
-        // Act
-        sut.push(pushedStack)
-
-        // Assert
-        XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
-        XCTAssertEqual(mockStackHandlerDelegate.stackDidChangeDifference, expectedStackChanges)
-    }
-
-    func testThat_whenPushingAStackResultingInANewStackWithDuplicates_theCurrentStackIsNotChanged() {
-        // Arrange
-        let stack = Stack.distinctElements(4)
-        sut = StackHandler(stack: stack)
-
-        let pushedStack = [UIViewController(), stack[2], UIViewController()]
-
-        // Act
-        sut.push(pushedStack)
-
-        // Assert
-        XCTAssertEqual(sut.stack, stack)
-    }
-
     // MARK: - pop(animated:, interactive: Bool) -> UIViewController?
 
     func testThat_whenPoppingAViewControllerFromAStackHavingMoreThanOneElement_thisIsRemovedFromTheCurrentStackAndReturnedToTheCaller() {

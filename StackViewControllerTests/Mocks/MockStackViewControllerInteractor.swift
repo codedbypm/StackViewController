@@ -25,15 +25,6 @@ class MockStackViewControllerInteractor: StackViewControllerInteractor {
         pushedViewControllerAnimated = animated
     }
 
-    var didCallPushStackAnimated: Bool?
-    var pushedStack: Stack?
-    var pushedStackAnimated: Bool?
-    override func push(_ stack: Stack, animated: Bool) {
-        didCallPushStackAnimated = true
-        pushedStack = stack
-        pushedStackAnimated = animated
-    }
-
     var didCallPopAnimatedInteractive: Bool?
     var popAnimated: Bool?
     var popInteractive: Bool?

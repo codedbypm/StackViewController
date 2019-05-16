@@ -51,7 +51,7 @@ public final class StackViewController: UIViewController {
     }()
 
     var viewControllerWrapperView: UIView {
-        return interactor.viewControllerWrapperView        
+        return interactor.viewControllerWrapperView
     }
 
     // MARK: - Init
@@ -119,10 +119,6 @@ public final class StackViewController: UIViewController {
 
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
         interactor.push(viewController, animated: animated)
-    }
-
-    public func pushStack(_ stack: Stack, animated: Bool) {
-        interactor.push(stack, animated: animated)
     }
 
     @discardableResult

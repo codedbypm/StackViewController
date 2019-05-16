@@ -189,12 +189,18 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
             self.delegate?.prepareAddingChild($0)
             self.delegate?.finishAddingChild($0)
         }
+        insertions.suffix(1).forEach {
+            self.delegate?.prepareAddingChild($0)
+        }
     }
 
     private func notifyControllerOfRemovals(_ removals: Stack) {
         removals.dropLast().forEach {
             self.delegate?.prepareRemovingChild($0)
             self.delegate?.finishRemovingChild($0)
+        }
+        removals.suffix(1).forEach {
+            self.delegate?.prepareRemovingChild($0)
         }
     }
 

@@ -19,7 +19,7 @@ class TransitionContext: NSObject, UIViewControllerContextTransitioning {
     var targetTransform: CGAffineTransform = .identity
     var onTransitionFinished: ((Bool) -> Void)?
     var onTransitionCancelled: ((Bool) -> Void)?
-    var operation: StackViewController.Operation
+    var operation: StackViewController.Operation = .none
 
     var from: UIViewController? { return viewController(forKey: .from) }
     var to: UIViewController? { return viewController(forKey: .to) }

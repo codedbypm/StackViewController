@@ -12,7 +12,7 @@ extension UINavigationController: StackViewControllerHandling {}
 
 class UIKitCoordinator: NSObject {
 
-    let canPrint = false
+    let canPrint = true
 
     lazy var navigationController: NavigationController = {
         let navController = NavigationController()
@@ -20,14 +20,14 @@ class UIKitCoordinator: NSObject {
         let root = UIViewController.stacked(on: navController,
                                             delegate: self,
                                             color: .yellow)
-//        navController.viewControllers = [root]
+        navController.viewControllers = [root]
         navController.delegate = navController
         navController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
-        navController.viewControllers = [
-            UIViewController.stacked(on: navController, delegate: self, color: .black),
-            UIViewController.stacked(on: navController, delegate: self, color: .red),
-            UIViewController.stacked(on: navController, delegate: self, color: .green),
-        ]
+//        navController.viewControllers = [
+//            UIViewController.stacked(on: navController, delegate: self, color: .yellow),
+//            UIViewController.stacked(on: navController, delegate: self, color: .black),
+//            UIViewController.stacked(on: navController, delegate: self, color: .green),
+//        ]
         return navController
     }()
 

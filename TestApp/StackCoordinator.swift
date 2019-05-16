@@ -24,19 +24,19 @@ class StackCoordinator {
                                                                  delegate: self,
                                                                  color: .green)
 
-        let stackViewController = StackViewController(viewControllers: [yellow, black, green])
+        let stackViewController = StackViewController(rootViewController: yellow)
         yellow.stack = stackViewController
-        black.stack = stackViewController
-        green.stack = stackViewController
+//        black.stack = stackViewController
+//        green.stack = stackViewController
 
         stackViewController.debugDelegate = self
         stackViewController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
-        stackViewController.viewControllers = [
-            yellow,
-            UIViewController.stacked(on: stackViewController, delegate: self, color: .green),
-            black,
-            green
-        ]
+//        stackViewController.viewControllers = [
+//            yellow,
+//            UIViewController.stacked(on: stackViewController, delegate: self, color: .green),
+//            black,
+//            green
+//        ]
         return stackViewController
     }()
 }

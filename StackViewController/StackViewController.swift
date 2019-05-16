@@ -56,6 +56,15 @@ public final class StackViewController: UIViewController {
 
     // MARK: - Init
 
+    public convenience init(rootViewController: UIViewController) {
+        let stackHandler = StackHandler(stack: [])
+        let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        self.init(interactor: interactor)
+
+        interactor.delegate = self
+        interactor.setStack([rootViewController], animated: false)
+    }
+
     public convenience init(viewControllers: [UIViewController]) {
         let stackHandler = StackHandler(stack: [])
         let interactor = StackViewControllerInteractor(stackHandler: stackHandler)

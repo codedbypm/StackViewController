@@ -19,6 +19,10 @@ class TransitionHandler {
 
     weak var delegate: TransitionHandlerDelegate?
 
+    var operation: StackViewController.Operation {
+        return transitionContext.operation
+    }
+
     // MARK: - Private properties
 
     private weak var stackViewControllerDelegate: StackViewControllerDelegate?

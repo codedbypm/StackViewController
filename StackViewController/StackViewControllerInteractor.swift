@@ -116,8 +116,8 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
 
         notifyControllerAboutStackChanges(difference)
 
-        guard let delegate = delegate, delegate.isInViewHierarchy else {
-            transitionHandler = nil
+        guard let delegate = delegate, delegate.isInViewHierarchy, transitionHandler.operation != .none else {
+            self.transitionHandler = nil
             return
         }
 

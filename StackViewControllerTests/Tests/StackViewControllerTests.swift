@@ -28,7 +28,7 @@ class StackViewControllerTests: XCTestCase {
     //    StackVC with stack = [Yellow]
     //
     //    Yellow   =>  willMove(toParent:)
-    func testThat_whenInitWithARootViewController_itSendsCorrectSequenceOfEvents() {
+    func testThat_whenInitWithARootViewController_itSendsOnlyWillMoveToParent() {
         // Arrange
         let yellow = MockViewController()
 
@@ -44,8 +44,6 @@ class StackViewControllerTests: XCTestCase {
         ]
         XCTAssertEqual(events.compactMap({ $0 }).sorted(), [yellow.willMoveToParentDate])
     }
-
-
 
     //    StackVC  =>  viewDidLoad()
     //    StackVC  =>  viewWillAppear(_:)

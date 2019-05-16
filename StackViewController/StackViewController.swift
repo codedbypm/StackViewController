@@ -62,7 +62,7 @@ public final class StackViewController: UIViewController {
         self.init(interactor: interactor)
 
         interactor.delegate = self
-        interactor.setStack([rootViewController], animated: false)
+        viewControllers = [rootViewController]
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -77,7 +77,7 @@ public final class StackViewController: UIViewController {
         self.init(interactor: interactor)
 
         interactor.delegate = self
-        interactor.setStack(viewControllers, animated: false)
+        self.viewControllers = viewControllers
     }
 
     init(interactor: StackViewControllerInteractor) {

@@ -64,8 +64,8 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
     var onSetViewControllersEmptyAnimated: (() -> Void)?
     var onSetViewControllersEmptyNonAnimated: (() -> Void)?
     var onSetVarViewControllersEmpty: (() -> Void)?
-    var onReplaceWithRootAnimated: (() -> Void)?
-    var onReplaceWithRootNonAnimated: (() -> Void)?
+    var onSwapRootWithTop: (() -> Void)?
+    var onInsertAtIndexZero: (() -> Void)?
 
     lazy var titles: [String] = [
         "pop(_: true)",
@@ -78,8 +78,8 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
         "setViewControllers([], true)",
         "setViewControllers([], false)",
         "viewControllers = []",
-        "setViewControllers([root], true)",
-        "viewControllers = [root]"
+        "Swap root with top",
+        "insert new at index 0"
     ]
 
     lazy var closures = [
@@ -93,16 +93,34 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
         onSetViewControllersEmptyAnimated,
         onSetViewControllersEmptyNonAnimated,
         onSetVarViewControllersEmpty,
-        onReplaceWithRootAnimated,
-        onReplaceWithRootNonAnimated,
+        onSwapRootWithTop,
+        onInsertAtIndexZero,
     ]
 
     lazy var buttons: [UIButton] = titles.map { button(title: $0) }
     lazy var buttonsAndClosures = zip(buttons, closures)
     lazy var dictionary = Dictionary(uniqueKeysWithValues: buttonsAndClosures)
 
+    private lazy var popStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: Array(buttons.prefix(2)))
+        stackView.axis = .horizontal
+        stackView.spacing = 10.0
+        stackView.alignment = .center
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+
+    private lazy var pushStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: Array(buttons[2...3]))
+        stackView.axis = .horizontal
+        stackView.spacing = 10.0
+        stackView.alignment = .center
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: buttons)
+        let stackView = UIStackView(arrangedSubviews: [popStackView, pushStackView] + Array(buttons.dropFirst(4)))
         stackView.axis = .vertical
         stackView.spacing = 10.0
         stackView.alignment = .center

@@ -71,14 +71,23 @@ extension UIViewController {
             })
         }
 
-        controller.onReplaceWithRootAnimated = {
+        controller.onSwapRootWithTop = {
             guard let root = controller.stack?.viewControllers.first else { return assertionFailure() }
-            controller.stack?.setViewControllers([root], animated: true)
+            guard let top = controller.stack?.viewControllers.last else { return assertionFailure() }
+            guard root !== top else { return assertionFailure() }
+
+            let middle = controller.stack!.viewControllers.dropFirst().dropLast()
+            let stack = [top] + Array(middle) + [root]
+            controller.stack?.setViewControllers(stack, animated: true)
         }
 
-        controller.onReplaceWithRootNonAnimated = {
-            guard let root = controller.stack?.viewControllers.first else { return assertionFailure() }
-            controller.stack?.viewControllers = [root]
+        controller.onInsertAtIndexZero = {
+            let insert = self.stacked(on: controller.stack, delegate: delegate)
+            var modifiedStack = controller.stack?.viewControllers
+            modifiedStack?.insert(insert, at: 0)
+
+            guard let newStack = modifiedStack else { return assertionFailure() }
+            controller.stack?.viewControllers = newStack
         }
 
         return controller

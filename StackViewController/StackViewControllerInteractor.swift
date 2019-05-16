@@ -107,15 +107,8 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
     // MARK: - StackHandlerDelegate
 
     func stackDidChange(_ difference: Stack.Difference) {
-        guard !(difference.insertions + difference.removals).isEmpty else {
-            self.transitionHandler = nil
-            return
-        }
-
-        guard let transitionHandler = transitionHandler else {
-            assertionFailure()
-            return
-        }
+        guard let transitionHandler = transitionHandler else { return assertionFailure() }
+        guard !difference.isEmpty else { return (self.transitionHandler = nil) }
 
         notifyControllerAboutStackChanges(difference)
 

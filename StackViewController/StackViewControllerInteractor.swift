@@ -109,7 +109,10 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
     // MARK: - StackHandlerDelegate
 
     func stackDidChange(_ difference: Stack.Difference) {
-        assert(transitionHandler != nil)
+        guard let transitionHandler = transitionHandler else {
+            assertionFailure()
+            return
+        }
 
         notifyControllerAboutStackChanges(difference)
 
@@ -120,7 +123,7 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
 
         undoLastStackChange = transitionUndo(for: difference)
 
-        transitionHandler?.performTransition()
+        transitionHandler.performTransition()
     }
 
     // MARK: - TransitionHandlerDelegate

@@ -62,7 +62,7 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
     var onSetVarViewControllersSame: (() -> Void)?
 
     var onSetViewControllersEmptyAnimated: (() -> Void)?
-    var onSetViewControllersEmptyNonAnimated: (() -> Void)?
+    var onSwapIntermediateControllers: (() -> Void)?
     var onSetVarViewControllersEmpty: (() -> Void)?
     var onSwapRootWithTop: (() -> Void)?
     var onInsertAtIndexZero: (() -> Void)?
@@ -76,8 +76,8 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
         "setViewControllers(same, false)",
         "viewControllers = same",
         "setViewControllers([], true)",
-        "setViewControllers([], false)",
         "viewControllers = []",
+        "Swap 2 middle elements",
         "Swap root with top",
         "insert new at index 0"
     ]
@@ -91,8 +91,8 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
         onSetViewControllersSameNonAnimated,
         onSetVarViewControllersSame,
         onSetViewControllersEmptyAnimated,
-        onSetViewControllersEmptyNonAnimated,
         onSetVarViewControllersEmpty,
+        onSwapIntermediateControllers,
         onSwapRootWithTop,
         onInsertAtIndexZero,
     ]

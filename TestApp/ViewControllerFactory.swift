@@ -57,11 +57,15 @@ extension UIViewController {
             })
         }
 
-        controller.onSetViewControllersEmptyNonAnimated = {
-            controller.stack?.setViewControllers([], animated: false)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
-                controller.onPushAnimated?()
-            })
+        controller.onSwapIntermediateControllers = {
+            while controller.stack!.viewControllers.count < 4 {
+                let insert = self.stacked(on: controller.stack, delegate: delegate)
+                controller.stack?.pushViewController(insert, animated: false)
+            }
+
+            let midSwap = controller.stack!.viewControllers.dropLast().dropFirst().reversed()
+            let newStack = Array(controller.stack!.viewControllers.prefix(1)) + Array(midSwap) + Array(controller.stack!.viewControllers.suffix(1))
+            controller.stack?.setViewControllers(Array(newStack), animated: true)
         }
 
         controller.onSetVarViewControllersEmpty = {

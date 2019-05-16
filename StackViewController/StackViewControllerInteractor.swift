@@ -208,6 +208,8 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
         let from = topViewController
         let to = newStack.last
 
+        guard from !== to else { return .none }
+
         if let to = to {
             if oldStack.contains(to) { return .pop }
             else { return .push }

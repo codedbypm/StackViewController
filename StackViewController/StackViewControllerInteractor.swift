@@ -126,6 +126,7 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
     // MARK: - TransitionHandlerDelegate
 
     func willStartTransition(using context: TransitionContext) {
+        sendBeginTransitionViewContainmentEvents(using: context)
         sendBeginTransitionViewEvents(using: context)
     }
 
@@ -133,7 +134,6 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
         if didComplete {
             
             sendEndTransitionViewEvents(using: context)
-
             sendEndTransitionViewContainmentEvents(using: context)
 
         } else {
@@ -186,18 +186,12 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
             self.delegate?.prepareAddingChild($0)
             self.delegate?.finishAddingChild($0)
         }
-        insertions.suffix(1).forEach {
-            self.delegate?.prepareAddingChild($0)
-        }
     }
 
     private func notifyControllerOfRemovals(_ removals: Stack) {
         removals.dropLast().forEach {
             self.delegate?.prepareRemovingChild($0)
             self.delegate?.finishRemovingChild($0)
-        }
-        removals.suffix(1).forEach {
-            self.delegate?.prepareRemovingChild($0)
         }
     }
 
@@ -247,6 +241,15 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
             } else {
                 delegate?.finishAppearance(of: to)
             }
+        }
+    }
+
+    private func sendBeginTransitionViewContainmentEvents(using context: TransitionContext) {
+        if let from = context.from, case .pop = context.operation {
+            delegate?.prepareRemovingChild(from)
+        }
+        if let to = context.to, case .push = context.operation {
+            delegate?.prepareAddingChild(to)
         }
     }
 

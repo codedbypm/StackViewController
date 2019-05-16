@@ -18,10 +18,10 @@ class MockViewController: UIViewController {
         return [willMoveToParentDate, didMoveToParentDate]
     }
 
-    var events: [Date?] {
-        return appearanceEventDates + viewContainmentEventDates
+    var receivedEvents: [Date] {
+        return (appearanceEventDates + viewContainmentEventDates).compactMap { $0 }
     }
-    
+
     var didCallBeginAppearance: Bool? = nil
     var beginAppearanceIsAppearing: Bool? = nil
     var beginAppearanceAnimated: Bool? = nil

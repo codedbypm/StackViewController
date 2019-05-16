@@ -126,47 +126,19 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
     // MARK: - TransitionHandlerDelegate
 
     func willStartTransition(using context: TransitionContext) {
-        if let from = context.viewController(forKey: .from) {
-            delegate?.prepareDisappearance(of: from, animated: context.isAnimated)
-        }
-        if let to = context.viewController(forKey: .to) {
-            delegate?.prepareAppearance(of: to, animated: context.isAnimated)
-        }
+        sendBeginTransitionViewEvents(using: context)
     }
 
     func didEndTransition(using context: TransitionContext, didComplete: Bool) {
         if didComplete {
-            if let from = context.viewController(forKey: .from) {
-                delegate?.finishDisappearance(of: from)
-            }
-            if let to = context.viewController(forKey: .to) {
-                delegate?.finishAppearance(of: to)
-            }
+            
+            sendEndTransitionViewEvents(using: context)
 
-            if let from = context.viewController(forKey: .from) {
-                if case .pop = context.operation {
-                    delegate?.finishRemovingChild(from)
-                }
-            }
+            sendEndTransitionViewContainmentEvents(using: context)
 
-            if let to = context.viewController(forKey: .to) {
-                if case .push = context.operation {
-                    delegate?.finishAddingChild(to)
-                }
-            }
         } else {
-            if let from = context.viewController(forKey: .from) {
-                delegate?.prepareAppearance(of: from, animated: context.isAnimated)
-            }
-            if let to = context.viewController(forKey: .to) {
-                delegate?.prepareDisappearance(of: to, animated: context.isAnimated)
-            }
-            if let from = context.viewController(forKey: .from) {
-                delegate?.finishAppearance(of: from)
-            }
-            if let to = context.viewController(forKey: .to) {
-                delegate?.finishAppearance(of: to)
-            }
+            sendBeginTransitionViewEvents(using: context)
+            sendEndTransitionViewEvents(using: context)
 
             undoLastStackChange?()
         }
@@ -239,6 +211,52 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
         } else {
             if from != nil { return .pop }
             else { return .none }
+        }
+    }
+
+    private func sendBeginTransitionViewEvents(using context: TransitionContext) {
+        if let from = context.from {
+            if context.transitionWasCancelled {
+                delegate?.prepareAppearance(of: from, animated: context.isAnimated)
+            } else {
+                delegate?.prepareDisappearance(of: from, animated: context.isAnimated)
+            }
+        }
+
+        if let to = context.to {
+            if context.transitionWasCancelled {
+                delegate?.prepareDisappearance(of: to, animated: context.isAnimated)
+            } else {
+                delegate?.prepareAppearance(of: to, animated: context.isAnimated)
+            }
+        }
+    }
+
+    private func sendEndTransitionViewEvents(using context: TransitionContext) {
+        if let from = context.from {
+            if context.transitionWasCancelled {
+                delegate?.finishAppearance(of: from)
+            } else {
+                delegate?.finishDisappearance(of: from)
+            }
+        }
+
+        if let to = context.to {
+            if context.transitionWasCancelled {
+                delegate?.finishDisappearance(of: to)
+            } else {
+                delegate?.finishAppearance(of: to)
+            }
+        }
+    }
+
+    private func sendEndTransitionViewContainmentEvents(using context: TransitionContext) {
+        if let from = context.from, case .pop = context.operation {
+            delegate?.finishRemovingChild(from)
+        }
+
+        if let to = context.to, case .push = context.operation {
+            delegate?.finishAddingChild(to)
         }
     }
 }

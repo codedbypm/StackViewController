@@ -28,12 +28,6 @@ class StackViewControllerTests: XCTestCase {
     //    StackVC with stack = [Yellow]
     //
     //    Yellow   =>  willMove(toParent:)
-    //    StackVC  =>  viewDidLoad()
-    //    StackVC  =>  viewWillAppear(_:)
-    //    Yellow   =>  viewWillAppear(_:)
-    //    StackVC  =>  viewDidAppear(_:)
-    //    Yellow   =>  viewDidAppear(_:)
-    //    StackVC  =>  didMoveToParent(_:)
     func testThat_whenInitWithARootViewController_itSendsCorrectSequenceOfEvents() {
         // Arrange
         let yellow = MockViewController()
@@ -42,7 +36,23 @@ class StackViewControllerTests: XCTestCase {
         sut = StackViewController(rootViewController: yellow)
 
         // Assert
+        let events = [
+            yellow.willMoveToParentDate,
+            yellow.beginAppearanceTransitionDate,
+            yellow.endAppearanceTransitionDate,
+            yellow.didMoveToParentDate
+        ]
+        XCTAssertEqual(events.compactMap({ $0 }).sorted(), [yellow.willMoveToParentDate])
     }
+
+
+
+    //    StackVC  =>  viewDidLoad()
+    //    StackVC  =>  viewWillAppear(_:)
+    //    Yellow   =>  viewWillAppear(_:)
+    //    StackVC  =>  viewDidAppear(_:)
+    //    Yellow   =>  viewDidAppear(_:)
+    //    StackVC  =>  didMoveToParent(_:)
 
     // MARK: - viewDidLoad()
 
@@ -168,23 +178,23 @@ class StackViewControllerTests: XCTestCase {
 //    [UIKit] Red    =>    willMove(toParent:)
 //    [UIKit] Red    =>    didMove(toParent:)
 //    [UIKit] Green    =>    willMove(toParent:)
-    func testThat_whenInitWithANonEmptyStack_itSendsCorrectSequenceOfEventsToHisChildren() {
-        // Arrange
-        let stack: [MockViewController] = Stack.distinctElements(3)
-
-        // Act
-        sut = StackViewController(viewControllers: stack)
-
-        // Assert
-        let willMoveDates = stack.compactMap { $0.willMoveToParentDate }
-        XCTAssertEqual(willMoveDates.count, 3)
-
-        let didMoveDates = stack.compactMap { $0.didMoveToParentDate }
-        XCTAssertEqual(didMoveDates.count, 2)
-
-        var flattenedDates = zip(willMoveDates, didMoveDates).flatMap({ return [$0, $1] })
-        flattenedDates.append(contentsOf: willMoveDates.suffix(1))
-        XCTAssertEqual(flattenedDates, flattenedDates.sorted())
-        XCTAssertEqual(flattenedDates.count, 5)
-    }
+//    func testThat_whenInitWithANonEmptyStack_itSendsCorrectSequenceOfEventsToHisChildren() {
+//        // Arrange
+//        let stack: [MockViewController] = Stack.distinctElements(3)
+//
+//        // Act
+//        sut = StackViewController(viewControllers: stack)
+//
+//        // Assert
+//        let willMoveDates = stack.compactMap { $0.willMoveToParentDate }
+//        XCTAssertEqual(willMoveDates.count, 3)
+//
+//        let didMoveDates = stack.compactMap { $0.didMoveToParentDate }
+//        XCTAssertEqual(didMoveDates.count, 2)
+//
+//        var flattenedDates = zip(willMoveDates, didMoveDates).flatMap({ return [$0, $1] })
+//        flattenedDates.append(contentsOf: willMoveDates.suffix(1))
+//        XCTAssertEqual(flattenedDates, flattenedDates.sorted())
+//        XCTAssertEqual(flattenedDates.count, 5)
+//    }
 }

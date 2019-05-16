@@ -13,15 +13,19 @@ class MockViewController: UIViewController {
     var didCallBeginAppearance: Bool? = nil
     var beginAppearanceIsAppearing: Bool? = nil
     var beginAppearanceAnimated: Bool? = nil
+    var beginAppearanceTransitionDate: Date?
     override func beginAppearanceTransition(_ isAppearing: Bool, animated: Bool) {
         didCallBeginAppearance = true
         beginAppearanceIsAppearing = isAppearing
         beginAppearanceAnimated = animated
+        beginAppearanceTransitionDate = Date()
     }
 
     var didCallEndAppearance: Bool? = nil
+    var endAppearanceTransitionDate: Date?
     override func endAppearanceTransition() {
         didCallEndAppearance = true
+        endAppearanceTransitionDate = Date()
     }
 
     var didCallWillMoveToParent: Bool?

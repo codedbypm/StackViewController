@@ -40,8 +40,6 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
 
     private let stackHandler: StackHandler
 
-    private var transitionContext: TransitionContext?
-
     private var transitionHandler: TransitionHandler?
 
     private var undoLastStackChange: (() -> Void)?

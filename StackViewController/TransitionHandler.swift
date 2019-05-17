@@ -68,41 +68,33 @@ class TransitionHandler {
     func performTransition() {
         delegate?.willStartTransition(using: transitionContext)
 
-        if transitionContext.isAnimated {
-            let animationController: UIViewControllerAnimatedTransitioning
-            let interactionController: UIViewControllerInteractiveTransitioning?
+        let animationController: UIViewControllerAnimatedTransitioning
+        let interactionController: UIViewControllerInteractiveTransitioning?
 
-            if let from = transitionContext.from, let to = transitionContext.to {
-                if let controller = stackViewControllerDelegate?.animationController(for: transitionContext.operation, from: from, to: to) {
-                    animationController = controller
-                } else {
-                    animationController = defaultAnimationController(for: transitionContext.operation)
-                }
+        if let from = transitionContext.from, let to = transitionContext.to {
+            if let controller = stackViewControllerDelegate?.animationController(for: transitionContext.operation, from: from, to: to) {
+                animationController = controller
             } else {
                 animationController = defaultAnimationController(for: transitionContext.operation)
             }
-            self.animationController = animationController
-
-
-            if transitionContext.isInteractive {
-                if let controller = stackViewControllerDelegate?.interactionController(for: animationController) {
-                    interactionController = controller
-                } else {
-                    interactionController = InteractivePopAnimator(animationController: animationController,
-                                                                   screenEdgePanGestureRecognizer: screenEdgePanGestureRecognizer!)
-                }
-                self.interactionController = interactionController
-                interactionController?.startInteractiveTransition(transitionContext)
-            } else {
-                self.interactionController = nil
-                animationController.animateTransition(using: transitionContext)
-            }
         } else {
-            delegate?.willStartTransition(using: transitionContext)
-            let animator = defaultAnimationController(for: transitionContext.operation)
-            animator.prepareTransition(using: transitionContext)
-            animator.transitionAnimations(using: transitionContext)()
-            animator.transitionCompletion(using: transitionContext)(.end)
+            animationController = defaultAnimationController(for: transitionContext.operation)
+        }
+        self.animationController = animationController
+
+
+        if transitionContext.isInteractive {
+            if let controller = stackViewControllerDelegate?.interactionController(for: animationController) {
+                interactionController = controller
+            } else {
+                interactionController = InteractivePopAnimator(animationController: animationController,
+                                                               screenEdgePanGestureRecognizer: screenEdgePanGestureRecognizer!)
+            }
+            self.interactionController = interactionController
+            interactionController?.startInteractiveTransition(transitionContext)
+        } else {
+            self.interactionController = nil
+            animationController.animateTransition(using: transitionContext)
         }
     }
 

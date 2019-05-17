@@ -23,7 +23,7 @@ protocol StackViewControllerInteractorDelegate: UIViewController {
     func startInteractivePopTransition()
 }
 
-class StackViewControllerInteractor: StackHandlerDelegate  {
+class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDelegate  {
 
     // MARK: - Internal properties
 
@@ -119,6 +119,7 @@ class StackViewControllerInteractor: StackHandlerDelegate  {
 
         undoLastStackChange = transitionUndo(for: difference)
 
+        transitionHandler.delegate = self
         transitionHandler.performTransition()
     }
 

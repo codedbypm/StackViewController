@@ -158,6 +158,16 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
         addSubviewsLayoutConstraints()
     }
 
+    override func beginAppearanceTransition(_ isAppearing: Bool, animated: Bool) {
+        debugFunc(#function, allowed: false, appending: " isAppearing: \(isAppearing)")
+        super.beginAppearanceTransition(isAppearing, animated: animated)
+    }
+
+    override func endAppearanceTransition() {
+        debugFunc(#function, allowed: false)
+        super.endAppearanceTransition()
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         debugFunc(#function, allowed: debugAppearance)
         super.viewWillAppear(animated)

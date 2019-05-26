@@ -21,7 +21,19 @@ class StackHandlerTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: - push(_ : UIViewController, animated: Bool)
+    // MARK: - push(_ : UIViewController)
+
+    func testThat_whenPushingAViewControllerWhichIsNotInTheStack_resultIsSuccess() {
+        // Arrange
+        let stack = Stack.distinctElements(2)
+        sut = StackHandler(stack: stack)
+
+        // Act
+        let result = sut.push(UIViewController())
+        
+        // Assert
+        XCTAssertNoThrow(try result.get())
+    }
 
     func testThat_whenPushingAViewControllerWhichIsNotInTheStack_thisIsAppendedToTheCurrentStack() {
         // Arrange
@@ -31,36 +43,13 @@ class StackHandlerTests: XCTestCase {
         let pushedViewController = UIViewController()
 
         // Act
-        sut.push(pushedViewController)
+        _ = sut.push(pushedViewController)
 
         // Assert
         XCTAssertEqual(sut.stack, stack + [pushedViewController])
     }
 
-    func testThat_whenPushingAViewControllerWhichIsNotInTheStack_theDelegateReceivesTheInsertionsAndRemovals() {
-        // Arrange
-        let stack = Stack.distinctElements(10)
-        sut = StackHandler(stack: stack)
-
-        let mockStackHandlerDelegate = MockStackHandlerDelegate()
-        sut.delegate = mockStackHandlerDelegate
-
-        let pushedViewController = UIViewController()
-
-        let expectedStackChanges = (stack + [pushedViewController]).difference(from: stack)
-
-        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
-
-        // Act
-        sut.push(pushedViewController)
-
-        // Assert
-        XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
-        XCTAssertEqual(mockStackHandlerDelegate.stackDidChangeDifference, expectedStackChanges)
-    }
-
-    func testThat_whenPushingAViewControllerWhichIsAlreadyInTheStack_theCurrentStackIsNotChanged() {
+    func testThat_whenPushingAViewControllerWhichIsAlreadyInTheStack_resultIsErrorElementAlreadyOnStack() {
         // Arrange
         let stack = Stack.distinctElements(10)
         sut = StackHandler(stack: stack)
@@ -68,7 +57,24 @@ class StackHandlerTests: XCTestCase {
         let pushedViewController = stack[6]
 
         // Act
-        sut.push(pushedViewController)
+        let result = sut.push(pushedViewController)
+
+        // Assert
+        XCTAssertThrowsError(try result.get(), "") { error in
+            XCTAssertTrue(error is StackOperationError)
+            XCTAssertTrue((error as? StackOperationError) == StackOperationError.elementAlreadyOnStack)
+        }
+    }
+
+    func testThat_whenPushingAViewControllerWhichIsAlreadyInTheStack_theStackIsNotUpdated() {
+        // Arrange
+        let stack = Stack.distinctElements(10)
+        sut = StackHandler(stack: stack)
+
+        let pushedViewController = stack[6]
+
+        // Act
+        _ = sut.push(pushedViewController)
 
         // Assert
         XCTAssertEqual(sut.stack, stack)

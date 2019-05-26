@@ -22,6 +22,12 @@ protocol StackHandlerDelegate: class {
     func stackDidChange(_ difference: Stack.Difference)
 }
 
+enum StackOperationError: Swift.Error {
+    case elementAlreadyOnStack
+}
+
+typealias StackOperationResult<T> = Result<T, StackOperationError>
+
 class StackHandler: ExceptionThrowing {
 
     // MARK: - Internal properties
@@ -50,9 +56,10 @@ class StackHandler: ExceptionThrowing {
 
     // MARK: - Internal methods
 
-    func push(_ viewController: UIViewController) {
-        guard canPush(viewController) else { return }
-        self.stack.append(viewController)
+    func push(_ viewController: UIViewController) -> StackOperationResult<Void> {
+        guard canPush(viewController) else { return .failure(.elementAlreadyOnStack)}
+        stack.append(viewController)
+        return .success(())
     }
 
     func pop() -> UIViewController? {

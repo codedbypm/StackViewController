@@ -73,7 +73,7 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
                                               animated: animated,
                                               interactive: interactive,
                                               screenEdgePanGestureRecognizer: screenEdgePanGestureRecognizer)
-        return stackHandler.pop()
+        return try? stackHandler.pop().get()
     }
 
     func popToRoot(animated: Bool) -> Stack {

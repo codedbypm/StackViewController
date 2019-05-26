@@ -62,9 +62,9 @@ class StackHandler: ExceptionThrowing {
         return .success(())
     }
 
-    func pop() -> UIViewController? {
+    func pop() -> StackOperationResult<UIViewController?> {
         let index = stack.endIndex.advanced(by: -2)
-        return popToViewController(at: index).first
+        return .success(popToViewController(at: index).first)
     }
 
     func popToRoot() -> Stack {

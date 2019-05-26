@@ -94,7 +94,7 @@ class StackHandler: ExceptionThrowing {
     }
 
     private func canPopLast(_ count: Int) -> Bool {
-        guard (1..<stack.count).contains(count) else { return false }
+        guard (0..<stack.count).contains(count) else { return false }
         return true
     }
 

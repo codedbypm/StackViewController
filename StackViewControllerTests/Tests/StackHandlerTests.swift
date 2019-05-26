@@ -119,17 +119,19 @@ class StackHandlerTests: XCTestCase {
         XCTAssertEqual(sut.stack, stack.dropLast())
     }
 
-    func testThat_whenStackHasOneElement_andPopIsCalled_resultContainsNoDifference() {
+    func testThat_whenStackIsEmpty_andPopIsCalled_resultIsErrorEmptyStack() {
         // Arrange
-        let stack = Stack.distinctElements(1)
+        let stack = Stack.distinctElements(0)
         sut = StackHandler(stack: stack)
 
         // Act
         let result = sut.pop()
 
         // Assert
-        XCTAssertNoThrow(try result.get())
-        XCTAssertEqual(CollectionDifference.noDifference, try? result.get())
+        XCTAssertThrowsError(try result.get(), "") { error in
+            XCTAssertTrue(error is StackOperationError)
+            XCTAssertTrue((error as? StackOperationError) == StackOperationError.emptyStack)
+        }
     }
 
     func testThat_whenStackHasOneElement_andPopIsCalled_theStackIsNotChanged() {

@@ -87,56 +87,48 @@ class StackHandlerTests: XCTestCase {
         let stack = Stack.distinctElements(4)
         sut = StackHandler(stack: stack)
 
+        // Act
         let result = sut.pop()
 
         // Assert
         XCTAssertNoThrow(try result.get())
     }
 
-    func testThat_whenPoppingAViewControllerFromAStackHavingMoreThanOneElement_thisIsRemovedFromTheCurrentStackAndReturnedToTheCaller() {
-        // Act
+    func testThat_whenStackHasMoreThanOneElement_andPopIsCalled_resultContainsThePoppedElement() {
+        // Arrange
         let stack = Stack.distinctElements(4)
         sut = StackHandler(stack: stack)
 
-        let poppedViewController = sut.pop()
+        // Act
+        let result = sut.pop()
 
         // Assert
-//        XCTAssertEqual(poppedViewController, stack.last)
+        XCTAssertEqual(stack.last, try? result.get())
+    }
+
+    func testThat_whenStackHasMoreThanOneElement_andPopIsCalled_theElementIsRemovedFromTheStack() {
+        // Arrange
+        let stack = Stack.distinctElements(4)
+        sut = StackHandler(stack: stack)
+
+        // Act
+        _ = sut.pop()
+
+        // Assert
         XCTAssertEqual(sut.stack, stack.dropLast())
     }
 
-    func testThat_whenPoppingAViewControllerFromAStackHavingMoreThanOneElement_theDelegateReceivesTheInsertionsAndRemovals() {
+    func testThat_whenStackHasOneElement_andPopIsCalled_resultContainsNil() {
         // Arrange
-        let stack = Stack.distinctElements(10)
+        let stack = Stack.distinctElements(1)
         sut = StackHandler(stack: stack)
 
-        let mockStackHandlerDelegate = MockStackHandlerDelegate()
-        sut.delegate = mockStackHandlerDelegate
-
-        let expectedStackChanges = stack.dropLast().difference(from: stack)
-
-        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
-
         // Act
-        let _ = sut.pop()
+        let result = sut.pop()
 
         // Assert
-        XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
-        XCTAssertEqual(mockStackHandlerDelegate.stackDidChangeDifference, expectedStackChanges)
-    }
-
-    func testThat_whenPoppingAViewControllerFromAStackHavingOnlyOneElement_theCurrentStackIsNotChangedAndTheMethodReturnsNil() {
-        // Arrange
-        let oneElementStack = Stack.distinctElements(1)
-        sut = StackHandler(stack: oneElementStack)
-
-        // Act
-        let poppedViewController = sut.pop()
-
-        // Assert
-//        XCTAssertNil(poppedViewController)
-        XCTAssertEqual(sut.stack, oneElementStack)
+        XCTAssertNoThrow(try result.get())
+        XCTAssertNil(try? result.get())
     }
 
     // MARK: - popToRoot(animated: Bool) -> Stack

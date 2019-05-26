@@ -19,4 +19,5 @@ public protocol StackViewControllerHandling: UIViewController {
     @discardableResult func popViewController(animated: Bool) -> UIViewController?
     func pushViewController(_: UIViewController, animated: Bool)
     func setViewControllers(_: [UIViewController], animated: Bool)
+    func popToRootViewController(animated: Bool) -> [UIViewController]?
 }

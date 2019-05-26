@@ -75,6 +75,10 @@ extension UIViewController {
             })
         }
 
+        controller.onPopToRootAnimated = {
+            controller.stack?.popToRootViewController(animated: true)
+        }
+
         controller.onSwapRootWithTop = {
             guard let root = controller.stack?.viewControllers.first else { return assertionFailure() }
             guard let top = controller.stack?.viewControllers.last else { return assertionFailure() }

@@ -22,6 +22,7 @@ enum StackOperationError: Swift.Error {
     case elementAlreadyOnStack
     case elementNotFound
     case duplicateElements
+    case emptyStack
 }
 
 typealias StackOperationResult = Result<Stack.Difference, StackOperationError>
@@ -54,16 +55,16 @@ class StackHandler: ExceptionThrowing {
 
     func pop() -> StackOperationResult {
         let index = stack.endIndex.advanced(by: -2)
-        return .success(popToViewController(at: index))
+        return popToViewController(at: index)
     }
 
     func popToRoot() -> StackOperationResult {
-        return .success(popToViewController(at: stack.startIndex))
+        return popToViewController(at: stack.startIndex)
     }
 
     func popToElement(_ element: Stack.Element) -> StackOperationResult {
         guard let index = stack.firstIndex(of: element) else { return .failure(.elementNotFound) }
-        return .success(popToViewController(at: index))
+        return popToViewController(at: index)
     }
 
     func replaceStack(with newStack: Stack) -> StackOperationResult {
@@ -75,16 +76,16 @@ class StackHandler: ExceptionThrowing {
 
     // MARK: - Private methods
 
-    private func popToViewController(at index: Int) -> Stack.Difference {
+    private func popToViewController(at index: Int) -> StackOperationResult {
         let poppedCount = stack.endIndex - (index + 1)
-        guard canPopLast(poppedCount) else { return .noDifference }
+        guard canPopLast(poppedCount) else { return .failure(.emptyStack) }
 
         let poppedElements = Array(stack.suffix(poppedCount))
         stack.removeLast(poppedCount)
 
         let difference = stack.difference(from: (stack + poppedElements))
 
-        return difference
+        return .success(difference)
     }
 
     private func canPush(_ viewController: UIViewController) -> Bool {

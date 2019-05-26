@@ -55,55 +55,104 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
     // MARK: - Internal methods
 
     func push(_ viewController: UIViewController, animated: Bool) {
-        transitionHandler = TransitionHandler(operation: .push,
-                                              from: topViewController,
-                                              to: viewController,
-                                              containerView: viewControllerWrapperView,
-                                              animated: animated)
-        stackHandler.push(viewController)
+        let from = stack.last
+        let result = stackHandler.push(viewController)
+        guard case .success = result else {
+            // Handle error
+            return
+        }
+
+        let transitionHandler = TransitionHandler(operation: .push,
+                                                  from: from,
+                                                  to: stack.last,
+                                                  containerView: viewControllerWrapperView,
+                                                  animated: animated)
+        transitionHandler.delegate = self
+        transitionHandler.performTransition()
+        self.transitionHandler = transitionHandler
+
     }
 
     @discardableResult
     func pop(animated: Bool, interactive: Bool = false) -> UIViewController? {
-        transitionHandler = TransitionHandler(operation: .pop,
-                                              from: topViewController,
-                                              to: stack.dropLast().last,
+        let from = stack.last
+        let result = stackHandler.pop()
+        guard case let .success(difference) = result else {
+            return nil
+        }
+
+        let transitionHandler = TransitionHandler(operation: .pop,
+                                                  from: from,
+                                                  to: stack.last,
                                               containerView: viewControllerWrapperView,
                                               animated: animated,
                                               interactive: interactive,
                                               screenEdgePanGestureRecognizer: screenEdgePanGestureRecognizer)
-        return try? stackHandler.pop().get().removals.first?._element
+
+        transitionHandler.delegate = self
+        transitionHandler.performTransition()
+        self.transitionHandler = transitionHandler
+
+        return difference.removals.first?._element
     }
 
     func popToRoot(animated: Bool) -> Stack {
-        transitionHandler = TransitionHandler(operation: .pop,
-                                              from: topViewController,
-                                              to: stack.first,
+        let from = stack.last
+        let result = stackHandler.popToRoot()
+        guard case let .success(difference) = result else {
+            return []
+        }
+
+        let transitionHandler = TransitionHandler(operation: .pop,
+                                                  from: from,
+                                                  to: stack.last,
                                               containerView: viewControllerWrapperView,
                                               animated: animated)
-        return (try? stackHandler.popToRoot().get())?.removals.map { $0._element } ?? []
+
+        transitionHandler.delegate = self
+        transitionHandler.performTransition()
+        self.transitionHandler = transitionHandler
+
+        return difference.removals.map { $0._element }
     }
 
     func popTo(_ viewController: UIViewController, animated: Bool) -> Stack {
-        transitionHandler = TransitionHandler(operation: .pop,
-                                              from: topViewController,
-                                              to: viewController,
+        let from = stack.last
+        let result = stackHandler.popToElement(viewController)
+        guard case let .success(difference) = result else {
+            return []
+        }
+
+        let transitionHandler = TransitionHandler(operation: .pop,
+                                              from: from,
+                                              to: stack.last,
                                               containerView: viewControllerWrapperView,
                                               animated: animated)
-        return (try? stackHandler.popToElement(viewController).get())?.removals.map { $0._element } ?? []
+        transitionHandler.delegate = self
+        transitionHandler.performTransition()
+        self.transitionHandler = transitionHandler
+
+        return difference.removals.map { $0._element }
     }
 
     func setStack(_ newStack: Stack, animated: Bool) {
+        let from = stack.last
         let operation = stackOperation(whenReplacing: stack, with: newStack)
+
+        let result = stackHandler.replaceStack(with: newStack)
+        guard case let .success(difference) = result else {
+            return
+        }
+
+
         transitionHandler = TransitionHandler(operation: operation,
-                                              from: topViewController,
-                                              to: newStack.last,
+                                              from: from,
+                                              to: stack.last,
                                               containerView: viewControllerWrapperView,
                                               animated: animated)
 
-        if let difference = try? stackHandler.replaceStack(with: newStack).get() {
-            processStackChange(difference)
-        }
+        processStackChange(difference)
+
     }
 
     // MARK: - StackHandlerDelegate

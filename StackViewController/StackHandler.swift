@@ -25,6 +25,7 @@ protocol StackHandlerDelegate: class {
 enum StackOperationError: Swift.Error {
     case elementAlreadyOnStack
     case elementNotFound
+    case duplicateElements
 }
 
 typealias StackOperationResult<T> = Result<T, StackOperationError>
@@ -77,9 +78,10 @@ class StackHandler: ExceptionThrowing {
         return .success(popToViewController(at: index))
     }
 
-    func setStack(_ newStack: Stack) {
-        guard canReplaceStack(with: newStack) else { return }
+    func replaceStack(with newStack: Stack) -> StackOperationResult<Void> {
+        guard canReplaceStack(with: newStack) else { return .failure(.duplicateElements) }
         stack = newStack
+        return .success(())
     }
 
     // MARK: - Private methods
@@ -105,7 +107,6 @@ class StackHandler: ExceptionThrowing {
     }
 
     private func canReplaceStack(with newStack: Stack) -> Bool {
-        guard !stack.elementsEqual(newStack) else { return false }
         guard !newStack.hasDuplicates else { return false }
         return true
     }

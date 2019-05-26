@@ -101,7 +101,7 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
                                               to: newStack.last,
                                               containerView: viewControllerWrapperView,
                                               animated: animated)
-        stackHandler.setStack(newStack)
+        stackHandler.replaceStack(with: newStack)
     }
 
     // MARK: - StackHandlerDelegate
@@ -168,7 +168,7 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
             guard let oldStack = self.stack.applying(invertedDifference) else { return }
 
             self.stackHandler.delegate = nil
-            self.stackHandler.setStack(oldStack)
+            self.stackHandler.replaceStack(with: oldStack)
             self.stackHandler.delegate = self
         }
     }

@@ -288,70 +288,37 @@ class StackHandlerTests: XCTestCase {
         XCTAssertEqual(sut.stack, stack)
     }
 
-    // MARK: - setStack(_: Stack, animated: Bool)
+    // MARK: - replaceStack(with: Stack)
 
-    func testThat_whenReplacingCurrentStackWithSameStack_theStackIsNotChangedAndTheStackDidChangeMethodIsNotInvoked() {
+    func testThat_whenNewStackContainsDuplicates_resultIsErrorDuplicateElements() {
         // Arrange
-        let stack = Stack.distinctElements(10)
+        let stack = Stack.distinctElements(3)
         sut = StackHandler(stack: stack)
-
-        let mockStackHandlerDelegate = MockStackHandlerDelegate()
-        sut.delegate = mockStackHandlerDelegate
-
-        let sameStack = stack
-
-        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
-
-        // Act
-        sut.setStack(sameStack)
-
-        // Assert
-        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
-        XCTAssertEqual(sut.stack, stack)
-    }
-
-    func testThat_whenReplacingCurrentStackWithAStackContainingDuplicates_theStackIsNotChangedAndTheStackDidChangeMethodIsNotInvoked() {
-        // Arrange
-        let stack = Stack.distinctElements(10)
-        sut = StackHandler(stack: stack)
-
-        let mockStackHandlerDelegate = MockStackHandlerDelegate()
-        sut.delegate = mockStackHandlerDelegate
 
         let duplicateViewController = UIViewController()
-        let duplicatesStack = [duplicateViewController] + Stack.distinctElements(4) + [duplicateViewController]
-
-        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
+        let duplicatesStack = [duplicateViewController] + Stack.distinctElements(1) + [duplicateViewController]
 
         // Act
-        sut.setStack(duplicatesStack)
+        let result = sut.replaceStack(with: duplicatesStack)
 
         // Assert
-        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
-        XCTAssertEqual(sut.stack, stack)
+        XCTAssertThrowsError(try result.get(), "") { error in
+            XCTAssertTrue(error is StackOperationError)
+            XCTAssertTrue((error as? StackOperationError) == StackOperationError.duplicateElements)
+        }
     }
 
-    func testThat_ReplacingCurrentStackWithAStackContainingDistinctElements_theDelegateReceivesTheInsertionsAndRemovals() {
+    func testThat_whenNewStackContainsNoDuplicates_resultIsSuccess() {
         // Arrange
-        let stack = Stack.distinctElements(10)
+        let stack = Stack.distinctElements(3)
         sut = StackHandler(stack: stack)
 
-        let mockStackHandlerDelegate = MockStackHandlerDelegate()
-        sut.delegate = mockStackHandlerDelegate
-
-        let newStack = Stack.distinctElements(4)
-
-        let expectedStackChanges = newStack.difference(from: stack)
+        let newStack = Stack.distinctElements(6)
 
         // Act
-        sut.setStack(newStack)
+        let result = sut.replaceStack(with: newStack)
 
         // Assert
-        XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
-        XCTAssertEqual(mockStackHandlerDelegate.stackDidChangeDifference, expectedStackChanges)
+        XCTAssertNoThrow(try result.get())
     }
 }

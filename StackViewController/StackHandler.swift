@@ -24,6 +24,7 @@ protocol StackHandlerDelegate: class {
 
 enum StackOperationError: Swift.Error {
     case elementAlreadyOnStack
+    case elementNotFound
 }
 
 typealias StackOperationResult<T> = Result<T, StackOperationError>
@@ -71,9 +72,9 @@ class StackHandler: ExceptionThrowing {
         return .success(popToViewController(at: stack.startIndex))
     }
 
-    func popToElement(_ element: Stack.Element) -> Stack {
-        let index = stack.firstIndex(of: element) ?? stack.endIndex
-        return popToViewController(at: index)
+    func popToElement(_ element: Stack.Element) -> StackOperationResult<Stack> {
+        guard let index = stack.firstIndex(of: element) else { return .failure(.elementNotFound) }
+        return .success(popToViewController(at: index))
     }
 
     func setStack(_ newStack: Stack) {

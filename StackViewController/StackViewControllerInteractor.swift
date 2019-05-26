@@ -91,7 +91,7 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
                                               to: viewController,
                                               containerView: viewControllerWrapperView,
                                               animated: animated)
-        return stackHandler.popToElement(viewController)
+        return (try? stackHandler.popToElement(viewController).get()) ?? []
     }
 
     func setStack(_ newStack: Stack, animated: Bool) {

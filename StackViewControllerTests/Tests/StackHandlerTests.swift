@@ -211,60 +211,80 @@ class StackHandlerTests: XCTestCase {
         XCTAssertEqual(sut.stack, stack)
     }
 
-    // MARK: - popToViewController(_: UIViewController) -> Stack
+    // MARK: - popToElement(_: Stack.Element) -> Stack
 
-    func testThat_whenPoppingToAViewControllerAlreadyOnTheStack_allElementsAfterThatViewControllerAreRemovedFromTheCurrentStackAndReturnedToTheCaller() {
+    func testThat_whenElementIsOnTheStack_resultIsSuccess() {
         // Arrange
-        let stack = Stack.distinctElements(10)
+        let stack = Stack.distinctElements(4)
         sut = StackHandler(stack: stack)
-
-        let targetIndex = 7
-        let targetViewController = stack[targetIndex]
+        let targetIndex = 2
+        let targetElement = stack[targetIndex]
 
         // Act
-        let poppedViewControllers = sut.popToElement(targetViewController)
+        let result = sut.popToElement(targetElement)
 
         // Assert
-        XCTAssertEqual(poppedViewControllers, stack.suffix(2))
-        XCTAssertEqual(sut.stack, stack.dropLast(2))
+        XCTAssertNoThrow(try result.get())
     }
 
-    func testThat_whenPoppingToAViewControllerWhichIsOnTheStack_theDelegateReceivesTheInsertionsAndRemovals() {
+    func testThat_whenElementIsOnTheStack_andStackHasOneElement_resultContainsEmptyStack() {
         // Arrange
-        let stack = Stack.distinctElements(10)
+        let stack = Stack.distinctElements(1)
         sut = StackHandler(stack: stack)
-
-        let mockStackHandlerDelegate = MockStackHandlerDelegate()
-        sut.delegate = mockStackHandlerDelegate
-
-        let targetIndex = 7
-        let targetViewController = stack[targetIndex]
-
-        let expectedStackChanges = stack.dropLast(2).difference(from: stack)
-
-        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
+        let targetIndex = 0
+        let targetElement = stack[targetIndex]
 
         // Act
-        let _ = sut.popToElement(targetViewController)
+        let result = sut.popToElement(targetElement)
 
         // Assert
-        XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
-        XCTAssertEqual(mockStackHandlerDelegate.stackDidChangeDifference, expectedStackChanges)
+        do {
+            let poppedStack = try result.get()
+            XCTAssertTrue(poppedStack.isEmpty)
+        }
+        catch {
+            XCTFail()
+        }
     }
 
-    func testThat_whenPoppingToAViewControllerWhichIsNotOnTheStack_theCurrentStackIsNotChangedAndTheMethodReturnsEmptyArray() {
+    func testThat_whenElementIsOnTheStack_andStackHasMoreThanOneElement_resultContainsThePoppedElements() {
         // Arrange
-        let stack = Stack.distinctElements(10)
+        let stack = Stack.distinctElements(4)
         sut = StackHandler(stack: stack)
-
-        let targetViewController = UIViewController()
+        let targetIndex = 2
+        let targetElement = stack[targetIndex]
 
         // Act
-        let poppedViewControllers = sut.popToElement(targetViewController)
+        let result = sut.popToElement(targetElement)
 
         // Assert
-        XCTAssertTrue(poppedViewControllers.isEmpty)
+        XCTAssertEqual(stack.suffix(1), try? result.get())
+    }
+
+    func testThat_whenElementIsNotOnTheStack_resultIsErrorElementNotFound() {
+        // Arrange
+        let stack = Stack.distinctElements(4)
+        sut = StackHandler(stack: stack)
+
+        // Act
+        let result = sut.popToElement(UIViewController())
+
+        // Assert
+        XCTAssertThrowsError(try result.get(), "") { error in
+            XCTAssertTrue(error is StackOperationError)
+            XCTAssertTrue((error as? StackOperationError) == StackOperationError.elementNotFound)
+        }
+    }
+
+    func testThat_whenElementIsNotOnTheStack_theStackIsNotChanged() {
+        // Arrange
+        let stack = Stack.distinctElements(4)
+        sut = StackHandler(stack: stack)
+
+        // Act
+        _ = sut.popToElement(UIViewController())
+
+        // Assert
         XCTAssertEqual(sut.stack, stack)
     }
 

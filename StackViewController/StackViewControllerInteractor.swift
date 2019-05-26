@@ -113,6 +113,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         transitionHandler.performTransition()
         self.transitionHandler = transitionHandler
 
+        processStackChange(difference)
+
         return difference.removals.map { $0._element }
     }
 
@@ -131,6 +133,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         transitionHandler.delegate = self
         transitionHandler.performTransition()
         self.transitionHandler = transitionHandler
+
+        processStackChange(difference)
 
         return difference.removals.map { $0._element }
     }

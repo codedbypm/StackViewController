@@ -66,7 +66,7 @@ class StackHandlerTests: XCTestCase {
         }
     }
 
-    func testThat_whenPushingAViewControllerWhichIsAlreadyInTheStack_theStackIsNotUpdated() {
+    func testThat_whenPushingAViewControllerWhichIsAlreadyInTheStack_theStackIsNotChanged() {
         // Arrange
         let stack = Stack.distinctElements(10)
         sut = StackHandler(stack: stack)
@@ -131,55 +131,86 @@ class StackHandlerTests: XCTestCase {
         XCTAssertNil(try? result.get())
     }
 
-    // MARK: - popToRoot(animated: Bool) -> Stack
+    func testThat_whenStackHasOneElement_andPopIsCalled_theStackIsNotChanged() {
+        // Arrange
+        let stack = Stack.distinctElements(1)
+        sut = StackHandler(stack: stack)
 
-    func testThat_whenPoppingToRoot_allElementsAfterRootAreRemovedFromTheCurrentStackAndReturnedToTheCaller() {
+        // Act
+        _ = sut.pop()
+
+        // Assert
+        XCTAssertEqual(sut.stack, stack)
+    }
+
+    // MARK: - popToRoot() -> Stack
+
+    func testThat_whenStackHasMoreThanOneElement_andPopToRootIsCalled_resultIsSuccess() {
         // Arrange
         let stack = Stack.distinctElements(4)
         sut = StackHandler(stack: stack)
 
         // Act
-        let poppedViewControllers = sut.popToRoot()
+        let result = sut.popToRoot()
 
         // Assert
-        XCTAssertEqual(poppedViewControllers, Array(stack.dropFirst()))
-        XCTAssertEqual(sut.stack, [stack.first])
+        XCTAssertNoThrow(try result.get())
     }
 
-    func testThat_whenPoppingToRoot_theDelegateReceivesTheInsertionsAndRemovals() {
+    func testThat_whenStackHasMoreThanOneElement_andPopToRootIsCalled_resultContainsThePoppedElements() {
         // Arrange
-        let stack = Stack.distinctElements(10)
+        let stack = Stack.distinctElements(4)
         sut = StackHandler(stack: stack)
 
-        let mockStackHandlerDelegate = MockStackHandlerDelegate()
-        sut.delegate = mockStackHandlerDelegate
-
-        let expectedStackChanges = stack.dropLast(9).difference(from: stack)
-
-        XCTAssertNil(mockStackHandlerDelegate.didCallStackDidChange)
-        XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
-
         // Act
-        let _ = sut.popToRoot()
+        let result = sut.popToRoot()
 
         // Assert
-        XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
-        XCTAssertEqual(mockStackHandlerDelegate.stackDidChangeDifference, expectedStackChanges)
+        XCTAssertEqual(stack.suffix(3), try? result.get())
     }
 
-    func testThat_whenPoppingToRootFromAStackHavingOnlyOneElement_theCurrentStackIsNotChangedAndTheMethodReturnsEmptyArray() {
+    func testThat_whenStackHasMoreThanOneElement_andPopToRootIsCalled_theElementsAreRemovedFromTheStack() {
         // Arrange
-        let oneElementStack = Stack.distinctElements(1)
-        sut = StackHandler(stack: oneElementStack)
+        let stack = Stack.distinctElements(4)
+        sut = StackHandler(stack: stack)
 
         // Act
-        let poppedViewControllers = sut.popToRoot()
+        _ = sut.popToRoot()
 
         // Assert
-        XCTAssertTrue(poppedViewControllers.isEmpty)
-        XCTAssertEqual(sut.stack, oneElementStack)
+        XCTAssertEqual(sut.stack, stack.dropLast(3))
     }
-    
+
+    func testThat_whenStackHasOneElement_andPopToRootIsCalled_resultContainsEmptyStack() {
+        // Arrange
+        let stack = Stack.distinctElements(1)
+        sut = StackHandler(stack: stack)
+
+        // Act
+        let result = sut.popToRoot()
+
+        // Assert
+        do {
+            let poppedStack = try result.get()
+            XCTAssertTrue(poppedStack.isEmpty)
+        }
+        catch {
+            XCTFail()
+        }
+    }
+
+    func testThat_whenStackHasOneElement_andPopToRootIsCalled_theStackIsNotChanged() {
+        // Arrange
+        let stack = Stack.distinctElements(1)
+        sut = StackHandler(stack: stack)
+
+        // Act
+        _ = sut.popToRoot()
+
+        // Assert
+        XCTAssertEqual(sut.stack, stack)
+    }
+
     // MARK: - popTo(_: UIViewController, animated: Bool, interactive: Bool) -> Stack
 
     func testThat_whenPoppingToAViewControllerAlreadyOnTheStack_allElementsAfterThatViewControllerAreRemovedFromTheCurrentStackAndReturnedToTheCaller() {

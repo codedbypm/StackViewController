@@ -82,7 +82,7 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
                                               to: stack.first,
                                               containerView: viewControllerWrapperView,
                                               animated: animated)
-        return stackHandler.popToRoot()
+        return (try? stackHandler.popToRoot().get()) ?? []
     }
 
     func popTo(_ viewController: UIViewController, animated: Bool) -> Stack {

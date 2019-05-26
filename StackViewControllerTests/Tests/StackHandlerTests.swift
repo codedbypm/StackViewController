@@ -94,16 +94,17 @@ class StackHandlerTests: XCTestCase {
         XCTAssertNoThrow(try result.get())
     }
 
-    func testThat_whenStackHasMoreThanOneElement_andPopIsCalled_resultContainsThePoppedElement() {
+    func testThat_whenStackHasMoreThanOneElement_andPopIsCalled_resultContainsTheDifference() {
         // Arrange
         let stack = Stack.distinctElements(4)
         sut = StackHandler(stack: stack)
+        let expectedDifference = stack.dropLast().difference(from: stack)
 
         // Act
         let result = sut.pop()
 
         // Assert
-        XCTAssertEqual(stack.last, try? result.get())
+        XCTAssertEqual(expectedDifference, try? result.get())
     }
 
     func testThat_whenStackHasMoreThanOneElement_andPopIsCalled_theElementIsRemovedFromTheStack() {
@@ -118,7 +119,7 @@ class StackHandlerTests: XCTestCase {
         XCTAssertEqual(sut.stack, stack.dropLast())
     }
 
-    func testThat_whenStackHasOneElement_andPopIsCalled_resultContainsNil() {
+    func testThat_whenStackHasOneElement_andPopIsCalled_resultContainsNoDifference() {
         // Arrange
         let stack = Stack.distinctElements(1)
         sut = StackHandler(stack: stack)
@@ -128,7 +129,7 @@ class StackHandlerTests: XCTestCase {
 
         // Assert
         XCTAssertNoThrow(try result.get())
-        XCTAssertNil(try? result.get())
+        XCTAssertEqual(CollectionDifference.noDifference, try? result.get())
     }
 
     func testThat_whenStackHasOneElement_andPopIsCalled_theStackIsNotChanged() {
@@ -157,16 +158,17 @@ class StackHandlerTests: XCTestCase {
         XCTAssertNoThrow(try result.get())
     }
 
-    func testThat_whenStackHasMoreThanOneElement_andPopToRootIsCalled_resultContainsThePoppedElements() {
+    func testThat_whenStackHasMoreThanOneElement_andPopToRootIsCalled_resultContainsTheDifference() {
         // Arrange
         let stack = Stack.distinctElements(4)
         sut = StackHandler(stack: stack)
+        let expectedDifference = stack.prefix(1).difference(from: stack)
 
         // Act
         let result = sut.popToRoot()
 
         // Assert
-        XCTAssertEqual(stack.suffix(3), try? result.get())
+        XCTAssertEqual(expectedDifference, try? result.get())
     }
 
     func testThat_whenStackHasMoreThanOneElement_andPopToRootIsCalled_theElementsAreRemovedFromTheStack() {
@@ -247,18 +249,20 @@ class StackHandlerTests: XCTestCase {
         }
     }
 
-    func testThat_whenElementIsOnTheStack_andStackHasMoreThanOneElement_resultContainsThePoppedElements() {
+    func testThat_whenElementIsOnTheStack_andStackHasMoreThanOneElement_resultContainsTheDifference() {
         // Arrange
         let stack = Stack.distinctElements(4)
         sut = StackHandler(stack: stack)
         let targetIndex = 2
         let targetElement = stack[targetIndex]
 
+        let expectedDifference = stack.prefix(3).difference(from: stack)
+
         // Act
         let result = sut.popToElement(targetElement)
 
         // Assert
-        XCTAssertEqual(stack.suffix(1), try? result.get())
+        XCTAssertEqual(expectedDifference, try? result.get())
     }
 
     func testThat_whenElementIsNotOnTheStack_resultIsErrorElementNotFound() {

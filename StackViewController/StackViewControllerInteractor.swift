@@ -73,7 +73,7 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
                                               animated: animated,
                                               interactive: interactive,
                                               screenEdgePanGestureRecognizer: screenEdgePanGestureRecognizer)
-        return try? stackHandler.pop().get()
+        return try? stackHandler.pop().get().removals.first?._element
     }
 
     func popToRoot(animated: Bool) -> Stack {
@@ -82,7 +82,7 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
                                               to: stack.first,
                                               containerView: viewControllerWrapperView,
                                               animated: animated)
-        return (try? stackHandler.popToRoot().get()) ?? []
+        return (try? stackHandler.popToRoot().get())?.removals.map { $0._element } ?? []
     }
 
     func popTo(_ viewController: UIViewController, animated: Bool) -> Stack {
@@ -91,7 +91,7 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
                                               to: viewController,
                                               containerView: viewControllerWrapperView,
                                               animated: animated)
-        return (try? stackHandler.popToElement(viewController).get()) ?? []
+        return (try? stackHandler.popToElement(viewController).get())?.removals.map { $0._element } ?? []
     }
 
     func setStack(_ newStack: Stack, animated: Bool) {

@@ -23,7 +23,7 @@ protocol StackViewControllerInteractorDelegate: UIViewController {
     func startInteractivePopTransition()
 }
 
-class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDelegate  {
+class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
     // MARK: - Internal properties
 
@@ -50,7 +50,6 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
 
     init(stackHandler: StackHandler) {
         self.stackHandler = stackHandler
-        self.stackHandler.delegate = self
     }
 
     // MARK: - Internal methods
@@ -101,12 +100,15 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
                                               to: newStack.last,
                                               containerView: viewControllerWrapperView,
                                               animated: animated)
-        stackHandler.replaceStack(with: newStack)
+
+        if let difference = try? stackHandler.replaceStack(with: newStack).get() {
+            processStackChange(difference)
+        }
     }
 
     // MARK: - StackHandlerDelegate
 
-    func stackDidChange(_ difference: Stack.Difference) {
+    func processStackChange(_ difference: Stack.Difference) {
         guard let transitionHandler = transitionHandler else { return assertionFailure() }
         guard !difference.isEmpty else { return (self.transitionHandler = nil) }
 
@@ -167,9 +169,7 @@ class StackViewControllerInteractor: StackHandlerDelegate, TransitionHandlerDele
             guard let invertedDifference = difference.inverted else { return }
             guard let oldStack = self.stack.applying(invertedDifference) else { return }
 
-            self.stackHandler.delegate = nil
             self.stackHandler.replaceStack(with: oldStack)
-            self.stackHandler.delegate = self
         }
     }
 

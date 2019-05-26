@@ -18,10 +18,6 @@ extension Stack {
     typealias Removals = [CollectionDifference<UIViewController>.Change]
 }
 
-protocol StackHandlerDelegate: class {
-    func stackDidChange(_ difference: Stack.Difference)
-}
-
 enum StackOperationError: Swift.Error {
     case elementAlreadyOnStack
     case elementNotFound
@@ -34,16 +30,7 @@ class StackHandler: ExceptionThrowing {
 
     // MARK: - Internal properties
 
-    weak var delegate: StackHandlerDelegate?
-
-    // MARK: - Private properties
-
-    private(set) var stack = Stack() {
-        didSet {
-            let difference = stack.difference(from: oldValue)
-            delegate?.stackDidChange(difference)
-        }
-    }
+    private(set) var stack = Stack()
 
     // MARK: - Init
 

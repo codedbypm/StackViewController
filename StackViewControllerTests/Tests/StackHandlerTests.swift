@@ -211,7 +211,7 @@ class StackHandlerTests: XCTestCase {
         XCTAssertEqual(sut.stack, stack)
     }
 
-    // MARK: - popTo(_: UIViewController, animated: Bool, interactive: Bool) -> Stack
+    // MARK: - popToViewController(_: UIViewController) -> Stack
 
     func testThat_whenPoppingToAViewControllerAlreadyOnTheStack_allElementsAfterThatViewControllerAreRemovedFromTheCurrentStackAndReturnedToTheCaller() {
         // Arrange
@@ -222,7 +222,7 @@ class StackHandlerTests: XCTestCase {
         let targetViewController = stack[targetIndex]
 
         // Act
-        let poppedViewControllers = sut.popTo(targetViewController)
+        let poppedViewControllers = sut.popToElement(targetViewController)
 
         // Assert
         XCTAssertEqual(poppedViewControllers, stack.suffix(2))
@@ -246,7 +246,7 @@ class StackHandlerTests: XCTestCase {
         XCTAssertNil(mockStackHandlerDelegate.stackDidChangeDifference)
 
         // Act
-        let _ = sut.popTo(targetViewController)
+        let _ = sut.popToElement(targetViewController)
 
         // Assert
         XCTAssertEqual(mockStackHandlerDelegate.didCallStackDidChange, true)
@@ -261,7 +261,7 @@ class StackHandlerTests: XCTestCase {
         let targetViewController = UIViewController()
 
         // Act
-        let poppedViewControllers = sut.popTo(targetViewController)
+        let poppedViewControllers = sut.popToElement(targetViewController)
 
         // Assert
         XCTAssertTrue(poppedViewControllers.isEmpty)

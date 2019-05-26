@@ -71,8 +71,8 @@ class StackHandler: ExceptionThrowing {
         return .success(popToViewController(at: stack.startIndex))
     }
 
-    func popTo(_ viewController: UIViewController) -> Stack {
-        let index = stack.firstIndex(of: viewController) ?? stack.endIndex
+    func popToElement(_ element: Stack.Element) -> Stack {
+        let index = stack.firstIndex(of: element) ?? stack.endIndex
         return popToViewController(at: index)
     }
 

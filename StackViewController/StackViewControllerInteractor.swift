@@ -62,11 +62,11 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         }
 
         processStackChange(difference)
-         transitionHandler = TransitionHandler(operation: .push,
-                                                  from: from,
-                                                  to: stack.last,
-                                                  containerView: viewControllerWrapperView,
-                                                  animated: animated)
+        transitionHandler = TransitionHandler(operation: .push,
+                                              from: from,
+                                              to: stack.last,
+                                              containerView: viewControllerWrapperView,
+                                              animated: animated)
         beginTransition()
 
     }
@@ -82,8 +82,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         processStackChange(difference)
 
         transitionHandler = TransitionHandler(operation: .pop,
-                                                  from: from,
-                                                  to: stack.last,
+                                              from: from,
+                                              to: stack.last,
                                               containerView: viewControllerWrapperView,
                                               animated: animated,
                                               interactive: interactive,
@@ -104,8 +104,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         processStackChange(difference)
 
         transitionHandler = TransitionHandler(operation: .pop,
-                                                  from: from,
-                                                  to: stack.last,
+                                              from: from,
+                                              to: stack.last,
                                               containerView: viewControllerWrapperView,
                                               animated: animated)
         beginTransition()

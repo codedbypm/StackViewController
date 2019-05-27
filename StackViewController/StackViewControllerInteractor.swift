@@ -160,9 +160,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         transitionHandler?.performTransition()
     }
 
-    // MARK: - StackHandlerDelegate
-
-    func processStackChange(_ difference: Stack.Difference) {
+    private func processStackChange(_ difference: Stack.Difference) {
         guard !difference.isEmpty else {
             return
         }
@@ -171,7 +169,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         undoLastStackChange = transitionUndo(for: difference)
     }
 
-    func beginTransition() {
+    private func beginTransition() {
         guard let delegate = delegate, delegate.isInViewHierarchy, transitionHandler?.operation != .none else {
             self.transitionHandler = nil
             return

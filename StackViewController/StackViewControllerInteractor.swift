@@ -57,7 +57,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
     func push(_ viewController: UIViewController, animated: Bool) {
         // Set some state before the stack changes
-        let transitionHandler = TransitionHandler(operation: .push,
+        transitionHandler = TransitionHandler(operation: .push,
                                                   from: stack.last,
                                                   to: viewController,
                                                   containerView: viewControllerWrapperView,
@@ -69,14 +69,13 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         }
 
         // Execute the transition
-        self.transitionHandler = transitionHandler
         transitionHandler?.performTransition()
     }
 
     @discardableResult
     func pop(animated: Bool, interactive: Bool = false) -> UIViewController? {
         // Set some state before the stack changes
-        let transitionHandler = TransitionHandler(operation: .pop,
+        transitionHandler = TransitionHandler(operation: .pop,
                                                   from: stack.last,
                                                   to: stack.suffix(2).first,
                                                   containerView: viewControllerWrapperView,
@@ -90,14 +89,13 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         }
 
         // Execute the transition
-        self.transitionHandler = transitionHandler
         transitionHandler?.performTransition()
 
         return difference.removals.last?._element
     }
 
     func popToRoot(animated: Bool) -> Stack {
-        let transitionHandler = TransitionHandler(operation: .pop,
+        transitionHandler = TransitionHandler(operation: .pop,
                                                   from: stack.last,
                                                   to: stack.first,
                                                   containerView: viewControllerWrapperView,
@@ -111,7 +109,6 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         processStackChange(difference)
 
         // Execute the transition
-        self.transitionHandler = transitionHandler
         transitionHandler?.performTransition()
 
         return difference.removals.map { $0._element }
@@ -134,14 +131,14 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
         // Execute the transition
         self.transitionHandler = transitionHandler
-        transitionHandler?.performTransition()
+        transitionHandler.performTransition()
 
         return difference.removals.map { $0._element }
     }
 
     func setStack(_ newStack: Stack, animated: Bool) {
         let operation = stackOperation(whenReplacing: stack, with: newStack)
-        let transitionHandler = TransitionHandler(operation: operation,
+        transitionHandler = TransitionHandler(operation: operation,
                                                   from: stack.last,
                                                   to: newStack.last,
                                                   containerView: viewControllerWrapperView,
@@ -156,7 +153,6 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         processStackChange(difference)
 
         // Execute the transition
-        self.transitionHandler = transitionHandler
         transitionHandler?.performTransition()
     }
 

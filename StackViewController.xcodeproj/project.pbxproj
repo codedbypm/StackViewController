@@ -142,6 +142,8 @@
 		FD76B789227917320090EDB2 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleDebuggable.swift; sourceTree = "<group>"; };
 		FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
+		FD8386FF22A196640017E8F8 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		FD83870022A199310017E8F8 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -264,6 +266,7 @@
 				FD67E578225250E10051786B /* StackViewController.h */,
 				FD67E579225250E10051786B /* Info.plist */,
 				FD1B5701227CBEB000E005EC /* Swift 5 diffing */,
+				FD83870122A199480017E8F8 /* Config */,
 			);
 			path = StackViewController;
 			sourceTree = "<group>";
@@ -315,6 +318,15 @@
 				FD00021E2260CC9100A87FFB /* InteractivePopAnimator.swift */,
 			);
 			path = Animators;
+			sourceTree = "<group>";
+		};
+		FD83870122A199480017E8F8 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				FD8386FF22A196640017E8F8 /* Debug.xcconfig */,
+				FD83870022A199310017E8F8 /* Release.xcconfig */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -548,6 +560,7 @@
 /* Begin XCBuildConfiguration section */
 		FD67E57B225250E10051786B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FD8386FF22A196640017E8F8 /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -670,6 +683,7 @@
 		};
 		FD67E57E225250E10051786B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FD8386FF22A196640017E8F8 /* Debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -698,6 +712,7 @@
 		};
 		FD67E57F225250E10051786B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FD83870022A199310017E8F8 /* Release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -765,6 +780,7 @@
 		};
 		FD76B7092270C9530090EDB2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FD8386FF22A196640017E8F8 /* Debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HPXR38FW5T;
@@ -784,6 +800,7 @@
 		};
 		FD76B70A2270C9530090EDB2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FD83870022A199310017E8F8 /* Release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HPXR38FW5T;

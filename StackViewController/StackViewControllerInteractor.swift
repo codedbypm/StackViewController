@@ -46,7 +46,6 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
     private var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
 
-
     // MARK: - Init
 
     init(stackHandler: StackHandler) {
@@ -131,7 +130,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
         // Execute the transition
         self.transitionHandler = transitionHandler
-        transitionHandler.performTransition()
+        transitionHandler?.performTransition()
 
         return difference.removals.map { $0._element }
     }
@@ -219,7 +218,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             guard let invertedDifference = difference.inverted else { return }
             guard let oldStack = self.stack.applying(invertedDifference) else { return }
 
-            self.stackHandler.replaceStack(with: oldStack)
+            _ = self.stackHandler.replaceStack(with: oldStack)
         }
     }
 

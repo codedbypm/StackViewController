@@ -27,7 +27,7 @@ enum StackOperationError: Swift.Error {
 
 typealias StackOperationResult = Result<Stack.Difference, StackOperationError>
 
-class StackHandler: ExceptionThrowing {
+class StackHandler: StackHandling, ExceptionThrowing {
 
     // MARK: - Internal properties
 

@@ -56,6 +56,7 @@
 		FD76B78A227917320090EDB2 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B789227917320090EDB2 /* NavigationController.swift */; };
 		FD76B78F2279E0950090EDB2 /* ConsoleDebuggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */; };
 		FD76B791227A5B7A0090EDB2 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */; };
+		FD83870522A19C750017E8F8 /* StackHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD83870422A19C750017E8F8 /* StackHandling.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,6 +145,7 @@
 		FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		FD8386FF22A196640017E8F8 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		FD83870022A199310017E8F8 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		FD83870422A19C750017E8F8 /* StackHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackHandling.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -256,6 +258,7 @@
 				FD67E5C2225258840051786B /* StackViewController.swift */,
 				FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */,
 				FD1B570A227D68CB00E005EC /* StackHandler.swift */,
+				FD83870422A19C750017E8F8 /* StackHandling.swift */,
 				FD67E5F72254F2010051786B /* TransitionContext.swift */,
 				FD1B570C227DB9AF00E005EC /* Transition.swift */,
 				FD5259832280F25A0072C6B8 /* TransitionHandler.swift */,
@@ -479,6 +482,7 @@
 				FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */,
 				FD76B78F2279E0950090EDB2 /* ConsoleDebuggable.swift in Sources */,
 				FD44FF44228B06DD00DA2AEB /* TransitionHandler.swift in Sources */,
+				FD83870522A19C750017E8F8 /* StackHandling.swift in Sources */,
 				FD67E5C8225260C40051786B /* Animator.swift in Sources */,
 				FD76B77F227643600090EDB2 /* PushAnimator.swift in Sources */,
 				FD76B7812276449F0090EDB2 /* PopAnimator.swift in Sources */,

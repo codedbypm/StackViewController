@@ -10,10 +10,6 @@ import Foundation
 
 extension CollectionDifference {
 
-    static var noDifference: CollectionDifference {
-        return CollectionDifference([])!
-    }
-
     var inverted: CollectionDifference? {
         return CollectionDifference(map { $0.inverted })
     }

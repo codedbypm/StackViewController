@@ -13,26 +13,29 @@ protocol TransitionHandlerDelegate: class {
     func didEndTransition(using _: TransitionContext, didComplete: Bool)
 }
 
-class TransitionHandler {
+class TransitionHandler: TransitionHandling {
 
     // MARK: - Internal properties
 
     weak var delegate: TransitionHandlerDelegate?
 
     var operation: StackViewController.Operation {
-        return transitionContext.operation
+        return transitionContext?.operation ?? .none
     }
 
     // MARK: - Private properties
 
     private weak var stackViewControllerDelegate: StackViewControllerDelegate?
-    private let transitionContext: TransitionContext
+    private var transitionContext: TransitionContext?
     private var animationController: UIViewControllerAnimatedTransitioning?
     private var interactionController: UIViewControllerInteractiveTransitioning?
-    private let screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
+    private var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
     private let transitionId = UUID()
 
     // MARK: - Init
+    init() {
+
+    }
 
     init(operation: StackViewController.Operation,
          from: UIViewController?,
@@ -51,12 +54,12 @@ class TransitionHandler {
                                               animated: animated,
                                               interactive: interactive)
 
-        transitionContext.onTransitionFinished = { [weak self] didComplete in
+        transitionContext?.onTransitionFinished = { [weak self] didComplete in
             self?.animationController?.animationEnded?(didComplete)
             self?.transitionFinished(didComplete)
         }
 
-        transitionContext.onTransitionCancelled = { _ in
+        transitionContext?.onTransitionCancelled = { _ in
 
         }
     }
@@ -66,6 +69,8 @@ class TransitionHandler {
     }
 
     func performTransition() {
+        guard let transitionContext = transitionContext else { return }
+
         delegate?.willStartTransition(using: transitionContext)
 
         let animationController: UIViewControllerAnimatedTransitioning
@@ -99,6 +104,8 @@ class TransitionHandler {
     }
 
     func transitionFinished(_ didComplete: Bool) {
+        guard let transitionContext = transitionContext else { return }
+
         delegate?.didEndTransition(using: transitionContext, didComplete: didComplete)
         interactionController = nil
         animationController = nil

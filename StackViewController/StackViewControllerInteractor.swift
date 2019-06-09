@@ -33,14 +33,17 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
     var stack: Stack { return stackHandler.stack }
     
     var topViewController: UIViewController? { return stack.last }
+    var rootViewController: UIViewController? { return stack.first }
 
     lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
+    private(set) var transitionContext: TransitionContext?
+
     // MARK: - Private properties
 
-    private let stackHandler: StackHandler
+    private let stackHandler: StackHandling
 
-    private var transitionHandler: TransitionHandler?
+    private var transitionHandler: TransitionHandling?
 
     private var undoLastStackChange: (() -> Void)?
 
@@ -48,129 +51,142 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
     // MARK: - Init
 
-    init(stackHandler: StackHandler) {
+    init(stackHandler: StackHandling,
+         transitionHandler: TransitionHandling = TransitionHandler()) {
         self.stackHandler = stackHandler
+        self.transitionHandler = transitionHandler
     }
 
     // MARK: - Internal methods
 
-    func push(_ viewController: UIViewController, animated: Bool) {
-        // Set some state before the stack changes
-        transitionHandler = TransitionHandler(operation: .push,
-                                                  from: stack.last,
-                                                  to: viewController,
-                                                  containerView: viewControllerWrapperView,
-                                                  animated: animated)
+    func pushViewController(
+        _ viewController: UIViewController,
+        animated: Bool
+    ) {
+        // guard can push else return
+        guard stackHandler.canPushViewController(viewController) else { return }
 
-        // Change the stack
-        guard case .success = stackHandler.push(viewController) else {
-            return
-        }
+        // prepare transition context
+        transitionContext = TransitionContext(
+            operation: .push,
+            from: stack.last,
+            to: viewController,
+            containerView: viewControllerWrapperView,
+            animated: animated
+        )
 
-        // Execute the transition
+        // push on stack
+        stackHandler.pushViewController(viewController)
+
+        // execute transition
         transitionHandler?.performTransition()
     }
 
     @discardableResult
-    func pop(animated: Bool, interactive: Bool = false) -> UIViewController? {
-        // Set some state before the stack changes
-        transitionHandler = TransitionHandler(operation: .pop,
-                                                  from: stack.last,
-                                                  to: stack.suffix(2).first,
-                                                  containerView: viewControllerWrapperView,
-                                                  animated: animated,
-                                                  interactive: interactive,
-                                                  screenEdgePanGestureRecognizer: screenEdgePanGestureRecognizer)
+    func popViewController(
+        animated: Bool,
+        interactive: Bool = false
+    ) -> UIViewController? {
+        // guard can push else return
+        guard stackHandler.canPopViewController() else { return nil }
 
-        // Change the stack
-        guard let difference = try? stackHandler.pop().get() else {
-            return nil
-        }
+        // prepare transition context
+        transitionContext = TransitionContext(
+            operation: .pop,
+            from: stack.last,
+            to: stack.suffix(2).first,
+            containerView: viewControllerWrapperView,
+            animated: animated,
+            interactive: interactive
+        )
 
-        // Execute the transition
         transitionHandler?.performTransition()
 
-        return difference.removals.last?._element
+        return stackHandler.popViewController()
     }
 
-    func popToRoot(animated: Bool) -> Stack {
-        transitionHandler = TransitionHandler(operation: .pop,
-                                                  from: stack.last,
-                                                  to: stack.first,
-                                                  containerView: viewControllerWrapperView,
-                                                  animated: animated)
+    @discardableResult
+    func popToRoot(animated: Bool) -> [UIViewController]? {
+        guard stackHandler.canPopToRoot() else { return nil }
 
-        // Change the stack
-        guard let difference = try? stackHandler.popToRoot().get() else {
-            return []
+        // prepare transition context
+        transitionContext = TransitionContext(
+            operation: .pop,
+            from: stack.last,
+            to: stack.first,
+            containerView: viewControllerWrapperView,
+            animated: animated,
+            interactive: false
+        )
+
+        let poppedViewControllers = stackHandler.popToRoot()
+
+        if let poppedViewControllers = poppedViewControllers {
+            notifyControllerOfRemovals(poppedViewControllers)
         }
 
-        processStackChange(difference)
-
-        // Execute the transition
         transitionHandler?.performTransition()
 
-        return difference.removals.map { $0._element }
+        return poppedViewControllers
     }
 
-    func popTo(_ viewController: UIViewController, animated: Bool) -> Stack {
-        let transitionHandler = TransitionHandler(operation: .pop,
-                                                  from: stack.last,
-                                                  to: viewController,
-                                                  containerView: viewControllerWrapperView,
-                                                  animated: animated)
+    @discardableResult
+    func pop(
+        to viewController: UIViewController,
+        animated: Bool
+    ) -> [UIViewController]? {
+        guard stackHandler.canPop(to: viewController) else { return nil }
 
-        // Change the stack
-        guard let difference = try? stackHandler.popToElement(viewController).get() else {
-            return []
+        // prepare transition context
+        transitionContext = TransitionContext(
+            operation: .pop,
+            from: stack.last,
+            to: viewController,
+            containerView: viewControllerWrapperView,
+            animated: animated,
+            interactive: false
+        )
+
+        let poppedViewControllers = stackHandler.pop(to: viewController)
+
+        if let poppedViewControllers = poppedViewControllers {
+            notifyControllerOfRemovals(poppedViewControllers)
         }
 
-        // Process the changes
-        processStackChange(difference)
-
-        // Execute the transition
-        self.transitionHandler = transitionHandler
         transitionHandler?.performTransition()
 
-        return difference.removals.map { $0._element }
+        return poppedViewControllers
     }
 
-    func setStack(_ newStack: Stack, animated: Bool) {
+    func setStack(
+        _ newStack: [UIViewController],
+        animated: Bool
+    ) {
+        guard stackHandler.canSetStack(newStack) else { return }
+
         let operation = stackOperation(whenReplacing: stack, with: newStack)
-        transitionHandler = TransitionHandler(operation: operation,
-                                                  from: stack.last,
-                                                  to: newStack.last,
-                                                  containerView: viewControllerWrapperView,
-                                                  animated: animated)
 
-        // Change the stack
-        guard let difference = try? stackHandler.replaceStack(with: newStack).get() else {
-            return
-        }
+        // prepare transition context
+        transitionContext = TransitionContext(
+            operation: operation,
+            from: stack.last,
+            to: newStack.last,
+            containerView: viewControllerWrapperView,
+            animated: animated,
+            interactive: false
+        )
 
-        // Process the changes
-        processStackChange(difference)
+        stackHandler.setStack(newStack)
 
+        //        // Change the stack
+//        guard let difference = try? stackHandler.replaceStack(with: newStack).get() else {
+//            return
+//        }
+//
+//        // Process the changes
+//        processStackChange(difference)
+//
         // Execute the transition
-        transitionHandler?.performTransition()
-    }
-
-    private func processStackChange(_ difference: Stack.Difference) {
-        guard !difference.isEmpty else {
-            return
-        }
-
-        notifyControllerAboutStackChanges(difference)
-        undoLastStackChange = transitionUndo(for: difference)
-    }
-
-    private func beginTransition() {
-        guard let delegate = delegate, delegate.isInViewHierarchy, transitionHandler?.operation != .none else {
-            self.transitionHandler = nil
-            return
-        }
-
-        transitionHandler?.delegate = self
         transitionHandler?.performTransition()
     }
 
@@ -210,16 +226,41 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         }
     }
 
+}
+
+private extension StackViewControllerInteractor {
+    
     // MARK: - Private methods
 
-    private func transitionUndo(for difference: Stack.Difference) -> (() -> Void)? {
-        return { [weak self] in
-            guard let self = self else { return }
-            guard let invertedDifference = difference.inverted else { return }
-            guard let oldStack = self.stack.applying(invertedDifference) else { return }
-
-            _ = self.stackHandler.replaceStack(with: oldStack)
+    private func processStackChange(_ difference: Stack.Difference) {
+        guard !difference.isEmpty else {
+            return
         }
+
+        notifyControllerAboutStackChanges(difference)
+        undoLastStackChange = transitionUndo(for: difference)
+    }
+
+    private func beginTransition() {
+
+        //        guard let delegate = delegate, delegate.isInViewHierarchy, transitionHandler?.operation != .none else {
+        //            self.transitionHandler = nil
+        //            return
+        //        }
+        //
+        //        transitionHandler?.delegate = self
+        //        transitionHandler?.performTransition()
+    }
+
+    private func transitionUndo(for difference: Stack.Difference) -> (() -> Void)? {
+        return nil
+//        return { [weak self] in
+//            guard let self = self else { return }
+//            guard let invertedDifference = difference.inverted else { return }
+//            guard let oldStack = self.stack.applying(invertedDifference) else { return }
+//
+//            _ = self.stackHandler.replaceStack(with: oldStack)
+//        }
     }
 
     private func notifyControllerAboutStackChanges(_ difference: Stack.Difference) {

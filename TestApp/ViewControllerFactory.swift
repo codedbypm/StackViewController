@@ -76,7 +76,7 @@ extension UIViewController {
         }
 
         controller.onPopToRootAnimated = {
-            controller.stack?.popToRootViewController(animated: true)
+            _ = controller.stack?.popToRootViewController(animated: true)
         }
 
         controller.onSwapRootWithTop = {

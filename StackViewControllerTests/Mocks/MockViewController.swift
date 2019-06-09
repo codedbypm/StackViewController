@@ -18,7 +18,7 @@ class MockViewController: UIViewController {
         return [willMoveToParentDate, didMoveToParentDate]
     }
 
-    var receivedEvents: [Date] {
+    var receivedEventDates: [Date] {
         return (appearanceEventDates + viewContainmentEventDates).compactMap { $0 }
     }
 

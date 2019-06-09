@@ -21,310 +21,280 @@ class StackHandlerTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: - push(_ : UIViewController)
+    // MARK: - push
 
-    func testThat_whenPushingAViewControllerWhichIsNotInTheStack_resultIsSuccess() {
+    func testThat_whenPushingAViewControllerAlreadyInTheStack_itDoesNotChangeTheStack() {
         // Arrange
-        let stack = Stack.distinctElements(2)
-        sut = StackHandler(stack: stack)
+        sut = StackHandler.withDefaultStack()
 
         // Act
-        let result = sut.push(UIViewController())
-        
+        sut.pushViewController(.middle)
+
         // Assert
-        XCTAssertNoThrow(try result.get())
+        XCTAssertEqual(sut.stack, .default)
     }
 
-    func testThat_whenPushingAViewControllerWhichIsNotInTheStack_thisIsAppendedToTheCurrentStack() {
+    func testThat_whenPushingAViewControllerNotYetInTheStack_itAppendsItToTheCurrentStack() {
         // Arrange
-        let stack = Stack.distinctElements(2)
-        sut = StackHandler(stack: stack)
+        sut = StackHandler.withDefaultStack()
 
         let pushedViewController = UIViewController()
 
         // Act
-        _ = sut.push(pushedViewController)
+        sut.pushViewController(pushedViewController)
 
         // Assert
-        XCTAssertEqual(sut.stack, stack + [pushedViewController])
+        XCTAssertEqual(sut.stack, .default + [pushedViewController])
     }
 
-    func testThat_whenPushingAViewControllerWhichIsAlreadyInTheStack_resultIsErrorElementAlreadyOnStack() {
-        // Arrange
-        let stack = Stack.distinctElements(10)
-        sut = StackHandler(stack: stack)
+    // MARK: - pop
 
-        let pushedViewController = stack[6]
+    func testThat_whenPoppingAViewControllerFromAnEmptyStack_itReturnsNil() {
+        // Arrange
+        sut = StackHandler.withEmptyStack()
 
         // Act
-        let result = sut.push(pushedViewController)
+        let poppedViewController = sut.popViewController()
 
         // Assert
-        XCTAssertThrowsError(try result.get(), "") { error in
-            XCTAssertTrue(error is StackOperationError)
-            XCTAssertTrue((error as? StackOperationError) == StackOperationError.elementAlreadyOnStack)
-        }
+        XCTAssertNil(poppedViewController)
     }
 
-    func testThat_whenPushingAViewControllerWhichIsAlreadyInTheStack_theStackIsNotChanged() {
+    func testThat_whenPoppingAViewControllerFromAnEmptyStack_itDoesNotChangeTheStack() {
         // Arrange
-        let stack = Stack.distinctElements(10)
-        sut = StackHandler(stack: stack)
-
-        let pushedViewController = stack[6]
+        sut = StackHandler.withEmptyStack()
 
         // Act
-        _ = sut.push(pushedViewController)
+        sut.popViewController()
+
+        // Assert
+        XCTAssertEqual(sut.stack, [])
+    }
+
+    func testThat_whenPoppingAViewControllerFromAStackWithOneElement_itReturnsNil() {
+        // Arrange
+        sut = StackHandler.withStack([.first])
+
+        // Act
+        let poppedViewController = sut.popViewController()
+
+        // Assert
+        XCTAssertNil(poppedViewController)
+    }
+
+    func testThat_whenPoppingAViewControllerFromAStackWithOneElement_itDoesNotChangeTheStack() {
+        // Arrange
+        sut = StackHandler.withStack([.first])
+
+        // Act
+        sut.popViewController()
+
+        // Assert
+        XCTAssertEqual(sut.stack, [.first])
+    }
+
+    func testThat_whenPoppingAViewControllerFromAStackWithMoreThanOneElement_itReturnsTheLastViewController() {
+        // Arrange
+        sut = StackHandler.withDefaultStack()
+
+        // Act
+        let poppedViewController = sut.popViewController()
+
+        // Assert
+        XCTAssertEqual(poppedViewController, .last)
+    }
+
+    func testThat_whenPoppingAViewControllerFromAStackWithMoreThanOneElement_itUpdatesTheStack() {
+        // Arrange
+        sut = StackHandler.withDefaultStack()
+
+        // Act
+        sut.popViewController()
+
+        // Assert
+        XCTAssertEqual(sut.stack, [.first, .middle])
+    }
+
+    // MARK: - popToRoot
+
+    func testThat_whenPoppingToRootFromEmptyStack_itReturnsNil() {
+        // Arrange
+        sut = StackHandler.withEmptyStack()
+
+        // Act
+        let poppedViewControllers = sut.popToRoot()
+
+        // Assert
+        XCTAssertNil(poppedViewControllers)
+    }
+
+    func testThat_whenPoppingToRootFromEmptyStack_itDoesNotChangeTheStack() {
+        // Arrange
+        sut = StackHandler.withEmptyStack()
+
+        // Act
+        sut.popToRoot()
+
+        // Assert
+        XCTAssertEqual(sut.stack, [])
+    }
+
+    func testThat_whenPoppingToRootFromAStackWithOneElement_itReturnsNil() {
+        // Arrange
+        sut = StackHandler.withStack([.first])
+
+        // Act
+        let poppedViewController = sut.popToRoot()
+
+        // Assert
+        XCTAssertNil(poppedViewController)
+    }
+
+    func testThat_whenPoppingToRootFromAStackWithOneElement_itDoesNotChangeTheStack() {
+        // Arrange
+        sut = StackHandler.withStack([.first])
+
+        // Act
+        sut.popToRoot()
+
+        // Assert
+        XCTAssertEqual(sut.stack, [.first])
+    }
+
+    func testThat_whenPoppingToRootFromAStackWithMoreThanOneElement_itReturnsThePoppedViewControllers() {
+        // Arrange
+        sut = StackHandler.withDefaultStack()
+
+        // Act
+        let poppedViewControllers = sut.popToRoot()
+
+        // Assert
+        XCTAssertEqual(poppedViewControllers, [.middle, .last])
+    }
+
+    func testThat_whenPoppingToRootFromAStackWithMoreThanOneElement_itUpdatesTheStack() {
+        // Arrange
+        sut = StackHandler.withDefaultStack()
+
+        // Act
+        sut.popToRoot()
+
+        // Assert
+        XCTAssertEqual(sut.stack, [.first])
+    }
+
+    // MARK: - pop(to: )
+
+    func testThat_whenPoppingToViewControllerFromEmptyStack_itReturnsNil() {
+        // Arrange
+        sut = StackHandler.withEmptyStack()
+
+        // Act
+        let poppedViewControllers = sut.pop(to: UIViewController())
+
+        // Assert
+        XCTAssertNil(poppedViewControllers)
+    }
+
+    func testThat_whenPoppingToViewControllerFromEmptyStack_itDoesNotChangeTheStack() {
+        // Arrange
+        sut = StackHandler.withEmptyStack()
+
+        // Act
+        sut.pop(to: UIViewController())
+
+        // Assert
+        XCTAssertEqual(sut.stack, [])
+    }
+
+    func testThat_whenPoppingToViewControllerFromAStackWithOneElement_itReturnsNil() {
+        // Arrange
+        sut = StackHandler.withStack([.first])
+
+        // Act
+        let poppedViewController = sut.pop(to: UIViewController())
+
+        // Assert
+        XCTAssertNil(poppedViewController)
+    }
+
+    func testThat_whenPoppingToViewControllerFromAStackWithOneElement_itDoesNotChangeTheStack() {
+        // Arrange
+        sut = StackHandler.withStack([.first])
+
+        // Act
+        sut.pop(to: UIViewController())
+
+        // Assert
+        XCTAssertEqual(sut.stack, [.first])
+    }
+
+    func testThat_whenPoppingToViewControllerNotYetInStackWithMoreThanOneElement_itReturnsNil() {
+        // Arrange
+        sut = StackHandler.withDefaultStack()
+
+        // Act
+        let poppedViewControllers = sut.pop(to: UIViewController())
+
+        // Assert
+        XCTAssertNil(poppedViewControllers)
+    }
+
+    func testThat_whenPoppingToViewControllerFromAStackWithMoreThanOneElement_itDoesNotChangeTheStack() {
+        // Arrange
+        sut = StackHandler.withDefaultStack()
+
+        // Act
+        sut.pop(to: UIViewController())
+
+        // Assert
+        XCTAssertEqual(sut.stack, .default)
+    }
+
+    func testThat_whenPoppingToViewControllerAlreadyInStackWithMoreThanOneElement_itReturnsPoppedViewControllers() {
+        // Arrange
+        sut = StackHandler.withDefaultStack()
+
+        // Act
+        let poppedViewControllers = sut.pop(to: .middle)
+
+        // Assert
+        XCTAssertEqual(poppedViewControllers, [.last])
+    }
+
+    func testThat_whenPoppingToViewControllerAlreadyInStackWithMoreThanOneElement_itUpdatesTheStack() {
+        // Arrange
+        sut = StackHandler.withDefaultStack()
+
+        // Act
+        sut.pop(to: .middle)
+
+        // Assert
+        XCTAssertEqual(sut.stack, [.first, .middle])
+    }
+
+    // MARK: - setStack
+
+    func testThat_whenSettingStackContainingDuplicates_itDoesNotChangeTheStack() {
+        // Arrange
+        let stack = Stack.distinctElements(6)
+        sut = StackHandler.withStack(stack)
+
+        // Act
+        sut.setStack([.first, .last, .first, .first])
 
         // Assert
         XCTAssertEqual(sut.stack, stack)
     }
 
-    // MARK: - pop() -> UIViewController?
-
-    func testThat_whenStackHasMoreThanOneElement_andPopIsCalled_resultIsSuccess() {
+    func testThat_whenSettingStack_itReplaceTheCurrentStack() {
         // Arrange
-        let stack = Stack.distinctElements(4)
-        sut = StackHandler(stack: stack)
+        sut = StackHandler.withDistinctElements(6)
 
         // Act
-        let result = sut.pop()
+        sut.setStack(.default)
 
         // Assert
-        XCTAssertNoThrow(try result.get())
-    }
-
-    func testThat_whenStackHasMoreThanOneElement_andPopIsCalled_resultContainsTheDifference() {
-        // Arrange
-        let stack = Stack.distinctElements(4)
-        sut = StackHandler(stack: stack)
-        let expectedDifference = stack.dropLast().difference(from: stack)
-
-        // Act
-        let result = sut.pop()
-
-        // Assert
-        XCTAssertEqual(expectedDifference, try? result.get())
-    }
-
-    func testThat_whenStackHasMoreThanOneElement_andPopIsCalled_theElementIsRemovedFromTheStack() {
-        // Arrange
-        let stack = Stack.distinctElements(4)
-        sut = StackHandler(stack: stack)
-
-        // Act
-        _ = sut.pop()
-
-        // Assert
-        XCTAssertEqual(sut.stack, stack.dropLast())
-    }
-
-    func testThat_whenStackIsEmpty_andPopIsCalled_resultIsErrorEmptyStack() {
-        // Arrange
-        let stack = Stack.distinctElements(0)
-        sut = StackHandler(stack: stack)
-
-        // Act
-        let result = sut.pop()
-
-        // Assert
-        XCTAssertThrowsError(try result.get(), "") { error in
-            XCTAssertTrue(error is StackOperationError)
-            XCTAssertTrue((error as? StackOperationError) == StackOperationError.emptyStack)
-        }
-    }
-
-    func testThat_whenStackHasOneElement_andPopIsCalled_theStackIsNotChanged() {
-        // Arrange
-        let stack = Stack.distinctElements(1)
-        sut = StackHandler(stack: stack)
-
-        // Act
-        _ = sut.pop()
-
-        // Assert
-        XCTAssertEqual(sut.stack, stack)
-    }
-
-    // MARK: - popToRoot() -> Stack
-
-    func testThat_whenStackHasMoreThanOneElement_andPopToRootIsCalled_resultIsSuccess() {
-        // Arrange
-        let stack = Stack.distinctElements(4)
-        sut = StackHandler(stack: stack)
-
-        // Act
-        let result = sut.popToRoot()
-
-        // Assert
-        XCTAssertNoThrow(try result.get())
-    }
-
-    func testThat_whenStackHasMoreThanOneElement_andPopToRootIsCalled_resultContainsTheDifference() {
-        // Arrange
-        let stack = Stack.distinctElements(4)
-        sut = StackHandler(stack: stack)
-        let expectedDifference = stack.prefix(1).difference(from: stack)
-
-        // Act
-        let result = sut.popToRoot()
-
-        // Assert
-        XCTAssertEqual(expectedDifference, try? result.get())
-    }
-
-    func testThat_whenStackHasMoreThanOneElement_andPopToRootIsCalled_theElementsAreRemovedFromTheStack() {
-        // Arrange
-        let stack = Stack.distinctElements(4)
-        sut = StackHandler(stack: stack)
-
-        // Act
-        _ = sut.popToRoot()
-
-        // Assert
-        XCTAssertEqual(sut.stack, stack.dropLast(3))
-    }
-
-    func testThat_whenStackHasOneElement_andPopToRootIsCalled_resultContainsEmptyStack() {
-        // Arrange
-        let stack = Stack.distinctElements(1)
-        sut = StackHandler(stack: stack)
-
-        // Act
-        let result = sut.popToRoot()
-
-        // Assert
-        do {
-            let poppedStack = try result.get()
-            XCTAssertTrue(poppedStack.isEmpty)
-        }
-        catch {
-            XCTFail()
-        }
-    }
-
-    func testThat_whenStackHasOneElement_andPopToRootIsCalled_theStackIsNotChanged() {
-        // Arrange
-        let stack = Stack.distinctElements(1)
-        sut = StackHandler(stack: stack)
-
-        // Act
-        _ = sut.popToRoot()
-
-        // Assert
-        XCTAssertEqual(sut.stack, stack)
-    }
-
-    // MARK: - popToElement(_: Stack.Element) -> Stack
-
-    func testThat_whenElementIsOnTheStack_resultIsSuccess() {
-        // Arrange
-        let stack = Stack.distinctElements(4)
-        sut = StackHandler(stack: stack)
-        let targetIndex = 2
-        let targetElement = stack[targetIndex]
-
-        // Act
-        let result = sut.popToElement(targetElement)
-
-        // Assert
-        XCTAssertNoThrow(try result.get())
-    }
-
-    func testThat_whenElementIsOnTheStack_andStackHasOneElement_resultContainsEmptyStack() {
-        // Arrange
-        let stack = Stack.distinctElements(1)
-        sut = StackHandler(stack: stack)
-        let targetIndex = 0
-        let targetElement = stack[targetIndex]
-
-        // Act
-        let result = sut.popToElement(targetElement)
-
-        // Assert
-        do {
-            let poppedStack = try result.get()
-            XCTAssertTrue(poppedStack.isEmpty)
-        }
-        catch {
-            XCTFail()
-        }
-    }
-
-    func testThat_whenElementIsOnTheStack_andStackHasMoreThanOneElement_resultContainsTheDifference() {
-        // Arrange
-        let stack = Stack.distinctElements(4)
-        sut = StackHandler(stack: stack)
-        let targetIndex = 2
-        let targetElement = stack[targetIndex]
-
-        let expectedDifference = stack.prefix(3).difference(from: stack)
-
-        // Act
-        let result = sut.popToElement(targetElement)
-
-        // Assert
-        XCTAssertEqual(expectedDifference, try? result.get())
-    }
-
-    func testThat_whenElementIsNotOnTheStack_resultIsErrorElementNotFound() {
-        // Arrange
-        let stack = Stack.distinctElements(4)
-        sut = StackHandler(stack: stack)
-
-        // Act
-        let result = sut.popToElement(UIViewController())
-
-        // Assert
-        XCTAssertThrowsError(try result.get(), "") { error in
-            XCTAssertTrue(error is StackOperationError)
-            XCTAssertTrue((error as? StackOperationError) == StackOperationError.elementNotFound)
-        }
-    }
-
-    func testThat_whenElementIsNotOnTheStack_theStackIsNotChanged() {
-        // Arrange
-        let stack = Stack.distinctElements(4)
-        sut = StackHandler(stack: stack)
-
-        // Act
-        _ = sut.popToElement(UIViewController())
-
-        // Assert
-        XCTAssertEqual(sut.stack, stack)
-    }
-
-    // MARK: - replaceStack(with: Stack)
-
-    func testThat_whenNewStackContainsDuplicates_resultIsErrorDuplicateElements() {
-        // Arrange
-        let stack = Stack.distinctElements(3)
-        sut = StackHandler(stack: stack)
-
-        let duplicateViewController = UIViewController()
-        let duplicatesStack = [duplicateViewController] + Stack.distinctElements(1) + [duplicateViewController]
-
-        // Act
-        let result = sut.replaceStack(with: duplicatesStack)
-
-        // Assert
-        XCTAssertThrowsError(try result.get(), "") { error in
-            XCTAssertTrue(error is StackOperationError)
-            XCTAssertTrue((error as? StackOperationError) == StackOperationError.duplicateElements)
-        }
-    }
-
-    func testThat_whenNewStackContainsNoDuplicates_resultIsSuccess() {
-        // Arrange
-        let stack = Stack.distinctElements(3)
-        sut = StackHandler(stack: stack)
-
-        let newStack = Stack.distinctElements(6)
-
-        // Act
-        let result = sut.replaceStack(with: newStack)
-
-        // Assert
-        XCTAssertNoThrow(try result.get())
+        XCTAssertEqual(sut.stack, .default)
     }
 }

@@ -19,7 +19,10 @@ class MockStackViewControllerInteractor: StackViewControllerInteractor {
     var didCallPushViewControllerAnimated: Bool?
     var pushedViewController: UIViewController?
     var pushedViewControllerAnimated: Bool?
-    override func push(_ viewController: UIViewController, animated: Bool) {
+    override func pushViewController(
+        _ viewController: UIViewController,
+        animated: Bool
+    ) {
         didCallPushViewControllerAnimated = true
         pushedViewController = viewController
         pushedViewControllerAnimated = animated
@@ -29,7 +32,7 @@ class MockStackViewControllerInteractor: StackViewControllerInteractor {
     var popAnimated: Bool?
     var popInteractive: Bool?
     var popReturnValue: UIViewController?
-    override func pop(animated: Bool, interactive: Bool = false) -> UIViewController? {
+    override func popViewController(animated: Bool, interactive: Bool = false) -> UIViewController? {
         didCallPopAnimatedInteractive = true
         popAnimated = animated
         popInteractive = interactive
@@ -49,7 +52,7 @@ class MockStackViewControllerInteractor: StackViewControllerInteractor {
     var popToViewControllerViewController: UIViewController?
     var popToViewControllerAnimated: Bool?
     var popToViewControllerReturnValue: Stack = []
-    override func popTo(_ viewController: UIViewController, animated: Bool) -> Stack {
+    override func pop(to viewController: UIViewController, animated: Bool) -> Stack {
         didCallPopToViewControllerAnimated = true
         popToViewControllerViewController = viewController
         popToViewControllerAnimated = animated

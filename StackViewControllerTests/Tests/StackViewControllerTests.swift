@@ -29,7 +29,7 @@ class StackViewControllerTests: XCTestCase {
     //
     //    Yellow   =>  willMove(toParent:)
     
-    func testThat_whenInitWithARootViewController_itSendsOnlyWillMoveToParent() {
+    func testThat_whenInitWithARootViewController_itSendsOnlyRootViewControllerWillMoveToParent() {
         // Arrange
         let yellow = MockViewController()
 
@@ -38,7 +38,7 @@ class StackViewControllerTests: XCTestCase {
 
         // Assert
         XCTAssertEqual(
-            yellow.receivedEvents,
+            yellow.receivedEventDates,
             [yellow.willMoveToParentDate])
     }
 

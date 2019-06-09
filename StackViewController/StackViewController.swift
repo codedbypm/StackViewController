@@ -57,8 +57,10 @@ public final class StackViewController: UIViewController {
     // MARK: - Init
 
     public convenience init(rootViewController: UIViewController) {
-        let stackHandler = StackHandler(stack: [])
-        let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        let stackHandler = StackHandler()
+        let interactor = StackViewControllerInteractor(
+            stackHandler: stackHandler
+        )
         self.init(interactor: interactor)
 
         interactor.delegate = self
@@ -72,8 +74,10 @@ public final class StackViewController: UIViewController {
     }
 
     convenience init(viewControllers: [UIViewController]) {
-        let stackHandler = StackHandler(stack: [])
-        let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        let stackHandler = StackHandler(stack:viewControllers)
+        let interactor = StackViewControllerInteractor(
+            stackHandler: stackHandler
+        )
         self.init(interactor: interactor)
 
         interactor.delegate = self
@@ -127,12 +131,12 @@ public final class StackViewController: UIViewController {
     // MARK: - Public methods
 
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        interactor.push(viewController, animated: animated)
+        interactor.pushViewController(viewController, animated: animated)
     }
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
-        return interactor.pop(animated: animated)
+        return interactor.popViewController(animated: animated)
     }
 
     @discardableResult
@@ -142,7 +146,7 @@ public final class StackViewController: UIViewController {
 
     @discardableResult
     public func popToViewController(_ viewController: UIViewController, animated: Bool) -> Stack? {
-        return interactor.popTo(viewController, animated: animated)
+        return interactor.pop(to: viewController, animated: animated)
     }
 
     public func setStack(_ stack: Stack, animated: Bool) {
@@ -155,7 +159,7 @@ public final class StackViewController: UIViewController {
 extension StackViewController: StackViewControllerInteractorDelegate {
 
     func startInteractivePopTransition() {
-        interactor.pop(animated: true, interactive: true)
+        interactor.popViewController(animated: true, interactive: true)
     }
 
     func prepareAddingChild(_ viewController: UIViewController) {

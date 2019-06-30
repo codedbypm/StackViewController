@@ -72,7 +72,7 @@ class TransitionHandler: TransitionHandling {
         delegate?.willStartTransition(context)
     }
 
-    func performTransition(
+    func performAnimatedTransition(
         context: TransitionContext,
         animationController: UIViewControllerAnimatedTransitioning
     ) {
@@ -80,14 +80,6 @@ class TransitionHandler: TransitionHandling {
 
         delegate?.willStartTransition(context)
         animationController.animateTransition(using: context)
-    }
-
-    func transitionFinished(_ didComplete: Bool) {
-        guard let transitionContext = transitionContext else { return }
-
-        delegate?.didEndTransition(transitionContext, didComplete: didComplete)
-        interactionController = nil
-        animationController = nil
     }
 
     func updateInteractiveTransition(_ gestureRecognizer: ScreenEdgePanGestureRecognizer) {
@@ -109,6 +101,17 @@ class TransitionHandler: TransitionHandling {
             return
         }
         interactionController.stopInteractiveTransition(gestureRecognizer)
+    }
+}
+
+private extension TransitionHandler {
+
+    func transitionFinished(_ didComplete: Bool) {
+        guard let transitionContext = transitionContext else { return }
+
+        delegate?.didEndTransition(transitionContext, didComplete: didComplete)
+        interactionController = nil
+        animationController = nil
     }
 }
 

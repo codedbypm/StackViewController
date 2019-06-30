@@ -45,8 +45,10 @@ class TransitionHandlerTests: XCTestCase {
 
         
         // Act
-        sut.performTransition(context: .dummy,
-                              animationController: MockAnimatedTransitioning())
+        sut.performAnimatedTransition(
+            context: .dummy,
+            animationController: MockAnimatedTransitioning()
+        )
 
         // Assert
         XCTAssertEqual(delegate.didCallWillStartTransition, true)
@@ -60,8 +62,10 @@ class TransitionHandlerTests: XCTestCase {
         let animationController = MockAnimatedTransitioning()
 
         // Act
-        sut.performTransition(context: .dummy,
-                              animationController: animationController)
+        sut.performAnimatedTransition(
+            context: .dummy,
+            animationController: animationController
+        )
 
         // Assert
         XCTAssertEqual(animationController.didCallAnimateTransition, true)

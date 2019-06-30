@@ -20,10 +20,7 @@ public final class StackViewController: UIViewController {
     
     public var debugDelegate: DebugDelegate?
 
-    public weak var delegate: StackViewControllerDelegate? {
-        get { return interactor.stackViewControllerDelegate }
-        set { interactor.stackViewControllerDelegate = newValue }
-    }
+    public weak var delegate: StackViewControllerDelegate?
 
     public var viewControllers: [UIViewController] {
         get { return interactor.stack }
@@ -157,6 +154,22 @@ public final class StackViewController: UIViewController {
 // MARK: - StackViewControllerInteractorDelegate
 
 extension StackViewController: StackViewControllerInteractorDelegate {
+
+    public func animationController(
+        for operation: StackViewController.Operation,
+        from: UIViewController,
+        to: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+        return delegate?.animationController(for: operation,
+                                             from: from,
+                                             to: to)
+    }
+
+    public func interactionController(
+        for animationController: UIViewControllerAnimatedTransitioning
+    ) -> UIViewControllerInteractiveTransitioning? {
+        return delegate?.interactionController(for: animationController)
+    }
 
     func startInteractivePopTransition() {
         interactor.popViewController(animated: true, interactive: true)

@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol StackViewControllerInteractorDelegate: UIViewController {
+protocol StackViewControllerInteractorDelegate: UIViewController, StackViewControllerDelegate {
     func prepareAddingChild(_: UIViewController)
     func finishAddingChild(_: UIViewController)
 
@@ -28,7 +28,6 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
     // MARK: - Internal properties
 
     weak var delegate: StackViewControllerInteractorDelegate?
-    weak var stackViewControllerDelegate: StackViewControllerDelegate?
 
     var stack: Stack { return stackHandler.stack }
     

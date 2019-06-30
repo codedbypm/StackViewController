@@ -78,7 +78,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         // execute transition
         transitionHandler?.performTransition(
             context: transitionContext,
-            animationController: animationController(context: transitionContext),
+            animationController: userProvidedAnimationController(context: transitionContext),
             interactionController: nil
         )
     }
@@ -101,8 +101,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             interactive: interactive
         )
 
-        if let userProvidedAnimationController = animationController(context: transitionContext) {
-            let userProvidedInteractiveController = interactionController(animationController: userProvidedAnimationController)
+        if let userProvidedAnimationController = userProvidedAnimationController(context: transitionContext) {
+            let userProvidedInteractiveController = userProvidedInteractionController(animationController: userProvidedAnimationController)
             transitionHandler?.performTransition(
                 context: transitionContext,
                 animationController: userProvidedAnimationController,
@@ -142,7 +142,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
         transitionHandler?.performTransition(
             context: transitionContext,
-            animationController: animationController(context: transitionContext),
+            animationController: userProvidedAnimationController(context: transitionContext),
             interactionController: nil
         )
 
@@ -174,7 +174,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
         transitionHandler?.performTransition(
             context: transitionContext,
-            animationController: animationController(context: transitionContext),
+            animationController: userProvidedAnimationController(context: transitionContext),
             interactionController: nil
         )
 
@@ -212,7 +212,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         // Execute the transition
         transitionHandler?.performTransition(
             context: transitionContext,
-            animationController: animationController(context: transitionContext),
+            animationController: userProvidedAnimationController(context: transitionContext),
             interactionController: nil
         )
     }
@@ -365,7 +365,7 @@ private extension StackViewControllerInteractor {
         }
     }
 
-    func animationController(
+    func userProvidedAnimationController(
         context: TransitionContext
     ) -> UIViewControllerAnimatedTransitioning? {
 
@@ -380,7 +380,7 @@ private extension StackViewControllerInteractor {
         return controller
     }
 
-    func interactionController(
+    func userProvidedInteractionController(
         animationController: UIViewControllerAnimatedTransitioning
         ) -> UIViewControllerInteractiveTransitioning {
 

@@ -35,4 +35,35 @@ class TransitionHandlerTests: XCTestCase {
         // Assert
         XCTAssertEqual(delegate.didCallWillStartTransition, true)
     }
+
+    // MARK: - performTransition(animationController:)
+
+    func testThat_whenPerformingAnimatedTransitionWithAContext_itCallsDelegateWillStartTransition() {
+        // Arrange
+        let delegate = MockTransitionHandlerDelegate()
+        sut.delegate = delegate
+
+        
+        // Act
+        sut.performTransition(context: .dummy,
+                              animationController: MockAnimatedTransitioning())
+
+        // Assert
+        XCTAssertEqual(delegate.didCallWillStartTransition, true)
+    }
+
+    func testThat_whenPerformingAnimatedTransitionWithAContext_itCallsAnimateTransition() {
+        // Arrange
+        let delegate = MockTransitionHandlerDelegate()
+        sut.delegate = delegate
+
+        let animationController = MockAnimatedTransitioning()
+
+        // Act
+        sut.performTransition(context: .dummy,
+                              animationController: animationController)
+
+        // Assert
+        XCTAssertEqual(animationController.didCallAnimateTransition, true)
+    }
 }

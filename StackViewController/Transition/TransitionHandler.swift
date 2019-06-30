@@ -73,17 +73,13 @@ class TransitionHandler: TransitionHandling {
     }
 
     func performTransition(
+        context: TransitionContext,
         animationController: UIViewControllerAnimatedTransitioning
     ) {
         assert(interactionController == nil)
 
-        guard let transitionContext = transitionContext else {
-            assertionFailure("Error: no TransitionContext found when trying to perform a transition")
-            return
-        }
-
-        delegate?.willStartTransition(transitionContext)
-        animationController.animateTransition(using: transitionContext)
+        delegate?.willStartTransition(context)
+        animationController.animateTransition(using: context)
     }
 
     func transitionFinished(_ didComplete: Bool) {

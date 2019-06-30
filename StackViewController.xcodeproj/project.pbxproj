@@ -65,6 +65,7 @@
 		FDF0BC7522C92603000EAAD5 /* TransitionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7422C92603000EAAD5 /* TransitionHandlerTests.swift */; };
 		FDF0BC7722C9278D000EAAD5 /* TransitionContext+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7622C9278D000EAAD5 /* TransitionContext+Extensions.swift */; };
 		FDF0BC7922C92850000EAAD5 /* MockTransitionHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */; };
+		FDF0BC7B22C936F4000EAAD5 /* MockAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,6 +163,7 @@
 		FDF0BC7422C92603000EAAD5 /* TransitionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionHandlerTests.swift; sourceTree = "<group>"; };
 		FDF0BC7622C9278D000EAAD5 /* TransitionContext+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionContext+Extensions.swift"; sourceTree = "<group>"; };
 		FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTransitionHandlerDelegate.swift; sourceTree = "<group>"; };
+		FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAnimatedTransitioning.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +222,7 @@
 				FDAD73C722AD4A0400FB68BB /* MockStackHandler.swift */,
 				FDAD73D122AD5F6600FB68BB /* MockTransitionHandler.swift */,
 				FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */,
+				FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -577,6 +580,7 @@
 				FD52598C2284E9070072C6B8 /* Stack+Extensions.swift in Sources */,
 				FD44FF3B22889FA200DA2AEB /* StackHandler+Extensions.swift in Sources */,
 				FD44FF4A228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift in Sources */,
+				FDF0BC7B22C936F4000EAAD5 /* MockAnimatedTransitioning.swift in Sources */,
 				FDF0BC7922C92850000EAAD5 /* MockTransitionHandlerDelegate.swift in Sources */,
 				FDAD73D422AEB8E500FB68BB /* MockStackViewControllerInteractorDelegate.swift in Sources */,
 				FD0E192E22C78E29004C78DC /* StackHandlerTests.swift in Sources */,

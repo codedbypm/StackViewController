@@ -76,13 +76,21 @@ class TransitionHandler: TransitionHandling {
         context: TransitionContext,
         animationController: UIViewControllerAnimatedTransitioning
     ) {
-        assert(interactionController == nil)
-
         delegate?.willStartTransition(context)
         animationController.animateTransition(using: context)
     }
 
-    func updateInteractiveTransition(_ gestureRecognizer: ScreenEdgePanGestureRecognizer) {
+    func performInteractiveTransition(
+        context: TransitionContext,
+        interactionController: UIViewControllerInteractiveTransitioning
+    ) {
+        delegate?.willStartTransition(context)
+        interactionController.startInteractiveTransition(context)
+    }
+
+    func updateInteractiveTransition(
+        _ gestureRecognizer: ScreenEdgePanGestureRecognizer
+    ) {
         guard let interactionController = interactionController as? InteractivePopAnimator else {
             return
         }

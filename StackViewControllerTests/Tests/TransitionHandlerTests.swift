@@ -36,9 +36,9 @@ class TransitionHandlerTests: XCTestCase {
         XCTAssertEqual(delegate.didCallWillStartTransition, true)
     }
 
-    // MARK: - performTransition(animationController:)
+    // MARK: - performAnimatedTransition(context:animationController:)
 
-    func testThat_whenPerformingAnimatedTransitionWithAContext_itCallsDelegateWillStartTransition() {
+    func testThat_whenPerformingAnimatedTransition_itCallsDelegateWillStartTransition() {
         // Arrange
         let delegate = MockTransitionHandlerDelegate()
         sut.delegate = delegate
@@ -54,7 +54,7 @@ class TransitionHandlerTests: XCTestCase {
         XCTAssertEqual(delegate.didCallWillStartTransition, true)
     }
 
-    func testThat_whenPerformingAnimatedTransitionWithAContext_itCallsAnimateTransition() {
+    func testThat_whenPerformingAnimatedTransition_itCallsAnimateTransition() {
         // Arrange
         let delegate = MockTransitionHandlerDelegate()
         sut.delegate = delegate
@@ -69,5 +69,39 @@ class TransitionHandlerTests: XCTestCase {
 
         // Assert
         XCTAssertEqual(animationController.didCallAnimateTransition, true)
+    }
+
+    // MARK: - performInteractiveTransition(context:animationController:)
+
+    func testThat_whenPerformingInteractiveTransition_itCallsDelegateWillStartTransition() {
+        // Arrange
+        let delegate = MockTransitionHandlerDelegate()
+        sut.delegate = delegate
+
+        // Act
+        sut.performInteractiveTransition(
+            context: .dummy,
+            interactionController: MockInteractiveTransitioning()
+        )
+
+        // Assert
+        XCTAssertEqual(delegate.didCallWillStartTransition, true)
+    }
+
+    func testThat_whenPerformingAnimatedTransitionWithAContext_itCallsAnimateTransition() {
+        // Arrange
+        let delegate = MockTransitionHandlerDelegate()
+        sut.delegate = delegate
+
+        let interactionController = MockInteractiveTransitioning()
+
+        // Act
+        sut.performInteractiveTransition(
+            context: .dummy,
+            interactionController: interactionController
+        )
+
+        // Assert
+        XCTAssertEqual(interactionController.didCallStartInteractiveTransition, true)
     }
 }

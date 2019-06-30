@@ -66,6 +66,7 @@
 		FDF0BC7722C9278D000EAAD5 /* TransitionContext+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7622C9278D000EAAD5 /* TransitionContext+Extensions.swift */; };
 		FDF0BC7922C92850000EAAD5 /* MockTransitionHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */; };
 		FDF0BC7B22C936F4000EAAD5 /* MockAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */; };
+		FDF0BC7F22C9572C000EAAD5 /* MockInteractiveTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7E22C9572C000EAAD5 /* MockInteractiveTransitioning.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -164,6 +165,7 @@
 		FDF0BC7622C9278D000EAAD5 /* TransitionContext+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionContext+Extensions.swift"; sourceTree = "<group>"; };
 		FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTransitionHandlerDelegate.swift; sourceTree = "<group>"; };
 		FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAnimatedTransitioning.swift; sourceTree = "<group>"; };
+		FDF0BC7E22C9572C000EAAD5 /* MockInteractiveTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInteractiveTransitioning.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +225,7 @@
 				FDAD73D122AD5F6600FB68BB /* MockTransitionHandler.swift */,
 				FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */,
 				FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */,
+				FDF0BC7E22C9572C000EAAD5 /* MockInteractiveTransitioning.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -562,6 +565,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDF0BC7F22C9572C000EAAD5 /* MockInteractiveTransitioning.swift in Sources */,
 				FD44FF3D2288CFA900DA2AEB /* MockViewController.swift in Sources */,
 				FDF0BC7522C92603000EAAD5 /* TransitionHandlerTests.swift in Sources */,
 				FD76B7692270EA010090EDB2 /* StackViewControllerTests+StackActions.swift in Sources */,

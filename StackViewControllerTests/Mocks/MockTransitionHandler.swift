@@ -12,9 +12,22 @@ class MockTransitionHandler: TransitionHandling {
 
     var didCallPerformTransition: Bool?
     var transitionContext: TransitionContext?
-    func performTransition(_ context: TransitionContext) {
+    var animationController: UIViewControllerAnimatedTransitioning?
+    func performTransition(
+        context: TransitionContext,
+        animationController: UIViewControllerAnimatedTransitioning
+    ) {
         didCallPerformTransition = true
         transitionContext = context
+        self.animationController = animationController
+    }
+
+
+    func performInteractiveTransition(
+        context: TransitionContext,
+        interactionController: UIViewControllerInteractiveTransitioning
+    ) {
+
     }
 }
 

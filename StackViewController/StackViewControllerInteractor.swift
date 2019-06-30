@@ -76,7 +76,10 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         stackHandler.pushViewController(viewController)
 
         // execute transition
-        transitionHandler?.performTransition(transitionContext)
+        transitionHandler?.performTransition(
+            context: transitionContext,
+            animationController: animationController(context: transitionContext)
+        )
     }
 
     @discardableResult
@@ -97,7 +100,14 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             interactive: interactive
         )
 
-        transitionHandler?.performTransition(transitionContext)
+        if interactive {
+            transitionHandler?.performInteractiveTransition(context: transitionContext, interactionController: interactionController(animationController: animationController(context: transitionContext)))
+        } else {
+            transitionHandler?.performTransition(
+                context: transitionContext,
+                animationController: animationController(context: transitionContext)
+            )
+        }
 
         return stackHandler.popViewController()
     }
@@ -122,7 +132,10 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             notifyControllerOfRemovals(poppedViewControllers)
         }
 
-        transitionHandler?.performTransition(transitionContext)
+        transitionHandler?.performTransition(
+            context: transitionContext,
+            animationController: animationController(context: transitionContext)
+        )
 
         return poppedViewControllers
     }
@@ -150,7 +163,10 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             notifyControllerOfRemovals(poppedViewControllers)
         }
 
-        transitionHandler?.performTransition(transitionContext)
+        transitionHandler?.performTransition(
+            context: transitionContext,
+            animationController: animationController(context: transitionContext)
+        )
 
         return poppedViewControllers
     }
@@ -184,7 +200,10 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         //        processStackChange(difference)
         //
         // Execute the transition
-        transitionHandler?.performTransition(transitionContext)
+        transitionHandler?.performTransition(
+            context: transitionContext,
+            animationController: animationController(context: transitionContext)
+        )
     }
 
     // MARK: - TransitionHandlerDelegate
@@ -359,7 +378,7 @@ private extension StackViewControllerInteractor {
 
     func animationController(
         context: TransitionContext
-        ) -> UIViewControllerAnimatedTransitioning? {
+        ) -> UIViewControllerAnimatedTransitioning {
 
         let animationController: UIViewControllerAnimatedTransitioning
 
@@ -386,7 +405,7 @@ private extension StackViewControllerInteractor {
 
     func interactionController(
         animationController: UIViewControllerAnimatedTransitioning
-        ) -> UIViewControllerInteractiveTransitioning? {
+        ) -> UIViewControllerInteractiveTransitioning {
 
         let controller = delegate?.interactionController(
             for: animationController

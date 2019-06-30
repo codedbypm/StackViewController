@@ -22,21 +22,7 @@ class TransitionHandlerTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: - performTransition(:)
-
-    func testThat_whenPerformingTransition_itCallsDelegateWillStartTransition() {
-        // Arrange
-        let delegate = MockTransitionHandlerDelegate()
-        sut.delegate = delegate
-
-        // Act
-        sut.performTransition(.dummy)
-
-        // Assert
-        XCTAssertEqual(delegate.didCallWillStartTransition, true)
-    }
-
-    // MARK: - performAnimatedTransition(context:animationController:)
+    // MARK: - performTransition(context:animationController:)
 
     func testThat_whenPerformingAnimatedTransition_itCallsDelegateWillStartTransition() {
         // Arrange
@@ -45,7 +31,7 @@ class TransitionHandlerTests: XCTestCase {
 
         
         // Act
-        sut.performAnimatedTransition(
+        sut.performTransition(
             context: .dummy,
             animationController: MockAnimatedTransitioning()
         )
@@ -62,7 +48,7 @@ class TransitionHandlerTests: XCTestCase {
         let animationController = MockAnimatedTransitioning()
 
         // Act
-        sut.performAnimatedTransition(
+        sut.performTransition(
             context: .dummy,
             animationController: animationController
         )

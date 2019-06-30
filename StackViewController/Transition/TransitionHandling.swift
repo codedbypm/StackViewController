@@ -9,5 +9,5 @@
 import Foundation
 
 protocol TransitionHandling {
-    func performTransition()
+    func performTransition(_: TransitionContext)
 }

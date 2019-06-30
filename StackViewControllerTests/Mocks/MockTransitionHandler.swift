@@ -11,8 +11,10 @@
 class MockTransitionHandler: TransitionHandling {
 
     var didCallPerformTransition: Bool?
-    func performTransition() {
+    var transitionContext: TransitionContext?
+    func performTransition(_ context: TransitionContext) {
         didCallPerformTransition = true
+        transitionContext = context
     }
 }
 

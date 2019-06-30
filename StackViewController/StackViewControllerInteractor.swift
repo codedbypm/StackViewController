@@ -37,8 +37,6 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
     lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
-    private(set) var transitionContext: TransitionContext?
-
     // MARK: - Private properties
 
     private let stackHandler: StackHandling
@@ -67,7 +65,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         guard stackHandler.canPushViewController(viewController) else { return }
 
         // prepare transition context
-        transitionContext = TransitionContext(
+        let transitionContext = TransitionContext(
             operation: .push,
             from: stack.last,
             to: viewController,
@@ -79,7 +77,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         stackHandler.pushViewController(viewController)
 
         // execute transition
-        transitionHandler?.performTransition()
+        transitionHandler?.performTransition(transitionContext)
     }
 
     @discardableResult
@@ -91,7 +89,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         guard stackHandler.canPopViewController() else { return nil }
 
         // prepare transition context
-        transitionContext = TransitionContext(
+        let transitionContext = TransitionContext(
             operation: .pop,
             from: stack.last,
             to: stack.suffix(2).first,
@@ -100,7 +98,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             interactive: interactive
         )
 
-        transitionHandler?.performTransition()
+        transitionHandler?.performTransition(transitionContext)
 
         return stackHandler.popViewController()
     }
@@ -110,7 +108,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         guard stackHandler.canPopToRoot() else { return nil }
 
         // prepare transition context
-        transitionContext = TransitionContext(
+        let transitionContext = TransitionContext(
             operation: .pop,
             from: stack.last,
             to: stack.first,
@@ -125,7 +123,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             notifyControllerOfRemovals(poppedViewControllers)
         }
 
-        transitionHandler?.performTransition()
+        transitionHandler?.performTransition(transitionContext)
 
         return poppedViewControllers
     }
@@ -138,7 +136,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         guard stackHandler.canPop(to: viewController) else { return nil }
 
         // prepare transition context
-        transitionContext = TransitionContext(
+        let transitionContext = TransitionContext(
             operation: .pop,
             from: stack.last,
             to: viewController,
@@ -153,7 +151,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             notifyControllerOfRemovals(poppedViewControllers)
         }
 
-        transitionHandler?.performTransition()
+        transitionHandler?.performTransition(transitionContext)
 
         return poppedViewControllers
     }
@@ -167,7 +165,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         let operation = stackOperation(whenReplacing: stack, with: newStack)
 
         // prepare transition context
-        transitionContext = TransitionContext(
+        let transitionContext = TransitionContext(
             operation: operation,
             from: stack.last,
             to: newStack.last,
@@ -187,17 +185,17 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 //        processStackChange(difference)
 //
         // Execute the transition
-        transitionHandler?.performTransition()
+        transitionHandler?.performTransition(transitionContext)
     }
 
     // MARK: - TransitionHandlerDelegate
 
-    func willStartTransition(using context: TransitionContext) {
+    func willStartTransition(_ context: TransitionContext) {
         sendBeginTransitionViewContainmentEvents(using: context)
         sendBeginTransitionViewEvents(using: context)
     }
 
-    func didEndTransition(using context: TransitionContext, didComplete: Bool) {
+    func didEndTransition(_ context: TransitionContext, didComplete: Bool) {
         if didComplete {
             
             sendEndTransitionViewEvents(using: context)
@@ -226,6 +224,20 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         }
     }
 
+    func stackOperation(whenReplacing oldStack: Stack, with newStack: Stack) -> StackViewController.Operation {
+        let from = topViewController
+        let to = newStack.last
+
+        guard from !== to else { return .none }
+
+        if let to = to {
+            if oldStack.contains(to) { return .pop }
+            else { return .push }
+        } else {
+            if from != nil { return .pop }
+            else { return .none }
+        }
+    }
 }
 
 private extension StackViewControllerInteractor {
@@ -288,21 +300,6 @@ private extension StackViewControllerInteractor {
         }
         removals.suffix(1).forEach {
             self.delegate?.prepareRemovingChild($0)
-        }
-    }
-
-    private func stackOperation(whenReplacing oldStack: Stack, with newStack: Stack) -> StackViewController.Operation {
-        let from = topViewController
-        let to = newStack.last
-
-        guard from !== to else { return .none }
-
-        if let to = to {
-            if oldStack.contains(to) { return .pop }
-            else { return .push }
-        } else {
-            if from != nil { return .pop }
-            else { return .none }
         }
     }
 

@@ -9,8 +9,8 @@
 import Foundation
 
 protocol TransitionHandlerDelegate: class {
-    func willStartTransition(using _: TransitionContext)
-    func didEndTransition(using _: TransitionContext, didComplete: Bool)
+    func willStartTransition(_: TransitionContext)
+    func didEndTransition(_: TransitionContext, didComplete: Bool)
 }
 
 class TransitionHandler: TransitionHandling {
@@ -37,58 +37,57 @@ class TransitionHandler: TransitionHandling {
 
     }
 
-    init(operation: StackViewController.Operation,
-         from: UIViewController?,
-         to: UIViewController?,
-         containerView: UIView,
-         animated: Bool,
-         interactive: Bool = false,
-         screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer? = nil) {
-
-        self.screenEdgePanGestureRecognizer = screenEdgePanGestureRecognizer
-
-        transitionContext = TransitionContext(operation: operation,
-                                              from: from,
-                                              to: to,
-                                              containerView: containerView,
-                                              animated: animated,
-                                              interactive: interactive)
-
-        transitionContext?.onTransitionFinished = { [weak self] didComplete in
-            self?.animationController?.animationEnded?(didComplete)
-            self?.transitionFinished(didComplete)
-        }
-
-        transitionContext?.onTransitionCancelled = { _ in
-
-        }
-    }
+//    init(operation: StackViewController.Operation,
+//         from: UIViewController?,
+//         to: UIViewController?,
+//         containerView: UIView,
+//         animated: Bool,
+//         interactive: Bool = false,
+//         screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer? = nil) {
+//
+//        self.screenEdgePanGestureRecognizer = screenEdgePanGestureRecognizer
+//
+//        transitionContext = TransitionContext(operation: operation,
+//                                              from: from,
+//                                              to: to,
+//                                              containerView: containerView,
+//                                              animated: animated,
+//                                              interactive: interactive)
+//
+//        transitionContext?.onTransitionFinished = { [weak self] didComplete in
+//            self?.animationController?.animationEnded?(didComplete)
+//            self?.transitionFinished(didComplete)
+//        }
+//
+//        transitionContext?.onTransitionCancelled = { _ in
+//
+//        }
+//    }
 
     deinit {
         print("\(String(describing: self)): \(#function)")
     }
 
-    func performTransition() {
-        guard let transitionContext = transitionContext else { return }
+    func performTransition(_ context: TransitionContext) {
 
-        delegate?.willStartTransition(using: transitionContext)
+        delegate?.willStartTransition(context)
 
         let animationController: UIViewControllerAnimatedTransitioning
         let interactionController: UIViewControllerInteractiveTransitioning?
 
-        if let from = transitionContext.from, let to = transitionContext.to {
-            if let controller = stackViewControllerDelegate?.animationController(for: transitionContext.operation, from: from, to: to) {
+        if let from = context.from, let to = context.to {
+            if let controller = stackViewControllerDelegate?.animationController(for: context.operation, from: from, to: to) {
                 animationController = controller
             } else {
-                animationController = defaultAnimationController(for: transitionContext.operation)
+                animationController = defaultAnimationController(for: context.operation)
             }
         } else {
-            animationController = defaultAnimationController(for: transitionContext.operation)
+            animationController = defaultAnimationController(for: context.operation)
         }
         self.animationController = animationController
 
 
-        if transitionContext.isInteractive {
+        if context.isInteractive {
             if let controller = stackViewControllerDelegate?.interactionController(for: animationController) {
                 interactionController = controller
             } else {
@@ -96,17 +95,17 @@ class TransitionHandler: TransitionHandling {
                                                                screenEdgePanGestureRecognizer: screenEdgePanGestureRecognizer!)
             }
             self.interactionController = interactionController
-            interactionController?.startInteractiveTransition(transitionContext)
+            interactionController?.startInteractiveTransition(context)
         } else {
             self.interactionController = nil
-            animationController.animateTransition(using: transitionContext)
+            animationController.animateTransition(using: context)
         }
     }
 
     func transitionFinished(_ didComplete: Bool) {
         guard let transitionContext = transitionContext else { return }
 
-        delegate?.didEndTransition(using: transitionContext, didComplete: didComplete)
+        delegate?.didEndTransition(transitionContext, didComplete: didComplete)
         interactionController = nil
         animationController = nil
     }

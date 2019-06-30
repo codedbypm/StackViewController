@@ -33,7 +33,8 @@ class TransitionHandlerTests: XCTestCase {
         // Act
         sut.performTransition(
             context: .dummy,
-            animationController: MockAnimatedTransitioning()
+            animationController: MockAnimatedTransitioning(),
+            interactionController: nil
         )
 
         // Assert
@@ -50,44 +51,11 @@ class TransitionHandlerTests: XCTestCase {
         // Act
         sut.performTransition(
             context: .dummy,
-            animationController: animationController
+            animationController: animationController,
+            interactionController: nil
         )
 
         // Assert
         XCTAssertEqual(animationController.didCallAnimateTransition, true)
-    }
-
-    // MARK: - performInteractiveTransition(context:animationController:)
-
-    func testThat_whenPerformingInteractiveTransition_itCallsDelegateWillStartTransition() {
-        // Arrange
-        let delegate = MockTransitionHandlerDelegate()
-        sut.delegate = delegate
-
-        // Act
-        sut.performInteractiveTransition(
-            context: .dummy,
-            interactionController: MockInteractiveTransitioning()
-        )
-
-        // Assert
-        XCTAssertEqual(delegate.didCallWillStartTransition, true)
-    }
-
-    func testThat_whenPerformingAnimatedTransitionWithAContext_itCallsAnimateTransition() {
-        // Arrange
-        let delegate = MockTransitionHandlerDelegate()
-        sut.delegate = delegate
-
-        let interactionController = MockInteractiveTransitioning()
-
-        // Act
-        sut.performInteractiveTransition(
-            context: .dummy,
-            interactionController: interactionController
-        )
-
-        // Assert
-        XCTAssertEqual(interactionController.didCallStartInteractiveTransition, true)
     }
 }

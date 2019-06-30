@@ -78,7 +78,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         // execute transition
         transitionHandler?.performTransition(
             context: transitionContext,
-            animationController: animationController(context: transitionContext)
+            animationController: animationController(context: transitionContext),
+            interactionController: nil
         )
     }
 
@@ -100,14 +101,21 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             interactive: interactive
         )
 
-        if interactive {
-            transitionHandler?.performInteractiveTransition(context: transitionContext, interactionController: interactionController(animationController: animationController(context: transitionContext)))
+        if let userProvidedAnimationController = animationController(context: transitionContext) {
+            let userProvidedInteractiveController = interactionController(animationController: userProvidedAnimationController)
+            transitionHandler?.performTransition(
+                context: transitionContext,
+                animationController: userProvidedAnimationController,
+                interactionController: userProvidedInteractiveController
+            )
         } else {
             transitionHandler?.performTransition(
                 context: transitionContext,
-                animationController: animationController(context: transitionContext)
+                animationController: nil,
+                interactionController: nil
             )
         }
+
 
         return stackHandler.popViewController()
     }
@@ -134,7 +142,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
         transitionHandler?.performTransition(
             context: transitionContext,
-            animationController: animationController(context: transitionContext)
+            animationController: animationController(context: transitionContext),
+            interactionController: nil
         )
 
         return poppedViewControllers
@@ -165,7 +174,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
         transitionHandler?.performTransition(
             context: transitionContext,
-            animationController: animationController(context: transitionContext)
+            animationController: animationController(context: transitionContext),
+            interactionController: nil
         )
 
         return poppedViewControllers
@@ -202,7 +212,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         // Execute the transition
         transitionHandler?.performTransition(
             context: transitionContext,
-            animationController: animationController(context: transitionContext)
+            animationController: animationController(context: transitionContext),
+            interactionController: nil
         )
     }
 
@@ -260,28 +271,6 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
 private extension StackViewControllerInteractor {
     
-    // MARK: - Private methods
-
-    private func processStackChange(_ difference: Stack.Difference) {
-        guard !difference.isEmpty else {
-            return
-        }
-
-        notifyControllerAboutStackChanges(difference)
-        undoLastStackChange = transitionUndo(for: difference)
-    }
-
-    private func beginTransition() {
-
-        //        guard let delegate = delegate, delegate.isInViewHierarchy, transitionHandler?.operation != .none else {
-        //            self.transitionHandler = nil
-        //            return
-        //        }
-        //
-        //        transitionHandler?.delegate = self
-        //        transitionHandler?.performTransition()
-    }
-
     private func transitionUndo(for difference: Stack.Difference) -> (() -> Void)? {
         return nil
         //        return { [weak self] in
@@ -378,29 +367,17 @@ private extension StackViewControllerInteractor {
 
     func animationController(
         context: TransitionContext
-        ) -> UIViewControllerAnimatedTransitioning {
+    ) -> UIViewControllerAnimatedTransitioning? {
 
-        let animationController: UIViewControllerAnimatedTransitioning
+        guard let from = context.from else { return nil }
+        guard let to = context.to else { return nil }
+        guard let controller = delegate?.animationController(
+            for: context.operation,
+            from: from,
+            to: to
+        ) else { return nil }
 
-        if let from = context.from, let to = context.to {
-            if let controller = delegate?.animationController(for: context.operation, from: from, to: to) {
-                animationController = controller
-            } else {
-                animationController = defaultAnimationController(for: context.operation)
-            }
-        } else {
-            animationController = defaultAnimationController(for: context.operation)
-        }
-
-        return animationController
-    }
-
-    func defaultAnimationController(for operation: StackViewController.Operation) -> Animator {
-        switch operation {
-        case .pop: return PopAnimator()
-        case .push: return PushAnimator()
-        case .none: return NoTransitionAnimator()
-        }
+        return controller
     }
 
     func interactionController(

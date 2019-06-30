@@ -9,13 +9,10 @@
 import Foundation
 
 protocol TransitionHandling {
+
     func performTransition(
         context: TransitionContext,
-        animationController: UIViewControllerAnimatedTransitioning
-    )
-
-    func performInteractiveTransition(
-        context: TransitionContext,
-        interactionController: UIViewControllerInteractiveTransitioning
+        animationController: UIViewControllerAnimatedTransitioning?,
+        interactionController: UIViewControllerInteractiveTransitioning?
     )
 }

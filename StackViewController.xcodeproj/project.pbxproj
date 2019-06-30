@@ -62,6 +62,11 @@
 		FDAD73D022AD5E3900FB68BB /* TransitionHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73CF22AD5E3900FB68BB /* TransitionHandling.swift */; };
 		FDAD73D222AD5F6600FB68BB /* MockTransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73D122AD5F6600FB68BB /* MockTransitionHandler.swift */; };
 		FDAD73D422AEB8E500FB68BB /* MockStackViewControllerInteractorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73D322AEB8E500FB68BB /* MockStackViewControllerInteractorDelegate.swift */; };
+		FDF0BC7522C92603000EAAD5 /* TransitionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7422C92603000EAAD5 /* TransitionHandlerTests.swift */; };
+		FDF0BC7722C9278D000EAAD5 /* TransitionContext+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7622C9278D000EAAD5 /* TransitionContext+Extensions.swift */; };
+		FDF0BC7922C92850000EAAD5 /* MockTransitionHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */; };
+		FDF0BC7B22C936F4000EAAD5 /* MockAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */; };
+		FDF0BC7F22C9572C000EAAD5 /* MockInteractiveTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7E22C9572C000EAAD5 /* MockInteractiveTransitioning.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -156,6 +161,11 @@
 		FDAD73CF22AD5E3900FB68BB /* TransitionHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionHandling.swift; sourceTree = "<group>"; };
 		FDAD73D122AD5F6600FB68BB /* MockTransitionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTransitionHandler.swift; sourceTree = "<group>"; };
 		FDAD73D322AEB8E500FB68BB /* MockStackViewControllerInteractorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackViewControllerInteractorDelegate.swift; sourceTree = "<group>"; };
+		FDF0BC7422C92603000EAAD5 /* TransitionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionHandlerTests.swift; sourceTree = "<group>"; };
+		FDF0BC7622C9278D000EAAD5 /* TransitionContext+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionContext+Extensions.swift"; sourceTree = "<group>"; };
+		FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTransitionHandlerDelegate.swift; sourceTree = "<group>"; };
+		FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAnimatedTransitioning.swift; sourceTree = "<group>"; };
+		FDF0BC7E22C9572C000EAAD5 /* MockInteractiveTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInteractiveTransitioning.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +223,9 @@
 				FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */,
 				FDAD73C722AD4A0400FB68BB /* MockStackHandler.swift */,
 				FDAD73D122AD5F6600FB68BB /* MockTransitionHandler.swift */,
+				FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */,
+				FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */,
+				FDF0BC7E22C9572C000EAAD5 /* MockInteractiveTransitioning.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -227,6 +240,7 @@
 				FD44FF49228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift */,
 				FD1B56F8227C525B00E005EC /* StackHandlerTests.swift */,
 				FD44FF3E228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift */,
+				FDF0BC7422C92603000EAAD5 /* TransitionHandlerTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -239,6 +253,7 @@
 				FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */,
 				FD76B7622270DA340090EDB2 /* StackViewController+Extensions.swift */,
 				FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */,
+				FDF0BC7622C9278D000EAAD5 /* TransitionContext+Extensions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -550,13 +565,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDF0BC7F22C9572C000EAAD5 /* MockInteractiveTransitioning.swift in Sources */,
 				FD44FF3D2288CFA900DA2AEB /* MockViewController.swift in Sources */,
+				FDF0BC7522C92603000EAAD5 /* TransitionHandlerTests.swift in Sources */,
 				FD76B7692270EA010090EDB2 /* StackViewControllerTests+StackActions.swift in Sources */,
 				FDAD73CB22AD4B4500FB68BB /* CollectionDifference+Extensions.swift in Sources */,
 				FDAD73C822AD4A0400FB68BB /* MockStackHandler.swift in Sources */,
 				FD76B7672270E9C60090EDB2 /* StackViewControllerTests+Properties.swift in Sources */,
 				FD44FF4E228C2F1A00DA2AEB /* StackViewControllerTests+InteractorDelegate.swift in Sources */,
 				FD76B7032270C9530090EDB2 /* StackViewControllerTests.swift in Sources */,
+				FDF0BC7722C9278D000EAAD5 /* TransitionContext+Extensions.swift in Sources */,
 				FD76B7652270E3B70090EDB2 /* TimeInterval+Extensions.swift in Sources */,
 				FD44FF46228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift in Sources */,
 				FD44FF48228B65CF00DA2AEB /* MockStackViewControllerInteractor.swift in Sources */,
@@ -566,6 +584,8 @@
 				FD52598C2284E9070072C6B8 /* Stack+Extensions.swift in Sources */,
 				FD44FF3B22889FA200DA2AEB /* StackHandler+Extensions.swift in Sources */,
 				FD44FF4A228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift in Sources */,
+				FDF0BC7B22C936F4000EAAD5 /* MockAnimatedTransitioning.swift in Sources */,
+				FDF0BC7922C92850000EAAD5 /* MockTransitionHandlerDelegate.swift in Sources */,
 				FDAD73D422AEB8E500FB68BB /* MockStackViewControllerInteractorDelegate.swift in Sources */,
 				FD0E192E22C78E29004C78DC /* StackHandlerTests.swift in Sources */,
 			);

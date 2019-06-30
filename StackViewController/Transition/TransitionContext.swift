@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 class TransitionContext: NSObject, UIViewControllerContextTransitioning {
 
     let containerView: UIView

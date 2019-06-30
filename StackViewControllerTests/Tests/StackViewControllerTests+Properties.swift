@@ -11,40 +11,6 @@ import XCTest
 
 extension StackViewControllerTests {
 
-    // MARK: - Delegate
-
-    func testThat_whenSettingTheStackViewControllerDelegate_theStackViewControllerDelegatePropertyOfInteractorIsSetToThatValue() {
-        // Arrange
-        sut = StackViewController.dummy
-        let mockDelegate = MockStackViewControllerDelegate()
-
-        XCTAssertNil(sut.delegate)
-        XCTAssertNil(sut.interactor.stackViewControllerDelegate)
-
-        // Act
-        sut.delegate = mockDelegate
-
-        // Assert
-        XCTAssertTrue(sut.delegate === sut.interactor.stackViewControllerDelegate)
-    }
-
-    func testThat_whenGettingTheStackViewControllerDelegate_itReturnsTheSameValueOfInteractorStackViewControllerDelegateProperty() {
-        // Arrange
-        sut = StackViewController.dummy
-
-        sut.interactor.stackViewControllerDelegate = nil
-        XCTAssertNil(sut.delegate)
-
-        let mockDelegate = MockStackViewControllerDelegate()
-        sut.interactor.stackViewControllerDelegate = mockDelegate
-
-        // Act
-        let delegate = sut.delegate
-
-        // Assert
-        XCTAssertTrue(delegate === mockDelegate)
-    }
-
     // MARK: - viewControllers
 
     func testThat_whenSettingViewControllers_itCallsSetViewControllersNonAnimatedMethodOfInteractor() {

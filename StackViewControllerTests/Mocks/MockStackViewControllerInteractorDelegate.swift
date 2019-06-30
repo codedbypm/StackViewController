@@ -10,6 +10,16 @@
 
 class MockStackViewControllerInteractorDelegate: UIViewController, StackViewControllerInteractorDelegate {
 
+    var animationController: UIViewControllerAnimatedTransitioning?
+    func animationController(for operation: StackViewController.Operation, from: UIViewController, to: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return animationController
+    }
+
+    var interactiveController: UIViewControllerInteractiveTransitioning?
+    func interactionController(for animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return interactiveController
+    }
+
     func prepareAddingChild(_ viewController: UIViewController) {
 
     }

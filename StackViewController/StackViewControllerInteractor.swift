@@ -36,11 +36,11 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
     lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
 
+    private(set) var transitionHandler: TransitionHandler?
+
     // MARK: - Private properties
 
     private let stackHandler: StackHandling
-
-    private var transitionHandler: TransitionHandling?
 
     private var undoLastStackChange: (() -> Void)?
 
@@ -48,10 +48,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
     // MARK: - Init
 
-    init(stackHandler: StackHandling,
-         transitionHandler: TransitionHandling = TransitionHandler()) {
+    init(stackHandler: StackHandling) {
         self.stackHandler = stackHandler
-        self.transitionHandler = transitionHandler
     }
 
     // MARK: - Internal methods
@@ -99,7 +97,13 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
         performTransition(context: transitionContext)
 
-        return stackHandler.popViewController()
+        let poppedViewController = stackHandler.popViewController()
+        undoLastStackChange = { [weak self] in
+            guard let controller = poppedViewController else { return }
+            self?.stackHandler.pushViewController(controller)
+        }
+
+        return poppedViewController
     }
 
     @discardableResult
@@ -190,6 +194,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             undoLastStackChange?()
         }
         //        debugTransitionEnded()
+        transitionHandler = nil
     }
 
     // MARK: - Actions
@@ -319,6 +324,7 @@ private extension StackViewControllerInteractor {
     }
 
     func performTransition(context: TransitionContext) {
+        transitionHandler = TransitionHandler(delegate: self)
         let animationController = self.animationController(context: context)
 
         if context.isInteractive {
@@ -327,6 +333,7 @@ private extension StackViewControllerInteractor {
             )
             transitionHandler?.performInteractiveTransition(
                 context: context,
+                animationController: animationController,
                 interactionController: interactionController
             )
         } else {

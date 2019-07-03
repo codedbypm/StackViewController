@@ -28,8 +28,8 @@ class TransitionHandler: TransitionHandling {
 
     // MARK: - Init
 
-    init() {
-
+    init(delegate: TransitionHandlerDelegate) {
+        self.delegate = delegate
     }
 
     deinit {
@@ -45,6 +45,7 @@ class TransitionHandler: TransitionHandling {
         context.onTransitionFinished = { didComplete in
             animationController.animationEnded?(didComplete)
             self.delegate?.didEndTransition(context, didComplete: didComplete)
+            self.animationController = nil
         }
 
         context.onTransitionCancelled = { _ in
@@ -58,10 +59,18 @@ class TransitionHandler: TransitionHandling {
 
     func performInteractiveTransition(
         context: TransitionContext,
+        animationController: UIViewControllerAnimatedTransitioning,
         interactionController: UIViewControllerInteractiveTransitioning
     ) {
         delegate?.willStartTransition(context)
-        
+
+        context.onTransitionFinished = { didComplete in
+            animationController.animationEnded?(didComplete)
+            self.delegate?.didEndTransition(context, didComplete: didComplete)
+            self.animationController = nil
+            self.interactionController = nil
+        }
+
         transitionId = UUID()
         self.interactionController = interactionController
         interactionController.startInteractiveTransition(context)

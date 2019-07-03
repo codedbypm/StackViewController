@@ -17,6 +17,7 @@ protocol TransitionHandling {
 
     func performInteractiveTransition(
         context: TransitionContext,
+        animationController: UIViewControllerAnimatedTransitioning,
         interactionController: UIViewControllerInteractiveTransitioning
     )
 }

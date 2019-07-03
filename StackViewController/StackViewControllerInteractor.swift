@@ -130,7 +130,6 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
     ) -> [UIViewController]? {
         guard stackHandler.canPop(to: viewController) else { return nil }
 
-        // prepare transition context
         let transitionContext = TransitionContext(
             operation: .pop,
             from: stack.last,
@@ -141,7 +140,6 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         )
 
         let poppedViewControllers = stackHandler.pop(to: viewController)
-
         if let poppedViewControllers = poppedViewControllers {
             notifyControllerOfRemovals(poppedViewControllers)
         }
@@ -159,7 +157,6 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
         let operation = stackOperation(whenReplacing: stack, with: newStack)
 
-        // prepare transition context
         let transitionContext = TransitionContext(
             operation: operation,
             from: stack.last,
@@ -170,16 +167,6 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         )
 
         stackHandler.setStack(newStack)
-
-        //        // Change the stack
-        //        guard let difference = try? stackHandler.replaceStack(with: newStack).get() else {
-        //            return
-        //        }
-        //
-        //        // Process the changes
-        //        processStackChange(difference)
-        //
-        // Execute the transition
 
         performTransition(context: transitionContext)
     }
@@ -193,7 +180,6 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
     func didEndTransition(_ context: TransitionContext, didComplete: Bool) {
         if didComplete {
-            
             sendEndTransitionViewEvents(using: context)
             sendEndTransitionViewContainmentEvents(using: context)
 
@@ -333,9 +319,7 @@ private extension StackViewControllerInteractor {
     }
 
     func performTransition(context: TransitionContext) {
-        let animationController = self.animationController(
-            context: context
-        )
+        let animationController = self.animationController(context: context)
 
         if context.isInteractive {
             let interactionController = self.interactionController(

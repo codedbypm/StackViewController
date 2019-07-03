@@ -27,6 +27,7 @@ class TransitionHandler: TransitionHandling {
     private var interactionController: UIViewControllerInteractiveTransitioning?
 
     // MARK: - Init
+
     init() {
 
     }
@@ -60,6 +61,7 @@ class TransitionHandler: TransitionHandling {
         interactionController: UIViewControllerInteractiveTransitioning
     ) {
         delegate?.willStartTransition(context)
+        
         transitionId = UUID()
         self.interactionController = interactionController
         interactionController.startInteractiveTransition(context)

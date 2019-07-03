@@ -23,6 +23,8 @@ class TransitionHandler: TransitionHandling {
 
     private var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
     private var transitionId: UUID?
+    private var animationController: UIViewControllerAnimatedTransitioning?
+    private var interactionController: UIViewControllerInteractiveTransitioning?
 
     // MARK: - Init
     init() {
@@ -49,6 +51,7 @@ class TransitionHandler: TransitionHandling {
         }
 
         transitionId = UUID()
+        self.animationController = animationController
         animationController.animateTransition(using: context)
     }
 
@@ -58,12 +61,9 @@ class TransitionHandler: TransitionHandling {
     ) {
         delegate?.willStartTransition(context)
         transitionId = UUID()
+        self.interactionController = interactionController
         interactionController.startInteractiveTransition(context)
     }
-}
-
-private extension TransitionHandler {
-    
 }
 
 extension TransitionHandler: CustomStringConvertible {

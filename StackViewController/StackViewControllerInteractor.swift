@@ -127,7 +127,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
     func pop(
         to viewController: UIViewController,
         animated: Bool
-        ) -> [UIViewController]? {
+    ) -> [UIViewController]? {
         guard stackHandler.canPop(to: viewController) else { return nil }
 
         // prepare transition context
@@ -333,10 +333,11 @@ private extension StackViewControllerInteractor {
     }
 
     func performTransition(context: TransitionContext) {
+        let animationController = self.animationController(
+            context: context
+        )
+
         if context.isInteractive {
-            let animationController = self.animationController(
-                context: context
-            )
             let interactionController = self.interactionController(
                 animationController: animationController
             )
@@ -345,9 +346,6 @@ private extension StackViewControllerInteractor {
                 interactionController: interactionController
             )
         } else {
-            let animationController = self.animationController(
-                context: context
-            )
             transitionHandler?.performTransition(
                 context: context,
                 animationController: animationController

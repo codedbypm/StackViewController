@@ -35,34 +35,12 @@ class TransitionHandler: TransitionHandling {
 
     func performTransition(
         context: TransitionContext,
-        animationController: UIViewControllerAnimatedTransitioning?,
-        interactionController: UIViewControllerInteractiveTransitioning?
+        animationController: UIViewControllerAnimatedTransitioning
     ) {
         delegate?.willStartTransition(context)
 
-        let animator: UIViewControllerAnimatedTransitioning
-        let interactiveAnimator: UIViewControllerInteractiveTransitioning?
-
-        if let animationController = animationController {
-            animator = animationController
-        } else {
-            animator = defaultAnimationController(for: context.operation)
-        }
-
-        if context.isInteractive {
-            if let interactionController = interactionController {
-                interactiveAnimator = interactionController
-            } else {
-                interactiveAnimator = InteractivePopAnimator(
-                    animationController: animator,
-                    screenEdgePanGestureRecognizer: screenEdgePanGestureRecognizer!)
-            }
-        } else {
-            interactiveAnimator = nil
-        }
-
         context.onTransitionFinished = { didComplete in
-            animator.animationEnded?(didComplete)
+            animationController.animationEnded?(didComplete)
             self.delegate?.didEndTransition(context, didComplete: didComplete)
         }
 
@@ -70,24 +48,22 @@ class TransitionHandler: TransitionHandling {
 
         }
 
-        if context.isInteractive {
-            interactiveAnimator?.startInteractiveTransition(context)
-        } else {
-            animator.animateTransition(using: context)
-        }
         transitionId = UUID()
+        animationController.animateTransition(using: context)
+    }
+
+    func performInteractiveTransition(
+        context: TransitionContext,
+        interactionController: UIViewControllerInteractiveTransitioning
+    ) {
+        delegate?.willStartTransition(context)
+        transitionId = UUID()
+        interactionController.startInteractiveTransition(context)
     }
 }
 
 private extension TransitionHandler {
     
-    func defaultAnimationController(for operation: StackViewController.Operation) -> Animator {
-        switch operation {
-        case .pop: return PopAnimator()
-        case .push: return PushAnimator()
-        case .none: return NoTransitionAnimator()
-        }
-    }
 }
 
 extension TransitionHandler: CustomStringConvertible {

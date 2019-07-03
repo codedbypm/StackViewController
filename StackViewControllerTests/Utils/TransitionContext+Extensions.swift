@@ -10,7 +10,7 @@
 
 extension TransitionContext {
 
-    static var dummy: TransitionContext {
+    static var dummyAnimated: TransitionContext {
         return TransitionContext(
             operation: .push,
             from: UIViewController(),
@@ -18,6 +18,28 @@ extension TransitionContext {
             containerView: ViewControllerWrapperView(),
             animated: true,
             interactive: false
+        )
+    }
+
+    static var dummyNonAnimated: TransitionContext {
+        return TransitionContext(
+            operation: .push,
+            from: UIViewController(),
+            to: UIViewController(),
+            containerView: ViewControllerWrapperView(),
+            animated: false,
+            interactive: false
+        )
+    }
+
+    static var dummyInteractive: TransitionContext {
+        return TransitionContext(
+            operation: .push,
+            from: UIViewController(),
+            to: UIViewController(),
+            containerView: ViewControllerWrapperView(),
+            animated: true,
+            interactive: true
         )
     }
 }

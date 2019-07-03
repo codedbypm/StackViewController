@@ -12,7 +12,11 @@ protocol TransitionHandling {
 
     func performTransition(
         context: TransitionContext,
-        animationController: UIViewControllerAnimatedTransitioning?,
-        interactionController: UIViewControllerInteractiveTransitioning?
+        animationController: UIViewControllerAnimatedTransitioning
+    )
+
+    func performInteractiveTransition(
+        context: TransitionContext,
+        interactionController: UIViewControllerInteractiveTransitioning
     )
 }

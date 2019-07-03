@@ -59,7 +59,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
     func pushViewController(
         _ viewController: UIViewController,
         animated: Bool
-        ) {
+    ) {
         // guard can push else return
         guard stackHandler.canPushViewController(viewController) else { return }
 
@@ -76,18 +76,14 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         stackHandler.pushViewController(viewController)
 
         // execute transition
-        transitionHandler?.performTransition(
-            context: transitionContext,
-            animationController: userProvidedAnimationController(context: transitionContext),
-            interactionController: nil
-        )
+        performTransition(context: transitionContext)
     }
 
     @discardableResult
     func popViewController(
         animated: Bool,
         interactive: Bool = false
-        ) -> UIViewController? {
+    ) -> UIViewController? {
         // guard can push else return
         guard stackHandler.canPopViewController() else { return nil }
 
@@ -101,21 +97,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             interactive: interactive
         )
 
-        if let userProvidedAnimationController = userProvidedAnimationController(context: transitionContext) {
-            let userProvidedInteractiveController = userProvidedInteractionController(animationController: userProvidedAnimationController)
-            transitionHandler?.performTransition(
-                context: transitionContext,
-                animationController: userProvidedAnimationController,
-                interactionController: userProvidedInteractiveController
-            )
-        } else {
-            transitionHandler?.performTransition(
-                context: transitionContext,
-                animationController: nil,
-                interactionController: nil
-            )
-        }
-
+        performTransition(context: transitionContext)
 
         return stackHandler.popViewController()
     }
@@ -136,15 +118,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
         let poppedViewControllers = stackHandler.popToRoot()
 
-        if let poppedViewControllers = poppedViewControllers {
-            notifyControllerOfRemovals(poppedViewControllers)
-        }
-
-        transitionHandler?.performTransition(
-            context: transitionContext,
-            animationController: userProvidedAnimationController(context: transitionContext),
-            interactionController: nil
-        )
+        performTransition(context: transitionContext)
 
         return poppedViewControllers
     }
@@ -172,11 +146,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             notifyControllerOfRemovals(poppedViewControllers)
         }
 
-        transitionHandler?.performTransition(
-            context: transitionContext,
-            animationController: userProvidedAnimationController(context: transitionContext),
-            interactionController: nil
-        )
+        performTransition(context: transitionContext)
 
         return poppedViewControllers
     }
@@ -210,11 +180,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         //        processStackChange(difference)
         //
         // Execute the transition
-        transitionHandler?.performTransition(
-            context: transitionContext,
-            animationController: userProvidedAnimationController(context: transitionContext),
-            interactionController: nil
-        )
+
+        performTransition(context: transitionContext)
     }
 
     // MARK: - TransitionHandlerDelegate
@@ -365,6 +332,51 @@ private extension StackViewControllerInteractor {
         }
     }
 
+    func performTransition(context: TransitionContext) {
+        if context.isInteractive {
+            let animationController = self.animationController(
+                context: context
+            )
+            let interactionController = self.interactionController(
+                animationController: animationController
+            )
+            transitionHandler?.performInteractiveTransition(
+                context: context,
+                interactionController: interactionController
+            )
+        } else {
+            let animationController = self.animationController(
+                context: context
+            )
+            transitionHandler?.performTransition(
+                context: context,
+                animationController: animationController
+            )
+        }
+    }
+
+    func defaultAnimationController(
+        for operation: StackViewController.Operation
+    ) -> Animator {
+        switch operation {
+        case .pop: return PopAnimator()
+        case .push: return PushAnimator()
+        case .none: return NoTransitionAnimator()
+        }
+    }
+
+    func animationController(
+        context: TransitionContext
+    ) -> UIViewControllerAnimatedTransitioning {
+        if let controller = userProvidedAnimationController(
+            context: context
+        ) {
+            return controller
+        } else {
+            return defaultAnimationController(for: context.operation)
+        }
+    }
+
     func userProvidedAnimationController(
         context: TransitionContext
     ) -> UIViewControllerAnimatedTransitioning? {
@@ -380,22 +392,26 @@ private extension StackViewControllerInteractor {
         return controller
     }
 
-    func userProvidedInteractionController(
+    func interactionController(
         animationController: UIViewControllerAnimatedTransitioning
-        ) -> UIViewControllerInteractiveTransitioning {
+    ) -> UIViewControllerInteractiveTransitioning {
 
-        let controller = delegate?.interactionController(
-            for: animationController
-        )
-
-        if let controller = controller {
-            return controller
+        if let interactionController = userProvidedInteractionController(
+            animationController: animationController)
+        {
+            return interactionController
         } else {
             return InteractivePopAnimator(
                 animationController: animationController,
                 screenEdgePanGestureRecognizer: screenEdgePanGestureRecognizer!
             )
         }
+    }
+
+    func userProvidedInteractionController(
+        animationController: UIViewControllerAnimatedTransitioning
+    ) -> UIViewControllerInteractiveTransitioning? {
+        return delegate?.interactionController(for: animationController)
     }
 }
 

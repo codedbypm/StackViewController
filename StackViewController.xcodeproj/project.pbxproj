@@ -282,13 +282,13 @@
 				FD76B782227648A50090EDB2 /* Animators */,
 				FD1B56FC227C876700E005EC /* Custom views */,
 				FD67E5F12252AF0F0051786B /* Extensions */,
+				FDD1807522CD692D003017EE /* Gesture Recognizers */,
 				FDAD73C922AD4A1700FB68BB /* Stack */,
 				FDAD73CE22AD5E0700FB68BB /* Transition */,
 				FD67E5C2225258840051786B /* StackViewController.swift */,
 				FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */,
 				FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */,
 				FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */,
-				FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */,
 				FD67E578225250E10051786B /* StackViewController.h */,
 				FD67E579225250E10051786B /* Info.plist */,
 				FD1B5701227CBEB000E005EC /* Swift 5 diffing */,
@@ -373,6 +373,14 @@
 				FDAD73CF22AD5E3900FB68BB /* TransitionHandling.swift */,
 			);
 			path = Transition;
+			sourceTree = "<group>";
+		};
+		FDD1807522CD692D003017EE /* Gesture Recognizers */ = {
+			isa = PBXGroup;
+			children = (
+				FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */,
+			);
+			path = "Gesture Recognizers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

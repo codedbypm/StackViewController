@@ -242,6 +242,10 @@ private extension StackViewControllerInteractor {
     }
 
     private func notifyControllerAboutStackChanges(_ difference: Stack.Difference) {
+
+private extension StackViewControllerInteractor {
+
+    func notifyControllerAboutStackChanges(_ difference: Stack.Difference) {
         let removedViewControllers = difference.removals.map { $0._element }
         notifyControllerOfRemovals(removedViewControllers)
 
@@ -249,7 +253,7 @@ private extension StackViewControllerInteractor {
         notifyControllerOfInsertions(insertedViewControllers)
     }
 
-    private func notifyControllerOfInsertions(_ insertions: Stack) {
+    func notifyControllerOfInsertions(_ insertions: Stack) {
         insertions.dropLast().forEach {
             self.delegate?.prepareAddingChild($0)
             self.delegate?.finishAddingChild($0)
@@ -259,7 +263,7 @@ private extension StackViewControllerInteractor {
         }
     }
 
-    private func notifyControllerOfRemovals(_ removals: Stack) {
+    func notifyControllerOfRemovals(_ removals: Stack) {
         removals.dropLast().forEach {
             self.delegate?.prepareRemovingChild($0)
             self.delegate?.finishRemovingChild($0)
@@ -269,7 +273,7 @@ private extension StackViewControllerInteractor {
         }
     }
 
-    private func sendBeginTransitionViewEvents(using context: TransitionContext) {
+    func sendBeginTransitionViewEvents(using context: TransitionContext) {
         if let from = context.from {
             if context.transitionWasCancelled {
                 delegate?.prepareAppearance(of: from, animated: context.isAnimated)
@@ -287,7 +291,7 @@ private extension StackViewControllerInteractor {
         }
     }
 
-    private func sendEndTransitionViewEvents(using context: TransitionContext) {
+    func sendEndTransitionViewEvents(using context: TransitionContext) {
         if let from = context.from {
             if context.transitionWasCancelled {
                 delegate?.finishAppearance(of: from)
@@ -305,7 +309,7 @@ private extension StackViewControllerInteractor {
         }
     }
 
-    private func sendBeginTransitionViewContainmentEvents(using context: TransitionContext) {
+    func sendBeginTransitionViewContainmentEvents(using context: TransitionContext) {
         if let from = context.from, case .pop = context.operation {
             delegate?.prepareRemovingChild(from)
         }
@@ -314,7 +318,7 @@ private extension StackViewControllerInteractor {
         }
     }
 
-    private func sendEndTransitionViewContainmentEvents(using context: TransitionContext) {
+    func sendEndTransitionViewContainmentEvents(using context: TransitionContext) {
         if let from = context.from, case .pop = context.operation {
             delegate?.finishRemovingChild(from)
         }
@@ -323,6 +327,7 @@ private extension StackViewControllerInteractor {
             delegate?.finishAddingChild(to)
         }
     }
+}
 
     func performTransition(context: TransitionContext) {
         transitionHandler = TransitionHandler(delegate: self)

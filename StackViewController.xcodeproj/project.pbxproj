@@ -19,6 +19,7 @@
 		FD226059226B6359007E44CE /* StackCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD226058226B6359007E44CE /* StackCoordinator.swift */; };
 		FD22605B226B6363007E44CE /* UIKitCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD22605A226B6363007E44CE /* UIKitCoordinator.swift */; };
 		FD2614BF22E4EB9A00BAD2DD /* StackOperationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD2614BE22E4EB9A00BAD2DD /* StackOperationProvider.swift */; };
+		FD2614C122E4ECBD00BAD2DD /* MockStackOperationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD2614C022E4ECBD00BAD2DD /* MockStackOperationProvider.swift */; };
 		FD44FF362286515000DA2AEB /* StackViewControllerInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */; };
 		FD44FF3B22889FA200DA2AEB /* StackHandler+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */; };
 		FD44FF3D2288CFA900DA2AEB /* MockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */; };
@@ -112,6 +113,7 @@
 		FD226058226B6359007E44CE /* StackCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackCoordinator.swift; sourceTree = "<group>"; };
 		FD22605A226B6363007E44CE /* UIKitCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitCoordinator.swift; sourceTree = "<group>"; };
 		FD2614BE22E4EB9A00BAD2DD /* StackOperationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackOperationProvider.swift; sourceTree = "<group>"; };
+		FD2614C022E4ECBD00BAD2DD /* MockStackOperationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackOperationProvider.swift; sourceTree = "<group>"; };
 		FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerInteractor.swift; sourceTree = "<group>"; };
 		FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackHandler+Extensions.swift"; sourceTree = "<group>"; };
 		FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockViewController.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 				FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */,
 				FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */,
 				FDF0BC7E22C9572C000EAAD5 /* MockInteractiveTransitioning.swift */,
+				FD2614C022E4ECBD00BAD2DD /* MockStackOperationProvider.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -595,6 +598,7 @@
 				FDF0BC7B22C936F4000EAAD5 /* MockAnimatedTransitioning.swift in Sources */,
 				FDF0BC7922C92850000EAAD5 /* MockTransitionHandlerDelegate.swift in Sources */,
 				FDAD73D422AEB8E500FB68BB /* MockStackViewControllerInteractorDelegate.swift in Sources */,
+				FD2614C122E4ECBD00BAD2DD /* MockStackOperationProvider.swift in Sources */,
 				FD0E192E22C78E29004C78DC /* StackHandlerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

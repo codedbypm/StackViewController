@@ -182,7 +182,45 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         performTransition(context: transitionContext)
     }
 
-    // MARK: - TransitionHandlerDelegate
+    func performTransition(context: TransitionContext) {
+        transitionHandler = TransitionHandler(delegate: self)
+        let animationController = self.animationController(context: context)
+
+        if context.isInteractive {
+            let interactionController = self.interactionController(
+                animationController: animationController
+            )
+            transitionHandler?.performInteractiveTransition(
+                context: context,
+                animationController: animationController,
+                interactionController: interactionController
+            )
+        } else {
+            transitionHandler?.performTransition(
+                context: context,
+                animationController: animationController
+            )
+        }
+    }
+
+    // MARK: - Actions
+
+    func handleScreenEdgePanGestureRecognizerStateChange(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+        switch gestureRecognizer.state {
+        case .began:
+            screenEdgePanGestureRecognizer = gestureRecognizer
+            delegate?.startInteractivePopTransition()
+        case .changed, .ended, .cancelled, .failed, .possible:
+            break
+        @unknown default:
+            assertionFailure()
+        }
+    }
+}
+
+// MARK: - TransitionHandlerDelegate
+
+extension StackViewControllerInteractor {
 
     func willStartTransition(_ context: TransitionContext) {
         sendBeginTransitionViewContainmentEvents(using: context)
@@ -203,52 +241,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         //        debugTransitionEnded()
         transitionHandler = nil
     }
-
-    // MARK: - Actions
-
-    func handleScreenEdgePanGestureRecognizerStateChange(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
-        switch gestureRecognizer.state {
-        case .began:
-            screenEdgePanGestureRecognizer = gestureRecognizer
-            delegate?.startInteractivePopTransition()
-        case .changed, .ended, .cancelled, .failed, .possible:
-            break
-        @unknown default:
-            assertionFailure()
-        }
-    }
-
-    func stackOperation(whenReplacing oldStack: Stack,
-                        with newStack: Stack) -> StackViewController.Operation {
-        let from = topViewController
-        let to = newStack.last
-
-        guard from !== to else { return .none }
-
-        if let to = to {
-            if oldStack.contains(to) { return .pop }
-            else { return .push }
-        } else {
-            if from != nil { return .pop }
-            else { return .none }
-        }
-    }
 }
-
-private extension StackViewControllerInteractor {
-    
-    private func transitionUndo(for difference: Stack.Difference) -> (() -> Void)? {
-        return nil
-        //        return { [weak self] in
-        //            guard let self = self else { return }
-        //            guard let invertedDifference = difference.inverted else { return }
-        //            guard let oldStack = self.stack.applying(invertedDifference) else { return }
-        //
-        //            _ = self.stackHandler.replaceStack(with: oldStack)
-        //        }
-    }
-
-    private func notifyControllerAboutStackChanges(_ difference: Stack.Difference) {
 
 private extension StackViewControllerInteractor {
 
@@ -336,26 +329,7 @@ private extension StackViewControllerInteractor {
     }
 }
 
-    func performTransition(context: TransitionContext) {
-        transitionHandler = TransitionHandler(delegate: self)
-        let animationController = self.animationController(context: context)
-
-        if context.isInteractive {
-            let interactionController = self.interactionController(
-                animationController: animationController
-            )
-            transitionHandler?.performInteractiveTransition(
-                context: context,
-                animationController: animationController,
-                interactionController: interactionController
-            )
-        } else {
-            transitionHandler?.performTransition(
-                context: context,
-                animationController: animationController
-            )
-        }
-    }
+private extension StackViewControllerInteractor {
 
     func defaultAnimationController(
         for operation: StackViewController.Operation

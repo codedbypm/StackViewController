@@ -211,7 +211,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         }
     }
 
-    func stackOperation(whenReplacing oldStack: Stack, with newStack: Stack) -> StackViewController.Operation {
+    func stackOperation(whenReplacing oldStack: Stack,
+                        with newStack: Stack) -> StackViewController.Operation {
         let from = topViewController
         let to = newStack.last
 

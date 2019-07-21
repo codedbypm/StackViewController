@@ -46,10 +46,14 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
     private var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
 
+    private let stackOperationProvider: StackOperationProviding
+
     // MARK: - Init
 
-    init(stackHandler: StackHandling) {
+    init(stackHandler: StackHandling,
+         stackOperationProvider: StackOperationProviding = StackOperationProvider.shared) {
         self.stackHandler = stackHandler
+        self.stackOperationProvider = stackOperationProvider
     }
 
     // MARK: - Internal methods
@@ -159,7 +163,10 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         ) {
         guard stackHandler.canSetStack(newStack) else { return }
 
-        let operation = stackOperation(whenReplacing: stack, with: newStack)
+        let operation = stackOperationProvider.stackOperation(
+            whenReplacing: stack,
+            with: newStack
+        )
 
         let transitionContext = TransitionContext(
             operation: operation,

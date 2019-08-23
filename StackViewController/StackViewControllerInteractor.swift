@@ -246,11 +246,19 @@ extension StackViewControllerInteractor {
 private extension StackViewControllerInteractor {
 
     func notifyControllerAboutStackChanges(_ difference: Stack.Difference) {
-        let removedViewControllers = difference.removals.map { $0._element }
-        notifyControllerOfRemovals(removedViewControllers)
+        let removed = difference.removals.compactMap { change -> UIViewController? in
+            if case let .insert(_, element, _) = change { return element }
+            else { return nil }
+        }
+        notifyControllerOfRemovals(removed)
 
-        let insertedViewControllers = difference.insertions.map { $0._element }
-        notifyControllerOfInsertions(insertedViewControllers)
+        let inserted = difference
+            .insertions
+            .compactMap { change -> UIViewController? in
+                if case let .insert(_, element, _) = change { return element }
+                else { return nil }
+            }
+            notifyControllerOfInsertions(inserted)
     }
 
     func notifyControllerOfInsertions(_ insertions: Stack) {

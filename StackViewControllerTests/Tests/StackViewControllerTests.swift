@@ -28,7 +28,6 @@ class StackViewControllerTests: XCTestCase {
     //    StackVC with stack = [Yellow]
     //
     //    Yellow   =>  willMove(toParent:)
-    
     func testThat_whenInitWithARootViewController_itSendsOnlyRootViewControllerWillMoveToParent() {
         // Arrange
         let yellow = MockViewController()

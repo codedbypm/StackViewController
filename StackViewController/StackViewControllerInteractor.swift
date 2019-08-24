@@ -23,7 +23,7 @@ protocol StackViewControllerInteractorDelegate: UIViewController, StackViewContr
     func startInteractivePopTransition()
 }
 
-class StackViewControllerInteractor: TransitionHandlerDelegate  {
+class StackViewControllerInteractor {
 
     // MARK: - Internal properties
 
@@ -220,7 +220,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
 // MARK: - TransitionHandlerDelegate
 
-extension StackViewControllerInteractor {
+extension StackViewControllerInteractor: TransitionHandlerDelegate {
 
     func willStartTransition(_ context: TransitionContext) {
         sendBeginTransitionViewContainmentEvents(using: context)

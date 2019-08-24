@@ -491,8 +491,8 @@
 			projectRoot = "";
 			targets = (
 				FD67E574225250E10051786B /* StackViewController */,
-				FD67E5AF225257DA0051786B /* TestApp */,
 				FD76B6FF2270C9530090EDB2 /* StackViewControllerTests */,
+				FD67E5AF225257DA0051786B /* TestApp */,
 			);
 		};
 /* End PBXProject section */

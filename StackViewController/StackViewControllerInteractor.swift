@@ -138,6 +138,7 @@ class StackViewControllerInteractor {
     ) -> [UIViewController]? {
         guard stackHandler.canPop(to: viewController) else { return nil }
 
+        // prepare transition context
         let transitionContext = TransitionContext(
             operation: .pop,
             from: stack.last,
@@ -168,6 +169,7 @@ class StackViewControllerInteractor {
             with: newStack
         )
 
+        // prepare transition context
         let transitionContext = TransitionContext(
             operation: operation,
             from: stack.last,

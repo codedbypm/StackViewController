@@ -54,7 +54,6 @@
 		FD76B78F2279E0950090EDB2 /* ConsoleDebuggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */; };
 		FD76B791227A5B7A0090EDB2 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */; };
 		FD83870522A19C750017E8F8 /* StackHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD83870422A19C750017E8F8 /* StackHandling.swift */; };
-		FD8A54B1231011C2009C749F /* CollectionDifference+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52598D22855CFC0072C6B8 /* CollectionDifference+Extensions.swift */; };
 		FDAD73C822AD4A0400FB68BB /* MockStackHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73C722AD4A0400FB68BB /* MockStackHandler.swift */; };
 		FDAD73CB22AD4B4500FB68BB /* CollectionDifference+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73CA22AD4B4500FB68BB /* CollectionDifference+Extensions.swift */; };
 		FDAD73D022AD5E3900FB68BB /* TransitionHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73CF22AD5E3900FB68BB /* TransitionHandling.swift */; };
@@ -102,9 +101,6 @@
 		FD00021E2260CC9100A87FFB /* InteractivePopAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractivePopAnimator.swift; sourceTree = "<group>"; };
 		FD1B56F8227C525B00E005EC /* StackHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackHandlerTests.swift; sourceTree = "<group>"; };
 		FD1B56FA227C870600E005EC /* ViewControllerWrapperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerWrapperView.swift; sourceTree = "<group>"; };
-		FD1B56FD227CBD3C00E005EC /* CollectionDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDifference.swift; sourceTree = "<group>"; };
-		FD1B56FF227CBD4C00E005EC /* Diffing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diffing.swift; sourceTree = "<group>"; };
-		FD1B5702227CBEF900E005EC /* Collection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Extensions.swift"; sourceTree = "<group>"; };
 		FD1B570A227D68CB00E005EC /* StackHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackHandler.swift; sourceTree = "<group>"; };
 		FD1B570C227DB9AF00E005EC /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
 		FD226058226B6359007E44CE /* StackCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackCoordinator.swift; sourceTree = "<group>"; };
@@ -122,7 +118,6 @@
 		FD5259832280F25A0072C6B8 /* TransitionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionHandler.swift; sourceTree = "<group>"; };
 		FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEdgePanGestureRecognizer.swift; sourceTree = "<group>"; };
 		FD52598B2284E9070072C6B8 /* Stack+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stack+Extensions.swift"; sourceTree = "<group>"; };
-		FD52598D22855CFC0072C6B8 /* CollectionDifference+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionDifference+Extensions.swift"; sourceTree = "<group>"; };
 		FD67E575225250E10051786B /* StackViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StackViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD67E578225250E10051786B /* StackViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StackViewController.h; sourceTree = "<group>"; };
 		FD67E579225250E10051786B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -200,17 +195,6 @@
 				FD1B56FA227C870600E005EC /* ViewControllerWrapperView.swift */,
 			);
 			path = "Custom views";
-			sourceTree = "<group>";
-		};
-		FD1B5701227CBEB000E005EC /* Swift 5 diffing */ = {
-			isa = PBXGroup;
-			children = (
-				FD1B5702227CBEF900E005EC /* Collection+Extensions.swift */,
-				FD1B56FD227CBD3C00E005EC /* CollectionDifference.swift */,
-				FD52598D22855CFC0072C6B8 /* CollectionDifference+Extensions.swift */,
-				FD1B56FF227CBD4C00E005EC /* Diffing.swift */,
-			);
-			path = "Swift 5 diffing";
 			sourceTree = "<group>";
 		};
 		FD44FF3722888DE600DA2AEB /* Mocks */ = {
@@ -294,7 +278,6 @@
 				FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */,
 				FD67E578225250E10051786B /* StackViewController.h */,
 				FD67E579225250E10051786B /* Info.plist */,
-				FD1B5701227CBEB000E005EC /* Swift 5 diffing */,
 				FD83870122A199480017E8F8 /* Config */,
 			);
 			path = StackViewController;
@@ -545,7 +528,6 @@
 				FD1B570B227D68CB00E005EC /* StackHandler.swift in Sources */,
 				FD76B7772275F39C0090EDB2 /* StackViewController+Debug.swift in Sources */,
 				FD67E5F82254F2010051786B /* TransitionContext.swift in Sources */,
-				FD8A54B1231011C2009C749F /* CollectionDifference+Extensions.swift in Sources */,
 				FDAD73D022AD5E3900FB68BB /* TransitionHandling.swift in Sources */,
 				FD76B791227A5B7A0090EDB2 /* Array+Extensions.swift in Sources */,
 				FD67E5C3225258840051786B /* StackViewController.swift in Sources */,

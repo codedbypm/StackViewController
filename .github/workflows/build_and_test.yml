@@ -1,0 +1,13 @@
+name: Build and Test
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: XCode build
+      run: xcodebuild -configuration Debug -sdk iphoneos

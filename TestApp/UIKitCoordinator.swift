@@ -15,19 +15,15 @@ class UIKitCoordinator: NSObject {
     let canPrint = true
 
     lazy var navigationController: NavigationController = {
-        let navController = NavigationController()
-        navController.debugDelegate = self
-        let root = UIViewController.stacked(on: navController,
-                                            delegate: self,
+        let root = UIViewController.stacked(delegate: self,
                                             color: .yellow)
-        navController.viewControllers = [root]
+        let navController = NavigationController(rootViewController: root)
+        root.stack = navController
+
+        navController.debugDelegate = self
         navController.delegate = navController
         navController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
-//        navController.viewControllers = [
-//            UIViewController.stacked(on: navController, delegate: self, color: .yellow),
-//            UIViewController.stacked(on: navController, delegate: self, color: .black),
-//            UIViewController.stacked(on: navController, delegate: self, color: .green),
-//        ]
+
         return navController
     }()
 

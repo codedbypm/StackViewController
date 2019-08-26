@@ -23,9 +23,8 @@ class NavigationController: UINavigationController, ConsoleDebuggable {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
 
-    convenience override init(rootViewController: UIViewController) {
-        self.init(nibName: nil, bundle: nil)
-        viewControllers = [rootViewController]
+    override init(rootViewController: UIViewController) {
+        super.init(rootViewController: rootViewController)
         debugFunc(#function, allowed: true)
     }
 

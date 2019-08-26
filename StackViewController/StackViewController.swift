@@ -54,21 +54,28 @@ public final class StackViewController: UIViewController {
     // MARK: - Init
 
     public convenience init(rootViewController: UIViewController) {
-        let stackHandler = StackHandler()
-        let interactor = StackViewControllerInteractor(
+        self.init(viewControllers: [rootViewController])
+    }
+
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        let stackHandler = StackHandler(stack: [])
+        self.interactor = StackViewControllerInteractor(
             stackHandler: stackHandler
         )
-        self.init(interactor: interactor)
 
-        interactor.delegate = self
-        viewControllers = [rootViewController]
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+
+        self.interactor.delegate = self
+        self.viewControllers = []
     }
 
     public required init?(coder aDecoder: NSCoder) {
         let stackHandler = StackHandler()
-        interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        self.interactor = StackViewControllerInteractor(stackHandler: stackHandler)
         super.init(coder: aDecoder)
     }
+
+    // MARK: - Internal Init
 
     convenience init(viewControllers: [UIViewController]) {
         let stackHandler = StackHandler(stack:viewControllers)
@@ -77,7 +84,7 @@ public final class StackViewController: UIViewController {
         )
         self.init(interactor: interactor)
 
-        interactor.delegate = self
+        self.interactor.delegate = self
         self.viewControllers = viewControllers
     }
 
@@ -85,6 +92,7 @@ public final class StackViewController: UIViewController {
         self.interactor = interactor
         super.init(nibName: nil, bundle: nil)
     }
+
 
     // MARK: - UIViewController
 

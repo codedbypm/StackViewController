@@ -20,26 +20,32 @@ class MockStackViewController: StackViewController {
         ]
     }
 
+    var stackOperationDates: [Date?] {
+        return [pushViewControllerDate]
+    }
+
     var receivedEventDates: [Date] {
-        return viewCycleEventDates.compactMap { $0 }
+        return (viewCycleEventDates + stackOperationDates).compactMap { $0 }
     }
 
     var viewDidLoadDate: Date?
     override func viewDidLoad() {
-        super.viewDidLoad()
         viewDidLoadDate = Date()
     }
 
     var viewWillAppearDate: Date?
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         viewWillAppearDate = Date()
     }
 
     var viewDidAppearDate: Date?
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         viewDidAppearDate = Date()
+    }
+
+    var pushViewControllerDate: Date?
+    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        pushViewControllerDate = Date()
     }
 }
 

@@ -25,10 +25,11 @@ class StackViewControllerTests: XCTestCase {
 
     // MARK: - init()
 
-    //      StackVC with stack = []
-    //      SVC   =>  no events
+    // when: stack = []
     //
-    func testThat_init_itReceivesNoEvents() {
+    // then: no events
+    //
+    func testThat_init_itReceivesAndSendsProperEvents() {
         // Arrange
 
         // Act
@@ -48,21 +49,26 @@ class StackViewControllerTests: XCTestCase {
 
     // MARK: - init(rootViewController:)
 
-    //    StackVC with stack = [Yellow]
+    // when: stack = [yellow]
     //
-    //    Yellow   =>  willMove(toParent:)
-    func testThat_whenInitWithARootViewController_itSendsOnlyRootViewControllerWillMoveToParent() {
+    // then: receives => [pushViewController, viewDidLoad]
+    //       sends    => [willMoveToParent]
+    //
+    func testThat_whenInitWithARootViewController_itReceivesAndSendsProperEvents() {
         // Arrange
         let yellow = MockViewController()
 
         // Act
-        sut = StackViewController(rootViewController: yellow)
+        sut = MockStackViewController(rootViewController: yellow)
 
         // Assert
-        XCTAssertEqual(
-            yellow.receivedEventDates,
-            [yellow.willMoveToParentDate]
-        )
+        guard let sut = sut as? MockStackViewController else {
+            XCTFail("Expected sut of type MockStackViewController")
+            return
+        }
+
+        XCTAssertEqual(sut.receivedEventDates, [sut.pushViewControllerDate, sut.viewDidLoadDate])
+        XCTAssertEqual(yellow.receivedEventDates, [yellow.willMoveToParentDate])
     }
 
     //    StackVC  =>  viewDidLoad()

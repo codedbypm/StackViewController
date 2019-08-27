@@ -23,6 +23,29 @@ class StackViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - init()
+
+    //      StackVC with stack = []
+    //      SVC   =>  no events
+    //
+    func testThat_init_itReceivesNoEvents() {
+        // Arrange
+
+        // Act
+        sut = MockStackViewController()
+
+        // Assert
+        guard let sut = sut as? MockStackViewController else {
+            XCTFail("Expected sut of type MockStackViewController")
+            return
+        }
+
+        XCTAssertEqual(
+            sut.receivedEventDates,
+            []
+        )
+    }
+
     // MARK: - init(rootViewController:)
 
     //    StackVC with stack = [Yellow]

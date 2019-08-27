@@ -10,11 +10,10 @@ import UIKit
 import StackViewController
 
 extension UIViewController {
-    
-    static func stacked(delegate: DebugDelegate,
-                        color: Color = .random) -> BaseViewController {
 
-        let controller = BaseViewController(debugDelegate: delegate, color: color)
+    static func colored(_ color: Color = .random) -> BaseViewController {
+
+        let controller = BaseViewController(color: color)
         controller.navigationItem.title = color.rawValue
 
         controller.onPopAnimated = {
@@ -26,12 +25,12 @@ extension UIViewController {
         }
 
         controller.onPushAnimated = {
-            let next = self.stacked(delegate: delegate)
+            let next = colored()
             controller.stack?.pushViewController(next, animated: true)
         }
 
         controller.onPushNonAnimated = {
-            let next = self.stacked(delegate: delegate)
+            let next = colored()
             controller.stack?.pushViewController(next, animated: false)
         }
 
@@ -56,7 +55,7 @@ extension UIViewController {
 
         controller.onSwapIntermediateControllers = {
             while controller.stack!.viewControllers.count < 4 {
-                let insert = self.stacked(delegate: delegate)
+                let insert = colored()
                 controller.stack?.pushViewController(insert, animated: false)
             }
 
@@ -87,7 +86,7 @@ extension UIViewController {
         }
 
         controller.onInsertAtIndexZero = {
-            let insert = self.stacked(delegate: delegate)
+            let insert = colored()
             var modifiedStack = controller.stack?.viewControllers
             modifiedStack?.insert(insert, at: 0)
 

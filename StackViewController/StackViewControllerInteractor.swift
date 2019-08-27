@@ -161,7 +161,7 @@ class StackViewControllerInteractor {
     func setStack(
         _ newStack: [UIViewController],
         animated: Bool
-        ) {
+    ) {
         guard stackHandler.canSetStack(newStack) else { return }
 
         let operation = stackOperationProvider.stackOperation(
@@ -181,6 +181,8 @@ class StackViewControllerInteractor {
 
         stackHandler.setStack(newStack)
 
+        guard delegate?.isInViewHierarchy == true else { return }
+        
         performTransition(context: transitionContext)
     }
 
@@ -249,18 +251,16 @@ private extension StackViewControllerInteractor {
 
     func notifyControllerAboutStackChanges(_ difference: Stack.Difference) {
         let removed = difference.removals.compactMap { change -> UIViewController? in
-            if case let .insert(_, element, _) = change { return element }
+            if case let .remove(_, element, _) = change { return element }
             else { return nil }
         }
         notifyControllerOfRemovals(removed)
 
-        let inserted = difference
-            .insertions
-            .compactMap { change -> UIViewController? in
-                if case let .insert(_, element, _) = change { return element }
-                else { return nil }
-            }
-            notifyControllerOfInsertions(inserted)
+        let inserts = difference.insertions.compactMap { change -> UIViewController? in
+            if case let .insert(_, element, _) = change { return element }
+            else { return nil }
+        }
+        notifyControllerOfInsertions(inserts)
     }
 
     func notifyControllerOfInsertions(_ insertions: Stack) {
@@ -356,7 +356,7 @@ private extension StackViewControllerInteractor {
     ) -> UIViewControllerAnimatedTransitioning {
         if let controller = userProvidedAnimationController(
             context: context
-        ) {
+            ) {
             return controller
         } else {
             return defaultAnimationController(for: context.operation)
@@ -373,7 +373,7 @@ private extension StackViewControllerInteractor {
             for: context.operation,
             from: from,
             to: to
-        ) else { return nil }
+            ) else { return nil }
 
         return controller
     }

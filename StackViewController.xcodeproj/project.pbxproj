@@ -16,6 +16,8 @@
 		FD22605B226B6363007E44CE /* UIKitCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD22605A226B6363007E44CE /* UIKitCoordinator.swift */; };
 		FD2614BF22E4EB9A00BAD2DD /* StackOperationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD2614BE22E4EB9A00BAD2DD /* StackOperationProvider.swift */; };
 		FD2614C122E4ECBD00BAD2DD /* MockStackOperationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD2614C022E4ECBD00BAD2DD /* MockStackOperationProvider.swift */; };
+		FD44573A2315955200DCC278 /* Tracing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4457382315955200DCC278 /* Tracing.swift */; };
+		FD44573B2315955200DCC278 /* Trace.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4457392315955200DCC278 /* Trace.swift */; };
 		FD44FF362286515000DA2AEB /* StackViewControllerInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */; };
 		FD44FF3B22889FA200DA2AEB /* StackHandler+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */; };
 		FD44FF3D2288CFA900DA2AEB /* MockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */; };
@@ -51,7 +53,6 @@
 		FD76B7812276449F0090EDB2 /* PopAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7802276449F0090EDB2 /* PopAnimator.swift */; };
 		FD76B7882278E8D20090EDB2 /* UIViewController+Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7872278E8D20090EDB2 /* UIViewController+Extenstions.swift */; };
 		FD76B78A227917320090EDB2 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B789227917320090EDB2 /* NavigationController.swift */; };
-		FD76B78F2279E0950090EDB2 /* ConsoleDebuggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */; };
 		FD76B791227A5B7A0090EDB2 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */; };
 		FD83870522A19C750017E8F8 /* StackHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD83870422A19C750017E8F8 /* StackHandling.swift */; };
 		FDAD73C822AD4A0400FB68BB /* MockStackHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73C722AD4A0400FB68BB /* MockStackHandler.swift */; };
@@ -107,6 +108,8 @@
 		FD22605A226B6363007E44CE /* UIKitCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitCoordinator.swift; sourceTree = "<group>"; };
 		FD2614BE22E4EB9A00BAD2DD /* StackOperationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackOperationProvider.swift; sourceTree = "<group>"; };
 		FD2614C022E4ECBD00BAD2DD /* MockStackOperationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackOperationProvider.swift; sourceTree = "<group>"; };
+		FD4457382315955200DCC278 /* Tracing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracing.swift; sourceTree = "<group>"; };
+		FD4457392315955200DCC278 /* Trace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trace.swift; sourceTree = "<group>"; };
 		FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerInteractor.swift; sourceTree = "<group>"; };
 		FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackHandler+Extensions.swift"; sourceTree = "<group>"; };
 		FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockViewController.swift; sourceTree = "<group>"; };
@@ -145,8 +148,8 @@
 		FD76B7802276449F0090EDB2 /* PopAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopAnimator.swift; sourceTree = "<group>"; };
 		FD76B7872278E8D20090EDB2 /* UIViewController+Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extenstions.swift"; sourceTree = "<group>"; };
 		FD76B789227917320090EDB2 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
-		FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleDebuggable.swift; sourceTree = "<group>"; };
 		FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
+		FD7BF4552314456E00D7BAE5 /* Traces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Traces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD8386FF22A196640017E8F8 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		FD83870022A199310017E8F8 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		FD83870422A19C750017E8F8 /* StackHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackHandling.swift; sourceTree = "<group>"; };
@@ -249,6 +252,7 @@
 				FD67E5B1225257DA0051786B /* TestApp */,
 				FD76B7012270C9530090EDB2 /* StackViewControllerTests */,
 				FD67E576225250E10051786B /* Products */,
+				FD7BF4542314456E00D7BAE5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -265,6 +269,7 @@
 		FD67E577225250E10051786B /* StackViewController */ = {
 			isa = PBXGroup;
 			children = (
+				FDD9DFE123143953004B0E19 /* Logging */,
 				FD76B782227648A50090EDB2 /* Animators */,
 				FD1B56FC227C876700E005EC /* Custom views */,
 				FD67E5F12252AF0F0051786B /* Extensions */,
@@ -286,7 +291,6 @@
 		FD67E5B1225257DA0051786B /* TestApp */ = {
 			isa = PBXGroup;
 			children = (
-				FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */,
 				FD67E5F42252EC770051786B /* RootCoordinator.swift */,
 				FD226058226B6359007E44CE /* StackCoordinator.swift */,
 				FD22605A226B6363007E44CE /* UIKitCoordinator.swift */,
@@ -332,6 +336,14 @@
 			path = Animators;
 			sourceTree = "<group>";
 		};
+		FD7BF4542314456E00D7BAE5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FD7BF4552314456E00D7BAE5 /* Traces.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		FD83870122A199480017E8F8 /* Config */ = {
 			isa = PBXGroup;
 			children = (
@@ -367,6 +379,15 @@
 				FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */,
 			);
 			path = "Gesture Recognizers";
+			sourceTree = "<group>";
+		};
+		FDD9DFE123143953004B0E19 /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				FD4457382315955200DCC278 /* Tracing.swift */,
+				FD4457392315955200DCC278 /* Trace.swift */,
+			);
+			path = Logging;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -510,13 +531,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD44573A2315955200DCC278 /* Tracing.swift in Sources */,
 				FD76B7882278E8D20090EDB2 /* UIViewController+Extenstions.swift in Sources */,
 				FD5259862281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift in Sources */,
 				FD00021F2260CC9100A87FFB /* InteractivePopAnimator.swift in Sources */,
+				FD44573B2315955200DCC278 /* Trace.swift in Sources */,
 				FD1B56FB227C870600E005EC /* ViewControllerWrapperView.swift in Sources */,
 				FD1B570D227DB9AF00E005EC /* Transition.swift in Sources */,
 				FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */,
-				FD76B78F2279E0950090EDB2 /* ConsoleDebuggable.swift in Sources */,
 				FD44FF44228B06DD00DA2AEB /* TransitionHandler.swift in Sources */,
 				FD83870522A19C750017E8F8 /* StackHandling.swift in Sources */,
 				FD67E5C8225260C40051786B /* Animator.swift in Sources */,

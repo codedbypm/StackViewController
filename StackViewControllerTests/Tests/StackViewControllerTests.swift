@@ -36,10 +36,10 @@ class StackViewControllerTests: XCTestCase {
         sut = StackViewController(rootViewController: yellow)
 
         // Assert
-        // TODO: re-enable this 
-//        XCTAssertEqual(
-//            yellow.receivedEventDates,
-//            [yellow.willMoveToParentDate])
+        XCTAssertEqual(
+            yellow.receivedEventDates,
+            [yellow.willMoveToParentDate]
+        )
     }
 
     //    StackVC  =>  viewDidLoad()

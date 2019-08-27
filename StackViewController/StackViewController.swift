@@ -17,8 +17,6 @@ public final class StackViewController: UIViewController {
     }
 
     // MARK: - Public properties
-    
-    public var debugDelegate: DebugDelegate?
 
     public weak var delegate: StackViewControllerDelegate?
 
@@ -34,6 +32,8 @@ public final class StackViewController: UIViewController {
     public override var shouldAutomaticallyForwardAppearanceMethods: Bool {
         return false
     }
+
+    public override var description: String { return "SVC" }
 
     // MARK: - Internal properties
 
@@ -70,7 +70,7 @@ public final class StackViewController: UIViewController {
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        let stackHandler = StackHandler()
+        let stackHandler = StackHandler(stack: [])
         self.interactor = StackViewControllerInteractor(stackHandler: stackHandler)
         super.init(coder: aDecoder)
     }
@@ -93,12 +93,11 @@ public final class StackViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
-
     // MARK: - UIViewController
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
 
         view.addGestureRecognizer(screenEdgePanGestureRecognizer)
         view.addSubview(viewControllerWrapperView)
@@ -110,26 +109,26 @@ public final class StackViewController: UIViewController {
     }
 
     override public func viewWillAppear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
         super.viewWillAppear(animated)
+        trace(.viewLifeCycle, self, #function)
         topViewController?.beginAppearanceTransition(true, animated: animated)
     }
 
     override public func viewDidAppear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
         super.viewDidAppear(animated)
+        trace(.viewLifeCycle, self, #function)
         topViewController?.endAppearanceTransition()
     }
 
     override public func viewWillDisappear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
         super.viewWillDisappear(animated)
+        trace(.viewLifeCycle, self, #function)
         topViewController?.beginAppearanceTransition(false, animated: animated)
     }
 
     override public func viewDidDisappear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
         super.viewDidDisappear(animated)
+        trace(.viewLifeCycle, self, #function)
         topViewController?.endAppearanceTransition()
     }
 
@@ -223,14 +222,10 @@ extension StackViewController {
     }
 }
 
-extension StackViewController: ConsoleDebuggable {
-    public override var description: String { return "SVC" }
-    var debugAppearance: Bool { return true }
-
-}
-
 extension StackViewController: StackViewControllerHandling {
     public func setViewControllers(_ stack: [UIViewController], animated: Bool) {
         setStack(stack, animated: animated)
     }
 }
+
+extension StackViewController: Tracing {}

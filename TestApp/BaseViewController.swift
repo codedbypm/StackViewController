@@ -43,9 +43,8 @@ enum Color: String, CaseIterable {
     }
 }
 
-class BaseViewController: UIViewController, ConsoleDebuggable {
+final class BaseViewController: UIViewController, Tracing {
 
-    weak var debugDelegate: DebugDelegate?
     weak var stack: StackViewControllerHandling?
     
     let debugAppearance = true
@@ -133,8 +132,7 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
 
     private let color: Color
     
-    required init(debugDelegate: DebugDelegate, color: Color) {
-        self.debugDelegate = debugDelegate
+    required init(color: Color) {
         self.color = color
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = color.rawValue
@@ -142,15 +140,6 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    func debugFunc(_ functionName: String, allowed: Bool, appending string: String? = nil) {
-        if allowed {
-            debugDelegate?.debug(String(describing: self)
-                .appending(debugArrow)
-                .appending(functionName)
-                .appending(string ?? ""))
-        }
     }
 
     override func viewDidLoad() {
@@ -162,62 +151,65 @@ class BaseViewController: UIViewController, ConsoleDebuggable {
     }
 
     override func beginAppearanceTransition(_ isAppearing: Bool, animated: Bool) {
-        debugFunc(#function, allowed: false, appending: " isAppearing: \(isAppearing)")
+        trace(.viewControllerContainment, self, #function, isAppearing ? "isAppearing" : "isDisappearing")
         super.beginAppearanceTransition(isAppearing, animated: animated)
     }
 
     override func endAppearanceTransition() {
-        debugFunc(#function, allowed: false)
+        trace(.viewControllerContainment, self, #function)
         super.endAppearanceTransition()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
         super.viewWillAppear(animated)
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
         super.viewDidAppear(animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
         super.viewWillDisappear(animated)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
         super.viewDidDisappear(animated)
     }
 
     override func willMove(toParent parent: UIViewController?) {
         super.willMove(toParent: parent)
-        debugFunc(#function, allowed: debugViewControllerContainment, appending: " \(parent == nil ? "nil" : "")")
+        trace(.viewControllerContainment, self, #function, parent == nil ? "removed" : "added")
     }
 
     override func didMove(toParent parent: UIViewController?) {
         super.didMove(toParent: parent)
-        debugFunc(#function, allowed: debugViewControllerContainment, appending: " \(parent == nil ? "nil" : "")")
+        trace(.viewControllerContainment, self, #function, parent == nil ? "removed" : "added")
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
-        debugFunc(#function, allowed: debugTraitCollection)
+        trace(.traitCollection, self, #function)
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        debugFunc(#function, allowed: debugTraitCollection)
+        trace(.traitCollection, self, #function)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        debugFunc(#function, allowed: debugTraitCollection)
+        trace(.traitCollection, self, #function)
     }
 
     override var description: String {
-        return "\(navigationItem.title?.capitalized ?? "")"
+        let controllerName = navigationItem.title?.capitalized ?? ""
+        let stackName = stack?.description ?? ""
+        
+        return "\(stackName) \(controllerName)"
     }
 
     @objc func didTap(button: UIButton) {

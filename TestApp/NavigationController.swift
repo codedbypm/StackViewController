@@ -9,42 +9,19 @@
 import UIKit
 import StackViewController
 
-class NavigationController: UINavigationController, ConsoleDebuggable {
+class NavigationController: UINavigationController, Tracing {
 
-    var debugDelegate: DebugDelegate?
-    let debugAppearance = true
-
-
-    init() {
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-
-    override init(rootViewController: UIViewController) {
-        super.init(rootViewController: rootViewController)
-        debugFunc(#function, allowed: true)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        debugFunc(#function, allowed: true)
+        trace(.viewLifeCycle, self, #function)
         interactivePopGestureRecognizer?.delegate = self
     }
 
-    override var description: String {
-        return "UINC"
-    }
+    override var description: String { return "UINC" }
 
     override func addChild(_ childController: UIViewController) {
         super.addChild(childController)
-        debugFunc(#function, allowed: true)
+        trace(.viewControllerContainment, self, #function)
     }
 
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
@@ -57,22 +34,22 @@ class NavigationController: UINavigationController, ConsoleDebuggable {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
         super.viewWillAppear(animated)
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
         super.viewDidAppear(animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
         super.viewWillDisappear(animated)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
         super.viewDidDisappear(animated)
     }
 }
@@ -83,7 +60,6 @@ extension NavigationController: UIGestureRecognizerDelegate {
         return false
     }
 }
-
 
 extension NavigationController: UINavigationControllerDelegate {
 

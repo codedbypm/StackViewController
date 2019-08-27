@@ -24,9 +24,8 @@ class RootCoordinator: NSObject {
         super.init()
 
         tabBarController.viewControllers = [
-            stackViewController,
-            navigationController,
-//            stackViewController
+            stackViewController, navigationController
+//            navigationController, stackViewController
         ]
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()

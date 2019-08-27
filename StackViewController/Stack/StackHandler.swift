@@ -39,9 +39,6 @@ class StackHandler: StackHandling {
 
     // MARK: - Init
 
-    init() {
-    }
-
     init(stack: Stack) {
         //TODO: handle this guard in a better way
         guard !stack.hasDuplicates else { return }

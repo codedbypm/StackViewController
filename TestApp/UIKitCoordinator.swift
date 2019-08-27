@@ -12,32 +12,17 @@ extension UINavigationController: StackViewControllerHandling {}
 
 class UIKitCoordinator: NSObject {
 
-    let canPrint = true
-
     lazy var navigationController: NavigationController = {
-        let root = UIViewController.stacked(delegate: self,
-                                            color: .yellow)
+        let root = UIViewController.colored(.yellow)
         let navController = NavigationController(rootViewController: root)
         root.stack = navController
 
-        navController.debugDelegate = self
         navController.delegate = navController
-        navController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
-
+        navController.tabBarItem = UITabBarItem(title: String(describing: navController),
+                                                image: nil,
+                                                tag: 1)
         return navController
     }()
 
     var interactionController: InteractivePopAnimator?
-}
-
-extension UIKitCoordinator: DebugDelegate {
-
-    var debugPrefix: String {
-        return "[UIKit] "
-    }
-
-    func debug(_ text: String) {
-        guard canPrint else { return }
-        print(debugPrefix + text)
-    }
 }

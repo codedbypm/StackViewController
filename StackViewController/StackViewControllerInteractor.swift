@@ -50,7 +50,7 @@ class StackViewControllerInteractor {
 
     // MARK: - Init
 
-    init(stackHandler: StackHandling,
+    init(stackHandler: StackHandling = StackHandler.shared,
          stackOperationProvider: StackOperationProviding = StackOperationProvider.shared) {
         self.stackHandler = stackHandler
         self.stackOperationProvider = stackOperationProvider

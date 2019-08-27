@@ -35,6 +35,8 @@ class StackHandler: StackHandling {
 
     // MARK: - Internal properties
 
+    static let shared = StackHandler(stack: [])
+    
     private(set) var stack = Stack()
 
     // MARK: - Init

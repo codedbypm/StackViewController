@@ -29,4 +29,10 @@ extension OSLog {
         subsystem: subsystem,
         category: "traitCollectionCategory"
     )
+
+    /// Logs stack operation related events
+    public static let stackOperation = OSLog(
+        subsystem: subsystem,
+        category: "stackOperation"
+    )
 }

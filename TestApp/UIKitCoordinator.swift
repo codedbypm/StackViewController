@@ -14,7 +14,7 @@ class UIKitCoordinator: NSObject {
 
     lazy var navigationController: NavigationController = {
         let root = UIViewController.colored(.yellow)
-        let navController = NavigationController(rootViewController: root)
+        let navController = NavigationController()
         root.stack = navController
 
         navController.delegate = navController

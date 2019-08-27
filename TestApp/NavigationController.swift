@@ -11,24 +11,37 @@ import StackViewController
 
 class NavigationController: UINavigationController, Tracing {
 
+    override var viewControllers: [UIViewController] {
+        get {
+            trace(.stackOperation, self, #function)
+            return super.viewControllers
+        }
+        set {
+            trace(.stackOperation, self, #function)
+            super.viewControllers = newValue
+        }
+    }
+
     override func viewDidLoad() {
-        super.viewDidLoad()
         trace(.viewLifeCycle, self, #function)
+        super.viewDidLoad()
         interactivePopGestureRecognizer?.delegate = self
     }
 
     override var description: String { return "UINC" }
 
     override func addChild(_ childController: UIViewController) {
-        super.addChild(childController)
         trace(.viewControllerContainment, self, #function)
+        super.addChild(childController)
     }
 
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        super.pushViewController(viewController, animated: animated)        
+        trace(.stackOperation, self, #function)
+        super.pushViewController(viewController, animated: animated)
     }
 
     override func popViewController(animated: Bool) -> UIViewController? {
+        trace(.stackOperation, self, #function)
         let returned = super.popViewController(animated: animated)
         return returned
     }
@@ -52,6 +65,13 @@ class NavigationController: UINavigationController, Tracing {
         trace(.viewLifeCycle, self, #function)
         super.viewDidDisappear(animated)
     }
+
+    override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
+        trace(.stackOperation, self, #function)
+        super.setViewControllers(viewControllers, animated: animated)
+    }
+
+
 }
 
 extension NavigationController: UIGestureRecognizerDelegate {

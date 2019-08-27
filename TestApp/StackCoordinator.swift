@@ -12,8 +12,8 @@ import StackViewController
 class StackCoordinator {
 
     lazy var stackViewController: StackViewController = {
-        var root: BaseViewController = UIViewController.colored(.yellow)
-        let stackViewController = StackViewController(rootViewController: root)
+        var root: BaseViewController = UIViewController.colored(.black)
+        let stackViewController = StackViewController()
         root.stack = stackViewController
 
         let tabBarTitle = String(describing: stackViewController)

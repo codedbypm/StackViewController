@@ -8,7 +8,7 @@
 
 import UIKit
 
-public final class StackViewController: UIViewController {
+public class StackViewController: UIViewController {
 
     public enum Operation {
         case push
@@ -21,8 +21,14 @@ public final class StackViewController: UIViewController {
     public weak var delegate: StackViewControllerDelegate?
 
     public var viewControllers: [UIViewController] {
-        get { return interactor.stack }
-        set { interactor.setStack(newValue, animated: false) }
+        get {
+            trace(.stackOperation, self, #function)
+            return interactor.stack
+        }
+        set {
+            trace(.stackOperation, self, #function)
+            interactor.setStack(newValue, animated: false)
+        }
     }
 
     public var topViewController: UIViewController? {
@@ -53,20 +59,19 @@ public final class StackViewController: UIViewController {
 
     // MARK: - Init
 
-    public convenience init(rootViewController: UIViewController) {
-        self.init(viewControllers: [rootViewController])
+    public init(rootViewController: UIViewController) {
+        self.interactor = StackViewControllerInteractor()
+        super.init(nibName: nil, bundle: nil)
+
+        self.interactor.delegate = self
+        self.pushViewController(rootViewController, animated: false)
     }
 
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        let stackHandler = StackHandler(stack: [])
-        self.interactor = StackViewControllerInteractor(
-            stackHandler: stackHandler
-        )
-
+        self.interactor = StackViewControllerInteractor()
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
 
         self.interactor.delegate = self
-        self.viewControllers = []
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -135,25 +140,30 @@ public final class StackViewController: UIViewController {
     // MARK: - Public methods
 
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        trace(.stackOperation, self, #function)
         interactor.pushViewController(viewController, animated: animated)
     }
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
+        trace(.stackOperation, self, #function)
         return interactor.popViewController(animated: animated)
     }
 
     @discardableResult
     public func popToRootViewController(animated: Bool) -> Stack? {
+        trace(.stackOperation, self, #function)
         return interactor.popToRoot(animated: animated)
     }
 
     @discardableResult
     public func popToViewController(_ viewController: UIViewController, animated: Bool) -> Stack? {
+        trace(.stackOperation, self, #function)
         return interactor.pop(to: viewController, animated: animated)
     }
 
     public func setStack(_ stack: Stack, animated: Bool) {
+        trace(.stackOperation, self, #function)
         interactor.setStack(stack, animated: animated)
     }
 }

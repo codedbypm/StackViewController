@@ -143,7 +143,9 @@ final class BaseViewController: UIViewController, Tracing {
     }
 
     override func viewDidLoad() {
+        trace(.viewLifeCycle, self, #function)
         super.viewDidLoad()
+
         view.backgroundColor = color.uiColor
 
         addSubviews()
@@ -181,28 +183,28 @@ final class BaseViewController: UIViewController, Tracing {
     }
 
     override func willMove(toParent parent: UIViewController?) {
+        trace(.viewControllerContainment, self, #function, parent == nil ? "removed from \(self.parent!)" : "added to \(parent!)")
         super.willMove(toParent: parent)
-        trace(.viewControllerContainment, self, #function, parent == nil ? "removed" : "added")
     }
 
     override func didMove(toParent parent: UIViewController?) {
-        super.didMove(toParent: parent)
         trace(.viewControllerContainment, self, #function, parent == nil ? "removed" : "added")
+        super.didMove(toParent: parent)
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.willTransition(to: newCollection, with: coordinator)
         trace(.traitCollection, self, #function)
+        super.willTransition(to: newCollection, with: coordinator)
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
         trace(.traitCollection, self, #function)
+        super.viewWillTransition(to: size, with: coordinator)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
         trace(.traitCollection, self, #function)
+        super.traitCollectionDidChange(previousTraitCollection)
     }
 
     override var description: String {

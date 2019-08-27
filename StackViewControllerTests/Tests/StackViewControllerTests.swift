@@ -94,7 +94,7 @@ class StackViewControllerTests: XCTestCase {
     func testThat_whenTheGestureRecognizerSendItsAction_itCallshandleScreenEdgePanGestureRecognizerStateChangeOnTheInteractor() {
         // Arrange
         let gestureRecognizer = ScreenEdgePanGestureRecognizer(target: nil, action: nil)
-        let stackHandler = StackHandler.init()
+        let stackHandler = StackHandler(stack: [])
         let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
 

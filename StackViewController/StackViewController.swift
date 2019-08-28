@@ -75,21 +75,15 @@ public class StackViewController: UIViewController {
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        let stackHandler = StackHandler(stack: [])
-        self.interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        self.interactor = StackViewControllerInteractor()
         super.init(coder: aDecoder)
     }
 
     // MARK: - Internal Init
 
     convenience init(viewControllers: [UIViewController]) {
-        let stackHandler = StackHandler(stack:viewControllers)
-        let interactor = StackViewControllerInteractor(
-            stackHandler: stackHandler
-        )
-        self.init(interactor: interactor)
+        self.init(nibName: nil, bundle: nil)
 
-        self.interactor.delegate = self
         self.viewControllers = viewControllers
     }
 

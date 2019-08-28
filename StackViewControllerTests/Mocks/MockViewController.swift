@@ -8,6 +8,12 @@
 
 import UIKit
 
+class MockView: UIView {
+    override var window: UIWindow? {
+        return UIWindow()
+    }
+}
+
 class MockViewController: UIViewController {
 
     var appearanceEventDates: [Date?] {

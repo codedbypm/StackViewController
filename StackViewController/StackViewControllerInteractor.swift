@@ -76,7 +76,6 @@ class StackViewControllerInteractor {
             animated: animated
         )
 
-        // push on stack
         stackHandler.pushViewController(viewController)
 
         sendViewControllerContainmentBeginEvents(using: transitionContext)

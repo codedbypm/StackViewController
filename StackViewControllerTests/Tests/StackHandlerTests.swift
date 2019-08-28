@@ -14,6 +14,8 @@ class StackHandlerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        sut = StackHandler.shared
+        sut.setStack([])
     }
 
     override func tearDown() {
@@ -25,18 +27,20 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPushingAViewControllerAlreadyInTheStack_itDoesNotChangeTheStack() {
         // Arrange
-        sut = StackHandler.withDefaultStack()
+        sut.setStack([.middle])
+
+        XCTAssertEqual(sut.stack, [.middle])
 
         // Act
         sut.pushViewController(.middle)
 
         // Assert
-        XCTAssertEqual(sut.stack, .default)
+        XCTAssertEqual(sut.stack, [.middle])
     }
 
     func testThat_whenPushingAViewControllerNotYetInTheStack_itAppendsItToTheCurrentStack() {
         // Arrange
-        sut = StackHandler.withDefaultStack()
+        sut.setStack([.middle])
 
         let pushedViewController = UIViewController()
 
@@ -44,14 +48,14 @@ class StackHandlerTests: XCTestCase {
         sut.pushViewController(pushedViewController)
 
         // Assert
-        XCTAssertEqual(sut.stack, .default + [pushedViewController])
+        XCTAssertEqual(sut.stack, [.middle, pushedViewController])
     }
 
     // MARK: - pop
 
     func testThat_whenPoppingAViewControllerFromAnEmptyStack_itReturnsNil() {
         // Arrange
-        sut = StackHandler.withEmptyStack()
+        sut.setStack([])
 
         // Act
         let poppedViewController = sut.popViewController()
@@ -62,7 +66,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingAViewControllerFromAnEmptyStack_itDoesNotChangeTheStack() {
         // Arrange
-        sut = StackHandler.withEmptyStack()
+        sut.setStack([])
 
         // Act
         sut.popViewController()
@@ -73,7 +77,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingAViewControllerFromAStackWithOneElement_itReturnsNil() {
         // Arrange
-        sut = StackHandler.withStack([.first])
+        sut.setStack([.first])
 
         // Act
         let poppedViewController = sut.popViewController()
@@ -84,7 +88,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingAViewControllerFromAStackWithOneElement_itDoesNotChangeTheStack() {
         // Arrange
-        sut = StackHandler.withStack([.first])
+        sut.setStack([.first])
 
         // Act
         sut.popViewController()
@@ -95,7 +99,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingAViewControllerFromAStackWithMoreThanOneElement_itReturnsTheLastViewController() {
         // Arrange
-        sut = StackHandler.withDefaultStack()
+        sut.setStack(.default)
 
         // Act
         let poppedViewController = sut.popViewController()
@@ -106,7 +110,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingAViewControllerFromAStackWithMoreThanOneElement_itUpdatesTheStack() {
         // Arrange
-        sut = StackHandler.withDefaultStack()
+        sut.setStack(.default)
 
         // Act
         sut.popViewController()
@@ -119,7 +123,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToRootFromEmptyStack_itReturnsNil() {
         // Arrange
-        sut = StackHandler.withEmptyStack()
+        sut.setStack([])
 
         // Act
         let poppedViewControllers = sut.popToRoot()
@@ -130,7 +134,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToRootFromEmptyStack_itDoesNotChangeTheStack() {
         // Arrange
-        sut = StackHandler.withEmptyStack()
+        sut.setStack([])
 
         // Act
         sut.popToRoot()
@@ -141,7 +145,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToRootFromAStackWithOneElement_itReturnsNil() {
         // Arrange
-        sut = StackHandler.withStack([.first])
+        sut.setStack([.first])
 
         // Act
         let poppedViewController = sut.popToRoot()
@@ -152,7 +156,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToRootFromAStackWithOneElement_itDoesNotChangeTheStack() {
         // Arrange
-        sut = StackHandler.withStack([.first])
+        sut.setStack([.first])
 
         // Act
         sut.popToRoot()
@@ -163,7 +167,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToRootFromAStackWithMoreThanOneElement_itReturnsThePoppedViewControllers() {
         // Arrange
-        sut = StackHandler.withDefaultStack()
+        sut.setStack(.default)
 
         // Act
         let poppedViewControllers = sut.popToRoot()
@@ -174,7 +178,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToRootFromAStackWithMoreThanOneElement_itUpdatesTheStack() {
         // Arrange
-        sut = StackHandler.withDefaultStack()
+        sut.setStack(.default)
 
         // Act
         sut.popToRoot()
@@ -187,7 +191,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToViewControllerFromEmptyStack_itReturnsNil() {
         // Arrange
-        sut = StackHandler.withEmptyStack()
+        sut.setStack([])
 
         // Act
         let poppedViewControllers = sut.pop(to: UIViewController())
@@ -198,7 +202,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToViewControllerFromEmptyStack_itDoesNotChangeTheStack() {
         // Arrange
-        sut = StackHandler.withEmptyStack()
+        sut.setStack([])
 
         // Act
         sut.pop(to: UIViewController())
@@ -209,7 +213,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToViewControllerFromAStackWithOneElement_itReturnsNil() {
         // Arrange
-        sut = StackHandler.withStack([.first])
+        sut.setStack([.first])
 
         // Act
         let poppedViewController = sut.pop(to: UIViewController())
@@ -220,7 +224,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToViewControllerFromAStackWithOneElement_itDoesNotChangeTheStack() {
         // Arrange
-        sut = StackHandler.withStack([.first])
+        sut.setStack([.first])
 
         // Act
         sut.pop(to: UIViewController())
@@ -231,7 +235,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToViewControllerNotYetInStackWithMoreThanOneElement_itReturnsNil() {
         // Arrange
-        sut = StackHandler.withDefaultStack()
+        sut.setStack(.default)
 
         // Act
         let poppedViewControllers = sut.pop(to: UIViewController())
@@ -242,7 +246,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToViewControllerFromAStackWithMoreThanOneElement_itDoesNotChangeTheStack() {
         // Arrange
-        sut = StackHandler.withDefaultStack()
+        sut.setStack(.default)
 
         // Act
         sut.pop(to: UIViewController())
@@ -253,7 +257,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToViewControllerAlreadyInStackWithMoreThanOneElement_itReturnsPoppedViewControllers() {
         // Arrange
-        sut = StackHandler.withDefaultStack()
+        sut.setStack(.default)
 
         // Act
         let poppedViewControllers = sut.pop(to: .middle)
@@ -264,7 +268,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenPoppingToViewControllerAlreadyInStackWithMoreThanOneElement_itUpdatesTheStack() {
         // Arrange
-        sut = StackHandler.withDefaultStack()
+        sut.setStack(.default)
 
         // Act
         sut.pop(to: .middle)
@@ -278,7 +282,7 @@ class StackHandlerTests: XCTestCase {
     func testThat_whenSettingStackContainingDuplicates_itDoesNotChangeTheStack() {
         // Arrange
         let stack = Stack.distinctElements(6)
-        sut = StackHandler.withStack(stack)
+        sut.setStack(stack)
 
         // Act
         sut.setStack([.first, .last, .first, .first])
@@ -289,7 +293,7 @@ class StackHandlerTests: XCTestCase {
 
     func testThat_whenSettingStack_itReplaceTheCurrentStack() {
         // Arrange
-        sut = StackHandler.withDistinctElements(6)
+        sut.setStack(.distinctElements(6))
 
         // Act
         sut.setStack(.default)

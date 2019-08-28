@@ -27,28 +27,23 @@ extension StackViewController {
     static func withDefaultStack() -> StackViewController {
         return StackViewController(viewControllers: .default)
     }
-
-    static func withMockInteractor() -> StackViewController {
-        let stackHandler = StackHandler(stack: [])
-        let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
-        return StackViewController(interactor: interactor)
-    }
 }
 
 extension StackViewController {
+
 
     func loadingTopViewControllerView() -> StackViewController {
         _ = topViewController?.view
         return self
     }
 
-    func embeddedInWindow() -> StackViewController {
+    static func embeddedInWindow() -> StackViewController {
         class MockWindowView: UIView {
             override var window: UIWindow? { return UIWindow() }
         }
 
-        guard let topViewController = topViewController else { return .dummy }
-        topViewController.view = MockWindowView()
-        return self
+        let stackViewController = StackViewController()
+        stackViewController.view = MockWindowView()
+        return stackViewController
     }
 }

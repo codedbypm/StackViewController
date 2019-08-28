@@ -16,7 +16,7 @@ extension StackViewControllerTests {
     func testThat_whenSettingViewControllers_itCallsSetViewControllersNonAnimatedMethodOfInteractor() {
         // Arrange
         let stack = Stack.distinctElements(4)
-        let stackHandler = StackHandler(stack: [])
+        let stackHandler = MockStackHandler(stack: [])
         let mockInteractor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: mockInteractor)
 
@@ -36,7 +36,7 @@ extension StackViewControllerTests {
     func testThat_whenGettingViewControllers_itCallsTheGetterOfStackPropertyOfInteractor() {
         // Arrange
         let stack = Stack.distinctElements(1)
-        let stackHandler = StackHandler(stack: stack)
+        let stackHandler = MockStackHandler(stack: stack)
         let mockInteractor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: mockInteractor)
 

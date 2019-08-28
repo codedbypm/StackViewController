@@ -14,10 +14,6 @@ import UIKit
 class StackViewControllerTests: XCTestCase {
     var sut: StackViewController!
 
-    override func setUp() {
-        super.setUp()
-    }
-
     override func tearDown() {
         sut = nil
         super.tearDown()
@@ -126,7 +122,7 @@ class StackViewControllerTests: XCTestCase {
     func testThat_whenTheGestureRecognizerSendItsAction_itCallshandleScreenEdgePanGestureRecognizerStateChangeOnTheInteractor() {
         // Arrange
         let gestureRecognizer = ScreenEdgePanGestureRecognizer(target: nil, action: nil)
-        let stackHandler = StackHandler(stack: [])
+        let stackHandler = MockStackHandler(stack: [])
         let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
 

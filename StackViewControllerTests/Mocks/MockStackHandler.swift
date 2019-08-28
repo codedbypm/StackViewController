@@ -12,7 +12,7 @@ class MockStackHandler: StackHandling {
 
     var stack: Stack
 
-    init(stack: Stack = .default) {
+    init(stack: Stack) {
         self.stack = stack
     }
 

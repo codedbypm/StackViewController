@@ -28,6 +28,11 @@ class MockStackViewController: StackViewController {
         return (viewCycleEventDates + stackOperationDates).compactMap { $0 }.sorted()
     }
 
+    var isViewLoadedFlag = false
+    override var isViewLoaded: Bool {
+        return isViewLoadedFlag
+    }
+
     var viewDidLoadDate: Date?
     override func viewDidLoad() {
         viewDidLoadDate = Date()

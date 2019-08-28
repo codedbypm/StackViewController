@@ -16,7 +16,7 @@ extension StackViewControllerTests {
     func testThat_whenStartInteractivePopTransitionIsCalled_itCallsInteractorPopAnimatedAndInteractive() {
         // Arrange
         let stack = Stack.default
-        let stackHandler = StackHandler(stack: stack)
+        let stackHandler = MockStackHandler(stack: stack)
         let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
 

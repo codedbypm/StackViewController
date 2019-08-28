@@ -27,7 +27,7 @@ public class StackViewController: UIViewController {
         }
         set {
             trace(.stackOperation, self, #function)
-            interactor.setStack(newValue, animated: false)
+            setStack(newValue, animated: false)
         }
     }
 

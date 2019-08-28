@@ -12,6 +12,20 @@ import Foundation
 
 class MockStackViewController: StackViewController {
 
+    var controllers: [UIViewController]?
+    var viewControllersGetterDate: Date?
+    var viewControllersSetterDate: Date?
+    override var viewControllers: [UIViewController] {
+        get {
+            viewControllersGetterDate = Date()
+            return controllers ?? []
+        }
+        set {
+            viewControllersSetterDate = Date()
+            super.viewControllers = newValue
+        }
+    }
+
     var viewCycleEventDates: [Date?] {
         return [
             viewDidLoadDate,
@@ -21,7 +35,12 @@ class MockStackViewController: StackViewController {
     }
 
     var stackOperationDates: [Date?] {
-        return [pushViewControllerDate]
+        return [
+            pushViewControllerDate,
+            viewControllersGetterDate,
+            viewControllersSetterDate,
+            setStackDate
+        ]
     }
 
     var receivedEventDates: [Date] {
@@ -53,6 +72,12 @@ class MockStackViewController: StackViewController {
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         pushViewControllerDate = Date()
         super.pushViewController(viewController, animated: animated)
+    }
+
+    var setStackDate: Date?
+    override func setStack(_ stack: Stack, animated: Bool) {
+        setStackDate = Date()
+        super.setStack(stack, animated: animated)
     }
 }
 

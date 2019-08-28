@@ -43,6 +43,58 @@ class StackViewControllerTests: XCTestCase {
         )
     }
 
+    // when: stack = [] and pushViewController
+    //
+    // then: receives => [pushViewController, viewDidLoad]
+    //       sends    => [willMoveToParent]
+    //
+    func testThat_initFollowedByPushViewController_itReceivesAndSendsProperEvents() {
+        // Arrange
+        let yellow = MockViewController()
+        sut = MockStackViewController()
+
+        // Act
+        sut.pushViewController(yellow, animated: false)
+
+        // Assert
+        guard let sut = sut as? MockStackViewController else {
+            XCTFail("Expected sut of type MockStackViewController")
+            return
+        }
+
+        XCTAssertEqual(
+            sut.receivedEventDates,
+            [sut.pushViewControllerDate, sut.viewDidLoadDate]
+        )
+        XCTAssertEqual(yellow.receivedEventDates, [yellow.willMoveToParentDate])
+    }
+
+    // when: stack = [] and .viewControllers = [yellow]
+    //
+    // then: receives => [viewControllers, setViewControllers]
+    //       sends    => [willMoveToParent]
+    //
+    func testThat_initFollowedBySetViewControllers_itReceivesAndSendsProperEvents() {
+        // Arrange
+        let yellow = MockViewController()
+        sut = MockStackViewController()
+
+        // Act
+        sut.viewControllers = [yellow]
+
+        // Assert
+        guard let sut = sut as? MockStackViewController else {
+            XCTFail("Expected sut of type MockStackViewController")
+            return
+        }
+
+        XCTAssertEqual(
+            sut.receivedEventDates,
+            [sut.viewControllersSetterDate, sut.setStackDate]
+        )
+        XCTAssertEqual(yellow.receivedEventDates, [yellow.willMoveToParentDate])
+    }
+
     // MARK: - init(rootViewController:)
 
     // when: stack = [yellow]
@@ -69,6 +121,7 @@ class StackViewControllerTests: XCTestCase {
         )
         XCTAssertEqual(yellow.receivedEventDates, [yellow.willMoveToParentDate])
     }
+
 
     //    StackVC  =>  viewDidLoad()
     //    StackVC  =>  viewWillAppear(_:)

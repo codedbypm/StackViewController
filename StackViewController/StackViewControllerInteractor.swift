@@ -186,6 +186,8 @@ class StackViewControllerInteractor {
 
         stackHandler.setStack(newStack)
 
+        sendViewControllerContainmentBeginEvents(using: transitionContext)
+
         guard delegate?.isInViewHierarchy == true else { return }
         
         performTransition(context: transitionContext)

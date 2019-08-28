@@ -69,18 +69,22 @@ class StackViewControllerTests: XCTestCase {
         XCTAssertEqual(yellow.receivedEventDates, [yellow.willMoveToParentDate])
     }
 
-    // when: stack = [] and .viewControllers = [yellow]
+    // when: stack = [] and .viewControllers = [yellow, green, red]
     //
-    // then: receives => [viewControllers, setViewControllers]
-    //       sends    => [willMoveToParent]
+    // then: receives           => [viewControllers, setViewControllers]
+    //       sends to yellow    => [willMoveToParent], [didMoveToParent]
+    //       sends to green     => [willMoveToParent], [didMoveToParent]
+    //       sends to red       => [willMoveToParent]
     //
-    func testThat_initFollowedBySetViewControllers_itReceivesAndSendsProperEvents() {
+    func testThat_initFollowedBySetViewControllersWithMultipleElements_itReceivesAndSendsProperEvents() {
         // Arrange
         let yellow = MockViewController()
+        let green = MockViewController()
+        let red = MockViewController()
         sut = MockStackViewController()
 
         // Act
-        sut.viewControllers = [yellow]
+        sut.viewControllers = [yellow, green, red]
 
         // Assert
         guard let sut = sut as? MockStackViewController else {
@@ -92,7 +96,22 @@ class StackViewControllerTests: XCTestCase {
             sut.receivedEventDates,
             [sut.viewControllersSetterDate, sut.setStackDate]
         )
-        XCTAssertEqual(yellow.receivedEventDates, [yellow.willMoveToParentDate])
+        XCTAssertEqual(
+            yellow.receivedEventDates,
+            [yellow.willMoveToParentDate, yellow.didMoveToParentDate]
+        )
+        XCTAssertEqual(
+            green.receivedEventDates,
+            [green.willMoveToParentDate, green.didMoveToParentDate]
+        )
+        XCTAssertEqual(
+            red.receivedEventDates,
+            [red.willMoveToParentDate]
+        )
+        XCTAssertEqual(
+            yellow.receivedEventDates + green.receivedEventDates + red.receivedEventDates,
+            (yellow.receivedEventDates + green.receivedEventDates + red.receivedEventDates).sorted()
+        )
     }
 
     // MARK: - init(rootViewController:)

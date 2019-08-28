@@ -186,6 +186,11 @@ class StackViewControllerInteractor {
 
         stackHandler.setStack(newStack)
 
+        newStack.dropLast().forEach {
+            delegate?.prepareAddingChild($0)
+            delegate?.finishAddingChild($0)
+        }
+
         sendViewControllerContainmentBeginEvents(using: transitionContext)
 
         guard delegate?.isInViewHierarchy == true else { return }

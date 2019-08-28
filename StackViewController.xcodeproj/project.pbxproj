@@ -8,19 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		FD00021F2260CC9100A87FFB /* InteractivePopAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD00021E2260CC9100A87FFB /* InteractivePopAnimator.swift */; };
-		FD0E192A22C6A830004C78DC /* Collection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B5702227CBEF900E005EC /* Collection+Extensions.swift */; };
-		FD0E192B22C6A830004C78DC /* CollectionDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B56FD227CBD3C00E005EC /* CollectionDifference.swift */; };
-		FD0E192C22C6A830004C78DC /* CollectionDifference+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD52598D22855CFC0072C6B8 /* CollectionDifference+Extensions.swift */; };
-		FD0E192D22C6A830004C78DC /* Diffing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B56FF227CBD4C00E005EC /* Diffing.swift */; };
 		FD0E192E22C78E29004C78DC /* StackHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B56F8227C525B00E005EC /* StackHandlerTests.swift */; };
 		FD1B56FB227C870600E005EC /* ViewControllerWrapperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B56FA227C870600E005EC /* ViewControllerWrapperView.swift */; };
 		FD1B570B227D68CB00E005EC /* StackHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B570A227D68CB00E005EC /* StackHandler.swift */; };
 		FD1B570D227DB9AF00E005EC /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B570C227DB9AF00E005EC /* Transition.swift */; };
 		FD226059226B6359007E44CE /* StackCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD226058226B6359007E44CE /* StackCoordinator.swift */; };
 		FD22605B226B6363007E44CE /* UIKitCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD22605A226B6363007E44CE /* UIKitCoordinator.swift */; };
-		FD22605F226E579D007E44CE /* StackViewControllerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD22605E226E579D007E44CE /* StackViewControllerError.swift */; };
+		FD2614BF22E4EB9A00BAD2DD /* StackOperationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD2614BE22E4EB9A00BAD2DD /* StackOperationProvider.swift */; };
+		FD2614C122E4ECBD00BAD2DD /* MockStackOperationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD2614C022E4ECBD00BAD2DD /* MockStackOperationProvider.swift */; };
+		FD44573A2315955200DCC278 /* Tracing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4457382315955200DCC278 /* Tracing.swift */; };
+		FD44573B2315955200DCC278 /* Trace.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4457392315955200DCC278 /* Trace.swift */; };
+		FD44573D2315EA9B00DCC278 /* MockStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44573C2315EA9B00DCC278 /* MockStackViewController.swift */; };
 		FD44FF362286515000DA2AEB /* StackViewControllerInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */; };
-		FD44FF3B22889FA200DA2AEB /* StackHandler+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */; };
 		FD44FF3D2288CFA900DA2AEB /* MockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */; };
 		FD44FF3F228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3E228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift */; };
 		FD44FF44228B06DD00DA2AEB /* TransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5259832280F25A0072C6B8 /* TransitionHandler.swift */; };
@@ -54,7 +53,6 @@
 		FD76B7812276449F0090EDB2 /* PopAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7802276449F0090EDB2 /* PopAnimator.swift */; };
 		FD76B7882278E8D20090EDB2 /* UIViewController+Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B7872278E8D20090EDB2 /* UIViewController+Extenstions.swift */; };
 		FD76B78A227917320090EDB2 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B789227917320090EDB2 /* NavigationController.swift */; };
-		FD76B78F2279E0950090EDB2 /* ConsoleDebuggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */; };
 		FD76B791227A5B7A0090EDB2 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */; };
 		FD83870522A19C750017E8F8 /* StackHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD83870422A19C750017E8F8 /* StackHandling.swift */; };
 		FDAD73C822AD4A0400FB68BB /* MockStackHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73C722AD4A0400FB68BB /* MockStackHandler.swift */; };
@@ -104,16 +102,16 @@
 		FD00021E2260CC9100A87FFB /* InteractivePopAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractivePopAnimator.swift; sourceTree = "<group>"; };
 		FD1B56F8227C525B00E005EC /* StackHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackHandlerTests.swift; sourceTree = "<group>"; };
 		FD1B56FA227C870600E005EC /* ViewControllerWrapperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerWrapperView.swift; sourceTree = "<group>"; };
-		FD1B56FD227CBD3C00E005EC /* CollectionDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDifference.swift; sourceTree = "<group>"; };
-		FD1B56FF227CBD4C00E005EC /* Diffing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diffing.swift; sourceTree = "<group>"; };
-		FD1B5702227CBEF900E005EC /* Collection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Extensions.swift"; sourceTree = "<group>"; };
 		FD1B570A227D68CB00E005EC /* StackHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackHandler.swift; sourceTree = "<group>"; };
 		FD1B570C227DB9AF00E005EC /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
 		FD226058226B6359007E44CE /* StackCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackCoordinator.swift; sourceTree = "<group>"; };
 		FD22605A226B6363007E44CE /* UIKitCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitCoordinator.swift; sourceTree = "<group>"; };
-		FD22605E226E579D007E44CE /* StackViewControllerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerError.swift; sourceTree = "<group>"; };
+		FD2614BE22E4EB9A00BAD2DD /* StackOperationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackOperationProvider.swift; sourceTree = "<group>"; };
+		FD2614C022E4ECBD00BAD2DD /* MockStackOperationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackOperationProvider.swift; sourceTree = "<group>"; };
+		FD4457382315955200DCC278 /* Tracing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracing.swift; sourceTree = "<group>"; };
+		FD4457392315955200DCC278 /* Trace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trace.swift; sourceTree = "<group>"; };
+		FD44573C2315EA9B00DCC278 /* MockStackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackViewController.swift; sourceTree = "<group>"; };
 		FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerInteractor.swift; sourceTree = "<group>"; };
-		FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackHandler+Extensions.swift"; sourceTree = "<group>"; };
 		FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockViewController.swift; sourceTree = "<group>"; };
 		FD44FF3E228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerInteractorTests.swift; sourceTree = "<group>"; };
 		FD44FF45228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackViewControllerDelegate.swift; sourceTree = "<group>"; };
@@ -123,7 +121,6 @@
 		FD5259832280F25A0072C6B8 /* TransitionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionHandler.swift; sourceTree = "<group>"; };
 		FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEdgePanGestureRecognizer.swift; sourceTree = "<group>"; };
 		FD52598B2284E9070072C6B8 /* Stack+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stack+Extensions.swift"; sourceTree = "<group>"; };
-		FD52598D22855CFC0072C6B8 /* CollectionDifference+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionDifference+Extensions.swift"; sourceTree = "<group>"; };
 		FD67E575225250E10051786B /* StackViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StackViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD67E578225250E10051786B /* StackViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StackViewController.h; sourceTree = "<group>"; };
 		FD67E579225250E10051786B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -151,8 +148,8 @@
 		FD76B7802276449F0090EDB2 /* PopAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopAnimator.swift; sourceTree = "<group>"; };
 		FD76B7872278E8D20090EDB2 /* UIViewController+Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extenstions.swift"; sourceTree = "<group>"; };
 		FD76B789227917320090EDB2 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
-		FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleDebuggable.swift; sourceTree = "<group>"; };
 		FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
+		FD7BF4552314456E00D7BAE5 /* Traces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Traces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD8386FF22A196640017E8F8 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		FD83870022A199310017E8F8 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		FD83870422A19C750017E8F8 /* StackHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackHandling.swift; sourceTree = "<group>"; };
@@ -203,17 +200,6 @@
 			path = "Custom views";
 			sourceTree = "<group>";
 		};
-		FD1B5701227CBEB000E005EC /* Swift 5 diffing */ = {
-			isa = PBXGroup;
-			children = (
-				FD1B5702227CBEF900E005EC /* Collection+Extensions.swift */,
-				FD1B56FD227CBD3C00E005EC /* CollectionDifference.swift */,
-				FD52598D22855CFC0072C6B8 /* CollectionDifference+Extensions.swift */,
-				FD1B56FF227CBD4C00E005EC /* Diffing.swift */,
-			);
-			path = "Swift 5 diffing";
-			sourceTree = "<group>";
-		};
 		FD44FF3722888DE600DA2AEB /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
@@ -226,6 +212,8 @@
 				FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */,
 				FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */,
 				FDF0BC7E22C9572C000EAAD5 /* MockInteractiveTransitioning.swift */,
+				FD2614C022E4ECBD00BAD2DD /* MockStackOperationProvider.swift */,
+				FD44573C2315EA9B00DCC278 /* MockStackViewController.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -250,7 +238,6 @@
 			children = (
 				FDAD73CA22AD4B4500FB68BB /* CollectionDifference+Extensions.swift */,
 				FD52598B2284E9070072C6B8 /* Stack+Extensions.swift */,
-				FD44FF3A22889FA200DA2AEB /* StackHandler+Extensions.swift */,
 				FD76B7622270DA340090EDB2 /* StackViewController+Extensions.swift */,
 				FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */,
 				FDF0BC7622C9278D000EAAD5 /* TransitionContext+Extensions.swift */,
@@ -265,6 +252,7 @@
 				FD67E5B1225257DA0051786B /* TestApp */,
 				FD76B7012270C9530090EDB2 /* StackViewControllerTests */,
 				FD67E576225250E10051786B /* Products */,
+				FD7BF4542314456E00D7BAE5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -281,20 +269,20 @@
 		FD67E577225250E10051786B /* StackViewController */ = {
 			isa = PBXGroup;
 			children = (
+				FDD9DFE123143953004B0E19 /* Logging */,
 				FD76B782227648A50090EDB2 /* Animators */,
 				FD1B56FC227C876700E005EC /* Custom views */,
 				FD67E5F12252AF0F0051786B /* Extensions */,
+				FDD1807522CD692D003017EE /* Gesture Recognizers */,
 				FDAD73C922AD4A1700FB68BB /* Stack */,
 				FDAD73CE22AD5E0700FB68BB /* Transition */,
 				FD67E5C2225258840051786B /* StackViewController.swift */,
-				FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */,
-				FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */,
+				FD2614BE22E4EB9A00BAD2DD /* StackOperationProvider.swift */,
 				FD76B76C2271F3EF0090EDB2 /* StackViewControllerDelegate.swift */,
-				FD22605E226E579D007E44CE /* StackViewControllerError.swift */,
-				FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */,
+				FD76B7762275F39C0090EDB2 /* StackViewController+Debug.swift */,
+				FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */,
 				FD67E578225250E10051786B /* StackViewController.h */,
 				FD67E579225250E10051786B /* Info.plist */,
-				FD1B5701227CBEB000E005EC /* Swift 5 diffing */,
 				FD83870122A199480017E8F8 /* Config */,
 			);
 			path = StackViewController;
@@ -303,7 +291,6 @@
 		FD67E5B1225257DA0051786B /* TestApp */ = {
 			isa = PBXGroup;
 			children = (
-				FD76B78B227918580090EDB2 /* ConsoleDebuggable.swift */,
 				FD67E5F42252EC770051786B /* RootCoordinator.swift */,
 				FD226058226B6359007E44CE /* StackCoordinator.swift */,
 				FD22605A226B6363007E44CE /* UIKitCoordinator.swift */,
@@ -349,6 +336,14 @@
 			path = Animators;
 			sourceTree = "<group>";
 		};
+		FD7BF4542314456E00D7BAE5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FD7BF4552314456E00D7BAE5 /* Traces.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		FD83870122A199480017E8F8 /* Config */ = {
 			isa = PBXGroup;
 			children = (
@@ -376,6 +371,23 @@
 				FDAD73CF22AD5E3900FB68BB /* TransitionHandling.swift */,
 			);
 			path = Transition;
+			sourceTree = "<group>";
+		};
+		FDD1807522CD692D003017EE /* Gesture Recognizers */ = {
+			isa = PBXGroup;
+			children = (
+				FD5259852281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift */,
+			);
+			path = "Gesture Recognizers";
+			sourceTree = "<group>";
+		};
+		FDD9DFE123143953004B0E19 /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				FD4457382315955200DCC278 /* Tracing.swift */,
+				FD4457392315955200DCC278 /* Trace.swift */,
+			);
+			path = Logging;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -483,8 +495,8 @@
 			projectRoot = "";
 			targets = (
 				FD67E574225250E10051786B /* StackViewController */,
-				FD67E5AF225257DA0051786B /* TestApp */,
 				FD76B6FF2270C9530090EDB2 /* StackViewControllerTests */,
+				FD67E5AF225257DA0051786B /* TestApp */,
 			);
 		};
 /* End PBXProject section */
@@ -519,31 +531,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD44573A2315955200DCC278 /* Tracing.swift in Sources */,
 				FD76B7882278E8D20090EDB2 /* UIViewController+Extenstions.swift in Sources */,
 				FD5259862281FFF20072C6B8 /* ScreenEdgePanGestureRecognizer.swift in Sources */,
 				FD00021F2260CC9100A87FFB /* InteractivePopAnimator.swift in Sources */,
-				FD0E192A22C6A830004C78DC /* Collection+Extensions.swift in Sources */,
+				FD44573B2315955200DCC278 /* Trace.swift in Sources */,
 				FD1B56FB227C870600E005EC /* ViewControllerWrapperView.swift in Sources */,
 				FD1B570D227DB9AF00E005EC /* Transition.swift in Sources */,
 				FD76B76D2271F3EF0090EDB2 /* StackViewControllerDelegate.swift in Sources */,
-				FD76B78F2279E0950090EDB2 /* ConsoleDebuggable.swift in Sources */,
 				FD44FF44228B06DD00DA2AEB /* TransitionHandler.swift in Sources */,
 				FD83870522A19C750017E8F8 /* StackHandling.swift in Sources */,
 				FD67E5C8225260C40051786B /* Animator.swift in Sources */,
 				FD76B77F227643600090EDB2 /* PushAnimator.swift in Sources */,
+				FD2614BF22E4EB9A00BAD2DD /* StackOperationProvider.swift in Sources */,
 				FD76B7812276449F0090EDB2 /* PopAnimator.swift in Sources */,
-				FD0E192B22C6A830004C78DC /* CollectionDifference.swift in Sources */,
-				FD22605F226E579D007E44CE /* StackViewControllerError.swift in Sources */,
 				FD44FF362286515000DA2AEB /* StackViewControllerInteractor.swift in Sources */,
 				FD67E5FA22552D3A0051786B /* UIView+Extensions.swift in Sources */,
 				FD1B570B227D68CB00E005EC /* StackHandler.swift in Sources */,
-				FD0E192C22C6A830004C78DC /* CollectionDifference+Extensions.swift in Sources */,
 				FD76B7772275F39C0090EDB2 /* StackViewController+Debug.swift in Sources */,
 				FD67E5F82254F2010051786B /* TransitionContext.swift in Sources */,
 				FDAD73D022AD5E3900FB68BB /* TransitionHandling.swift in Sources */,
 				FD76B791227A5B7A0090EDB2 /* Array+Extensions.swift in Sources */,
 				FD67E5C3225258840051786B /* StackViewController.swift in Sources */,
-				FD0E192D22C6A830004C78DC /* Diffing.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -582,11 +591,12 @@
 				FD76B7632270DA340090EDB2 /* StackViewController+Extensions.swift in Sources */,
 				FDAD73D222AD5F6600FB68BB /* MockTransitionHandler.swift in Sources */,
 				FD52598C2284E9070072C6B8 /* Stack+Extensions.swift in Sources */,
-				FD44FF3B22889FA200DA2AEB /* StackHandler+Extensions.swift in Sources */,
+				FD44573D2315EA9B00DCC278 /* MockStackViewController.swift in Sources */,
 				FD44FF4A228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift in Sources */,
 				FDF0BC7B22C936F4000EAAD5 /* MockAnimatedTransitioning.swift in Sources */,
 				FDF0BC7922C92850000EAAD5 /* MockTransitionHandlerDelegate.swift in Sources */,
 				FDAD73D422AEB8E500FB68BB /* MockStackViewControllerInteractorDelegate.swift in Sources */,
+				FD2614C122E4ECBD00BAD2DD /* MockStackOperationProvider.swift in Sources */,
 				FD0E192E22C78E29004C78DC /* StackHandlerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -671,7 +681,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -729,7 +739,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -755,7 +765,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = StackViewController/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -784,7 +793,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = StackViewController/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -806,7 +814,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HPXR38FW5T;
 				INFOPLIST_FILE = TestApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -826,7 +833,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HPXR38FW5T;
 				INFOPLIST_FILE = TestApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -845,7 +851,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HPXR38FW5T;
 				INFOPLIST_FILE = StackViewControllerTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -865,7 +870,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HPXR38FW5T;
 				INFOPLIST_FILE = StackViewControllerTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

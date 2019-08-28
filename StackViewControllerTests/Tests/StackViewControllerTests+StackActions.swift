@@ -15,7 +15,7 @@ extension StackViewControllerTests {
 
     func testThat_whenAViewControllerIsPushed_itCallsInteractorMethod() {
         // Arrange
-        let stackHandler = StackHandler(stack: [])
+        let stackHandler = MockStackHandler(stack: [])
         let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
         let pushedViewController = UIViewController()
@@ -40,7 +40,7 @@ extension StackViewControllerTests {
     func testThat_whenPopAnimatedIsCalled_itCallsInteractorMethod_and_keepsTheDefaultValues() {
         // Arrange
         let viewController = UIViewController()
-        let stackHandler = StackHandler(stack: [viewController])
+        let stackHandler = MockStackHandler(stack: [viewController])
         let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
         let animated = true
@@ -65,7 +65,7 @@ extension StackViewControllerTests {
 
     func testThat_whenPoppingToRootViewController_itCallsInteractorMethod() {
         // Arrange
-        let stackHandler = StackHandler(stack: Stack.default)
+        let stackHandler = MockStackHandler(stack: Stack.default)
         let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
         let animated = true
@@ -89,7 +89,7 @@ extension StackViewControllerTests {
 
     func testThat_whenPoppingToAViewController_itCallsInteractorMethod() {
         // Arrange
-        let stackHandler = StackHandler(stack: Stack.default)
+        let stackHandler = MockStackHandler(stack: Stack.default)
         let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
         let animated = true
@@ -116,7 +116,7 @@ extension StackViewControllerTests {
 
     func testThat_whenSettingStack_itCallsInteractorMethod() {
         // Arrange
-        let stackHandler = StackHandler(stack: Stack.default)
+        let stackHandler = MockStackHandler(stack: Stack.default)
         let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
         let animated = true

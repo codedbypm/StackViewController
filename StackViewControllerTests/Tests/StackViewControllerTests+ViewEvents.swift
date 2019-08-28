@@ -18,7 +18,7 @@ extension StackViewControllerTests {
         let viewControllerA = MockViewController()
         let viewControllerB = MockViewController()
         let stack = [viewControllerA, viewControllerB]
-        let stackHandler = StackHandler(stack: stack)
+        let stackHandler = MockStackHandler(stack: stack)
         let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
         let animated = true
@@ -44,7 +44,7 @@ extension StackViewControllerTests {
         let viewControllerA = MockViewController()
         let viewControllerB = MockViewController()
         let stack = [viewControllerA, viewControllerB]
-        let stackHandler = StackHandler(stack: stack)
+        let stackHandler = MockStackHandler(stack: stack)
         let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
         let dontcare = true
@@ -66,7 +66,7 @@ extension StackViewControllerTests {
         let viewControllerA = MockViewController()
         let viewControllerB = MockViewController()
         let stack = [viewControllerA, viewControllerB]
-        let stackHandler = StackHandler(stack: stack)
+        let stackHandler = MockStackHandler(stack: stack)
         let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
         let animated = true
@@ -92,7 +92,7 @@ extension StackViewControllerTests {
         let viewControllerA = MockViewController()
         let viewControllerB = MockViewController()
         let stack = [viewControllerA, viewControllerB]
-        let stackHandler = StackHandler(stack: stack)
+        let stackHandler = MockStackHandler(stack: stack)
         let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
         let dontcare = true

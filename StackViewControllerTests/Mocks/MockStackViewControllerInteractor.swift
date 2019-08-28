@@ -32,6 +32,7 @@ class MockStackViewControllerInteractor: StackViewControllerInteractor {
     var popAnimated: Bool?
     var popInteractive: Bool?
     var popReturnValue: UIViewController?
+    @discardableResult
     override func popViewController(animated: Bool, interactive: Bool = false) -> UIViewController? {
         didCallPopAnimatedInteractive = true
         popAnimated = animated
@@ -42,6 +43,7 @@ class MockStackViewControllerInteractor: StackViewControllerInteractor {
     var didCallPopToRootAnimated: Bool?
     var popToRootAnimated: Bool?
     var popToRootReturnValue: Stack = []
+    @discardableResult
     override func popToRoot(animated: Bool) -> Stack {
         didCallPopToRootAnimated = true
         popToRootAnimated = animated
@@ -52,6 +54,7 @@ class MockStackViewControllerInteractor: StackViewControllerInteractor {
     var popToViewControllerViewController: UIViewController?
     var popToViewControllerAnimated: Bool?
     var popToViewControllerReturnValue: Stack = []
+    @discardableResult
     override func pop(to viewController: UIViewController, animated: Bool) -> Stack {
         didCallPopToViewControllerAnimated = true
         popToViewControllerViewController = viewController
@@ -73,5 +76,12 @@ class MockStackViewControllerInteractor: StackViewControllerInteractor {
     override func handleScreenEdgePanGestureRecognizerStateChange(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
         didCallHandleScreenEdgePanGestureRecognizerStateChange = true
         self.gestureRecognizer = gestureRecognizer
+    }
+
+    var didCallPerformTransition: Bool?
+    var context: TransitionContext?
+    override func performTransition(context: TransitionContext) {
+        didCallPerformTransition = true
+        self.context = context
     }
 }

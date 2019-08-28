@@ -20,8 +20,11 @@ class MockStackViewControllerInteractorDelegate: UIViewController, StackViewCont
         return interactiveController
     }
 
+    var didCallPrepareAddingChild: Bool?
+    var childAdded: UIViewController?
     func prepareAddingChild(_ viewController: UIViewController) {
-
+        didCallPrepareAddingChild = true
+        childAdded = viewController
     }
 
     func finishAddingChild(_ viewController: UIViewController) {

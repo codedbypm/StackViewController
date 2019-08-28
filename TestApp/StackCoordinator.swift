@@ -11,44 +11,16 @@ import StackViewController
 
 class StackCoordinator {
 
-    let canPrint = true
-
     lazy var stackViewController: StackViewController = {
-        var yellow: BaseViewController = UIViewController.stacked(on: nil,
-                                                                 delegate: self,
-                                                                 color: .yellow)
-        var black: BaseViewController = UIViewController.stacked(on: nil,
-                                                                 delegate: self,
-                                                                 color: .black)
-        var green: BaseViewController = UIViewController.stacked(on: nil,
-                                                                 delegate: self,
-                                                                 color: .green)
+        var root: BaseViewController = UIViewController.colored(.black)
+        let stackViewController = StackViewController(rootViewController: root)
+        root.stack = stackViewController
 
-        let stackViewController = StackViewController(rootViewController: yellow)
-        yellow.stack = stackViewController
-//        black.stack = stackViewController
-//        green.stack = stackViewController
+        let tabBarTitle = String(describing: stackViewController)
+        stackViewController.tabBarItem = UITabBarItem(title: tabBarTitle,
+                                                      image: nil,
+                                                      tag: 1)
 
-        stackViewController.debugDelegate = self
-        stackViewController.tabBarItem = UITabBarItem(title: debugPrefix, image: nil, tag: 1)
-//        stackViewController.viewControllers = [
-//            yellow,
-//            UIViewController.stacked(on: stackViewController, delegate: self, color: .green),
-//            black,
-//            green
-//        ]
         return stackViewController
     }()
-}
-
-extension StackCoordinator: DebugDelegate {
-
-    var debugPrefix: String {
-        return "[Stack] "
-    }
-
-    func debug(_ text: String) {
-        guard canPrint else { return }
-        print(debugPrefix + text)
-    }
 }

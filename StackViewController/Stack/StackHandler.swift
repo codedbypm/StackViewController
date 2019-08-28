@@ -35,18 +35,13 @@ class StackHandler: StackHandling {
 
     // MARK: - Internal properties
 
+    static let shared = StackHandler()
+    
     private(set) var stack = Stack()
 
     // MARK: - Init
 
-    init() {
-    }
-
-    init(stack: Stack) {
-        //TODO: handle this guard in a better way
-        guard !stack.hasDuplicates else { return }
-        self.stack = stack
-    }
+    private init() {}
 
     // MARK: - pushViewController
 

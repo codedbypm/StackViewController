@@ -4,10 +4,12 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: macos-latest
-    
     steps:
-    - uses: actions/checkout@v1
-    - name: XCode build
-      run: xcodebuild -configuration Debug -sdk iphoneos
+      - name: Checkout source code
+        uses: actions/checkout@v1
+      - name: XCode build and test
+        run: |
+          export DEVELOPER_DIR=${XCODE_11_DEVELOPER_DIR} 
+          xcodebuild test -scheme StackViewControllerTests -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8,OS=13.0'
+      

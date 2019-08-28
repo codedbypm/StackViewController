@@ -9,73 +9,69 @@
 import UIKit
 import StackViewController
 
-class NavigationController: UINavigationController, ConsoleDebuggable {
+class NavigationController: UINavigationController, Tracing {
 
-    var debugDelegate: DebugDelegate?
-    let debugAppearance = true
-
-
-    init() {
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-
-    convenience override init(rootViewController: UIViewController) {
-        self.init(nibName: nil, bundle: nil)
-        viewControllers = [rootViewController]
-        debugFunc(#function, allowed: true)
+    override var viewControllers: [UIViewController] {
+        get {
+            trace(.stackOperation, self, #function)
+            return super.viewControllers
+        }
+        set {
+            trace(.stackOperation, self, #function)
+            super.viewControllers = newValue
+        }
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
+        trace(.viewLifeCycle, self, #function)
         super.viewDidLoad()
-        debugFunc(#function, allowed: true)
         interactivePopGestureRecognizer?.delegate = self
     }
 
-    override var description: String {
-        return "UINC"
-    }
+    override var description: String { return "UINC" }
 
     override func addChild(_ childController: UIViewController) {
+        trace(.viewControllerContainment, self, #function)
         super.addChild(childController)
-        debugFunc(#function, allowed: true)
     }
 
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        super.pushViewController(viewController, animated: animated)        
+        trace(.stackOperation, self, #function)
+        super.pushViewController(viewController, animated: animated)
     }
 
     override func popViewController(animated: Bool) -> UIViewController? {
+        trace(.stackOperation, self, #function)
         let returned = super.popViewController(animated: animated)
         return returned
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
         super.viewWillAppear(animated)
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
         super.viewDidAppear(animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
         super.viewWillDisappear(animated)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
         super.viewDidDisappear(animated)
     }
+
+    override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
+        trace(.stackOperation, self, #function)
+        super.setViewControllers(viewControllers, animated: animated)
+    }
+
+
 }
 
 extension NavigationController: UIGestureRecognizerDelegate {
@@ -84,7 +80,6 @@ extension NavigationController: UIGestureRecognizerDelegate {
         return false
     }
 }
-
 
 extension NavigationController: UINavigationControllerDelegate {
 

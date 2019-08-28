@@ -8,7 +8,7 @@
 
 import UIKit
 
-public final class StackViewController: UIViewController {
+public class StackViewController: UIViewController {
 
     public enum Operation {
         case push
@@ -17,14 +17,18 @@ public final class StackViewController: UIViewController {
     }
 
     // MARK: - Public properties
-    
-    public var debugDelegate: DebugDelegate?
 
     public weak var delegate: StackViewControllerDelegate?
 
     public var viewControllers: [UIViewController] {
-        get { return interactor.stack }
-        set { interactor.setStack(newValue, animated: false) }
+        get {
+            trace(.stackOperation, self, #function)
+            return interactor.stack
+        }
+        set {
+            trace(.stackOperation, self, #function)
+            interactor.setStack(newValue, animated: false)
+        }
     }
 
     public var topViewController: UIViewController? {
@@ -34,6 +38,8 @@ public final class StackViewController: UIViewController {
     public override var shouldAutomaticallyForwardAppearanceMethods: Bool {
         return false
     }
+
+    public override var description: String { return "SVC" }
 
     // MARK: - Internal properties
 
@@ -53,31 +59,31 @@ public final class StackViewController: UIViewController {
 
     // MARK: - Init
 
-    public convenience init(rootViewController: UIViewController) {
-        let stackHandler = StackHandler()
-        let interactor = StackViewControllerInteractor(
-            stackHandler: stackHandler
-        )
-        self.init(interactor: interactor)
+    public init(rootViewController: UIViewController) {
+        self.interactor = StackViewControllerInteractor()
+        super.init(nibName: nil, bundle: nil)
 
-        interactor.delegate = self
-        viewControllers = [rootViewController]
+        self.interactor.delegate = self
+        self.pushViewController(rootViewController, animated: false)
+    }
+
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        self.interactor = StackViewControllerInteractor()
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+
+        self.interactor.delegate = self
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        let stackHandler = StackHandler()
-        interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        self.interactor = StackViewControllerInteractor()
         super.init(coder: aDecoder)
     }
 
-    convenience init(viewControllers: [UIViewController]) {
-        let stackHandler = StackHandler(stack:viewControllers)
-        let interactor = StackViewControllerInteractor(
-            stackHandler: stackHandler
-        )
-        self.init(interactor: interactor)
+    // MARK: - Internal Init
 
-        interactor.delegate = self
+    convenience init(viewControllers: [UIViewController]) {
+        self.init(nibName: nil, bundle: nil)
+
         self.viewControllers = viewControllers
     }
 
@@ -90,7 +96,7 @@ public final class StackViewController: UIViewController {
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        debugFunc(#function, allowed: debugAppearance)
+        trace(.viewLifeCycle, self, #function)
 
         view.addGestureRecognizer(screenEdgePanGestureRecognizer)
         view.addSubview(viewControllerWrapperView)
@@ -102,51 +108,56 @@ public final class StackViewController: UIViewController {
     }
 
     override public func viewWillAppear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
         super.viewWillAppear(animated)
+        trace(.viewLifeCycle, self, #function)
         topViewController?.beginAppearanceTransition(true, animated: animated)
     }
 
     override public func viewDidAppear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
         super.viewDidAppear(animated)
+        trace(.viewLifeCycle, self, #function)
         topViewController?.endAppearanceTransition()
     }
 
     override public func viewWillDisappear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
         super.viewWillDisappear(animated)
+        trace(.viewLifeCycle, self, #function)
         topViewController?.beginAppearanceTransition(false, animated: animated)
     }
 
     override public func viewDidDisappear(_ animated: Bool) {
-        debugFunc(#function, allowed: debugAppearance)
         super.viewDidDisappear(animated)
+        trace(.viewLifeCycle, self, #function)
         topViewController?.endAppearanceTransition()
     }
 
     // MARK: - Public methods
 
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        trace(.stackOperation, self, #function)
         interactor.pushViewController(viewController, animated: animated)
     }
 
     @discardableResult
     public func popViewController(animated: Bool) -> UIViewController? {
+        trace(.stackOperation, self, #function)
         return interactor.popViewController(animated: animated)
     }
 
     @discardableResult
     public func popToRootViewController(animated: Bool) -> Stack? {
+        trace(.stackOperation, self, #function)
         return interactor.popToRoot(animated: animated)
     }
 
     @discardableResult
     public func popToViewController(_ viewController: UIViewController, animated: Bool) -> Stack? {
+        trace(.stackOperation, self, #function)
         return interactor.pop(to: viewController, animated: animated)
     }
 
     public func setStack(_ stack: Stack, animated: Bool) {
+        trace(.stackOperation, self, #function)
         interactor.setStack(stack, animated: animated)
     }
 }
@@ -215,14 +226,10 @@ extension StackViewController {
     }
 }
 
-extension StackViewController: ConsoleDebuggable {
-    public override var description: String { return "SVC" }
-    var debugAppearance: Bool { return true }
-
-}
-
 extension StackViewController: StackViewControllerHandling {
     public func setViewControllers(_ stack: [UIViewController], animated: Bool) {
         setStack(stack, animated: animated)
     }
 }
+
+extension StackViewController: Tracing {}

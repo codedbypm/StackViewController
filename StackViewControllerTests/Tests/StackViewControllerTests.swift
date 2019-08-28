@@ -14,33 +14,60 @@ import UIKit
 class StackViewControllerTests: XCTestCase {
     var sut: StackViewController!
 
-    override func setUp() {
-        super.setUp()
-    }
-
     override func tearDown() {
         sut = nil
         super.tearDown()
     }
 
+    // MARK: - init()
+
+    // when: stack = []
+    //
+    // then: no events
+    //
+    func testThat_init_itReceivesAndSendsProperEvents() {
+        // Arrange
+
+        // Act
+        sut = MockStackViewController()
+
+        // Assert
+        guard let sut = sut as? MockStackViewController else {
+            XCTFail("Expected sut of type MockStackViewController")
+            return
+        }
+
+        XCTAssertEqual(
+            sut.receivedEventDates,
+            []
+        )
+    }
+
     // MARK: - init(rootViewController:)
 
-    //    StackVC with stack = [Yellow]
+    // when: stack = [yellow]
     //
-    //    Yellow   =>  willMove(toParent:)
-    
-    func testThat_whenInitWithARootViewController_itSendsOnlyRootViewControllerWillMoveToParent() {
+    // then: receives => [pushViewController, viewDidLoad]
+    //       sends    => [willMoveToParent]
+    //
+    func testThat_whenInitWithARootViewController_itReceivesAndSendsProperEvents() {
         // Arrange
         let yellow = MockViewController()
 
         // Act
-        sut = StackViewController(rootViewController: yellow)
+        sut = MockStackViewController(rootViewController: yellow)
 
         // Assert
-        // TODO: re-enable this 
-//        XCTAssertEqual(
-//            yellow.receivedEventDates,
-//            [yellow.willMoveToParentDate])
+        guard let sut = sut as? MockStackViewController else {
+            XCTFail("Expected sut of type MockStackViewController")
+            return
+        }
+
+        XCTAssertEqual(
+            sut.receivedEventDates,
+            [sut.pushViewControllerDate, sut.viewDidLoadDate]
+        )
+        XCTAssertEqual(yellow.receivedEventDates, [yellow.willMoveToParentDate])
     }
 
     //    StackVC  =>  viewDidLoad()
@@ -95,7 +122,7 @@ class StackViewControllerTests: XCTestCase {
     func testThat_whenTheGestureRecognizerSendItsAction_itCallshandleScreenEdgePanGestureRecognizerStateChangeOnTheInteractor() {
         // Arrange
         let gestureRecognizer = ScreenEdgePanGestureRecognizer(target: nil, action: nil)
-        let stackHandler = StackHandler.init()
+        let stackHandler = MockStackHandler(stack: [])
         let interactor = MockStackViewControllerInteractor(stackHandler: stackHandler)
         sut = StackViewController(interactor: interactor)
 

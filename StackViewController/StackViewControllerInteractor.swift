@@ -23,7 +23,7 @@ protocol StackViewControllerInteractorDelegate: UIViewController, StackViewContr
     func startInteractivePopTransition()
 }
 
-class StackViewControllerInteractor: TransitionHandlerDelegate  {
+class StackViewControllerInteractor {
 
     // MARK: - Internal properties
 
@@ -46,10 +46,14 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
     private var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer?
 
+    private let stackOperationProvider: StackOperationProviding
+
     // MARK: - Init
 
-    init(stackHandler: StackHandling) {
+    init(stackHandler: StackHandling = StackHandler.shared,
+         stackOperationProvider: StackOperationProviding = StackOperationProvider.shared) {
         self.stackHandler = stackHandler
+        self.stackOperationProvider = stackOperationProvider
     }
 
     // MARK: - Internal methods
@@ -61,6 +65,8 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
         // guard can push else return
         guard stackHandler.canPushViewController(viewController) else { return }
 
+        delegate?.loadViewIfNeeded()
+
         // prepare transition context
         let transitionContext = TransitionContext(
             operation: .push,
@@ -70,8 +76,11 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
             animated: animated
         )
 
-        // push on stack
         stackHandler.pushViewController(viewController)
+
+        sendViewControllerContainmentBeginEvents(using: transitionContext)
+
+        guard delegate?.isInViewHierarchy == true else { return }
 
         // execute transition
         performTransition(context: transitionContext)
@@ -134,6 +143,7 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
     ) -> [UIViewController]? {
         guard stackHandler.canPop(to: viewController) else { return nil }
 
+        // prepare transition context
         let transitionContext = TransitionContext(
             operation: .pop,
             from: stack.last,
@@ -156,11 +166,15 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
     func setStack(
         _ newStack: [UIViewController],
         animated: Bool
-        ) {
+    ) {
         guard stackHandler.canSetStack(newStack) else { return }
 
-        let operation = stackOperation(whenReplacing: stack, with: newStack)
+        let operation = stackOperationProvider.stackOperation(
+            whenReplacing: stack,
+            with: newStack
+        )
 
+        // prepare transition context
         let transitionContext = TransitionContext(
             operation: operation,
             from: stack.last,
@@ -172,155 +186,9 @@ class StackViewControllerInteractor: TransitionHandlerDelegate  {
 
         stackHandler.setStack(newStack)
 
+        guard delegate?.isInViewHierarchy == true else { return }
+        
         performTransition(context: transitionContext)
-    }
-
-    // MARK: - TransitionHandlerDelegate
-
-    func willStartTransition(_ context: TransitionContext) {
-        sendBeginTransitionViewContainmentEvents(using: context)
-        sendBeginTransitionViewEvents(using: context)
-    }
-
-    func didEndTransition(_ context: TransitionContext, didComplete: Bool) {
-        if didComplete {
-            sendEndTransitionViewEvents(using: context)
-            sendEndTransitionViewContainmentEvents(using: context)
-
-        } else {
-            sendBeginTransitionViewEvents(using: context)
-            sendEndTransitionViewEvents(using: context)
-
-            undoLastStackChange?()
-        }
-        //        debugTransitionEnded()
-        transitionHandler = nil
-    }
-
-    // MARK: - Actions
-
-    func handleScreenEdgePanGestureRecognizerStateChange(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
-        switch gestureRecognizer.state {
-        case .began:
-            screenEdgePanGestureRecognizer = gestureRecognizer
-            delegate?.startInteractivePopTransition()
-        case .changed, .ended, .cancelled, .failed, .possible:
-            break
-        @unknown default:
-            assertionFailure()
-        }
-    }
-
-    func stackOperation(whenReplacing oldStack: Stack, with newStack: Stack) -> StackViewController.Operation {
-        let from = topViewController
-        let to = newStack.last
-
-        guard from !== to else { return .none }
-
-        if let to = to {
-            if oldStack.contains(to) { return .pop }
-            else { return .push }
-        } else {
-            if from != nil { return .pop }
-            else { return .none }
-        }
-    }
-}
-
-private extension StackViewControllerInteractor {
-    
-    private func transitionUndo(for difference: Stack.Difference) -> (() -> Void)? {
-        return nil
-        //        return { [weak self] in
-        //            guard let self = self else { return }
-        //            guard let invertedDifference = difference.inverted else { return }
-        //            guard let oldStack = self.stack.applying(invertedDifference) else { return }
-        //
-        //            _ = self.stackHandler.replaceStack(with: oldStack)
-        //        }
-    }
-
-    private func notifyControllerAboutStackChanges(_ difference: Stack.Difference) {
-        let removedViewControllers = difference.removals.map { $0._element }
-        notifyControllerOfRemovals(removedViewControllers)
-
-        let insertedViewControllers = difference.insertions.map { $0._element }
-        notifyControllerOfInsertions(insertedViewControllers)
-    }
-
-    private func notifyControllerOfInsertions(_ insertions: Stack) {
-        insertions.dropLast().forEach {
-            self.delegate?.prepareAddingChild($0)
-            self.delegate?.finishAddingChild($0)
-        }
-        insertions.suffix(1).forEach {
-            self.delegate?.prepareAddingChild($0)
-        }
-    }
-
-    private func notifyControllerOfRemovals(_ removals: Stack) {
-        removals.dropLast().forEach {
-            self.delegate?.prepareRemovingChild($0)
-            self.delegate?.finishRemovingChild($0)
-        }
-        removals.suffix(1).forEach {
-            self.delegate?.prepareRemovingChild($0)
-        }
-    }
-
-    private func sendBeginTransitionViewEvents(using context: TransitionContext) {
-        if let from = context.from {
-            if context.transitionWasCancelled {
-                delegate?.prepareAppearance(of: from, animated: context.isAnimated)
-            } else {
-                delegate?.prepareDisappearance(of: from, animated: context.isAnimated)
-            }
-        }
-
-        if let to = context.to {
-            if context.transitionWasCancelled {
-                delegate?.prepareDisappearance(of: to, animated: context.isAnimated)
-            } else {
-                delegate?.prepareAppearance(of: to, animated: context.isAnimated)
-            }
-        }
-    }
-
-    private func sendEndTransitionViewEvents(using context: TransitionContext) {
-        if let from = context.from {
-            if context.transitionWasCancelled {
-                delegate?.finishAppearance(of: from)
-            } else {
-                delegate?.finishDisappearance(of: from)
-            }
-        }
-
-        if let to = context.to {
-            if context.transitionWasCancelled {
-                delegate?.finishDisappearance(of: to)
-            } else {
-                delegate?.finishAppearance(of: to)
-            }
-        }
-    }
-
-    private func sendBeginTransitionViewContainmentEvents(using context: TransitionContext) {
-        if let from = context.from, case .pop = context.operation {
-            delegate?.prepareRemovingChild(from)
-        }
-        if let to = context.to, case .push = context.operation {
-            delegate?.prepareAddingChild(to)
-        }
-    }
-
-    private func sendEndTransitionViewContainmentEvents(using context: TransitionContext) {
-        if let from = context.from, case .pop = context.operation {
-            delegate?.finishRemovingChild(from)
-        }
-
-        if let to = context.to, case .push = context.operation {
-            delegate?.finishAddingChild(to)
-        }
     }
 
     func performTransition(context: TransitionContext) {
@@ -344,6 +212,139 @@ private extension StackViewControllerInteractor {
         }
     }
 
+    // MARK: - Actions
+
+    func handleScreenEdgePanGestureRecognizerStateChange(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+        switch gestureRecognizer.state {
+        case .began:
+            screenEdgePanGestureRecognizer = gestureRecognizer
+            delegate?.startInteractivePopTransition()
+        case .changed, .ended, .cancelled, .failed, .possible:
+            break
+        @unknown default:
+            assertionFailure()
+        }
+    }
+}
+
+// MARK: - TransitionHandlerDelegate
+
+extension StackViewControllerInteractor: TransitionHandlerDelegate {
+
+    func willStartTransition(_ context: TransitionContext) {
+        sendBeginTransitionViewEvents(using: context)
+    }
+
+    func didEndTransition(_ context: TransitionContext, didComplete: Bool) {
+        if didComplete {
+            sendEndTransitionViewEvents(using: context)
+            sendEndTransitionViewContainmentEvents(using: context)
+
+        } else {
+            sendBeginTransitionViewEvents(using: context)
+            sendEndTransitionViewEvents(using: context)
+
+            undoLastStackChange?()
+        }
+        //        debugTransitionEnded()
+        transitionHandler = nil
+    }
+}
+
+private extension StackViewControllerInteractor {
+
+    func notifyControllerAboutStackChanges(_ difference: Stack.Difference) {
+        let removed = difference.removals.compactMap { change -> UIViewController? in
+            if case let .remove(_, element, _) = change { return element }
+            else { return nil }
+        }
+        notifyControllerOfRemovals(removed)
+
+        let inserts = difference.insertions.compactMap { change -> UIViewController? in
+            if case let .insert(_, element, _) = change { return element }
+            else { return nil }
+        }
+        notifyControllerOfInsertions(inserts)
+    }
+
+    func notifyControllerOfInsertions(_ insertions: Stack) {
+        insertions.dropLast().forEach {
+            self.delegate?.prepareAddingChild($0)
+            self.delegate?.finishAddingChild($0)
+        }
+        insertions.suffix(1).forEach {
+            self.delegate?.prepareAddingChild($0)
+        }
+    }
+
+    func notifyControllerOfRemovals(_ removals: Stack) {
+        removals.dropLast().forEach {
+            self.delegate?.prepareRemovingChild($0)
+            self.delegate?.finishRemovingChild($0)
+        }
+        removals.suffix(1).forEach {
+            self.delegate?.prepareRemovingChild($0)
+        }
+    }
+
+    func sendBeginTransitionViewEvents(using context: TransitionContext) {
+        if let from = context.from {
+            if context.transitionWasCancelled {
+                delegate?.prepareAppearance(of: from, animated: context.isAnimated)
+            } else {
+                delegate?.prepareDisappearance(of: from, animated: context.isAnimated)
+            }
+        }
+
+        if let to = context.to {
+            if context.transitionWasCancelled {
+                delegate?.prepareDisappearance(of: to, animated: context.isAnimated)
+            } else {
+                delegate?.prepareAppearance(of: to, animated: context.isAnimated)
+            }
+        }
+    }
+
+    func sendEndTransitionViewEvents(using context: TransitionContext) {
+        if let from = context.from {
+            if context.transitionWasCancelled {
+                delegate?.finishAppearance(of: from)
+            } else {
+                delegate?.finishDisappearance(of: from)
+            }
+        }
+
+        if let to = context.to {
+            if context.transitionWasCancelled {
+                delegate?.finishDisappearance(of: to)
+            } else {
+                delegate?.finishAppearance(of: to)
+            }
+        }
+    }
+
+    func sendViewControllerContainmentBeginEvents(using context: TransitionContext) {
+        if let from = context.from, case .pop = context.operation {
+            delegate?.prepareRemovingChild(from)
+        }
+        if let to = context.to, case .push = context.operation {
+            delegate?.prepareAddingChild(to)
+        }
+    }
+
+    func sendEndTransitionViewContainmentEvents(using context: TransitionContext) {
+        if let from = context.from, case .pop = context.operation {
+            delegate?.finishRemovingChild(from)
+        }
+
+        if let to = context.to, case .push = context.operation {
+            delegate?.finishAddingChild(to)
+        }
+    }
+}
+
+private extension StackViewControllerInteractor {
+
     func defaultAnimationController(
         for operation: StackViewController.Operation
     ) -> Animator {
@@ -359,7 +360,7 @@ private extension StackViewControllerInteractor {
     ) -> UIViewControllerAnimatedTransitioning {
         if let controller = userProvidedAnimationController(
             context: context
-        ) {
+            ) {
             return controller
         } else {
             return defaultAnimationController(for: context.operation)
@@ -376,7 +377,7 @@ private extension StackViewControllerInteractor {
             for: context.operation,
             from: from,
             to: to
-        ) else { return nil }
+            ) else { return nil }
 
         return controller
     }

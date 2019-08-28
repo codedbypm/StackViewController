@@ -8,8 +8,8 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v1
-      - name: XCode build
+      - name: XCode build and test
         run: |
           export DEVELOPER_DIR=${XCODE_11_DEVELOPER_DIR} 
-          xcodebuild -configuration Debug -sdk iphoneos
+          xcodebuild test -scheme StackViewControllerTests -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8,OS=13.0'
       

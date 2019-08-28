@@ -25,12 +25,13 @@ class MockStackViewController: StackViewController {
     }
 
     var receivedEventDates: [Date] {
-        return (viewCycleEventDates + stackOperationDates).compactMap { $0 }
+        return (viewCycleEventDates + stackOperationDates).compactMap { $0 }.sorted()
     }
 
     var viewDidLoadDate: Date?
     override func viewDidLoad() {
         viewDidLoadDate = Date()
+        super.viewDidLoad()
     }
 
     var viewWillAppearDate: Date?
@@ -46,6 +47,7 @@ class MockStackViewController: StackViewController {
     var pushViewControllerDate: Date?
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         pushViewControllerDate = Date()
+        super.pushViewController(viewController, animated: animated)
     }
 }
 

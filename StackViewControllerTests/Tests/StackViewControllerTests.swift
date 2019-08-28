@@ -67,7 +67,10 @@ class StackViewControllerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(sut.receivedEventDates, [sut.pushViewControllerDate, sut.viewDidLoadDate])
+        XCTAssertEqual(
+            sut.receivedEventDates,
+            [sut.pushViewControllerDate, sut.viewDidLoadDate]
+        )
         XCTAssertEqual(yellow.receivedEventDates, [yellow.willMoveToParentDate])
     }
 

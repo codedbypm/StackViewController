@@ -65,6 +65,8 @@ class StackViewControllerInteractor {
         // guard can push else return
         guard stackHandler.canPushViewController(viewController) else { return }
 
+        delegate?.loadViewIfNeeded()
+
         // prepare transition context
         let transitionContext = TransitionContext(
             operation: .push,
@@ -76,6 +78,10 @@ class StackViewControllerInteractor {
 
         // push on stack
         stackHandler.pushViewController(viewController)
+
+        sendViewControllerContainmentBeginEvents(using: transitionContext)
+
+        guard delegate?.isInViewHierarchy == true else { return }
 
         // execute transition
         performTransition(context: transitionContext)
@@ -227,7 +233,6 @@ class StackViewControllerInteractor {
 extension StackViewControllerInteractor: TransitionHandlerDelegate {
 
     func willStartTransition(_ context: TransitionContext) {
-        sendBeginTransitionViewContainmentEvents(using: context)
         sendBeginTransitionViewEvents(using: context)
     }
 
@@ -319,7 +324,7 @@ private extension StackViewControllerInteractor {
         }
     }
 
-    func sendBeginTransitionViewContainmentEvents(using context: TransitionContext) {
+    func sendViewControllerContainmentBeginEvents(using context: TransitionContext) {
         if let from = context.from, case .pop = context.operation {
             delegate?.prepareRemovingChild(from)
         }

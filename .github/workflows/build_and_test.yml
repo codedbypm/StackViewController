@@ -4,12 +4,12 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: macos-latest
-    
     steps:
-    - uses: actions/checkout@v1
-    - name: XCode select
-      run: xcode-select -s /Applications/Xcode_11.app/Contents/Developer
-    - name: XCode build
-      run: xcodebuild -configuration Debug -sdk iphoneos
+      - name: Checkout source code
+        uses: actions/checkout@v1
+      - name: XCode build
+        run: |
+          export DEVELOPER_DIR=${XCODE_11_DEVELOPER_DIR} 
+          xcodebuild -configuration Debug -sdk iphoneos
+      

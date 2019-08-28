@@ -9,9 +9,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: List XCode versions
-      run: ls -l /Applications/X*
-#    - name: XCode select
-#      run: xcode-select -s
+    - name: XCode select
+      run: xcode-select -s /Applications/Xcode_11.app/Contents/Developer
     - name: XCode build
       run: xcodebuild -configuration Debug -sdk iphoneos

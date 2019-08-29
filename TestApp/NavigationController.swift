@@ -46,6 +46,12 @@ class NavigationController: UINavigationController, Tracing {
         return returned
     }
 
+    @discardableResult
+    override func popToRootViewController(animated: Bool) -> [UIViewController]? {
+        trace(.stackOperation, self, #function)
+        return super.popToRootViewController(animated: animated)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         trace(.viewLifeCycle, self, #function)
         super.viewWillAppear(animated)

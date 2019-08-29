@@ -131,6 +131,13 @@ class StackViewControllerInteractor {
 
         let poppedViewControllers = stackHandler.popToRoot()
 
+        poppedViewControllers?.forEach {
+            delegate?.prepareRemovingChild($0)
+            delegate?.finishRemovingChild($0)
+        }
+
+        guard delegate?.isInViewHierarchy == true else { return poppedViewControllers }
+
         performTransition(context: transitionContext)
 
         return poppedViewControllers
@@ -168,7 +175,7 @@ class StackViewControllerInteractor {
         animated: Bool
     ) {
         guard stackHandler.canSetStack(newStack) else { return }
-
+        
         let operation = stackOperationProvider.stackOperation(
             whenReplacing: stack,
             with: newStack

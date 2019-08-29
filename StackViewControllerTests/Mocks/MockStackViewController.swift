@@ -13,38 +13,37 @@ import Foundation
 class MockStackViewController: StackViewController {
 
     var controllers: [UIViewController]?
-    var viewControllersGetterDate: Date?
-    var viewControllersSetterDate: Date?
+    var viewControllersGetterDates: [Date] = []
+    var viewControllersSetterDates: [Date] = []
     override var viewControllers: [UIViewController] {
         get {
-            viewControllersGetterDate = Date()
+            viewControllersGetterDates.append(Date())
             return controllers ?? []
         }
         set {
-            viewControllersSetterDate = Date()
+            viewControllersSetterDates.append(Date())
             super.viewControllers = newValue
         }
     }
 
-    var viewCycleEventDates: [Date?] {
-        return [
-            viewDidLoadDate,
-            viewWillAppearDate,
-            viewDidAppearDate
-        ]
+    var viewCycleEventDates: [Date] {
+        return
+            viewDidLoadDates
+            + viewWillAppearDates
+            + viewDidAppearDates
     }
 
-    var stackOperationDates: [Date?] {
-        return [
-            pushViewControllerDate,
-            viewControllersGetterDate,
-            viewControllersSetterDate,
-            setStackDate
-        ]
+    var stackOperationDates: [Date] {
+        return
+            pushViewControllerDates
+            + viewControllersGetterDates
+            + viewControllersSetterDates
+            + popToRootDates
+            + setStackDates
     }
 
     var receivedEventDates: [Date] {
-        return (viewCycleEventDates + stackOperationDates).compactMap { $0 }.sorted()
+        return (viewCycleEventDates + stackOperationDates).sorted()
     }
 
     var isViewLoadedFlag = false
@@ -52,31 +51,37 @@ class MockStackViewController: StackViewController {
         return isViewLoadedFlag
     }
 
-    var viewDidLoadDate: Date?
+    var viewDidLoadDates: [Date] = []
     override func viewDidLoad() {
-        viewDidLoadDate = Date()
+        viewDidLoadDates.append(Date())
         super.viewDidLoad()
     }
 
-    var viewWillAppearDate: Date?
+    var viewWillAppearDates: [Date] = []
     override func viewWillAppear(_ animated: Bool) {
-        viewWillAppearDate = Date()
+        viewWillAppearDates.append(Date())
     }
 
-    var viewDidAppearDate: Date?
+    var viewDidAppearDates: [Date] = []
     override func viewDidAppear(_ animated: Bool) {
-        viewDidAppearDate = Date()
+        viewDidAppearDates.append(Date())
     }
 
-    var pushViewControllerDate: Date?
+    var pushViewControllerDates: [Date] = []
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        pushViewControllerDate = Date()
+        pushViewControllerDates.append(Date())
         super.pushViewController(viewController, animated: animated)
     }
 
-    var setStackDate: Date?
+    var popToRootDates: [Date] = []
+    override func popToRootViewController(animated: Bool) -> Stack? {
+        popToRootDates.append(Date())
+        return super.popToRootViewController(animated: animated)
+    }
+    
+    var setStackDates: [Date] = []
     override func setStack(_ stack: Stack, animated: Bool) {
-        setStackDate = Date()
+        setStackDates.append(Date())
         super.setStack(stack, animated: animated)
     }
 }

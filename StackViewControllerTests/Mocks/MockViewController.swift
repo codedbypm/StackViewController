@@ -34,7 +34,17 @@ class MockViewController: UIViewController {
     }
 
     var receivedEventDates: [Date] {
-        return (appearanceEventDates + viewContainmentEventDates)
+        return (viewLifeCycleDates + appearanceEventDates + viewContainmentEventDates)
+    }
+
+    var viewLifeCycleDates: [Date] {
+        return viewDidLoadDates
+    }
+
+    var viewDidLoadDates: [Date] = []
+    override func viewDidLoad() {
+        viewDidLoadDates.append(Date())
+        super.viewDidLoad()
     }
 
     var didCallBeginAppearance: Bool? = nil

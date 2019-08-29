@@ -373,12 +373,15 @@ extension StackViewControllerInteractorTests {
         XCTAssertEqual(sut.context?.isInteractive, false)
     }
 
-    func testThat_whenStackHandlerCanPopToRoot_itCallsPerformTransition() {
+    func testThat_whenStackHandlerCanPopToRootAndSVCViewIsInHierarchy_itCallsPerformTransition() {
         // Arrange
         let stackHandler = MockStackHandler(stack: [.first, .middle])
         stackHandler.canPopToRootFlag = true
 
         let sut = MockSut(stackHandler: stackHandler)
+
+        let delegate = StackViewController.embeddedInWindow()
+        sut.delegate = delegate
 
         // Act
         sut.popToRoot(animated: true)

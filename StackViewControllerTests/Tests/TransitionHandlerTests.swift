@@ -16,7 +16,7 @@ class TransitionHandlerTests: XCTestCase {
     override func setUp() {
         super.setUp()
         delegate = MockTransitionHandlerDelegate()
-        sut = TransitionHandler(delegate: delegate)
+        sut = TransitionHandler()
     }
 
     override func tearDown() {
@@ -30,7 +30,7 @@ class TransitionHandlerTests: XCTestCase {
     func testThat_whenPerformingTransition_itCallsDelegateWillStartTransition() {
         // Arrange
         let delegate = MockTransitionHandlerDelegate()
-        sut.delegate = delegate
+        sut.transitionDelegate = delegate
 
         // Act
         sut.performTransition(
@@ -45,7 +45,7 @@ class TransitionHandlerTests: XCTestCase {
     func testThat_whenPerformingTransition_itCallsAnimateTransition() {
         // Arrange
         let delegate = MockTransitionHandlerDelegate()
-        sut.delegate = delegate
+        sut.transitionDelegate = delegate
 
         let animationController = MockAnimatedTransitioning()
 
@@ -64,7 +64,7 @@ class TransitionHandlerTests: XCTestCase {
     func testThat_whenPerformingInteractiveTransition_itCallsDelegateWillStartTransition() {
         // Arrange
         let delegate = MockTransitionHandlerDelegate()
-        sut.delegate = delegate
+        sut.transitionDelegate = delegate
 
         // Act
         sut.performInteractiveTransition(
@@ -80,7 +80,7 @@ class TransitionHandlerTests: XCTestCase {
     func testThat_whenPerformingInteractiveTransition_itCallsStartInteractiveTransition() {
         // Arrange
         let delegate = MockTransitionHandlerDelegate()
-        sut.delegate = delegate
+        sut.transitionDelegate = delegate
 
         let interactionController = MockInteractiveTransitioning()
 

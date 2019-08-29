@@ -77,11 +77,4 @@ class MockStackViewControllerInteractor: StackViewControllerInteractor {
         didCallHandleScreenEdgePanGestureRecognizerStateChange = true
         self.gestureRecognizer = gestureRecognizer
     }
-
-    var didCallPerformTransition: Bool?
-    var context: TransitionContext?
-    override func performTransition(context: TransitionContext) {
-        didCallPerformTransition = true
-        self.context = context
-    }
 }

@@ -8,24 +8,33 @@
 
 import UIKit
 
-class MockView: UIView {
-    override var window: UIWindow? {
-        return UIWindow()
+struct MoveToParentDates {
+    var removed: Date?
+    var added: Date?
+}
+
+extension MoveToParentDates {
+    var dates: [Date] {
+        return [removed, added].compactMap { $0 }
     }
 }
 
 class MockViewController: UIViewController {
+    var willBeAddedToParentDates: [Date] = []
+    var willBeRemovedFromParentDates: [Date] = []
+    var wasAddedToParentDates: [Date] = []
+    var wasRemovedFromParentDates: [Date] = []
 
-    var appearanceEventDates: [Date?] {
-        return [beginAppearanceTransitionDate, endAppearanceTransitionDate]
+    var appearanceEventDates: [Date] {
+        return [beginAppearanceTransitionDate, endAppearanceTransitionDate].compactMap { $0 }
     }
 
-    var viewContainmentEventDates: [Date?] {
-        return [willMoveToParentDate, didMoveToParentDate]
+    var viewContainmentEventDates: [Date] {
+        return willBeAddedToParentDates + wasAddedToParentDates + willBeRemovedFromParentDates + wasRemovedFromParentDates
     }
 
     var receivedEventDates: [Date] {
-        return (appearanceEventDates + viewContainmentEventDates).compactMap { $0 }
+        return (appearanceEventDates + viewContainmentEventDates)
     }
 
     var didCallBeginAppearance: Bool? = nil
@@ -47,26 +56,29 @@ class MockViewController: UIViewController {
     }
 
     var didCallWillMoveToParent: Bool?
-    var willMoveToParentDate: Date?
     var willMoveToParentParent: UIViewController?
     override func willMove(toParent parent: UIViewController?) {
         didCallWillMoveToParent = true
-        willMoveToParentDate = Date()
         willMoveToParentParent = parent
+
+        if parent == nil { willBeRemovedFromParentDates.append(Date()) }
+        else { willBeAddedToParentDates.append(Date()) }
     }
 
     var didCallDidMoveToParent: Bool?
-    var didMoveToParentDate: Date?
     var didMoveToParentParent: UIViewController?
     override func didMove(toParent parent: UIViewController?) {
         didCallDidMoveToParent = true
-        didMoveToParentDate = Date()
         didMoveToParentParent = parent
+
+        if parent == nil { wasRemovedFromParentDates.append(Date()) }
+        else { wasAddedToParentDates.append(Date()) }
     }
 
     var didCallRemoveFromParent: Bool?
     override func removeFromParent() {
         didCallRemoveFromParent = true
+        super.removeFromParent()
     }
 }
 

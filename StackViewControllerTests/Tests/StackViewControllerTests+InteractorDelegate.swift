@@ -42,14 +42,14 @@ extension StackViewControllerTests {
         sut = StackViewController.dummy
 
         XCTAssertTrue(child.parent !== sut)
-        XCTAssertNil(child.didMoveToParentDate)
+        XCTAssertNil(child.didCallDidMoveToParent)
 
         // Act
         sut.prepareAddingChild(child)
 
         // Assert
         XCTAssertTrue(child.parent === sut)
-        XCTAssertNil(child.didMoveToParentDate)
+        XCTAssertNil(child.didCallDidMoveToParent)
     }
 
     // MARK: - finishAddingChild(_:)

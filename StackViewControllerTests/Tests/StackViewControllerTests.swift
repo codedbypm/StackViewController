@@ -21,133 +21,7 @@ class StackViewControllerTests: XCTestCase {
 
     // MARK: - init()
 
-    // when: stack = []
-    //
-    // then: no events
-    //
-    func testThat_init_itReceivesAndSendsProperEvents() {
-        // Arrange
-
-        // Act
-        sut = MockStackViewController()
-
-        // Assert
-        guard let sut = sut as? MockStackViewController else {
-            XCTFail("Expected sut of type MockStackViewController")
-            return
-        }
-
-        XCTAssertEqual(
-            sut.receivedEventDates,
-            []
-        )
-    }
-
-    // when: stack = [] and pushViewController
-    //
-    // then: receives => [pushViewController, viewDidLoad]
-    //       sends    => [willMoveToParent]
-    //
-    func testThat_initFollowedByPushViewController_itReceivesAndSendsProperEvents() {
-        // Arrange
-        let yellow = MockViewController()
-        sut = MockStackViewController()
-
-        // Act
-        sut.pushViewController(yellow, animated: false)
-
-        // Assert
-        guard let sut = sut as? MockStackViewController else {
-            XCTFail("Expected sut of type MockStackViewController")
-            return
-        }
-
-        XCTAssertEqual(
-            sut.receivedEventDates,
-            [sut.pushViewControllerDate, sut.viewDidLoadDate]
-        )
-        XCTAssertEqual(yellow.receivedEventDates, [yellow.willMoveToParentDate])
-    }
-
-    // when: stack = [] and .viewControllers = [yellow, green, red]
-    //
-    // then: receives           => [viewControllers, setViewControllers]
-    //       sends to yellow    => [willMoveToParent], [didMoveToParent]
-    //       sends to green     => [willMoveToParent], [didMoveToParent]
-    //       sends to red       => [willMoveToParent]
-    //
-    func testThat_initFollowedBySetViewControllersWithMultipleElements_itReceivesAndSendsProperEvents() {
-        // Arrange
-        let yellow = MockViewController()
-        let green = MockViewController()
-        let red = MockViewController()
-        sut = MockStackViewController()
-
-        // Act
-        sut.viewControllers = [yellow, green, red]
-
-        // Assert
-        guard let sut = sut as? MockStackViewController else {
-            XCTFail("Expected sut of type MockStackViewController")
-            return
-        }
-
-        XCTAssertEqual(
-            sut.receivedEventDates,
-            [sut.viewControllersSetterDate, sut.setStackDate]
-        )
-        XCTAssertEqual(
-            yellow.receivedEventDates,
-            [yellow.willMoveToParentDate, yellow.didMoveToParentDate]
-        )
-        XCTAssertEqual(
-            green.receivedEventDates,
-            [green.willMoveToParentDate, green.didMoveToParentDate]
-        )
-        XCTAssertEqual(
-            red.receivedEventDates,
-            [red.willMoveToParentDate]
-        )
-        XCTAssertEqual(
-            yellow.receivedEventDates + green.receivedEventDates + red.receivedEventDates,
-            (yellow.receivedEventDates + green.receivedEventDates + red.receivedEventDates).sorted()
-        )
-    }
-
     // MARK: - init(rootViewController:)
-
-    // when: stack = [yellow]
-    //
-    // then: receives => [pushViewController, viewDidLoad]
-    //       sends    => [willMoveToParent]
-    //
-    func testThat_whenInitWithARootViewController_itReceivesAndSendsProperEvents() {
-        // Arrange
-        let yellow = MockViewController()
-
-        // Act
-        sut = MockStackViewController(rootViewController: yellow)
-
-        // Assert
-        guard let sut = sut as? MockStackViewController else {
-            XCTFail("Expected sut of type MockStackViewController")
-            return
-        }
-
-        XCTAssertEqual(
-            sut.receivedEventDates,
-            [sut.pushViewControllerDate, sut.viewDidLoadDate]
-        )
-        XCTAssertEqual(yellow.receivedEventDates, [yellow.willMoveToParentDate])
-    }
-
-
-    //    StackVC  =>  viewDidLoad()
-    //    StackVC  =>  viewWillAppear(_:)
-    //    Yellow   =>  viewWillAppear(_:)
-    //    StackVC  =>  viewDidAppear(_:)
-    //    Yellow   =>  viewDidAppear(_:)
-    //    StackVC  =>  didMoveToParent(_:)
 
     // MARK: - viewDidLoad()
 
@@ -209,87 +83,156 @@ class StackViewControllerTests: XCTestCase {
         XCTAssertTrue(interactor.gestureRecognizer === gestureRecognizer)
     }
 
-    // MARK: - didAddStackElements(_: Stack)
+    // MARK: - Sequence of events
 
-    /// UIKit sends the event in this sequence
-    ///
-    /// - VC1 willMove
-    /// - VC1 didMove
-    /// - VC2 willMove
-    /// - ...
-    ///
-    /// To guarantee the same behavior, this tests mark for each view controller the time stamp of
-    /// both calls `willMoveToParent` and `didMoveToPatent`. After that, flatMapping the sequence got
-    /// from zip(willDates, didDates) and adding the very last willMove, will give the ordered
-    /// array of timestamps.
-//    func testThat_whenAddingElementsToTheStack_theViewContainmentEventsAreSentTheSameWayUIKitDoes() {
-//        // Arrange
-//        sut = StackViewController.withEmptyStack()
-//        let stack: [MockViewController] = Stack.distinctElements(4)
-//
-//        // Act
-////        sut.didAddStackElements(stack)
-//
-//        // Assert
-//        let willMoveDates = stack.compactMap { $0.willMoveToParentDate }
-//        XCTAssertEqual(willMoveDates.count, 4)
-//
-//        let didMoveDates = stack.compactMap { $0.didMoveToParentDate }
-//        XCTAssertEqual(didMoveDates.count, 3)
-//
-//        var flattenedDates = zip(willMoveDates, didMoveDates).flatMap({ return [$0, $1] })
-//        flattenedDates.append(contentsOf: willMoveDates.suffix(1))
-//        XCTAssertEqual(flattenedDates, flattenedDates.sorted())
-//        XCTAssertEqual(flattenedDates.count, 7)
-//    }
-//
-//    // MARK: - didRemoveStackElements(_: Stack)
-//
-//    func testThat_whenRemovingElementsFromTheStack_theViewContainmentEventsAreSentTheSameWayUIKitDoes() {
-//        // Arrange
-//        let stack: [MockViewController] = Stack.distinctElements(4)
-//        sut = StackViewController(viewControllers: stack)
-//
-//        // Act
-////        sut.didRemoveStackElements(stack)
-//
-//        // Assert
-//        let willMoveDates = stack.compactMap { $0.willMoveToParentDate }
-//        XCTAssertEqual(willMoveDates.count, 4)
-//
-//        let didMoveDates = stack.compactMap { $0.didMoveToParentDate }
-//        XCTAssertEqual(didMoveDates.count, 4)
-//
-//        let flattenedDates = zip(willMoveDates, didMoveDates).flatMap({ return [$0, $1] })
-//        XCTAssertEqual(flattenedDates, flattenedDates.sorted())
-//        XCTAssertEqual(flattenedDates.count, 8)
-//    }
+    // when: stack = []
+    //
+    // then: no events
+    //
+    func testThat_initWithEmptyStack_itReceivesAndSendsProperEvents() {
+        // Arrange
 
+        // Act
+        sut = MockStackViewController()
 
-//    Start NC with stack = [Black, Red, Green]
-//  
-//    [UIKit] Black    =>    willMove(toParent:)
-//    [UIKit] Black    =>    didMove(toParent:)
-//    [UIKit] Red    =>    willMove(toParent:)
-//    [UIKit] Red    =>    didMove(toParent:)
-//    [UIKit] Green    =>    willMove(toParent:)
-//    func testThat_whenInitWithANonEmptyStack_itSendsCorrectSequenceOfEventsToHisChildren() {
-//        // Arrange
-//        let stack: [MockViewController] = Stack.distinctElements(3)
-//
-//        // Act
-//        sut = StackViewController(viewControllers: stack)
-//
-//        // Assert
-//        let willMoveDates = stack.compactMap { $0.willMoveToParentDate }
-//        XCTAssertEqual(willMoveDates.count, 3)
-//
-//        let didMoveDates = stack.compactMap { $0.didMoveToParentDate }
-//        XCTAssertEqual(didMoveDates.count, 2)
-//
-//        var flattenedDates = zip(willMoveDates, didMoveDates).flatMap({ return [$0, $1] })
-//        flattenedDates.append(contentsOf: willMoveDates.suffix(1))
-//        XCTAssertEqual(flattenedDates, flattenedDates.sorted())
-//        XCTAssertEqual(flattenedDates.count, 5)
-//    }
+        // Assert
+        guard let sut = sut as? MockStackViewController else {
+            XCTFail("Expected sut of type MockStackViewController")
+            return
+        }
+
+        XCTAssertEqual(
+            sut.receivedEventDates,
+            []
+        )
+    }
+
+    // when: stack = [] and pushViewController
+    //
+    // then: receives => [pushViewController, viewDidLoad]
+    //       sends    => [willMoveToParent]
+    //
+    func testThat_initWithEmptyStackFollowedByPushViewController_itReceivesAndSendsProperEvents() {
+        // Arrange
+        let yellow = MockViewController()
+        sut = MockStackViewController()
+
+        // Act
+        sut.pushViewController(yellow, animated: false)
+
+        // Assert
+        guard let sut = sut as? MockStackViewController else {
+            XCTFail("Expected sut of type MockStackViewController")
+            return
+        }
+
+        XCTAssertEqual(
+            sut.receivedEventDates,
+            [sut.pushViewControllerDate, sut.viewDidLoadDate]
+        )
+        XCTAssertEqual(yellow.receivedEventDates, yellow.willBeAddedToParentDates)
+    }
+
+    // when: stack = [yellow, green] and .viewControllers = [red, black]
+    //
+    // then: receives           =>  [viewControllers, setViewControllers]
+    //       sends to yellow    =>  [willMoveToParent: sut],
+    //                              [didMoveToParent: sut],
+    //                              [willMoveToParent: nil],
+    //                              [didMoveToParent: nil]
+    //       sends to green     =>  [willMoveToParent: sut],
+    //                              [willMoveToParent: nil],
+    //                              [didMoveToParent: nil]
+    //       sends to red       =>  [willMoveToParent: sut],
+    //                              [didMoveToParent: sut]
+    //       sends to black     =>  [willMoveToParent: sut]
+    //
+    func testThat_whenReoplacingStackWithNonEmptyStack_itReceivesAndSendsProperEvents() {
+        // Arrange
+        let yellow = MockViewController()
+        let green = MockViewController()
+        sut = MockStackViewController()
+        sut.viewControllers = [yellow, green]
+
+        let red = MockViewController()
+        let black = MockViewController()
+
+        // Act
+        sut.viewControllers = [red, black]
+
+        // Assert
+        guard let sut = sut as? MockStackViewController else {
+            XCTFail("Expected sut of type MockStackViewController")
+            return
+        }
+
+        XCTAssertEqual(sut.receivedEventDates.count, 2)
+        XCTAssertEqual(
+            sut.receivedEventDates,
+            [sut.viewControllersSetterDate, sut.setStackDate]
+        )
+
+        XCTAssertEqual(yellow.receivedEventDates.count, 4)
+        XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
+        XCTAssertEqual(yellow.wasAddedToParentDates.count, 1)
+        XCTAssertEqual(yellow.willBeRemovedFromParentDates.count, 1)
+        XCTAssertEqual(yellow.wasRemovedFromParentDates.count, 1)
+
+        XCTAssertEqual(green.receivedEventDates.count, 3)
+        XCTAssertEqual(green.willBeAddedToParentDates.count, 1)
+        XCTAssertEqual(green.wasAddedToParentDates.count, 0)
+        XCTAssertEqual(green.willBeRemovedFromParentDates.count, 1)
+        XCTAssertEqual(green.wasRemovedFromParentDates.count, 1)
+
+        XCTAssertEqual(red.receivedEventDates.count, 2)
+        XCTAssertEqual(red.willBeAddedToParentDates.count, 1)
+        XCTAssertEqual(red.wasAddedToParentDates.count, 1)
+        XCTAssertEqual(red.willBeRemovedFromParentDates.count, 0)
+        XCTAssertEqual(red.wasRemovedFromParentDates.count, 0)
+
+        XCTAssertEqual(black.receivedEventDates.count, 1)
+        XCTAssertEqual(black.willBeAddedToParentDates.count, 1)
+        XCTAssertEqual(black.wasAddedToParentDates.count, 0)
+        XCTAssertEqual(black.willBeRemovedFromParentDates.count, 0)
+        XCTAssertEqual(black.wasRemovedFromParentDates.count, 0)
+
+        let totalEvents =
+            yellow.willBeAddedToParentDates
+            + yellow.wasAddedToParentDates
+            + green.willBeAddedToParentDates
+            + yellow.willBeRemovedFromParentDates
+            + yellow.wasRemovedFromParentDates
+            + green.willBeRemovedFromParentDates
+            + green.wasRemovedFromParentDates
+            + red.willBeAddedToParentDates
+            + red.wasAddedToParentDates
+            + black.willBeAddedToParentDates
+        XCTAssertEqual(totalEvents, totalEvents.sorted())
+    }
+
+    // when: stack = [yellow]
+    //
+    // then: receives => [pushViewController, viewDidLoad]
+    //       sends    => [willMoveToParent]
+    //
+    func testThat_whenInitWithARootViewController_itReceivesAndSendsProperEvents() {
+        // Arrange
+        let yellow = MockViewController()
+
+        // Act
+        sut = MockStackViewController(rootViewController: yellow)
+
+        // Assert
+        guard let sut = sut as? MockStackViewController else {
+            XCTFail("Expected sut of type MockStackViewController")
+            return
+        }
+
+        XCTAssertEqual(
+            sut.receivedEventDates,
+            [sut.pushViewControllerDate, sut.viewDidLoadDate]
+        )
+        XCTAssertEqual(yellow.receivedEventDates, yellow.willBeAddedToParentDates)
+    }
+
 }

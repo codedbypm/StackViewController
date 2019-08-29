@@ -7,11 +7,15 @@
 //
 
 public protocol StackViewControllerDelegate: class {
-    func animationController(for operation: StackViewController.Operation,
-                             from: UIViewController,
-                             to: UIViewController) -> UIViewControllerAnimatedTransitioning?
+    func animationController(
+        for operation: StackViewController.Operation,
+        from: UIViewController,
+        to: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning?
 
-    func interactionController(for animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning?
+    func interactionController(
+        for animationController: UIViewControllerAnimatedTransitioning
+    ) -> UIViewControllerInteractiveTransitioning?
 }
 
 public protocol StackViewControllerHandling: UIViewController {

@@ -425,11 +425,3 @@ private extension StackViewControllerInteractor {
         return delegate?.interactionController(for: animationController)
     }
 }
-
-public class NoTransitionAnimator: Animator {
-    public override func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.0
-    }
-
-    public override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {}
-}

@@ -63,28 +63,7 @@ class StackViewControllerInteractor {
         _ viewController: UIViewController,
         animated: Bool
     ) {
-        // guard can push else return
-        guard stackHandler.canPushViewController(viewController) else { return }
-
-        delegate?.loadViewIfNeeded()
-
-        // prepare transition context
-        let transitionContext = TransitionContext(
-            operation: .push,
-            from: stack.last,
-            to: viewController,
-            containerView: viewControllerWrapperView,
-            animated: animated
-        )
-
-        stackHandler.pushViewController(viewController)
-
-        sendViewControllerContainmentBeginEvents(using: transitionContext)
-
-        guard delegate?.isInViewHierarchy == true else { return }
-
-        // execute transition
-        transitionHandler.prepareTransition(context: transitionContext)
+        setStack(stack + [viewController], animated: animated)
     }
 
     @discardableResult

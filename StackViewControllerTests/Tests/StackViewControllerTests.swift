@@ -237,7 +237,9 @@ class StackViewControllerTests: XCTestCase {
     //                              [popToRootViewController]
     //       sends to yellow    =>  [willMoveToParent: sut],
     //                              [didMoveToParent: sut],
-    //                              [viewDidLoad]
+    //                              [willMoveToParent: nil],
+    //                              [didMoveToParent: nil],
+    //                              [willMoveToParent: sut],
     //       sends to green     =>  [willMoveToParent: sut],
     //                              [didMoveToParent: sut],
     //                              [willMoveToParent: nil],
@@ -269,10 +271,11 @@ class StackViewControllerTests: XCTestCase {
             sut.viewControllersSetterDates + sut.setStackDates + sut.popToRootDates
         )
 
-        XCTAssertEqual(yellow.receivedEventDates.count, 2)
-        XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
+        XCTAssertEqual(yellow.receivedEventDates.count, 5)
+        XCTAssertEqual(yellow.willBeAddedToParentDates.count, 2)
         XCTAssertEqual(yellow.wasAddedToParentDates.count, 1)
-//        XCTAssertEqual(yellow.viewDidLoadDates.count, 1)
+        XCTAssertEqual(yellow.willBeRemovedFromParentDates.count, 1)
+        XCTAssertEqual(yellow.wasRemovedFromParentDates.count, 1)
 
         XCTAssertEqual(green.receivedEventDates.count, 4)
         XCTAssertEqual(green.willBeAddedToParentDates.count, 1)
@@ -288,17 +291,19 @@ class StackViewControllerTests: XCTestCase {
         let totalEvents: [Date] =
             sut.viewControllersSetterDates
                 + sut.setStackDates
-                + yellow.willBeAddedToParentDates
+                + Array(yellow.willBeAddedToParentDates.prefix(1))
                 + yellow.wasAddedToParentDates
                 + green.willBeAddedToParentDates
                 + green.wasAddedToParentDates
                 + red.willBeAddedToParentDates
                 + sut.popToRootDates
+                + yellow.willBeRemovedFromParentDates
+                + yellow.wasRemovedFromParentDates
                 + green.willBeRemovedFromParentDates
                 + green.wasRemovedFromParentDates
                 + red.willBeRemovedFromParentDates
                 + red.wasRemovedFromParentDates
-                + yellow.viewDidLoadDates
+                + Array(yellow.willBeAddedToParentDates.suffix(1))
         XCTAssertEqual(totalEvents, totalEvents.sorted())
     }
 

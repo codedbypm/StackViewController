@@ -104,8 +104,15 @@ class StackHandler: StackHandling {
         return true
     }
 
-    func setStack(_ newStack: [UIViewController]) {
-        guard canSetStack(newStack) else { return }
+    @discardableResult
+    func setStack(_ newStack: [UIViewController]) -> Stack {
+        guard canSetStack(newStack) else { return [] }
+        let difference = newStack.difference(from: stack)
         stack = newStack
+
+        return difference.compactMap { change -> UIViewController? in
+            if case let .remove(_, viewController, _) = change { return viewController }
+            else { return nil }
+        }
     }
 }

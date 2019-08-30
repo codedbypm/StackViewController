@@ -81,8 +81,9 @@ class MockStackHandler: StackHandling {
 
     var didCallSetStack: Bool?
     var newStack: Stack = []
-    func setStack(_ newStack: Stack) {
+    func setStack(_ newStack: Stack) -> Stack {
         didCallSetStack = true
         self.newStack = newStack
+        return []
     }
 }

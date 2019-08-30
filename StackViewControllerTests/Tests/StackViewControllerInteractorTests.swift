@@ -18,8 +18,11 @@ class StackViewControllerInteractorTests: XCTestCase {
         sut = nil
         super.tearDown()
     }
+}
 
-    // MARK: - push
+// MARK: - pushViewController
+
+extension StackViewControllerInteractorTests {
 
     func testThat_whenPushingAViewControllerThatGivesAnInvalidStack_itWontSetTheStack() {
         // Arrange
@@ -37,7 +40,7 @@ class StackViewControllerInteractorTests: XCTestCase {
         XCTAssertNil(stackHandler.didCallPush)
     }
 
-    func testThat_whenPushingAViewControllerThatGivesAValidStack_itSetsTheStack() {
+    func testThat_whenPushingAViewControllerThatGivesAValidStack_itUpdatesTheStack() {
         // Arrange
         let stackHandler = MockStackHandler(stack: [])
         stackHandler.canSetStackFlag = true
@@ -156,13 +159,16 @@ class StackViewControllerInteractorTests: XCTestCase {
         XCTAssertEqual(mockDelegate.didCallPrepareAddingChild, true)
         XCTAssertEqual(mockDelegate.childAdded, .last)
     }
+}
 
-    // MARK: - popViewController
+// MARK: - popViewController
+
+extension StackViewControllerInteractorTests {
 
     func testThat_whenStackHandlerCannotPopAViewController_itDoesNotCallPopViewController() {
         // Arrange
         let stackHandler = MockStackHandler(stack: [])
-        stackHandler.canPopViewControllerFlag = false
+        stackHandler.canSetStackFlag = false
 
         sut = StackViewControllerInteractor(stackHandler: stackHandler)
 
@@ -176,7 +182,7 @@ class StackViewControllerInteractorTests: XCTestCase {
     func testThat_whenStackHandlerCannotPopAViewController_itDoesNotCallPerformTransition() {
         // Arrange
         let stackHandler = MockStackHandler(stack: [])
-        stackHandler.canPopViewControllerFlag = false
+        stackHandler.canSetStackFlag = false
         let transitionHandler = MockTransitionHandler()
 
         sut = StackViewControllerInteractor(
@@ -190,21 +196,53 @@ class StackViewControllerInteractorTests: XCTestCase {
         XCTAssertNil(transitionHandler.didCallPerformTransition)
     }
 
-    func testThat_whenStackHandlerCanPopAViewController_itCallsPopViewController() {
+    func testThat_whenStackHandlerCanPopAViewController_itUpdatesTheStack() {
         // Arrange
         let stackHandler = MockStackHandler(stack: [])
-        stackHandler.canPopViewControllerFlag = true
+        stackHandler.canSetStackFlag = true
 
         sut = StackViewControllerInteractor(stackHandler: stackHandler)
+
+        XCTAssertNil(stackHandler.didCallSetStack)
 
         // Act
         sut.popViewController(animated: true)
 
         // Assert
-        XCTAssertEqual(stackHandler.didCallPopViewController, true)
+        XCTAssertEqual(stackHandler.didCallSetStack, true)
     }
 
-    // MARK: - popToRoot
+    func testThat_whenStackHandlerCanPopAViewController_itCallsPerformTransition() {
+        // Arrange
+        let stackHandler = MockStackHandler(stack: [.first, .middle])
+        stackHandler.canSetStackFlag = true
+
+        let transitionHandler = MockTransitionHandler()
+
+        let sut = StackViewControllerInteractor(stackHandler: stackHandler,
+                                                transitionHandler: transitionHandler)
+
+        let delegate = StackViewController.embeddedInWindow()
+        sut.delegate = delegate
+
+        // Act
+        sut.popViewController(animated: true)
+
+        // Assert
+        XCTAssertEqual(transitionHandler.didCallPrepareTransition, true)
+        XCTAssertEqual(transitionHandler.transitionContext?.operation, .pop)
+        XCTAssertEqual(transitionHandler.transitionContext?.from, .middle)
+        XCTAssertEqual(transitionHandler.transitionContext?.to, .first)
+        XCTAssertEqual(transitionHandler.transitionContext?.isAnimated, true)
+        XCTAssertEqual(transitionHandler.transitionContext?.containerView,
+                       sut.viewControllerWrapperView)
+        XCTAssertEqual(transitionHandler.transitionContext?.isInteractive, false)
+    }
+}
+
+// MARK: - popToRoot
+
+extension StackViewControllerInteractorTests {
 
     func testThat_whenStackHandlerCannotPopToRoot_itDoesNotCallPopViewController() {
         // Arrange
@@ -250,8 +288,11 @@ class StackViewControllerInteractorTests: XCTestCase {
         // Assert
         XCTAssertEqual(stackHandler.didCallPopToRoot, true)
     }
+}
 
-    // MARK: - popTo
+// MARK: - popTo
+
+extension StackViewControllerInteractorTests {
 
     func testThat_whenStackHandlerCannotPopToViewController_itDoesNotCallPopToViewController() {
         // Arrange
@@ -297,8 +338,11 @@ class StackViewControllerInteractorTests: XCTestCase {
         // Assert
         XCTAssertEqual(stackHandler.didCallPopToViewController, true)
     }
+}
 
-    // MARK: - setStack
+// MARK: - setStack
+
+extension StackViewControllerInteractorTests {
 
     func testThat_whenStackHandlerCannotSetStack_itDoesNotCallSetStack() {
         // Arrange
@@ -350,30 +394,6 @@ class StackViewControllerInteractorTests: XCTestCase {
 /// This tests are grouped in an extension because the all need a different mock of StackViewControllerInteractor.
 /// One that only mocks the `performTransition` method, since that is the one being tested. 
 extension StackViewControllerInteractorTests {
-
-    func testThat_whenStackHandlerCanPopAViewController_itCallsPerformTransition() {
-        // Arrange
-        let stackHandler = MockStackHandler(stack: [.first, .middle])
-        stackHandler.canPopViewControllerFlag = true
-
-        let transitionHandler = MockTransitionHandler()
-
-        let sut = StackViewControllerInteractor(stackHandler: stackHandler,
-                                                transitionHandler: transitionHandler)
-
-        // Act
-        sut.popViewController(animated: true)
-
-        // Assert
-        XCTAssertEqual(transitionHandler.didCallPrepareTransition, true)
-        XCTAssertEqual(transitionHandler.transitionContext?.operation, .pop)
-        XCTAssertEqual(transitionHandler.transitionContext?.from, .middle)
-        XCTAssertEqual(transitionHandler.transitionContext?.to, .first)
-        XCTAssertEqual(transitionHandler.transitionContext?.isAnimated, true)
-        XCTAssertEqual(transitionHandler.transitionContext?.containerView,
-                       sut.viewControllerWrapperView)
-        XCTAssertEqual(transitionHandler.transitionContext?.isInteractive, false)
-    }
 
     func testThat_whenStackHandlerCanPopToRootAndSVCViewIsInHierarchy_itCallsPerformTransition() {
         // Arrange

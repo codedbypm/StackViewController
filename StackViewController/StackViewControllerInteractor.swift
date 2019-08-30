@@ -71,28 +71,10 @@ class StackViewControllerInteractor {
         animated: Bool,
         interactive: Bool = false
     ) -> UIViewController? {
-        // guard can push else return
-        guard stackHandler.canPopViewController() else { return nil }
-
-        // prepare transition context
-        let transitionContext = TransitionContext(
-            operation: .pop,
-            from: stack.last,
-            to: stack.suffix(2).first,
-            containerView: viewControllerWrapperView,
-            animated: animated,
-            interactive: interactive
-        )
-
-        transitionHandler.prepareTransition(context: transitionContext)
-
-        let poppedViewController = stackHandler.popViewController()
-        undoLastStackChange = { [weak self] in
-            guard let controller = poppedViewController else { return }
-            self?.stackHandler.pushViewController(controller)
-        }
-
-        return poppedViewController
+        
+        let last = stack.last
+        setStack(stack.dropLast(), animated: animated)
+        return last
     }
 
     @discardableResult

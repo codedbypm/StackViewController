@@ -40,6 +40,7 @@ class NavigationController: UINavigationController, Tracing {
         super.pushViewController(viewController, animated: animated)
     }
 
+    @discardableResult
     override func popViewController(animated: Bool) -> UIViewController? {
         trace(.stackOperation, self, #function)
         let returned = super.popViewController(animated: animated)
@@ -50,6 +51,12 @@ class NavigationController: UINavigationController, Tracing {
     override func popToRootViewController(animated: Bool) -> [UIViewController]? {
         trace(.stackOperation, self, #function)
         return super.popToRootViewController(animated: animated)
+    }
+
+    @discardableResult
+    override func popToViewController(_ viewController: UIViewController, animated: Bool) -> [UIViewController]? {
+        trace(.stackOperation, self, #function)
+        return super.popToViewController(viewController, animated: animated)
     }
 
     override func viewWillAppear(_ animated: Bool) {

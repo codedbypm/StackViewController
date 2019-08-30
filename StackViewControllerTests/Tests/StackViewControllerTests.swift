@@ -269,10 +269,10 @@ class StackViewControllerTests: XCTestCase {
             sut.viewControllersSetterDates + sut.setStackDates + sut.popToRootDates
         )
 
-        XCTAssertEqual(yellow.receivedEventDates.count, 3)
+        XCTAssertEqual(yellow.receivedEventDates.count, 2)
         XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
         XCTAssertEqual(yellow.wasAddedToParentDates.count, 1)
-        XCTAssertEqual(yellow.viewDidLoadDates.count, 1)
+//        XCTAssertEqual(yellow.viewDidLoadDates.count, 1)
 
         XCTAssertEqual(green.receivedEventDates.count, 4)
         XCTAssertEqual(green.willBeAddedToParentDates.count, 1)

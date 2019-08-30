@@ -63,7 +63,8 @@ class StackViewControllerInteractor {
         _ viewController: UIViewController,
         animated: Bool
     ) {
-        setStack(stack + [viewController], animated: animated)
+        guard stackHandler.canPushViewController(viewController) else { return }
+        replaceStack(stack + [viewController], animated: animated)
     }
 
     @discardableResult
@@ -71,38 +72,18 @@ class StackViewControllerInteractor {
         animated: Bool,
         interactive: Bool = false
     ) -> UIViewController? {
-        
-        let last = stack.last
-        setStack(stack.dropLast(), animated: animated)
-        return last
+        guard stackHandler.canPopViewController() else { return nil }
+
+        let newStack: Stack = stack.dropLast()
+        return replaceStack(newStack, animated: animated).first
     }
 
     @discardableResult
     func popToRoot(animated: Bool) -> [UIViewController]? {
         guard stackHandler.canPopToRoot() else { return nil }
 
-        // prepare transition context
-        let transitionContext = TransitionContext(
-            operation: .pop,
-            from: stack.last,
-            to: stack.first,
-            containerView: viewControllerWrapperView,
-            animated: animated,
-            interactive: false
-        )
-
-        let poppedViewControllers = stackHandler.popToRoot()
-
-        poppedViewControllers?.forEach {
-            delegate?.prepareRemovingChild($0)
-            delegate?.finishRemovingChild($0)
-        }
-
-        guard delegate?.isInViewHierarchy == true else { return poppedViewControllers }
-
-        transitionHandler.prepareTransition(context: transitionContext)
-
-        return poppedViewControllers
+        let newStack = Array(stack.prefix(1))
+        return replaceStack(newStack, animated: animated)
     }
 
     @discardableResult
@@ -110,26 +91,10 @@ class StackViewControllerInteractor {
         to viewController: UIViewController,
         animated: Bool
     ) -> [UIViewController]? {
+
         guard stackHandler.canPop(to: viewController) else { return nil }
-
-        // prepare transition context
-        let transitionContext = TransitionContext(
-            operation: .pop,
-            from: stack.last,
-            to: viewController,
-            containerView: viewControllerWrapperView,
-            animated: animated,
-            interactive: false
-        )
-
-        let poppedViewControllers = stackHandler.pop(to: viewController)
-        if let poppedViewControllers = poppedViewControllers {
-            notifyControllerOfRemovals(poppedViewControllers)
-        }
-
-        transitionHandler.prepareTransition(context: transitionContext)
-
-        return poppedViewControllers
+        let newStack = Array(stack.prefix(while: { $0 != viewController } ) + [viewController])
+        return replaceStack(newStack, animated: animated)
     }
 
     func setStack(
@@ -137,6 +102,14 @@ class StackViewControllerInteractor {
         animated: Bool
     ) {
         guard stackHandler.canSetStack(newStack) else { return }
+        replaceStack(newStack, animated: animated)
+    }
+
+    @discardableResult
+    private func replaceStack(
+        _ newStack: [UIViewController],
+        animated: Bool
+    ) -> Stack {
         
         let operation = stackOperationProvider.stackOperation(
             whenReplacing: stack,
@@ -157,8 +130,8 @@ class StackViewControllerInteractor {
             delegate?.prepareRemovingChild($0)
             delegate?.finishRemovingChild($0)
         }
-        
-        stackHandler.setStack(newStack)
+
+        let removed = stackHandler.setStack(newStack)
 
         newStack.dropLast().forEach {
             delegate?.prepareAddingChild($0)
@@ -169,11 +142,13 @@ class StackViewControllerInteractor {
             delegate?.prepareAddingChild($0)
         }
 
-        guard delegate?.isInViewHierarchy == true else { return }
-        
-        transitionHandler.prepareTransition(context: transitionContext)
-    }
+        guard delegate?.isInViewHierarchy == true else { return removed }
 
+        transitionHandler.prepareTransition(context: transitionContext)
+
+        return removed
+    }
+    
     // MARK: - Actions
 
     func handleScreenEdgePanGestureRecognizerStateChange(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {

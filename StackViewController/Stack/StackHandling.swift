@@ -24,5 +24,5 @@ protocol StackHandling {
     func pop(to: UIViewController) -> [UIViewController]?
 
     func canSetStack(_: Stack) -> Bool
-    func setStack(_: Stack)
+    func setStack(_: Stack) -> Stack
 }

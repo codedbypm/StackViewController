@@ -220,10 +220,9 @@ extension StackViewController {
     }
 }
 
-extension StackViewController: StackViewControllerHandling {
-    public func setViewControllers(_ stack: [UIViewController], animated: Bool) {
-        setStack(stack, animated: animated)
-    }
-}
-
 extension StackViewController: Tracing {}
+//extension StackViewController: StackViewControllerHandling {
+////    public func setViewControllers(_ stack: [UIViewController], animated: Bool) {
+////        setStack(stack, animated: animated)
+////    }
+//}

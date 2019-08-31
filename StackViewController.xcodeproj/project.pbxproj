@@ -223,11 +223,7 @@
 		FD5259892284E8D10072C6B8 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */,
-				FD44FF4D228C2F1A00DA2AEB /* StackViewControllerTests+InteractorDelegate.swift */,
-				FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */,
-				FD76B7682270EA010090EDB2 /* StackViewControllerTests+StackActions.swift */,
-				FD44FF49228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift */,
+				FDB472DB231B1FB000871560 /* StackViewController */,
 				FD1B56F8227C525B00E005EC /* StackHandlerTests.swift */,
 				FD44FF3E228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift */,
 				FDF0BC7422C92603000EAAD5 /* TransitionHandlerTests.swift */,
@@ -374,6 +370,18 @@
 				FDAD73CF22AD5E3900FB68BB /* TransitionHandling.swift */,
 			);
 			path = Transition;
+			sourceTree = "<group>";
+		};
+		FDB472DB231B1FB000871560 /* StackViewController */ = {
+			isa = PBXGroup;
+			children = (
+				FD76B7022270C9530090EDB2 /* StackViewControllerTests.swift */,
+				FD44FF4D228C2F1A00DA2AEB /* StackViewControllerTests+InteractorDelegate.swift */,
+				FD76B7662270E9C60090EDB2 /* StackViewControllerTests+Properties.swift */,
+				FD76B7682270EA010090EDB2 /* StackViewControllerTests+StackActions.swift */,
+				FD44FF49228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift */,
+			);
+			path = StackViewController;
 			sourceTree = "<group>";
 		};
 		FDD1807522CD692D003017EE /* Gesture Recognizers */ = {

@@ -21,10 +21,6 @@ class StackViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: - init()
-
-    // MARK: - init(rootViewController:)
-
     // MARK: - viewDidLoad()
 
     func testThat_whenViewDidLoadIsCalled_itAddsGesgtureRecognizerToTheView() {

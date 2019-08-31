@@ -13,90 +13,77 @@ extension StackViewControllerTests {
 
     // MARK: - viewWillAppear
 
-    func testThat_whenViewWillAppear_beginAppearanceTransitionIsCalledOnTopViewController() {
+    func testThat_whenViewWillAppear_itCallsInteractorViewWillAppear() {
         // Arrange
-        let yellow = MockViewController()
-        let interactor = StackViewControllerInteractor()
-        interactor.setStack([yellow], animated: false)
+        let animated = false
+        let interactor = MockStackViewControllerInteractor()
         sut = StackViewController(interactor: interactor)
-        let animated = true
 
-        XCTAssertNil(yellow.beginAppearanceIsAppearing)
+        XCTAssertNil(interactor.didCallViewWillAppear)
+        XCTAssertNil(interactor.isAnimated)
 
         // Act
         sut.viewWillAppear(animated)
 
         // Assert
-        XCTAssertEqual(yellow.beginAppearanceIsAppearing, true)
+        XCTAssertEqual(interactor.didCallViewWillAppear, true)
+        XCTAssertEqual(interactor.isAnimated, animated)
     }
 
     // MARK: - viewDidAppear
 
-    func testThat_whenViewDidAppear_endAppearanceTransitionIsCalledOnTopViewController() {
+    func testThat_whenViewDidAppear_itCallsInteractorViewDidAppear() {
         // Arrange
-        let viewControllerA = MockViewController()
-        let viewControllerB = MockViewController()
-        let stack = [viewControllerA, viewControllerB]
-        let stackHandler = MockStackHandler(stack: stack)
-        let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        let animated = false
+        let interactor = MockStackViewControllerInteractor()
         sut = StackViewController(interactor: interactor)
-        let dontcare = true
 
-        XCTAssertNil(viewControllerB.didCallEndAppearance)
+        XCTAssertNil(interactor.didCallViewDidAppear)
+        XCTAssertNil(interactor.isAnimated)
 
         // Act
-        sut.viewDidAppear(dontcare)
+        sut.viewDidAppear(animated)
 
         // Assert
-        XCTAssertEqual(sut.topViewController, viewControllerB)
-        XCTAssertEqual(viewControllerB.didCallEndAppearance, true)
+        XCTAssertEqual(interactor.didCallViewDidAppear, true)
+        XCTAssertEqual(interactor.isAnimated, animated)
     }
 
     // MARK: - viewWillDisappear
 
-    func testThat_whenViewWillDisappear_beginAppearanceTransitionIsCalledOnTopViewController() {
+    func testThat_whenViewWillDisappear_itCallsInteractorViewWillDisappear() {
         // Arrange
-        let viewControllerA = MockViewController()
-        let viewControllerB = MockViewController()
-        let stack = [viewControllerA, viewControllerB]
-        let stackHandler = MockStackHandler(stack: stack)
-        let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        let animated = false
+        let interactor = MockStackViewControllerInteractor()
         sut = StackViewController(interactor: interactor)
-        let animated = true
 
-        XCTAssertNil(viewControllerB.didCallBeginAppearance)
-        XCTAssertNil(viewControllerB.beginAppearanceIsAppearing)
-        XCTAssertNil(viewControllerB.beginAppearanceAnimated)
+        XCTAssertNil(interactor.didCallViewWillDisappear)
+        XCTAssertNil(interactor.isAnimated)
 
         // Act
         sut.viewWillDisappear(animated)
 
         // Assert
-        XCTAssertEqual(sut.topViewController, viewControllerB)
-        XCTAssertEqual(viewControllerB.didCallBeginAppearance, true)
-        XCTAssertEqual(viewControllerB.beginAppearanceIsAppearing, false)
-        XCTAssertEqual(viewControllerB.beginAppearanceAnimated, animated)
+        XCTAssertEqual(interactor.didCallViewWillDisappear, true)
+        XCTAssertEqual(interactor.isAnimated, animated)
     }
 
     // MARK: - viewDidDisappear
 
-    func testThat_whenViewDidDisappear_endAppearanceTransitionIsCalledOnTopViewController() {
+    func testThat_whenViewDidDisappear_itCallsInteractorViewDidDisappear() {
         // Arrange
-        let viewControllerA = MockViewController()
-        let viewControllerB = MockViewController()
-        let stack = [viewControllerA, viewControllerB]
-        let stackHandler = MockStackHandler(stack: stack)
-        let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        let animated = false
+        let interactor = MockStackViewControllerInteractor()
         sut = StackViewController(interactor: interactor)
-        let dontcare = true
 
-        XCTAssertNil(viewControllerB.didCallEndAppearance)
+        XCTAssertNil(interactor.didCallViewDidDisappear)
+        XCTAssertNil(interactor.isAnimated)
 
         // Act
-        sut.viewDidDisappear(dontcare)
+        sut.viewDidDisappear(animated)
 
         // Assert
-        XCTAssertEqual(sut.topViewController, viewControllerB)
-        XCTAssertEqual(viewControllerB.didCallEndAppearance, true)
+        XCTAssertEqual(interactor.didCallViewDidDisappear, true)
+        XCTAssertEqual(interactor.isAnimated, animated)
     }
 }

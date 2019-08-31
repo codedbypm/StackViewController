@@ -77,4 +77,30 @@ class MockStackViewControllerInteractor: StackViewControllerInteractor {
         didCallHandleScreenEdgePanGestureRecognizerStateChange = true
         self.gestureRecognizer = gestureRecognizer
     }
+
+    var isAnimated: Bool?
+
+    var didCallViewWillAppear: Bool?
+    override func viewWillAppear(_ animated: Bool) {
+        didCallViewWillAppear = true
+        isAnimated = animated
+    }
+
+    var didCallViewDidAppear: Bool?
+    override func viewDidAppear(_ animated: Bool) {
+        didCallViewDidAppear = true
+        isAnimated = animated
+    }
+
+    var didCallViewWillDisappear: Bool?
+    override func viewWillDisappear(_ animated: Bool) {
+        didCallViewWillDisappear = true
+        isAnimated = animated
+    }
+
+    var didCallViewDidDisappear: Bool?
+    override func viewDidDisappear(_ animated: Bool) {
+        didCallViewDidDisappear = true
+        isAnimated = animated
+    }
 }

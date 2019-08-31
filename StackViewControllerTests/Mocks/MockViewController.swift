@@ -76,28 +76,38 @@ class MockViewController: UIViewController {
         viewDidDisappearDates.append(Date())
     }
 
-    var didCallBeginAppearance: Bool? = nil
-    var beginAppearanceIsAppearing: Bool? = nil
-    var beginAppearanceAnimated: Bool? = nil
+    // MARK: - AppearanceTransition
+
+    var isAppearing: Bool?
+    var isDisappearing: Bool?
+    var isAnimated: Bool?
+    
+    var didCallBeginAppearanceTransition: Bool?
     var beginAppearanceTransitionDates: [Date] = []
     var beginDisappearanceTransitionDates: [Date] = []
-    override func beginAppearanceTransition(_ isAppearing: Bool, animated: Bool) {
-        didCallBeginAppearance = true
-        beginAppearanceIsAppearing = isAppearing
-        beginAppearanceAnimated = animated
-        if isAppearing { beginAppearanceTransitionDates.append(Date()) }
-        else { beginDisappearanceTransitionDates.append(Date()) }
+    override func beginAppearanceTransition(_ appearing: Bool, animated: Bool) {
+        didCallBeginAppearanceTransition = true
+        isAnimated = animated
+
+        if appearing {
+            isAppearing = true
+            beginAppearanceTransitionDates.append(Date())
+        } else {
+            isDisappearing = true
+            beginDisappearanceTransitionDates.append(Date())
+        }
     }
 
-    var didCallEndAppearance: Bool? = nil
+    var didCallEndAppearanceTransition: Bool?
     var endAppearanceTransitionDates: [Date] = []
     var endDisppearanceTransitionDates: [Date] = []
     override func endAppearanceTransition() {
-        didCallEndAppearance = true
-        switch beginAppearanceIsAppearing {
-        case .some(true): endAppearanceTransitionDates.append(Date())
-        case .some(false): endDisppearanceTransitionDates.append(Date())
-        case .none: break
+        didCallEndAppearanceTransition = true
+
+        if case .some(true) = isAppearing {
+            endAppearanceTransitionDates.append(Date())
+        } else if case .some(true) = isDisappearing {
+            endDisppearanceTransitionDates.append(Date())
         }
     }
 

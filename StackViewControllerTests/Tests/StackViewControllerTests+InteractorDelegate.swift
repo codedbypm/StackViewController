@@ -109,73 +109,72 @@ extension StackViewControllerTests {
 
     func testThat_whenPrepareAppearanceIsCalled_itCallsBeginAppearanceTransitionOnTheViewController() {
         // Arrange
-        let viewController = MockViewController()
+        let yellow = MockViewController()
         let animated = true
         sut = StackViewController.dummy
 
-        XCTAssertNil(viewController.didCallBeginAppearance)
-        XCTAssertNil(viewController.beginAppearanceIsAppearing)
-        XCTAssertNil(viewController.beginAppearanceAnimated)
+        XCTAssertNil(yellow.didCallBeginAppearanceTransition)
+        XCTAssertNil(yellow.isAppearing)
 
         // Act
-        sut.prepareAppearance(of: viewController, animated: animated)
+        sut.prepareAppearance(of: yellow, animated: animated)
 
         // Assert
-        XCTAssertEqual(viewController.didCallBeginAppearance, true)
-        XCTAssertEqual(viewController.beginAppearanceIsAppearing, true)
-        XCTAssertEqual(viewController.beginAppearanceAnimated, animated)
+        XCTAssertEqual(yellow.didCallBeginAppearanceTransition, true)
+        XCTAssertEqual(yellow.isAnimated, animated)
+        XCTAssertEqual(yellow.isAppearing, true)
     }
 
     // MARK: - finishAppearance(of:)
 
     func testThat_whenFinishAppearanceIsCalled_itCallsEndAppearanceTransitionOnTheViewController() {
         // Arrange
-        let viewController = MockViewController()
+        let yellow = MockViewController()
         sut = StackViewController.dummy
 
-        XCTAssertNil(viewController.didCallEndAppearance)
+        XCTAssertNil(yellow.didCallEndAppearanceTransition)
 
         // Act
-        sut.finishAppearance(of: viewController)
+        sut.finishAppearance(of: yellow)
 
         // Assert
-        XCTAssertEqual(viewController.didCallEndAppearance, true)
+        XCTAssertEqual(yellow.didCallEndAppearanceTransition, true)
     }
 
     // MARK: - prepareDisappearance(of:animated:)
 
     func testThat_whenPrepareDisappearanceIsCalled_itCallsBeginAppearanceTransitionOnTheViewController() {
         // Arrange
-        let viewController = MockViewController()
+        let yellow = MockViewController()
         let animated = true
         sut = StackViewController.dummy
 
-        XCTAssertNil(viewController.didCallBeginAppearance)
-        XCTAssertNil(viewController.beginAppearanceIsAppearing)
-        XCTAssertNil(viewController.beginAppearanceAnimated)
+        XCTAssertNil(yellow.didCallBeginAppearanceTransition)
+        XCTAssertNil(yellow.isDisappearing)
 
         // Act
-        sut.prepareDisappearance(of: viewController, animated: animated)
+        sut.prepareDisappearance(of: yellow, animated: animated)
 
         // Assert
-        XCTAssertEqual(viewController.didCallBeginAppearance, true)
-        XCTAssertEqual(viewController.beginAppearanceIsAppearing, false)
-        XCTAssertEqual(viewController.beginAppearanceAnimated, animated)
+        XCTAssertEqual(yellow.didCallBeginAppearanceTransition, true)
+        XCTAssertEqual(yellow.isAnimated, animated)
+        XCTAssertEqual(yellow.isDisappearing, true)
+
     }
 
     // MARK: - finishDisappearance(of:)
 
     func testThat_whenFinishDisappearanceIsCalled_itCallsEndAppearanceTransitionOnTheViewController() {
         // Arrange
-        let viewController = MockViewController()
+        let yellow = MockViewController()
         sut = StackViewController.dummy
 
-        XCTAssertNil(viewController.didCallEndAppearance)
+        XCTAssertNil(yellow.didCallEndAppearanceTransition)
 
         // Act
-        sut.finishDisappearance(of: viewController)
+        sut.finishDisappearance(of: yellow)
 
         // Assert
-        XCTAssertEqual(viewController.didCallEndAppearance, true)
+        XCTAssertEqual(yellow.didCallEndAppearanceTransition, true)
     }
 }

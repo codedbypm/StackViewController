@@ -84,7 +84,15 @@ class NavigationController: UINavigationController, Tracing {
         super.setViewControllers(viewControllers, animated: animated)
     }
 
+    override func beginAppearanceTransition(_ isAppearing: Bool, animated: Bool) {
+        trace(.viewLifeCycle, self, #function)
+        super.beginAppearanceTransition(isAppearing, animated: animated)
+    }
 
+    override func endAppearanceTransition() {
+        trace(.viewLifeCycle, self, #function)
+        super.endAppearanceTransition()
+    }
 }
 
 extension NavigationController: UIGestureRecognizerDelegate {

@@ -9,7 +9,7 @@
 import UIKit
 import StackViewController
 
-extension UIViewController {
+extension BaseViewController {
 
     static func colored(_ color: Color = .random) -> BaseViewController {
 
@@ -26,11 +26,13 @@ extension UIViewController {
 
         controller.onPushAnimated = {
             let next = colored()
+            next.stack = controller.stack
             controller.stack?.pushViewController(next, animated: true)
         }
 
         controller.onPushNonAnimated = {
             let next = colored()
+            next.stack = controller.stack
             controller.stack?.pushViewController(next, animated: false)
         }
 
@@ -87,6 +89,7 @@ extension UIViewController {
 
         controller.onInsertAtIndexZero = {
             let insert = colored()
+            insert.stack = controller.stack
             var modifiedStack = controller.stack?.viewControllers
             modifiedStack?.insert(insert, at: 0)
 

@@ -12,7 +12,7 @@ import StackViewController
 class StackCoordinator {
 
     lazy var stackViewController: StackViewController = {
-        var root: BaseViewController = UIViewController.colored(.black)
+        var root = BaseViewController.colored(.black)
         let stackViewController = StackViewController(rootViewController: root)
         root.stack = stackViewController
 
@@ -23,4 +23,10 @@ class StackCoordinator {
 
         return stackViewController
     }()
+}
+
+extension StackViewController: StackViewControllerHandling {
+    public func setViewControllers(_ stack: [UIViewController], animated: Bool) {
+        setStack(stack, animated: animated)
+    }
 }

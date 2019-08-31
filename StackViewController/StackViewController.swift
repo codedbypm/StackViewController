@@ -221,8 +221,3 @@ extension StackViewController {
 }
 
 extension StackViewController: Tracing {}
-//extension StackViewController: StackViewControllerHandling {
-////    public func setViewControllers(_ stack: [UIViewController], animated: Bool) {
-////        setStack(stack, animated: animated)
-////    }
-//}

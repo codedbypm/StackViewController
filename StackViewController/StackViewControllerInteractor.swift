@@ -39,7 +39,7 @@ class StackViewControllerInteractor {
     // MARK: - Private properties
 
     private let stackHandler: StackHandling
-    private let transitionHandler: TransitionHandling
+    private var transitionHandler: TransitionHandling
 
     private var undoLastStackChange: (() -> Void)?
 
@@ -55,6 +55,8 @@ class StackViewControllerInteractor {
         self.stackHandler = stackHandler
         self.transitionHandler = transitionHandler
         self.stackOperationProvider = stackOperationProvider
+
+        self.transitionHandler.delegate = self
     }
 
     // MARK: - Internal methods
@@ -192,9 +194,9 @@ class StackViewControllerInteractor {
 
 }
 
-// MARK: - TransitionHandlerDelegate
+// MARK: - TransitionHandlingDelegate
 
-extension StackViewControllerInteractor: TransitionHandlerDelegate {
+extension StackViewControllerInteractor: TransitionHandlingDelegate {
 
     func willStartTransition(_ context: TransitionContext) {
         sendBeginTransitionViewEvents(using: context)

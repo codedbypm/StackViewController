@@ -13,7 +13,7 @@ extension UINavigationController: StackViewControllerHandling {}
 class UIKitCoordinator: NSObject {
 
     lazy var navigationController: NavigationController = {
-        let root = UIViewController.colored(.yellow)
+        let root = BaseViewController.colored(.yellow)
         let navController = NavigationController(rootViewController: root)
         root.stack = navController
 

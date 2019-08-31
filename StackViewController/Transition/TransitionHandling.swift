@@ -10,6 +10,8 @@ import Foundation
 
 protocol TransitionHandling {
 
+    var delegate: TransitionHandlingDelegate? { get set }
+
     func prepareTransition(context: TransitionContext)
     
     func performTransition(

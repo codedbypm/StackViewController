@@ -8,7 +8,7 @@
 
 @testable import StackViewController
 
-class MockTransitionHandlerDelegate: TransitionHandlerDelegate {
+class MockTransitionHandlerDelegate: TransitionHandlingDelegate {
 
     var didCallWillStartTransition: Bool?
     var willStartTransitionContext: TransitionContext?

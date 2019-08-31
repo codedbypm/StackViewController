@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol TransitionHandlerDelegate: class {
+protocol TransitionHandlingDelegate: class {
     func willStartTransition(_: TransitionContext)
     func didEndTransition(_: TransitionContext, didComplete: Bool)
 }
@@ -19,7 +19,7 @@ class TransitionHandler: TransitionHandling {
 
     static let shared = TransitionHandler()
 
-    weak var transitionDelegate: TransitionHandlerDelegate?
+    weak var delegate: TransitionHandlingDelegate?
     weak var stackViewControllerDelegate: StackViewControllerDelegate?
 
     // MARK: - Private properties
@@ -55,11 +55,11 @@ class TransitionHandler: TransitionHandling {
         context: TransitionContext,
         animationController: UIViewControllerAnimatedTransitioning
     ) {
-        transitionDelegate?.willStartTransition(context)
+        delegate?.willStartTransition(context)
 
         context.onTransitionFinished = { didComplete in
             animationController.animationEnded?(didComplete)
-            self.transitionDelegate?.didEndTransition(context, didComplete: didComplete)
+            self.delegate?.didEndTransition(context, didComplete: didComplete)
             self.animationController = nil
         }
 
@@ -77,11 +77,11 @@ class TransitionHandler: TransitionHandling {
         animationController: UIViewControllerAnimatedTransitioning,
         interactionController: UIViewControllerInteractiveTransitioning
     ) {
-        transitionDelegate?.willStartTransition(context)
+        delegate?.willStartTransition(context)
 
         context.onTransitionFinished = { didComplete in
             animationController.animationEnded?(didComplete)
-            self.transitionDelegate?.didEndTransition(context, didComplete: didComplete)
+            self.delegate?.didEndTransition(context, didComplete: didComplete)
             self.animationController = nil
             self.interactionController = nil
         }

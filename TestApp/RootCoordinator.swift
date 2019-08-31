@@ -23,9 +23,6 @@ class RootCoordinator: NSObject {
     init(window: UIWindow) {
         super.init()
 
-        let _ = stackViewController
-//        let _ = navigationController
-
         tabBarController.viewControllers = [
 //            stackViewController, navigationController
 //            navigationController, stackViewController

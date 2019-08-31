@@ -86,20 +86,16 @@ class StackViewControllerTests: XCTestCase {
     // when: stack = []
     // then: no events
     //
-    func testThat_initWithEmptyStack_itReceivesAndSendsProperEvents() {
+    func testThat_initWithEmptyStack_itReceivesAndSendsProperEvents() throws {
         // Arrange
 
         // Act
         sut = MockStackViewController()
 
         // Assert
-        guard let sut = sut as? MockStackViewController else {
-            XCTFail("Expected sut of type MockStackViewController")
-            return
-        }
-
+        let mockSut = try XCTUnwrap(sut as? MockStackViewController)
         XCTAssertEqual(
-            sut.receivedEventDates,
+            mockSut.receivedEventDates,
             []
         )
     }
@@ -108,7 +104,7 @@ class StackViewControllerTests: XCTestCase {
     // then: receives => [pushViewController, viewDidLoad]
     //       sends    => [willMoveToParent]
     //
-    func testThat_whenInitWithEmptyStack_and_pushViewController_thenItReceivesAndSendsProperEvents() {
+    func testThat_whenInitWithEmptyStack_and_pushViewController_thenItReceivesAndSendsProperEvents() throws {
         // Arrange
         let yellow = MockViewController()
         sut = MockStackViewController()
@@ -117,11 +113,7 @@ class StackViewControllerTests: XCTestCase {
         sut.pushViewController(yellow, animated: false)
 
         // Assert
-        guard let sut = sut as? MockStackViewController else {
-            XCTFail("Expected sut of type MockStackViewController")
-            return
-        }
-
+        let sut = try XCTUnwrap(self.sut as? MockStackViewController)
         XCTAssertEqual(
             sut.receivedEventDates,
             sut.pushViewControllerDates + sut.viewDidLoadDates
@@ -142,7 +134,7 @@ class StackViewControllerTests: XCTestCase {
     //                              [didMoveToParent: sut]
     //       sends to black     =>  [willMoveToParent: sut]
     //
-    func testThat_whenReplacingNonEmptyStackWithAnotherNonEmptyStack_thenItReceivesAndSendsProperEvents() {
+    func testThat_whenReplacingNonEmptyStackWithAnotherNonEmptyStack_thenItReceivesAndSendsProperEvents() throws {
         // Arrange
         let yellow = MockViewController()
         let green = MockViewController()
@@ -156,11 +148,7 @@ class StackViewControllerTests: XCTestCase {
         sut.viewControllers = [red, black]
 
         // Assert
-        guard let sut = sut as? MockStackViewController else {
-            XCTFail("Expected sut of type MockStackViewController")
-            return
-        }
-
+        let sut = try XCTUnwrap(self.sut as? MockStackViewController)
         XCTAssertEqual(sut.receivedEventDates.count, 4)
         XCTAssertEqual(
             sut.receivedEventDates,
@@ -209,7 +197,7 @@ class StackViewControllerTests: XCTestCase {
     // then: receives => [pushViewController, viewDidLoad]
     //       sends    => [willMoveToParent]
     //
-    func testThat_whenInitWithARootViewController_thenItReceivesAndSendsProperEvents() {
+    func testThat_whenInitWithARootViewController_thenItReceivesAndSendsProperEvents() throws {
         // Arrange
         let yellow = MockViewController()
 
@@ -217,11 +205,7 @@ class StackViewControllerTests: XCTestCase {
         sut = MockStackViewController(rootViewController: yellow)
 
         // Assert
-        guard let sut = sut as? MockStackViewController else {
-            XCTFail("Expected sut of type MockStackViewController")
-            return
-        }
-
+        let sut = try XCTUnwrap(self.sut as? MockStackViewController)
         XCTAssertEqual(
             sut.receivedEventDates,
             sut.pushViewControllerDates + sut.viewDidLoadDates
@@ -240,7 +224,7 @@ class StackViewControllerTests: XCTestCase {
     //                      [viewDidAppear]
     //                      [didMoveToParent]
     //
-    func testThat_whenInitWithARootViewControllerAndViewIsAddedToWindow_thenItReceivesAndSendsProperEvents() {
+    func testThat_whenInitWithARootViewControllerAndViewIsAddedToWindow_thenItReceivesAndSendsProperEvents() throws {
         // Arrange
         let yellow = MockViewController()
         window = UIWindow()
@@ -251,11 +235,7 @@ class StackViewControllerTests: XCTestCase {
         window.makeKeyAndVisible()
 
         // Assert
-        guard let sut = sut as? MockStackViewController else {
-            XCTFail("Expected sut of type MockStackViewController")
-            return
-        }
-
+        let sut = try XCTUnwrap(self.sut as? MockStackViewController)
         XCTAssertEqual(sut.pushViewControllerDates.count, 1)
         XCTAssertEqual(sut.viewDidLoadDates.count, 1)
         XCTAssertEqual(sut.viewWillAppearDates.count, 1)
@@ -287,7 +267,7 @@ class StackViewControllerTests: XCTestCase {
     //                              [willMoveToParent: nil],
     //                              [didMoveToParent: nil],
     //
-    func testThat_whenCallingPopToRootViewControllerOnNonEmptyStack_itReceivesAndSendsProperEvents() {
+    func testThat_whenCallingPopToRootViewControllerOnNonEmptyStack_itReceivesAndSendsProperEvents() throws {
         // Arrange
         let yellow = MockViewController()
         let green = MockViewController()
@@ -299,11 +279,7 @@ class StackViewControllerTests: XCTestCase {
         sut.popToRootViewController(animated: false)
 
         // Assert
-        guard let sut = sut as? MockStackViewController else {
-            XCTFail("Expected sut of type MockStackViewController")
-            return
-        }
-
+        let sut = try XCTUnwrap(self.sut as? MockStackViewController)
         XCTAssertEqual(sut.receivedEventDates.count, 3)
         XCTAssertEqual(
             sut.receivedEventDates,

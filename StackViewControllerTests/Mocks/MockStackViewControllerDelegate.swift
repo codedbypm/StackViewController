@@ -10,17 +10,19 @@
 
 class MockStackViewControllerDelegate: StackViewControllerDelegate {
 
+    var animationController: MockAnimatedTransitioning?
     func animationController(
         for operation: StackViewController.Operation,
         from: UIViewController,
         to: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        return nil
+        return animationController
     }
 
+    var interactiveController: MockInteractiveTransitioning?
     func interactionController(
         for animationController: UIViewControllerAnimatedTransitioning
     ) -> UIViewControllerInteractiveTransitioning? {
-        return nil
+        return interactiveController
     }
 }

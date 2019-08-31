@@ -11,6 +11,47 @@ import XCTest
 
 extension StackViewControllerTests {
 
+    // MARK: - animationController(for:from:to:)
+
+    func testThat_whenAskedForAnimationController_thenItReturnsWhatDelegateReturns() {
+        // Arrange
+        let animationController = MockAnimatedTransitioning()
+        let delegate = MockStackViewControllerDelegate()
+        delegate.animationController = animationController
+
+        let sut = StackViewController()
+        sut.delegate = delegate
+
+        // Act
+        let controller = sut.animationController(
+            for: .push,
+            from: UIViewController(),
+            to: UIViewController()
+        )
+
+        // Assert
+        XCTAssertTrue(controller === animationController)
+    }
+
+    // MARK: - interactionController(for:)
+
+    func testThat_whenAskedForInteractiveController_thenItReturnsWhatDelegateReturns() {
+        // Arrange
+        let interactiveController = MockInteractiveTransitioning()
+        let delegate = MockStackViewControllerDelegate()
+        delegate.interactiveController = interactiveController
+
+        let sut = StackViewController()
+        sut.delegate = delegate
+
+        // Act
+        let controller = sut.interactionController(for: MockAnimatedTransitioning())
+
+        // Assert
+        XCTAssertTrue(controller === interactiveController)
+    }
+
+
     // MARK: - startInteractivePopTransition()
 
     func testThat_whenStartInteractivePopTransitionIsCalled_itCallsInteractorPopAnimatedAndInteractive() {

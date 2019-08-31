@@ -67,11 +67,9 @@ public class StackViewController: UIViewController {
         self.pushViewController(rootViewController, animated: false)
     }
 
-    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        self.interactor = StackViewControllerInteractor()
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-
-        self.interactor.delegate = self
+    public override convenience init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        let interactor = StackViewControllerInteractor()
+        self.init(interactor: interactor)
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -81,15 +79,11 @@ public class StackViewController: UIViewController {
 
     // MARK: - Internal Init
 
-    convenience init(viewControllers: [UIViewController]) {
-        self.init(nibName: nil, bundle: nil)
-
-        self.viewControllers = viewControllers
-    }
-
     init(interactor: StackViewControllerInteractor) {
         self.interactor = interactor
         super.init(nibName: nil, bundle: nil)
+        
+        self.interactor.delegate = self
     }
 
     // MARK: - UIViewController
@@ -108,27 +102,27 @@ public class StackViewController: UIViewController {
     }
 
     override public func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         trace(.viewLifeCycle, self, #function)
-        topViewController?.beginAppearanceTransition(true, animated: animated)
+        super.viewWillAppear(animated)
+        interactor.viewWillAppear(animated)
     }
 
     override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         trace(.viewLifeCycle, self, #function)
-        topViewController?.endAppearanceTransition()
+        super.viewDidAppear(animated)
+        interactor.viewDidAppear(animated)
     }
 
     override public func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         trace(.viewLifeCycle, self, #function)
-        topViewController?.beginAppearanceTransition(false, animated: animated)
+        super.viewWillDisappear(animated)
+        interactor.viewWillDisappear(animated)
     }
 
     override public func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
         trace(.viewLifeCycle, self, #function)
-        topViewController?.endAppearanceTransition()
+        super.viewDidDisappear(animated)
+        interactor.viewDidDisappear(animated)
     }
 
     // MARK: - Public methods

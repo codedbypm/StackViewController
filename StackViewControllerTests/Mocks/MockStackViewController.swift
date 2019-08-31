@@ -31,6 +31,8 @@ class MockStackViewController: StackViewController {
             viewDidLoadDates
             + viewWillAppearDates
             + viewDidAppearDates
+            + viewWillDisappearDates
+            + viewDidDisappearDates
     }
 
     var stackOperationDates: [Date] {
@@ -60,11 +62,25 @@ class MockStackViewController: StackViewController {
     var viewWillAppearDates: [Date] = []
     override func viewWillAppear(_ animated: Bool) {
         viewWillAppearDates.append(Date())
+        super.viewWillAppear(animated)
     }
 
     var viewDidAppearDates: [Date] = []
     override func viewDidAppear(_ animated: Bool) {
         viewDidAppearDates.append(Date())
+        super.viewDidAppear(animated)
+    }
+
+    var viewWillDisappearDates: [Date] = []
+    override func viewWillDisappear(_ animated: Bool) {
+        viewWillDisappearDates.append(Date())
+        super.viewWillDisappear(animated)
+    }
+
+    var viewDidDisappearDates: [Date] = []
+    override func viewDidDisappear(_ animated: Bool) {
+        viewDidDisappearDates.append(Date())
+        super.viewDidDisappear(animated)
     }
 
     var pushViewControllerDates: [Date] = []

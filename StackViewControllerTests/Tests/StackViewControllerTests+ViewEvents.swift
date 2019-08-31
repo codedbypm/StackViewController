@@ -15,26 +15,19 @@ extension StackViewControllerTests {
 
     func testThat_whenViewWillAppear_beginAppearanceTransitionIsCalledOnTopViewController() {
         // Arrange
-        let viewControllerA = MockViewController()
-        let viewControllerB = MockViewController()
-        let stack = [viewControllerA, viewControllerB]
-        let stackHandler = MockStackHandler(stack: stack)
-        let interactor = StackViewControllerInteractor(stackHandler: stackHandler)
+        let yellow = MockViewController()
+        let interactor = StackViewControllerInteractor()
+        interactor.setStack([yellow], animated: false)
         sut = StackViewController(interactor: interactor)
         let animated = true
 
-        XCTAssertNil(viewControllerB.didCallBeginAppearance)
-        XCTAssertNil(viewControllerB.beginAppearanceIsAppearing)
-        XCTAssertNil(viewControllerB.beginAppearanceAnimated)
+        XCTAssertNil(yellow.beginAppearanceIsAppearing)
 
         // Act
         sut.viewWillAppear(animated)
 
         // Assert
-        XCTAssertEqual(sut.topViewController, viewControllerB)
-        XCTAssertEqual(viewControllerB.didCallBeginAppearance, true)
-        XCTAssertEqual(viewControllerB.beginAppearanceIsAppearing, true)
-        XCTAssertEqual(viewControllerB.beginAppearanceAnimated, animated)
+        XCTAssertEqual(yellow.beginAppearanceIsAppearing, true)
     }
 
     // MARK: - viewDidAppear

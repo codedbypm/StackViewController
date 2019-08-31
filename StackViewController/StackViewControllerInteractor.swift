@@ -162,6 +162,34 @@ class StackViewControllerInteractor {
             assertionFailure()
         }
     }
+
+    // MARK: - View appearance events
+
+    func viewWillAppear(_ animated: Bool) {
+        guard let topViewController = topViewController else { return }
+        delegate?.prepareAppearance(of: topViewController, animated: animated)
+    }
+
+    func viewDidAppear(_ animated: Bool) {
+        guard let topViewController = topViewController else { return }
+        delegate?.finishAppearance(of: topViewController)
+        delegate?.finishAddingChild(topViewController)
+    }
+
+    func viewWillDisappear(_ animated: Bool) {
+        guard let topViewController = topViewController else { return }
+        delegate?.prepareDisappearance(of: topViewController, animated: animated)
+    }
+
+    func viewDidDisappear(_ animated: Bool) {
+        guard let topViewController = topViewController else { return }
+        delegate?.finishAppearance(of: topViewController)
+//        // TODO: Maybe this needs to be called?
+//        delegate?.finishRemovingChild(topViewController)
+
+    }
+
+
 }
 
 // MARK: - TransitionHandlerDelegate

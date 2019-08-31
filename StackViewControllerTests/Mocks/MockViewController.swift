@@ -25,20 +25,29 @@ class MockViewController: UIViewController {
     var wasAddedToParentDates: [Date] = []
     var wasRemovedFromParentDates: [Date] = []
 
+    var viewCycleEventDates: [Date] {
+        return
+            viewDidLoadDates
+            + viewWillAppearDates
+            + viewDidAppearDates
+    }
+
     var appearanceEventDates: [Date] {
-        return [beginAppearanceTransitionDate, endAppearanceTransitionDate].compactMap { $0 }
+        return beginAppearanceTransitionDates
+            + beginDisappearanceTransitionDates
+            + endAppearanceTransitionDates
+            + endDisppearanceTransitionDates
     }
 
     var viewContainmentEventDates: [Date] {
-        return willBeAddedToParentDates + wasAddedToParentDates + willBeRemovedFromParentDates + wasRemovedFromParentDates
+        return willBeAddedToParentDates
+            + wasAddedToParentDates
+            + willBeRemovedFromParentDates
+            + wasRemovedFromParentDates
     }
 
     var receivedEventDates: [Date] {
-        return (viewLifeCycleDates + appearanceEventDates + viewContainmentEventDates)
-    }
-
-    var viewLifeCycleDates: [Date] {
-        return viewDidLoadDates
+        return (viewCycleEventDates + appearanceEventDates + viewContainmentEventDates)
     }
 
     var viewDidLoadDates: [Date] = []
@@ -47,22 +56,49 @@ class MockViewController: UIViewController {
         super.viewDidLoad()
     }
 
+    var viewWillAppearDates: [Date] = []
+    override func viewWillAppear(_ animated: Bool) {
+        viewWillAppearDates.append(Date())
+    }
+
+    var viewDidAppearDates: [Date] = []
+    override func viewDidAppear(_ animated: Bool) {
+        viewDidAppearDates.append(Date())
+    }
+
+    var viewWillDisappearDates: [Date] = []
+    override func viewWillDisappear(_ animated: Bool) {
+        viewWillDisappearDates.append(Date())
+    }
+
+    var viewDidDisappearDates: [Date] = []
+    override func viewDidDisappear(_ animated: Bool) {
+        viewDidDisappearDates.append(Date())
+    }
+
     var didCallBeginAppearance: Bool? = nil
     var beginAppearanceIsAppearing: Bool? = nil
     var beginAppearanceAnimated: Bool? = nil
-    var beginAppearanceTransitionDate: Date?
+    var beginAppearanceTransitionDates: [Date] = []
+    var beginDisappearanceTransitionDates: [Date] = []
     override func beginAppearanceTransition(_ isAppearing: Bool, animated: Bool) {
         didCallBeginAppearance = true
         beginAppearanceIsAppearing = isAppearing
         beginAppearanceAnimated = animated
-        beginAppearanceTransitionDate = Date()
+        if isAppearing { beginAppearanceTransitionDates.append(Date()) }
+        else { beginDisappearanceTransitionDates.append(Date()) }
     }
 
     var didCallEndAppearance: Bool? = nil
-    var endAppearanceTransitionDate: Date?
+    var endAppearanceTransitionDates: [Date] = []
+    var endDisppearanceTransitionDates: [Date] = []
     override func endAppearanceTransition() {
         didCallEndAppearance = true
-        endAppearanceTransitionDate = Date()
+        switch beginAppearanceIsAppearing {
+        case .some(true): endAppearanceTransitionDates.append(Date())
+        case .some(false): endDisppearanceTransitionDates.append(Date())
+        case .none: break
+        }
     }
 
     var didCallWillMoveToParent: Bool?

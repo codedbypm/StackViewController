@@ -11,6 +11,11 @@ import Foundation
 
 extension StackViewController {
 
+    convenience init(viewControllers: [UIViewController]) {
+        self.init(nibName: nil, bundle: nil)
+        self.viewControllers = viewControllers
+    }
+
     static var dummy: StackViewController {
         return StackViewController(viewControllers: [])
     }

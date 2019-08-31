@@ -9,6 +9,7 @@
 @testable import StackViewController
 
 class MockTransitionHandler: TransitionHandling {
+    weak var delegate: TransitionHandlingDelegate?
 
     var didCallPrepareTransition: Bool?
     func prepareTransition(context: TransitionContext) {

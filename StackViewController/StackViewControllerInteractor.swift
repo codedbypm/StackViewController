@@ -34,8 +34,6 @@ class StackViewControllerInteractor {
     var topViewController: UIViewController? { return stack.last }
     var rootViewController: UIViewController? { return stack.first }
 
-    lazy var viewControllerWrapperView: UIView = ViewControllerWrapperView()
-
     // MARK: - Private properties
 
     private let stackHandler: StackHandling
@@ -118,12 +116,14 @@ class StackViewControllerInteractor {
             with: newStack
         )
 
+        let containerView = ViewControllerWrapperView()
+
         // prepare transition context
         let transitionContext = TransitionContext(
             operation: operation,
             from: stack.last,
             to: newStack.last,
-            containerView: viewControllerWrapperView,
+            containerView: containerView,
             animated: animated,
             interactive: false
         )

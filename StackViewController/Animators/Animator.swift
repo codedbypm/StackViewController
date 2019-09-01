@@ -74,7 +74,7 @@ public class Animator: NSObject, UIViewControllerAnimatedTransitioning {
     }
 
     func transitionAnimations(using context: UIViewControllerContextTransitioning) -> Animations {
-        assertionFailure("Error: prepareTransition(using:) must be overriden")
+        assertionFailure("Error: transitionAnimations(using:) must be overriden")
         return {}
     }
 

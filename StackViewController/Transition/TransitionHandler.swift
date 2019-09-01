@@ -55,7 +55,6 @@ class TransitionHandler: TransitionHandling {
         context: TransitionContext,
         animationController: UIViewControllerAnimatedTransitioning
     ) {
-        delegate?.willStartTransition(context)
 
         context.onTransitionFinished = { didComplete in
             animationController.animationEnded?(didComplete)
@@ -64,11 +63,17 @@ class TransitionHandler: TransitionHandling {
         }
 
         context.onTransitionCancelled = { _ in
-
         }
 
         transitionId = UUID()
         self.animationController = animationController
+
+        if let to = context.viewController(forKey: .to) {
+            context.containerView.addSubview(to.view)
+        }
+
+        delegate?.willStartTransition(context)
+
         animationController.animateTransition(using: context)
     }
 

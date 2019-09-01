@@ -72,9 +72,10 @@ class NavigationController: UINavigationController, Tracing {
         }
     }
 
-    override func loadView() {
-        self.view = NavigationView("UINC View")
-    }
+//    override func loadView() {
+//        let view = NavigationView("UINC View")
+//        self.view = view
+//    }
 
     override func viewDidLoad() {
         trace(.viewLifeCycle, self, #function)
@@ -154,36 +155,4 @@ extension NavigationController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
     }
-}
-
-extension NavigationController: UINavigationControllerDelegate {
-
-    func navigationController(_ navigationController: UINavigationController,
-                              animationControllerFor operation: UINavigationController.Operation,
-                              from fromVC: UIViewController,
-                              to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-
-//        print("Operation: \(operation.rawValue)")
-//        print("From: \(fromVC)")
-//        print("To: \(toVC == nil ? "nil" : toVC.description)")
-
-        switch operation {
-        case .push:
-            return PushAnimator()
-        case .pop:
-            return PopAnimator()
-        default:
-            return nil
-        }
-    }
-
-    //    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-    //
-    //        guard let gestureRecognizer = navigationController.interactivePopGestureRecognizer as? UIScreenEdgePanGestureRecognizer else { return nil }
-    //
-    //        gestureRecognizer.removeTarget(nil, action: nil)
-    //        interactionController = HorizontalSlideInteractiveController(animationController: animationController,
-    //                                                                     gestureRecognizer: gestureRecognizer)
-    //        return interactionController
-    //    }
 }

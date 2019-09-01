@@ -53,10 +53,6 @@ public class StackViewController: UIViewController {
         return recognizer
     }()
 
-    var viewControllerWrapperView: UIView {
-        return interactor.viewControllerWrapperView
-    }
-
     // MARK: - Init
 
     public init(rootViewController: UIViewController) {
@@ -93,12 +89,6 @@ public class StackViewController: UIViewController {
         trace(.viewLifeCycle, self, #function)
 
         view.addGestureRecognizer(screenEdgePanGestureRecognizer)
-        view.addSubview(viewControllerWrapperView)
-        viewControllerWrapperView.frame = view.bounds
-
-        if let topViewController = topViewController {
-            viewControllerWrapperView.addSubview(topViewController.view)
-        }
     }
 
     override public func viewWillAppear(_ animated: Bool) {

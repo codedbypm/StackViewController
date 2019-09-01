@@ -116,8 +116,6 @@ extension StackViewControllerInteractorTests {
         XCTAssertEqual(transitionHandler.transitionContext?.from, .first)
         XCTAssertEqual(transitionHandler.transitionContext?.to, .last)
         XCTAssertEqual(transitionHandler.transitionContext?.isAnimated, true)
-        XCTAssertEqual(transitionHandler.transitionContext?.containerView,
-                       sut.viewControllerWrapperView)
         XCTAssertEqual(transitionHandler.transitionContext?.isInteractive, false)
     }
 
@@ -234,8 +232,6 @@ extension StackViewControllerInteractorTests {
         XCTAssertEqual(transitionHandler.transitionContext?.from, .middle)
         XCTAssertEqual(transitionHandler.transitionContext?.to, .first)
         XCTAssertEqual(transitionHandler.transitionContext?.isAnimated, true)
-        XCTAssertEqual(transitionHandler.transitionContext?.containerView,
-                       sut.viewControllerWrapperView)
         XCTAssertEqual(transitionHandler.transitionContext?.isInteractive, false)
     }
 }
@@ -313,8 +309,6 @@ extension StackViewControllerInteractorTests {
         XCTAssertEqual(transitionHandler.transitionContext?.from, .middle)
         XCTAssertEqual(transitionHandler.transitionContext?.to, .first)
         XCTAssertEqual(transitionHandler.transitionContext?.isAnimated, true)
-        XCTAssertEqual(transitionHandler.transitionContext?.containerView,
-                       sut.viewControllerWrapperView)
         XCTAssertEqual(transitionHandler.transitionContext?.isInteractive, false)
     }
 }
@@ -392,8 +386,6 @@ extension StackViewControllerInteractorTests {
         XCTAssertEqual(transitionHandler.transitionContext?.from, .last)
         XCTAssertEqual(transitionHandler.transitionContext?.to, .middle)
         XCTAssertEqual(transitionHandler.transitionContext?.isAnimated, true)
-        XCTAssertEqual(transitionHandler.transitionContext?.containerView,
-                       sut.viewControllerWrapperView)
         XCTAssertEqual(transitionHandler.transitionContext?.isInteractive, false)
     }
 }
@@ -475,8 +467,6 @@ extension StackViewControllerInteractorTests {
         XCTAssertEqual(transitionHandler.transitionContext?.from, .last)
         XCTAssertEqual(transitionHandler.transitionContext?.to, .first)
         XCTAssertEqual(transitionHandler.transitionContext?.isAnimated, true)
-        XCTAssertEqual(transitionHandler.transitionContext?.containerView,
-                       sut.viewControllerWrapperView)
         XCTAssertEqual(transitionHandler.transitionContext?.isInteractive, false)
     }
 }

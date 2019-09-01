@@ -13,12 +13,7 @@ public class PushAnimator: Animator {
 
     override func prepareTransition(using context: UIViewControllerContextTransitioning) {
         super.prepareTransition(using: context)
-
-        guard let to = context.viewController(forKey: .to) else { return }
-
-        let containerView = context.containerView
-        containerView.addSubview(to.view)
-        to.view.frame = frameOfViewWhenOffScreen
+        context.viewController(forKey: .to)?.view.frame = frameOfViewWhenOffScreen
     }
 
     override func transitionAnimations(using context: UIViewControllerContextTransitioning) -> Animations {

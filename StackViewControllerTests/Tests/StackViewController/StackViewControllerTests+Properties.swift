@@ -11,7 +11,7 @@ import XCTest
 
 extension StackViewControllerTests {
 
-    // MARK: - viewControllers
+    // MARK: - stack
 
     func testThat_whenSettingViewControllers_itCallsSetViewControllersNonAnimatedMethodOfInteractor() {
         // Arrange
@@ -25,7 +25,7 @@ extension StackViewControllerTests {
         XCTAssertNil(mockInteractor.setStackAnimated)
 
         // Act
-        sut.viewControllers = stack
+        sut.stack = stack
 
         // Assert
         XCTAssertEqual(mockInteractor.didCallSetStackAnimated, true)
@@ -43,7 +43,7 @@ extension StackViewControllerTests {
         XCTAssertNil(mockInteractor.didCallStackGetter)
 
         // Act
-        _ = sut.viewControllers
+        _ = sut.stack
 
         // Assert
         XCTAssertEqual(mockInteractor.didCallStackGetter, true)
@@ -98,6 +98,6 @@ extension StackViewControllerTests {
 
         // Assert
         XCTAssertNotNil(topViewController)
-        XCTAssertEqual(topViewController, sut.viewControllers.last)
+        XCTAssertEqual(topViewController, sut.stack.last)
     }
 }

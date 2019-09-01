@@ -13,7 +13,7 @@ extension StackViewController {
 
     convenience init(viewControllers: [UIViewController]) {
         self.init(nibName: nil, bundle: nil)
-        self.viewControllers = viewControllers
+        self.stack = viewControllers
     }
 
     static var dummy: StackViewController {

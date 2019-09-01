@@ -29,7 +29,7 @@ extension StackViewController {
         print(
             """
 
-            Stack \(viewControllers.isEmpty ? "is empty" : "contains \(viewControllers.count) view controllers")
+            Stack \(stack.isEmpty ? "is empty" : "contains \(stack.count) view controllers")
             StackViewControllers has \(children.isEmpty ? "no child" : "\(children.count) children")
             TopViewController is \(topViewController == nil ? "nil" : "\(String(describing: topViewController!))")
             """

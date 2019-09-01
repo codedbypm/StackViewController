@@ -19,7 +19,7 @@ public protocol StackViewControllerDelegate: class {
 }
 
 public protocol StackViewControllerHandling: UIViewController {
-    var viewControllers: [UIViewController] { get set }
+    var stack: [UIViewController] { get set }
     @discardableResult func popViewController(animated: Bool) -> UIViewController?
     func pushViewController(_: UIViewController, animated: Bool)
     func setViewControllers(_: [UIViewController], animated: Bool)

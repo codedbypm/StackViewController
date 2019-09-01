@@ -15,14 +15,14 @@ class MockStackViewController: StackViewController {
     var controllers: [UIViewController]?
     var viewControllersGetterDates: [Date] = []
     var viewControllersSetterDates: [Date] = []
-    override var viewControllers: [UIViewController] {
+    override var stack: [UIViewController] {
         get {
             viewControllersGetterDates.append(Date())
             return controllers ?? []
         }
         set {
             viewControllersSetterDates.append(Date())
-            super.viewControllers = newValue
+            super.stack = newValue
         }
     }
 

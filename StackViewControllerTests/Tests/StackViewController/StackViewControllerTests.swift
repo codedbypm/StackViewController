@@ -54,28 +54,24 @@ class StackViewControllerTests: XCTestCase {
 
         // Assert
         let mockSut = try XCTUnwrap(sut as? MockStackViewController)
-        XCTAssertEqual(
-            mockSut.receivedEventDates,
-            []
-        )
+        XCTAssertEqual(mockSut.receivedEventDates.count, 0)
     }
 
     // when: stack = [] and pushViewController
-    // then: receives => [pushViewController]
-    //       sends    => [willMoveToParent]
+    // then: receives           => [pushViewController]
+    //       sends to yellow    => [willMoveToParent]
     //
     // note: UINC receives viewDidLoad too
-    func testThat_whenInitWithEmptyStack_and_pushViewController_thenItReceivesAndSendsProperEvents() throws {
+    //
+    func testThat_whenInitWithEmptyStack_and_pushViewController_thenItReceivesAndSendsProperEvents() {
         // Arrange
         let yellow = MockViewController()
-        sut = MockStackViewController()
+        let sut = MockStackViewController()
 
         // Act
         sut.pushViewController(yellow, animated: false)
 
         // Assert
-        let sut = try XCTUnwrap(self.sut as? MockStackViewController)
-
         XCTAssertEqual(sut.receivedEventDates.count, 1)
         XCTAssertEqual(sut.pushViewControllerDates.count, 1)
 
@@ -87,12 +83,12 @@ class StackViewControllerTests: XCTestCase {
             yellow.willBeAddedToParentDates.first
         ].compactMap { $0 }
 
-        XCTAssertEqual(timeline.count, 2)
         XCTAssertEqual(timeline, timeline.sorted())
     }
 
     // when: stack = [yellow, green] and .viewControllers = [red, black]
-    // then: receives           =>  [viewControllers, setViewControllers]
+    // then: receives           =>  [viewControllers]
+    //                              [setViewControllers]
     //       sends to yellow    =>  [willMoveToParent: sut],
     //                              [didMoveToParent: sut],
     //                              [willMoveToParent: nil],
@@ -109,13 +105,13 @@ class StackViewControllerTests: XCTestCase {
         let yellow = MockViewController()
         let green = MockViewController()
         sut = MockStackViewController()
-        sut.viewControllers = [yellow, green]
+        sut.stack = [yellow, green]
 
         let red = MockViewController()
         let black = MockViewController()
 
         // Act
-        sut.viewControllers = [red, black]
+        sut.stack = [red, black]
 
         // Assert
         let sut = try XCTUnwrap(self.sut as? MockStackViewController)
@@ -149,7 +145,7 @@ class StackViewControllerTests: XCTestCase {
         XCTAssertEqual(black.willBeRemovedFromParentDates.count, 0)
         XCTAssertEqual(black.wasRemovedFromParentDates.count, 0)
 
-        let totalEvents =
+        let timeline =
             yellow.willBeAddedToParentDates
             + yellow.wasAddedToParentDates
             + green.willBeAddedToParentDates
@@ -160,12 +156,14 @@ class StackViewControllerTests: XCTestCase {
             + red.willBeAddedToParentDates
             + red.wasAddedToParentDates
             + black.willBeAddedToParentDates
-        XCTAssertEqual(totalEvents, totalEvents.sorted())
+        XCTAssertEqual(timeline, timeline.sorted())
     }
 
     // when: stack = [yellow]
-    // then: receives => [pushViewController, viewDidLoad]
-    //       sends    => [willMoveToParent]
+    // then: receives           => [pushViewController]
+    //       sends to yellow    => [willMoveToParent]
+    //
+    // note: UINC receives viewDidLoad too
     //
     func testThat_whenInitWithARootViewController_thenItReceivesAndSendsProperEvents() throws {
         // Arrange
@@ -176,11 +174,11 @@ class StackViewControllerTests: XCTestCase {
 
         // Assert
         let sut = try XCTUnwrap(self.sut as? MockStackViewController)
-        XCTAssertEqual(
-            sut.receivedEventDates,
-            sut.pushViewControllerDates + sut.viewDidLoadDates
-        )
-        XCTAssertEqual(yellow.receivedEventDates, yellow.willBeAddedToParentDates)
+        XCTAssertEqual(sut.receivedEventDates.count, 1)
+        XCTAssertEqual(sut.pushViewControllerDates.count, 1)
+
+        XCTAssertEqual(yellow.receivedEventDates.count, 1)
+        XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
     }
 
     // when: stack = [yellow]
@@ -243,7 +241,7 @@ class StackViewControllerTests: XCTestCase {
         let green = MockViewController()
         let red = MockViewController()
         sut = MockStackViewController()
-        sut.viewControllers = [yellow, green, red]
+        sut.stack = [yellow, green, red]
 
         // Act
         sut.popToRootViewController(animated: false)

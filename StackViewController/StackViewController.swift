@@ -20,7 +20,7 @@ public class StackViewController: UIViewController {
 
     public weak var delegate: StackViewControllerDelegate?
 
-    public var viewControllers: [UIViewController] {
+    public var stack: [UIViewController] {
         get {
             trace(.stackOperation, self, #function)
             return interactor.stack

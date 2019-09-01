@@ -37,15 +37,15 @@ extension BaseViewController {
         }
 
         controller.onSetViewControllersSameAnimated = {
-            controller.stack?.setViewControllers(controller.stack?.viewControllers ?? [], animated: true)
+            controller.stack?.setViewControllers(controller.stack?.stack ?? [], animated: true)
         }
 
         controller.onSetViewControllersSameNonAnimated = {
-            controller.stack?.setViewControllers(controller.stack?.viewControllers ?? [], animated: false)
+            controller.stack?.setViewControllers(controller.stack?.stack ?? [], animated: false)
         }
 
         controller.onSetVarViewControllersSame = {
-            controller.stack?.viewControllers = controller.stack?.viewControllers ?? []
+            controller.stack?.stack = controller.stack?.stack ?? []
         }
 
         controller.onSetViewControllersEmptyAnimated = {
@@ -56,18 +56,18 @@ extension BaseViewController {
         }
 
         controller.onSwapIntermediateControllers = {
-            while controller.stack!.viewControllers.count < 4 {
+            while controller.stack!.stack.count < 4 {
                 let insert = colored()
                 controller.stack?.pushViewController(insert, animated: false)
             }
 
-            let midSwap = controller.stack!.viewControllers.dropLast().dropFirst().reversed()
-            let newStack = Array(controller.stack!.viewControllers.prefix(1)) + Array(midSwap) + Array(controller.stack!.viewControllers.suffix(1))
+            let midSwap = controller.stack!.stack.dropLast().dropFirst().reversed()
+            let newStack = Array(controller.stack!.stack.prefix(1)) + Array(midSwap) + Array(controller.stack!.stack.suffix(1))
             controller.stack?.setViewControllers(Array(newStack), animated: true)
         }
 
         controller.onSetVarViewControllersEmpty = {
-            controller.stack?.viewControllers = []
+            controller.stack?.stack = []
             DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
                 controller.onPushAnimated?()
             })
@@ -78,11 +78,11 @@ extension BaseViewController {
         }
 
         controller.onSwapRootWithTop = {
-            guard let root = controller.stack?.viewControllers.first else { return assertionFailure() }
-            guard let top = controller.stack?.viewControllers.last else { return assertionFailure() }
+            guard let root = controller.stack?.stack.first else { return assertionFailure() }
+            guard let top = controller.stack?.stack.last else { return assertionFailure() }
             guard root !== top else { return assertionFailure() }
 
-            let middle = controller.stack!.viewControllers.dropFirst().dropLast()
+            let middle = controller.stack!.stack.dropFirst().dropLast()
             let stack = [top] + Array(middle) + [root]
             controller.stack?.setViewControllers(stack, animated: true)
         }
@@ -90,11 +90,11 @@ extension BaseViewController {
         controller.onInsertAtIndexZero = {
             let insert = colored()
             insert.stack = controller.stack
-            var modifiedStack = controller.stack?.viewControllers
+            var modifiedStack = controller.stack?.stack
             modifiedStack?.insert(insert, at: 0)
 
             guard let newStack = modifiedStack else { return assertionFailure() }
-            controller.stack?.viewControllers = newStack
+            controller.stack?.stack = newStack
         }
 
         return controller

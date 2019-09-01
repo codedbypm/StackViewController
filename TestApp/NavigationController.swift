@@ -61,14 +61,14 @@ class NavigationView: UIView, Tracing {
 
 class NavigationController: UINavigationController, Tracing {
 
-    override var viewControllers: [UIViewController] {
+    override var stack: [UIViewController] {
         get {
             trace(.stackOperation, self, #function)
-            return super.viewControllers
+            return super.stack
         }
         set {
             trace(.stackOperation, self, #function)
-            super.viewControllers = newValue
+            super.stack = newValue
         }
     }
 

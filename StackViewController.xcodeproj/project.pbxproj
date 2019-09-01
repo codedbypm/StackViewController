@@ -55,6 +55,7 @@
 		FD76B78A227917320090EDB2 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B789227917320090EDB2 /* NavigationController.swift */; };
 		FD76B791227A5B7A0090EDB2 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */; };
 		FD83870522A19C750017E8F8 /* StackHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD83870422A19C750017E8F8 /* StackHandling.swift */; };
+		FDA6BD02231C41F8004DD3B1 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA6BD01231C41F8004DD3B1 /* View.swift */; };
 		FDAD73C822AD4A0400FB68BB /* MockStackHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73C722AD4A0400FB68BB /* MockStackHandler.swift */; };
 		FDAD73CB22AD4B4500FB68BB /* CollectionDifference+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73CA22AD4B4500FB68BB /* CollectionDifference+Extensions.swift */; };
 		FDAD73D022AD5E3900FB68BB /* TransitionHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73CF22AD5E3900FB68BB /* TransitionHandling.swift */; };
@@ -154,6 +155,7 @@
 		FD8386FF22A196640017E8F8 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		FD83870022A199310017E8F8 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		FD83870422A19C750017E8F8 /* StackHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackHandling.swift; sourceTree = "<group>"; };
+		FDA6BD01231C41F8004DD3B1 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		FDAD73C722AD4A0400FB68BB /* MockStackHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackHandler.swift; sourceTree = "<group>"; };
 		FDAD73CA22AD4B4500FB68BB /* CollectionDifference+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionDifference+Extensions.swift"; sourceTree = "<group>"; };
 		FDAD73CF22AD5E3900FB68BB /* TransitionHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionHandling.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				FD76B77C227614D60090EDB2 /* ViewControllerFactory.swift */,
 				FD67E5B2225257DA0051786B /* AppDelegate.swift */,
 				FD76B789227917320090EDB2 /* NavigationController.swift */,
+				FDA6BD01231C41F8004DD3B1 /* View.swift */,
 				FD67E5BB225257DB0051786B /* LaunchScreen.storyboard */,
 				FD67E5BE225257DB0051786B /* Info.plist */,
 			);
@@ -572,6 +575,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDA6BD02231C41F8004DD3B1 /* View.swift in Sources */,
 				FD67E5F52252EC770051786B /* RootCoordinator.swift in Sources */,
 				FD67E5B3225257DA0051786B /* AppDelegate.swift in Sources */,
 				FD226059226B6359007E44CE /* StackCoordinator.swift in Sources */,

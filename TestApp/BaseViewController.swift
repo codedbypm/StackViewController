@@ -143,7 +143,7 @@ final class BaseViewController: UIViewController, Tracing {
     }
 
     override func loadView() {
-        self.view = NavigationView("\(description) view")
+        self.view = View("\(description) view")
     }
     
     override func viewDidLoad() {

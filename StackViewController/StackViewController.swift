@@ -87,7 +87,6 @@ public class StackViewController: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         trace(.viewLifeCycle, self, #function)
-
         view.addGestureRecognizer(screenEdgePanGestureRecognizer)
     }
 

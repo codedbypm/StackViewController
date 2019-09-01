@@ -247,8 +247,8 @@
 			isa = PBXGroup;
 			children = (
 				FD67E577225250E10051786B /* StackViewController */,
-				FD67E5B1225257DA0051786B /* TestApp */,
 				FD76B7012270C9530090EDB2 /* StackViewControllerTests */,
+				FD67E5B1225257DA0051786B /* TestApp */,
 				FD67E576225250E10051786B /* Products */,
 				FD7BF4542314456E00D7BAE5 /* Frameworks */,
 			);

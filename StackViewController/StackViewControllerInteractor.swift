@@ -61,7 +61,7 @@ class StackViewControllerInteractor {
 
     // MARK: - Internal methods
 
-    func pushViewController(
+    func push(
         _ viewController: UIViewController,
         animated: Bool
     ) {

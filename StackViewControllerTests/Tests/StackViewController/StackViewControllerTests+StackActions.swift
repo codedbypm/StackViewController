@@ -26,7 +26,7 @@ extension StackViewControllerTests {
         XCTAssertNil(interactor.pushedViewControllerAnimated)
 
         // Act
-        sut.pushViewController(pushedViewController, animated: animated)
+        sut.push(pushedViewController, animated: animated)
 
         // Assert
         XCTAssertTrue(interactor === sut.interactor)

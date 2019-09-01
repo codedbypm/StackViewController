@@ -13,7 +13,7 @@ class StackCoordinator {
 
     lazy var stackViewController: StackViewController = {
         var root = BaseViewController.colored(.black)
-        let stackViewController = StackViewController(rootViewController: root)
+        let stackViewController = StackViewController()
         root.stack = stackViewController
 
         let tabBarTitle = String(describing: stackViewController)

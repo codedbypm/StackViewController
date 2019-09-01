@@ -13,15 +13,15 @@ import Foundation
 class MockStackViewController: StackViewController {
 
     var controllers: [UIViewController]?
-    var viewControllersGetterDates: [Date] = []
-    var viewControllersSetterDates: [Date] = []
+    var stackGetterDates: [Date] = []
+    var stackSetterDates: [Date] = []
     override var stack: [UIViewController] {
         get {
-            viewControllersGetterDates.append(Date())
+            stackGetterDates.append(Date())
             return controllers ?? []
         }
         set {
-            viewControllersSetterDates.append(Date())
+            stackSetterDates.append(Date())
             super.stack = newValue
         }
     }
@@ -38,19 +38,14 @@ class MockStackViewController: StackViewController {
     var stackOperationDates: [Date] {
         return
             pushViewControllerDates
-            + viewControllersGetterDates
-            + viewControllersSetterDates
+            + stackGetterDates
+            + stackSetterDates
             + popToRootDates
             + setStackDates
     }
 
     var receivedEventDates: [Date] {
         return (viewCycleEventDates + stackOperationDates).sorted()
-    }
-
-    var isViewLoadedFlag = false
-    override var isViewLoaded: Bool {
-        return isViewLoadedFlag
     }
 
     var viewDidLoadDates: [Date] = []
@@ -84,9 +79,9 @@ class MockStackViewController: StackViewController {
     }
 
     var pushViewControllerDates: [Date] = []
-    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+    override func push(_ viewController: UIViewController, animated: Bool) {
         pushViewControllerDates.append(Date())
-        super.pushViewController(viewController, animated: animated)
+        super.push(viewController, animated: animated)
     }
 
     var popToRootDates: [Date] = []

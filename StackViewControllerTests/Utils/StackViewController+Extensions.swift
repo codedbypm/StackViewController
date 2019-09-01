@@ -36,7 +36,6 @@ extension StackViewController {
 
 extension StackViewController {
 
-
     func loadingTopViewControllerView() -> StackViewController {
         _ = topViewController?.view
         return self

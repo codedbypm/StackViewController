@@ -64,7 +64,7 @@ public class StackViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         self.interactor.delegate = self
-        self.pushViewController(rootViewController, animated: false)
+        self.push(rootViewController, animated: false)
     }
 
     public override convenience init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -127,9 +127,9 @@ public class StackViewController: UIViewController {
 
     // MARK: - Public methods
 
-    public func pushViewController(_ viewController: UIViewController, animated: Bool) {
+    public func push(_ viewController: UIViewController, animated: Bool) {
         trace(.stackOperation, self, #function)
-        interactor.pushViewController(viewController, animated: animated)
+        interactor.push(viewController, animated: animated)
     }
 
     @discardableResult

@@ -34,7 +34,7 @@ extension StackViewControllerInteractorTests {
         XCTAssertNil(stackHandler.didCallPush)
 
         // Act
-        sut.pushViewController(UIViewController(), animated: true)
+        sut.push(UIViewController(), animated: true)
 
         // Assert
         XCTAssertNil(stackHandler.didCallPush)
@@ -50,7 +50,7 @@ extension StackViewControllerInteractorTests {
         XCTAssertNil(stackHandler.didCallSetStack)
 
         // Act
-        sut.pushViewController(.last, animated: true)
+        sut.push(.last, animated: true)
 
         // Assert
         XCTAssertEqual(stackHandler.didCallSetStack, true)
@@ -69,7 +69,7 @@ extension StackViewControllerInteractorTests {
         XCTAssertNil(transitionHandler.didCallPrepareTransition)
 
         // Act
-        sut.pushViewController(UIViewController(), animated: true)
+        sut.push(UIViewController(), animated: true)
 
         // Assert
         XCTAssertNil(transitionHandler.didCallPrepareTransition)
@@ -88,7 +88,7 @@ extension StackViewControllerInteractorTests {
         XCTAssertNil(transitionHandler.didCallPrepareTransition)
 
         // Act
-        sut.pushViewController(.last, animated: true)
+        sut.push(.last, animated: true)
 
         // Assert
         XCTAssertNil(transitionHandler.didCallPrepareTransition)
@@ -108,7 +108,7 @@ extension StackViewControllerInteractorTests {
         sut.delegate = delegate
 
         // Act
-        sut.pushViewController(.last, animated: true)
+        sut.push(.last, animated: true)
 
         // Assert
         XCTAssertEqual(transitionHandler.didCallPrepareTransition, true)
@@ -132,7 +132,7 @@ extension StackViewControllerInteractorTests {
         sut.delegate = mockDelegate
 
         // Act
-        sut.pushViewController(.last, animated: true)
+        sut.push(.last, animated: true)
 
         // Assert
         XCTAssertNil(mockDelegate.didCallPrepareAddingChild)
@@ -153,7 +153,7 @@ extension StackViewControllerInteractorTests {
         XCTAssertNil(mockDelegate.childAdded)
 
         // Act
-        sut.pushViewController(.last, animated: true)
+        sut.push(.last, animated: true)
 
         // Assert
         XCTAssertEqual(mockDelegate.didCallPrepareAddingChild, true)

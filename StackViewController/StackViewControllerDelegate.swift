@@ -21,7 +21,7 @@ public protocol StackViewControllerDelegate: class {
 public protocol StackViewControllerHandling: UIViewController {
     var stack: [UIViewController] { get set }
     @discardableResult func popViewController(animated: Bool) -> UIViewController?
-    func pushViewController(_: UIViewController, animated: Bool)
+    func push(_: UIViewController, animated: Bool)
     func setViewControllers(_: [UIViewController], animated: Bool)
     func popToRootViewController(animated: Bool) -> [UIViewController]?
 }

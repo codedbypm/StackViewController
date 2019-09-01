@@ -89,9 +89,9 @@ class NavigationController: UINavigationController, Tracing {
         super.addChild(childController)
     }
 
-    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+    override func push(_ viewController: UIViewController, animated: Bool) {
         trace(.stackOperation, self, #function)
-        super.pushViewController(viewController, animated: animated)
+        super.push(viewController, animated: animated)
     }
 
     @discardableResult

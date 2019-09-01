@@ -27,13 +27,13 @@ extension BaseViewController {
         controller.onPushAnimated = {
             let next = colored()
             next.stack = controller.stack
-            controller.stack?.pushViewController(next, animated: true)
+            controller.stack?.push(next, animated: true)
         }
 
         controller.onPushNonAnimated = {
             let next = colored()
             next.stack = controller.stack
-            controller.stack?.pushViewController(next, animated: false)
+            controller.stack?.push(next, animated: false)
         }
 
         controller.onSetViewControllersSameAnimated = {
@@ -58,7 +58,7 @@ extension BaseViewController {
         controller.onSwapIntermediateControllers = {
             while controller.stack!.stack.count < 4 {
                 let insert = colored()
-                controller.stack?.pushViewController(insert, animated: false)
+                controller.stack?.push(insert, animated: false)
             }
 
             let midSwap = controller.stack!.stack.dropLast().dropFirst().reversed()

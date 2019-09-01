@@ -20,47 +20,7 @@ class StackViewControllerTests: XCTestCase {
         window = nil
         super.tearDown()
     }
-
-    // MARK: - viewDidLoad()
-
-    func testThat_whenViewDidLoadIsCalled_itAddsGesgtureRecognizerToTheView() {
-        // Arrange
-        sut = StackViewController.dummy
-
-        XCTAssertNil(sut.screenEdgePanGestureRecognizer.view)
-
-        // Act
-        _ = sut.view
-
-        // Assert
-        XCTAssertNotNil(sut.screenEdgePanGestureRecognizer.view)
-        XCTAssertEqual(sut.screenEdgePanGestureRecognizer.view, sut.view)
-    }
-
-    func testThat_whenViewDidLoadIsCalled_itAddsWrapperViewAsSubview() {
-        // Arrange
-        sut = StackViewController.dummy
-
-        // Act
-        _ = sut.view
-
-        // Assert
-        XCTAssertEqual(sut.viewControllerWrapperView.superview, sut.view)
-        XCTAssertNotEqual(sut.viewControllerWrapperView.frame, CGRect.zero)
-        XCTAssertEqual(sut.viewControllerWrapperView.frame, sut.view.bounds)
-    }
-
-    func testThat_whenViewDidLoadIsCalled_andTheStackIsNotEmpty_itAddsTopViewControllerViewAsSubviewOfWrapperView() {
-        // Arrange
-        sut = StackViewController.withDefaultStack()
-
-        // Act
-        _ = sut.view
-
-        // Assert
-        XCTAssertEqual(sut.topViewController?.view.superview, sut.viewControllerWrapperView)
-    }
-
+    
     // MARK: - screenEdgeGestureRecognizerDidChangeState(_:)
 
     func testThat_whenTheGestureRecognizerSendItsAction_itCallshandleScreenEdgePanGestureRecognizerStateChangeOnTheInteractor() {
@@ -101,9 +61,10 @@ class StackViewControllerTests: XCTestCase {
     }
 
     // when: stack = [] and pushViewController
-    // then: receives => [pushViewController, viewDidLoad]
+    // then: receives => [pushViewController]
     //       sends    => [willMoveToParent]
     //
+    // note: UINC receives viewDidLoad too
     func testThat_whenInitWithEmptyStack_and_pushViewController_thenItReceivesAndSendsProperEvents() throws {
         // Arrange
         let yellow = MockViewController()
@@ -114,11 +75,20 @@ class StackViewControllerTests: XCTestCase {
 
         // Assert
         let sut = try XCTUnwrap(self.sut as? MockStackViewController)
-        XCTAssertEqual(
-            sut.receivedEventDates,
-            sut.pushViewControllerDates + sut.viewDidLoadDates
-        )
-        XCTAssertEqual(yellow.receivedEventDates, yellow.willBeAddedToParentDates)
+
+        XCTAssertEqual(sut.receivedEventDates.count, 1)
+        XCTAssertEqual(sut.pushViewControllerDates.count, 1)
+
+        XCTAssertEqual(yellow.receivedEventDates.count, 1)
+        XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
+
+        let timeline: [Date] = [
+            sut.pushViewControllerDates.first,
+            yellow.willBeAddedToParentDates.first
+        ].compactMap { $0 }
+
+        XCTAssertEqual(timeline.count, 2)
+        XCTAssertEqual(timeline, timeline.sorted())
     }
 
     // when: stack = [yellow, green] and .viewControllers = [red, black]

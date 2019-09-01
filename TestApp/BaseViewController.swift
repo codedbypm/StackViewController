@@ -142,6 +142,10 @@ final class BaseViewController: UIViewController, Tracing {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func loadView() {
+        self.view = NavigationView("\(description) view")
+    }
+    
     override func viewDidLoad() {
         trace(.viewLifeCycle, self, #function)
         super.viewDidLoad()

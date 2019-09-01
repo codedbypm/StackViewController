@@ -18,6 +18,12 @@ extension OSLog {
         category: "viewLifeCycle"
     )
 
+    /// Logs events of view-related changes
+    public static let viewChanges = OSLog(
+        subsystem: subsystem,
+        category: "viewChanges"
+    )
+
     /// Logs the view conyroller containment events
     public static let viewControllerContainment = OSLog(
         subsystem: subsystem,

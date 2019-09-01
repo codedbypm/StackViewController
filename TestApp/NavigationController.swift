@@ -9,6 +9,56 @@
 import UIKit
 import StackViewController
 
+class NavigationBar: UINavigationBar {
+    override var description: String { return "UINC Bar" }
+}
+
+class NavigationView: UIView, Tracing {
+
+    let name: String
+
+    override var description: String { return name }
+
+    init(_ string: String) {
+        name = string
+        super.init(frame: .zero)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func didAddSubview(_ subview: UIView) {
+        trace(.viewChanges, self, #function, subview)
+        super.didAddSubview(subview)
+    }
+
+    override func willRemoveSubview(_ subview: UIView) {
+        trace(.viewChanges, self, #function, subview)
+        super.willRemoveSubview(subview)
+    }
+
+    override func willMove(toSuperview newSuperview: UIView?) {
+        trace(.viewChanges, self, #function, "\(String(describing: newSuperview))")
+        super.willMove(toSuperview: newSuperview)
+    }
+
+    override func didMoveToSuperview() {
+        trace(.viewChanges, self, #function)
+        super.didMoveToSuperview()
+    }
+
+    override func willMove(toWindow newWindow: UIWindow?) {
+        trace(.viewChanges, self, #function, "\(String(describing: newWindow))")
+        super.willMove(toWindow: newWindow)
+    }
+
+    override func didMoveToWindow() {
+        trace(.viewChanges, self, #function)
+        super.didMoveToWindow()
+    }
+}
+
 class NavigationController: UINavigationController, Tracing {
 
     override var viewControllers: [UIViewController] {
@@ -20,6 +70,10 @@ class NavigationController: UINavigationController, Tracing {
             trace(.stackOperation, self, #function)
             super.viewControllers = newValue
         }
+    }
+
+    override func loadView() {
+        self.view = NavigationView("UINC View")
     }
 
     override func viewDidLoad() {

@@ -35,15 +35,6 @@ class NavigationController: UINavigationController, Tracing {
 
     override var description: String { return "UINC" }
 
-    override func viewWillLayoutSubviews() {
-        trace(.viewLifeCycle, self, #function)
-        super.viewWillLayoutSubviews()
-    }
-
-    override func viewDidLayoutSubviews() {
-        trace(.viewLifeCycle, self, #function)
-        super.viewDidLayoutSubviews()
-    }
     override func addChild(_ childController: UIViewController) {
         trace(.viewControllerContainment, self, #function)
         super.addChild(childController)

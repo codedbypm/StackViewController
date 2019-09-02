@@ -43,7 +43,7 @@ enum Color: String, CaseIterable {
     }
 }
 
-final class BaseViewController: UIViewController, Tracing {
+class BaseViewController: UIViewController, Tracing {
 
     weak var stack: StackViewControllerHandling?
     

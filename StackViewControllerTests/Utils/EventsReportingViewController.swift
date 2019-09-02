@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import StackViewController
 
 struct MoveToParentDates {
     var removed: Date?
@@ -19,7 +20,7 @@ extension MoveToParentDates {
     }
 }
 
-class MockViewController: UIViewController {
+class EventReportingViewController: UIViewController, Tracing {
     var willBeAddedToParentDates: [Date] = []
     var willBeRemovedFromParentDates: [Date] = []
     var wasAddedToParentDates: [Date] = []
@@ -30,6 +31,8 @@ class MockViewController: UIViewController {
             viewDidLoadDates
             + viewWillAppearDates
             + viewDidAppearDates
+            + viewWillDisappearDates
+            + viewDidDisappearDates
     }
 
     var appearanceEventDates: [Date] {
@@ -52,27 +55,32 @@ class MockViewController: UIViewController {
 
     var viewDidLoadDates: [Date] = []
     override func viewDidLoad() {
+        trace(.viewLifeCycle, self, #function)
         viewDidLoadDates.append(Date())
         super.viewDidLoad()
     }
 
     var viewWillAppearDates: [Date] = []
     override func viewWillAppear(_ animated: Bool) {
+        trace(.viewLifeCycle, self, #function)
         viewWillAppearDates.append(Date())
     }
 
     var viewDidAppearDates: [Date] = []
     override func viewDidAppear(_ animated: Bool) {
+        trace(.viewLifeCycle, self, #function)
         viewDidAppearDates.append(Date())
     }
 
     var viewWillDisappearDates: [Date] = []
     override func viewWillDisappear(_ animated: Bool) {
+        trace(.viewLifeCycle, self, #function)
         viewWillDisappearDates.append(Date())
     }
 
     var viewDidDisappearDates: [Date] = []
     override func viewDidDisappear(_ animated: Bool) {
+        trace(.viewLifeCycle, self, #function)
         viewDidDisappearDates.append(Date())
     }
 
@@ -96,6 +104,8 @@ class MockViewController: UIViewController {
             isDisappearing = true
             beginDisappearanceTransitionDates.append(Date())
         }
+
+        super.beginAppearanceTransition(appearing, animated: animated)
     }
 
     var didCallEndAppearanceTransition: Bool?
@@ -109,6 +119,8 @@ class MockViewController: UIViewController {
         } else if case .some(true) = isDisappearing {
             endDisppearanceTransitionDates.append(Date())
         }
+
+        super.endAppearanceTransition()
     }
 
     var didCallWillMoveToParent: Bool?
@@ -119,6 +131,8 @@ class MockViewController: UIViewController {
 
         if parent == nil { willBeRemovedFromParentDates.append(Date()) }
         else { willBeAddedToParentDates.append(Date()) }
+
+        super.willMove(toParent: parent)
     }
 
     var didCallDidMoveToParent: Bool?
@@ -129,6 +143,8 @@ class MockViewController: UIViewController {
 
         if parent == nil { wasRemovedFromParentDates.append(Date()) }
         else { wasAddedToParentDates.append(Date()) }
+
+        super.didMove(toParent: parent)
     }
 
     var didCallRemoveFromParent: Bool?

@@ -28,16 +28,14 @@ class RootCoordinator: NSObject {
         tabBarController.viewControllers = [
 //            stackViewController, navigationController
 //            navigationController, stackViewController
-            navigationController,
+//            navigationController,
 //            stackViewController
         ]
-        window.rootViewController = tabBarController
+        window.rootViewController = navigationController
         window.makeKeyAndVisible()
 
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
-            self.navigationController.push(BaseViewController.colored(), animated: true)
-//            self.stackViewController.push(BaseViewController.colored(), animated: false)
-        }
-    }
+        self.navigationController.push(BaseViewController.colored(), animated: true)
+
+//    }
 }
 

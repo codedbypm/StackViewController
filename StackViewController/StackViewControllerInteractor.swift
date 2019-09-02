@@ -219,40 +219,6 @@ extension StackViewControllerInteractor: TransitionHandlingDelegate {
 
 private extension StackViewControllerInteractor {
 
-    func notifyControllerAboutStackChanges(_ difference: Stack.Difference) {
-        let removed = difference.removals.compactMap { change -> UIViewController? in
-            if case let .remove(_, element, _) = change { return element }
-            else { return nil }
-        }
-        notifyControllerOfRemovals(removed)
-
-        let inserts = difference.insertions.compactMap { change -> UIViewController? in
-            if case let .insert(_, element, _) = change { return element }
-            else { return nil }
-        }
-        notifyControllerOfInsertions(inserts)
-    }
-
-    func notifyControllerOfInsertions(_ insertions: Stack) {
-        insertions.dropLast().forEach {
-            self.delegate?.prepareAddingChild($0)
-            self.delegate?.finishAddingChild($0)
-        }
-        insertions.suffix(1).forEach {
-            self.delegate?.prepareAddingChild($0)
-        }
-    }
-
-    func notifyControllerOfRemovals(_ removals: Stack) {
-        removals.dropLast().forEach {
-            self.delegate?.prepareRemovingChild($0)
-            self.delegate?.finishRemovingChild($0)
-        }
-        removals.suffix(1).forEach {
-            self.delegate?.prepareRemovingChild($0)
-        }
-    }
-
     func sendBeginTransitionViewEvents(using context: TransitionContext) {
         if let from = context.from {
             if context.transitionWasCancelled {

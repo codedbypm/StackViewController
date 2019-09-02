@@ -15,6 +15,12 @@ class StackViewControllerTests: XCTestCase {
     var sut: StackViewController!
     var window: UIWindow!
 
+    override func setUp() {
+        super.setUp()
+        window = UIWindow()
+        window.makeKeyAndVisible()
+    }
+
     override func tearDown() {
         sut = nil
         window = nil
@@ -49,59 +55,45 @@ extension StackViewControllerTests {
     // MARK: - Sequence of events
 
     // when: stack = []
-    //       window == nil
+    //       stack.view.window == nil
     // then: no events
     //
-    func testThat_initWithEmptyStack_itReceivesAndSendsProperEvents() throws {
+    func testThat_initWithEmptyStack_itReceivesAndSendsProperEvents() {
         // Arrange
 
         // Act
-        sut = MockStackViewController()
+        let sut = MockStackViewController()
 
         // Assert
-        let mockSut = try XCTUnwrap(sut as? MockStackViewController)
-        XCTAssertEqual(mockSut.receivedEventDates.count, 0)
+        XCTAssertEqual(sut.receivedEventDates.count, 0)
     }
 
     // when: stack = []
-    //       window == nil
+    //       stack.view.window == nil
     //       pushViewController
     //
-    // then: receives           => [pushViewController]
-    //       sends to yellow    => [willMoveToParent]
+    // then: sends to yellow    => [willMoveToParent]
     //
     // note: UINC receives viewDidLoad too
     //
     func testThat_whenInitWithEmptyStack_and_pushViewController_thenItReceivesAndSendsProperEvents() {
         // Arrange
-        let yellow = MockViewController()
-        let sut = MockStackViewController()
+        let yellow = EventReportingViewController()
+        let sut = StackViewController()
 
         // Act
         sut.push(yellow, animated: false)
 
         // Assert
-        XCTAssertEqual(sut.receivedEventDates.count, 1)
-        XCTAssertEqual(sut.pushViewControllerDates.count, 1)
-
         XCTAssertEqual(yellow.receivedEventDates.count, 1)
         XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
-
-        let timeline: [Date] = [
-            sut.pushViewControllerDates.first,
-            yellow.willBeAddedToParentDates.first
-        ].compactMap { $0 }
-
-        XCTAssertEqual(timeline, timeline.sorted())
     }
 
     // when: stack = [yellow, green]
-    //       window == nil
+    //       stack.view.window == nil
     //       sut.stack = [red, black]
     //
-    // then: receives           =>  [viewControllers]
-    //                              [setViewControllers]
-    //       sends to yellow    =>  [willMoveToParent: sut],
+    // then: sends to yellow    =>  [willMoveToParent: sut],
     //                              [didMoveToParent: sut],
     //                              [willMoveToParent: nil],
     //                              [didMoveToParent: nil]
@@ -112,25 +104,20 @@ extension StackViewControllerTests {
     //                              [didMoveToParent: sut]
     //       sends to black     =>  [willMoveToParent: sut]
     //
-    func testThat_whenReplacingNonEmptyStackWithAnotherNonEmptyStack_thenItReceivesAndSendsProperEvents() throws {
+    func testThat_whenReplacingNonEmptyStackWithAnotherNonEmptyStack_thenItReceivesAndSendsProperEvents() {
         // Arrange
-        let yellow = MockViewController()
-        let green = MockViewController()
+        let yellow = EventReportingViewController()
+        let green = EventReportingViewController()
         sut = MockStackViewController()
         sut.stack = [yellow, green]
 
-        let red = MockViewController()
-        let black = MockViewController()
+        let red = EventReportingViewController()
+        let black = EventReportingViewController()
 
         // Act
         sut.stack = [red, black]
 
         // Assert
-        let sut = try XCTUnwrap(self.sut as? MockStackViewController)
-        XCTAssertEqual(sut.receivedEventDates.count, 4)
-        XCTAssertEqual(sut.stackSetterDates.count, 2)
-        XCTAssertEqual(sut.setStackDates.count, 2)
-
         XCTAssertEqual(yellow.receivedEventDates.count, 4)
         XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
         XCTAssertEqual(yellow.wasAddedToParentDates.count, 1)
@@ -170,43 +157,29 @@ extension StackViewControllerTests {
     }
 
     // when: stack = [yellow]
-    //       window == nil
+    //       stack.view.window == nil
     //
     // then: receives           => [pushViewController]
     //       sends to yellow    => [willMoveToParent]
     //
     // note: UINC receives viewDidLoad too
     //
-    func testThat_whenInitWithARootViewController_thenItReceivesAndSendsProperEvents() throws {
+    func testThat_whenInitWithARootViewController_thenItReceivesAndSendsProperEvents() {
         // Arrange
-        let yellow = MockViewController()
+        let yellow = EventReportingViewController()
 
         // Act
-        sut = MockStackViewController(rootViewController: yellow)
+        sut = StackViewController(rootViewController: yellow)
 
         // Assert
-        let sut = try XCTUnwrap(self.sut as? MockStackViewController)
-        XCTAssertEqual(sut.receivedEventDates.count, 1)
-        XCTAssertEqual(sut.pushViewControllerDates.count, 1)
-
         XCTAssertEqual(yellow.receivedEventDates.count, 1)
         XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
-
-        let timeline: [Date] = [
-            sut.pushViewControllerDates.first,
-            yellow.willBeAddedToParentDates.first
-        ].compactMap { $0 }
-
-        XCTAssertEqual(timeline, timeline.sorted())
-
-
     }
 
-    // when: stack = [yellow, green, red], popToRootViewController
-    // then: receives           =>  [viewControllers],
-    //                              [setViewControllers],
-    //                              [popToRootViewController]
-    //       sends to yellow    =>  [willMoveToParent: sut],
+    // when: stack = [yellow, green, red],
+    //       popToRootViewController
+    //
+    // then: sends to yellow    =>  [willMoveToParent: sut],
     //                              [didMoveToParent: sut],
     //                              [willMoveToParent: nil],
     //                              [didMoveToParent: nil],
@@ -219,25 +192,18 @@ extension StackViewControllerTests {
     //                              [willMoveToParent: nil],
     //                              [didMoveToParent: nil],
     //
-    func testThat_whenCallingPopToRootViewControllerOnNonEmptyStack_itReceivesAndSendsProperEvents() throws {
+    func testThat_whenCallingPopToRootViewControllerOnNonEmptyStack_itReceivesAndSendsProperEvents() {
         // Arrange
-        let yellow = MockViewController()
-        let green = MockViewController()
-        let red = MockViewController()
-        sut = MockStackViewController()
+        let yellow = EventReportingViewController()
+        let green = EventReportingViewController()
+        let red = EventReportingViewController()
+        sut = StackViewController()
         sut.stack = [yellow, green, red]
 
         // Act
         sut.popToRootViewController(animated: false)
 
         // Assert
-        let sut = try XCTUnwrap(self.sut as? MockStackViewController)
-        XCTAssertEqual(sut.receivedEventDates.count, 3)
-        XCTAssertEqual(
-            sut.receivedEventDates,
-            sut.stackSetterDates + sut.setStackDates + sut.popToRootDates
-        )
-
         XCTAssertEqual(yellow.receivedEventDates.count, 5)
         XCTAssertEqual(yellow.willBeAddedToParentDates.count, 2)
         XCTAssertEqual(yellow.wasAddedToParentDates.count, 1)
@@ -256,14 +222,11 @@ extension StackViewControllerTests {
         XCTAssertEqual(red.wasRemovedFromParentDates.count, 1)
 
         let totalEvents: [Date] =
-            sut.stackSetterDates
-                + sut.setStackDates
-                + Array(yellow.willBeAddedToParentDates.prefix(1))
+            Array(yellow.willBeAddedToParentDates.prefix(1))
                 + yellow.wasAddedToParentDates
                 + green.willBeAddedToParentDates
                 + green.wasAddedToParentDates
                 + red.willBeAddedToParentDates
-                + sut.popToRootDates
                 + yellow.willBeRemovedFromParentDates
                 + yellow.wasRemovedFromParentDates
                 + green.willBeRemovedFromParentDates
@@ -280,35 +243,10 @@ extension StackViewControllerTests {
 extension StackViewControllerTests {
 
     // when: stack = []
-    //       window != nil
-    // then: no events
+    //       window.rootViewController = SVC
+    //       push(yellow)
     //
-    func testThat_initWithEmptyStackAndWindowIsNotNil_itReceivesAndSendsProperEvents() throws {
-        // Arrange
-        window = UIWindow()
-
-        // Act
-        sut = MockStackViewController()
-        window.rootViewController = sut
-        window.makeKeyAndVisible()
-
-        // Assert
-        let mockSut = try XCTUnwrap(sut as? MockStackViewController)
-        XCTAssertEqual(mockSut.receivedEventDates.count, 3)
-        XCTAssertEqual(mockSut.viewDidLoadDates.count, 1)
-        XCTAssertEqual(mockSut.viewWillAppearDates.count, 1)
-        XCTAssertEqual(mockSut.viewDidAppearDates.count, 1)
-    }
-
-    // when: stack = []
-    //       window != nil
-    //       pushViewController
-    //
-    // then: receives           => [viewDidLoad]
-    //                             [viewWillAppear]
-    //                             [viewDidAppear]
-    //                             [push]
-    //       sends to yellow    => [willMoveToParent]
+    // then: yellow receives    => [willMoveToParent]
     //                             [viewDidLoad]
     //                             [beginAppearanceTransition]
     //                             [viewWillAppear]
@@ -317,25 +255,17 @@ extension StackViewControllerTests {
     //                             [didMoveToParent]
     //
     // note: UINC does not send [endAppearanceTransition]
-    func testThat_whenInitWithEmptyStackWhenWindowIsNotNilAndPushViewController_thenItReceivesAndSendsProperEvents() {
+    func testThat_whenInitWithEmptyStackAndSetAsWindowRootViewControllerOnPushViewController_thenProperEventsAreSent() {
         // Arrange
-        let window = UIWindow()
-        let sut = MockStackViewController()
+        let sut = StackViewController()
         window.rootViewController = sut
-        window.makeKeyAndVisible()
-        
-        let yellow = MockViewController()
+
+        let yellow = EventReportingViewController()
 
         // Act
         sut.push(yellow, animated: false)
 
         // Assert
-        XCTAssertEqual(sut.receivedEventDates.count, 4)
-        XCTAssertEqual(sut.viewDidLoadDates.count, 1)
-        XCTAssertEqual(sut.viewWillAppearDates.count, 1)
-        XCTAssertEqual(sut.viewDidAppearDates.count, 1)
-        XCTAssertEqual(sut.pushViewControllerDates.count, 1)
-
         XCTAssertEqual(yellow.receivedEventDates.count, 7)
         XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
         XCTAssertEqual(yellow.viewDidLoadDates.count, 1)
@@ -346,64 +276,64 @@ extension StackViewControllerTests {
         XCTAssertEqual(yellow.wasAddedToParentDates.count, 1)
 
         let timeline: [Date] = [
-            sut.pushViewControllerDates.first,
-            yellow.willBeAddedToParentDates.first
+            yellow.willBeAddedToParentDates.first,
+            yellow.viewDidLoadDates.first,
+            yellow.beginAppearanceTransitionDates.first,
+            yellow.viewWillAppearDates.first,
+            yellow.endAppearanceTransitionDates.first,
+            yellow.viewDidAppearDates.first,
+            yellow.wasAddedToParentDates.first
         ].compactMap { $0 }
-
         XCTAssertEqual(timeline, timeline.sorted())
+        XCTAssertEqual(timeline.count, 7)
     }
 
     // when: stack = [yellow]
-    //       window != nil
+    //       window.rootViewController = SVC
     //
-    // then: receives    => [pushViewController],
-    //                      [viewDidLoad]
-    //                      [viewWillAppear]
-    //                      [viewDidAppear]
-    //       yellow      => [willMoveToParent]
-    //                      [viewDidLoad]
-    //                      [viewWillAppear]
-    //                      [viewDidAppear]
-    //                      [didMoveToParent]
+    // then: yellow         => [willMoveToParent]
+    //                         [viewDidLoad]
+    //                         [beginAppearanceTransition]
+    //                         [viewWillAppear]
+    //                         [endAppearanceTransition]
+    //                         [viewDidAppear]
+    //                         [didMoveToParent]
     //
-    func testThat_whenInitWithARootViewControllerAndViewIsAddedToWindow_thenItReceivesAndSendsProperEvents() throws {
+    func testThat_whenInitWithARootViewControllerAndSetAsWindowRootViewController_thenProperEventsAreSent() throws {
         // Arrange
-        let yellow = MockViewController()
-        window = UIWindow()
+        let yellow = EventReportingViewController()
+        let sut = UINavigationController(rootViewController: yellow)
 
         // Act
-        sut = MockStackViewController(rootViewController: yellow)
         window.rootViewController = sut
         window.makeKeyAndVisible()
 
         // Assert
-        let sut = try XCTUnwrap(self.sut as? MockStackViewController)
-        XCTAssertEqual(sut.pushViewControllerDates.count, 1)
-        XCTAssertEqual(sut.viewDidLoadDates.count, 1)
-        XCTAssertEqual(sut.viewWillAppearDates.count, 1)
-        XCTAssertEqual(sut.viewDidAppearDates.count, 1)
-        XCTAssertEqual(sut.receivedEventDates.count, 4)
-
+        let predicate = NSPredicate(value: sut.view.subviews.contains(yellow.view))
+        let expectation = self.expectation(for: predicate, evaluatedWith: nil)
+        let result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
+        print(result)
         XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
         XCTAssertEqual(yellow.viewDidLoadDates.count, 1)
         XCTAssertEqual(yellow.beginAppearanceTransitionDates.count, 1)
+        XCTAssertEqual(yellow.viewWillAppearDates.count, 1)
         XCTAssertEqual(yellow.endAppearanceTransitionDates.count, 1)
+        XCTAssertEqual(yellow.viewDidAppearDates.count, 1)
         XCTAssertEqual(yellow.wasAddedToParentDates.count, 1)
-        XCTAssertEqual(yellow.receivedEventDates.count, 5)
+        XCTAssertEqual(yellow.receivedEventDates.count, 7)
 
-        let timeline: [Date] = [
-            sut.pushViewControllerDates.first,
+        let timeline: [TimeInterval] = [
             yellow.willBeAddedToParentDates.first,
-            sut.viewDidLoadDates.first,
-            yellow.viewDidLoadDates.first,
-            sut.viewWillAppearDates.first,
             yellow.beginAppearanceTransitionDates.first,
-            sut.viewDidAppearDates.first,
+            yellow.viewDidLoadDates.first,
+            yellow.viewWillAppearDates.first,
             yellow.endAppearanceTransitionDates.first,
+            yellow.viewDidAppearDates.first,
             yellow.wasAddedToParentDates.first
-        ].compactMap { $0 }
+            ].compactMap { $0?.timeIntervalSince1970 }
 
-        XCTAssertEqual(timeline, timeline.sorted(), "\(timeline.sorted().difference(from: timeline))")
+        XCTAssertEqual(timeline, timeline.sorted())
+        XCTAssertEqual(timeline.count, 7)
     }
 
 }

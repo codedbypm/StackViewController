@@ -20,7 +20,7 @@
 		FD44573B2315955200DCC278 /* Trace.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4457392315955200DCC278 /* Trace.swift */; };
 		FD44573D2315EA9B00DCC278 /* MockStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44573C2315EA9B00DCC278 /* MockStackViewController.swift */; };
 		FD44FF362286515000DA2AEB /* StackViewControllerInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */; };
-		FD44FF3D2288CFA900DA2AEB /* MockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */; };
+		FD44FF3D2288CFA900DA2AEB /* EventsReportingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3C2288CFA900DA2AEB /* EventsReportingViewController.swift */; };
 		FD44FF3F228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF3E228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift */; };
 		FD44FF44228B06DD00DA2AEB /* TransitionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5259832280F25A0072C6B8 /* TransitionHandler.swift */; };
 		FD44FF46228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD44FF45228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift */; };
@@ -114,7 +114,7 @@
 		FD4457392315955200DCC278 /* Trace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trace.swift; sourceTree = "<group>"; };
 		FD44573C2315EA9B00DCC278 /* MockStackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackViewController.swift; sourceTree = "<group>"; };
 		FD44FF352286515000DA2AEB /* StackViewControllerInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerInteractor.swift; sourceTree = "<group>"; };
-		FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockViewController.swift; sourceTree = "<group>"; };
+		FD44FF3C2288CFA900DA2AEB /* EventsReportingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsReportingViewController.swift; sourceTree = "<group>"; };
 		FD44FF3E228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewControllerInteractorTests.swift; sourceTree = "<group>"; };
 		FD44FF45228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackViewControllerDelegate.swift; sourceTree = "<group>"; };
 		FD44FF47228B65CF00DA2AEB /* MockStackViewControllerInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStackViewControllerInteractor.swift; sourceTree = "<group>"; };
@@ -210,7 +210,6 @@
 				FD44FF45228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift */,
 				FD44FF47228B65CF00DA2AEB /* MockStackViewControllerInteractor.swift */,
 				FDAD73D322AEB8E500FB68BB /* MockStackViewControllerInteractorDelegate.swift */,
-				FD44FF3C2288CFA900DA2AEB /* MockViewController.swift */,
 				FDAD73C722AD4A0400FB68BB /* MockStackHandler.swift */,
 				FDAD73D122AD5F6600FB68BB /* MockTransitionHandler.swift */,
 				FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */,
@@ -236,6 +235,7 @@
 		FD52598A2284E8DD0072C6B8 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				FD44FF3C2288CFA900DA2AEB /* EventsReportingViewController.swift */,
 				FDAD73CA22AD4B4500FB68BB /* CollectionDifference+Extensions.swift */,
 				FD52598B2284E9070072C6B8 /* Stack+Extensions.swift */,
 				FD76B7622270DA340090EDB2 /* StackViewController+Extensions.swift */,
@@ -591,7 +591,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FDF0BC7F22C9572C000EAAD5 /* MockInteractiveTransitioning.swift in Sources */,
-				FD44FF3D2288CFA900DA2AEB /* MockViewController.swift in Sources */,
+				FD44FF3D2288CFA900DA2AEB /* EventsReportingViewController.swift in Sources */,
 				FDF0BC7522C92603000EAAD5 /* TransitionHandlerTests.swift in Sources */,
 				FD76B7692270EA010090EDB2 /* StackViewControllerTests+StackActions.swift in Sources */,
 				FDAD73CB22AD4B4500FB68BB /* CollectionDifference+Extensions.swift in Sources */,

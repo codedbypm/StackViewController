@@ -14,16 +14,19 @@ import UIKit
 class StackViewControllerTests: XCTestCase {
     var sut: StackViewController!
     var window: UIWindow!
+    var waiter: XCTWaiter!
 
     override func setUp() {
         super.setUp()
         window = UIWindow()
         window.makeKeyAndVisible()
+        waiter = XCTWaiter(delegate: self)
     }
 
     override func tearDown() {
         sut = nil
         window = nil
+        waiter = nil
         super.tearDown()
     }
     
@@ -65,7 +68,7 @@ extension StackViewControllerTests {
         let sut = MockStackViewController()
 
         // Assert
-        XCTAssertEqual(sut.receivedEventDates.count, 0)
+        XCTAssertEqual(sut.allEventsTimestamps.count, 0)
     }
 
     // when: stack = []
@@ -78,15 +81,15 @@ extension StackViewControllerTests {
     //
     func testThat_whenInitWithEmptyStack_and_pushViewController_thenItReceivesAndSendsProperEvents() {
         // Arrange
-        let yellow = EventReportingViewController()
+        let yellow = EventsReportingViewController(.yellow)
         let sut = StackViewController()
 
         // Act
         sut.push(yellow, animated: false)
 
         // Assert
-        XCTAssertEqual(yellow.receivedEventDates.count, 1)
-        XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
+        XCTAssertEqual(yellow.allEventsTimestamps.count, 1)
+        XCTAssertEqual(yellow.willBeAddedToParentTimestamps.count, 1)
     }
 
     // when: stack = [yellow, green]
@@ -106,53 +109,53 @@ extension StackViewControllerTests {
     //
     func testThat_whenReplacingNonEmptyStackWithAnotherNonEmptyStack_thenItReceivesAndSendsProperEvents() {
         // Arrange
-        let yellow = EventReportingViewController()
-        let green = EventReportingViewController()
+        let yellow = EventsReportingViewController(.yellow)
+        let green = EventsReportingViewController(.green)
         sut = MockStackViewController()
         sut.stack = [yellow, green]
 
-        let red = EventReportingViewController()
-        let black = EventReportingViewController()
+        let red = EventsReportingViewController(.red)
+        let black = EventsReportingViewController(.black)
 
         // Act
         sut.stack = [red, black]
 
         // Assert
-        XCTAssertEqual(yellow.receivedEventDates.count, 4)
-        XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
-        XCTAssertEqual(yellow.wasAddedToParentDates.count, 1)
-        XCTAssertEqual(yellow.willBeRemovedFromParentDates.count, 1)
-        XCTAssertEqual(yellow.wasRemovedFromParentDates.count, 1)
+        XCTAssertEqual(yellow.allEventsTimestamps.count, 4)
+        XCTAssertEqual(yellow.willBeAddedToParentTimestamps.count, 1)
+        XCTAssertEqual(yellow.wasAddedToParentTimestamps.count, 1)
+        XCTAssertEqual(yellow.willBeRemovedFromParentTimestamps.count, 1)
+        XCTAssertEqual(yellow.wasRemovedFromParentTimestamps.count, 1)
 
-        XCTAssertEqual(green.receivedEventDates.count, 3)
-        XCTAssertEqual(green.willBeAddedToParentDates.count, 1)
-        XCTAssertEqual(green.wasAddedToParentDates.count, 0)
-        XCTAssertEqual(green.willBeRemovedFromParentDates.count, 1)
-        XCTAssertEqual(green.wasRemovedFromParentDates.count, 1)
+        XCTAssertEqual(green.allEventsTimestamps.count, 3)
+        XCTAssertEqual(green.willBeAddedToParentTimestamps.count, 1)
+        XCTAssertEqual(green.wasAddedToParentTimestamps.count, 0)
+        XCTAssertEqual(green.willBeRemovedFromParentTimestamps.count, 1)
+        XCTAssertEqual(green.wasRemovedFromParentTimestamps.count, 1)
 
-        XCTAssertEqual(red.receivedEventDates.count, 2)
-        XCTAssertEqual(red.willBeAddedToParentDates.count, 1)
-        XCTAssertEqual(red.wasAddedToParentDates.count, 1)
-        XCTAssertEqual(red.willBeRemovedFromParentDates.count, 0)
-        XCTAssertEqual(red.wasRemovedFromParentDates.count, 0)
+        XCTAssertEqual(red.allEventsTimestamps.count, 2)
+        XCTAssertEqual(red.willBeAddedToParentTimestamps.count, 1)
+        XCTAssertEqual(red.wasAddedToParentTimestamps.count, 1)
+        XCTAssertEqual(red.willBeRemovedFromParentTimestamps.count, 0)
+        XCTAssertEqual(red.wasRemovedFromParentTimestamps.count, 0)
 
-        XCTAssertEqual(black.receivedEventDates.count, 1)
-        XCTAssertEqual(black.willBeAddedToParentDates.count, 1)
-        XCTAssertEqual(black.wasAddedToParentDates.count, 0)
-        XCTAssertEqual(black.willBeRemovedFromParentDates.count, 0)
-        XCTAssertEqual(black.wasRemovedFromParentDates.count, 0)
+        XCTAssertEqual(black.allEventsTimestamps.count, 1)
+        XCTAssertEqual(black.willBeAddedToParentTimestamps.count, 1)
+        XCTAssertEqual(black.wasAddedToParentTimestamps.count, 0)
+        XCTAssertEqual(black.willBeRemovedFromParentTimestamps.count, 0)
+        XCTAssertEqual(black.wasRemovedFromParentTimestamps.count, 0)
 
         let timeline =
-            yellow.willBeAddedToParentDates
-            + yellow.wasAddedToParentDates
-            + green.willBeAddedToParentDates
-            + yellow.willBeRemovedFromParentDates
-            + yellow.wasRemovedFromParentDates
-            + green.willBeRemovedFromParentDates
-            + green.wasRemovedFromParentDates
-            + red.willBeAddedToParentDates
-            + red.wasAddedToParentDates
-            + black.willBeAddedToParentDates
+            yellow.willBeAddedToParentTimestamps
+            + yellow.wasAddedToParentTimestamps
+            + green.willBeAddedToParentTimestamps
+            + yellow.willBeRemovedFromParentTimestamps
+            + yellow.wasRemovedFromParentTimestamps
+            + green.willBeRemovedFromParentTimestamps
+            + green.wasRemovedFromParentTimestamps
+            + red.willBeAddedToParentTimestamps
+            + red.wasAddedToParentTimestamps
+            + black.willBeAddedToParentTimestamps
         XCTAssertEqual(timeline, timeline.sorted())
     }
 
@@ -166,14 +169,14 @@ extension StackViewControllerTests {
     //
     func testThat_whenInitWithARootViewController_thenItReceivesAndSendsProperEvents() {
         // Arrange
-        let yellow = EventReportingViewController()
+        let yellow = EventsReportingViewController(.yellow)
 
         // Act
         sut = StackViewController(rootViewController: yellow)
 
         // Assert
-        XCTAssertEqual(yellow.receivedEventDates.count, 1)
-        XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
+        XCTAssertEqual(yellow.allEventsTimestamps.count, 1)
+        XCTAssertEqual(yellow.willBeAddedToParentTimestamps.count, 1)
     }
 
     // when: stack = [yellow, green, red],
@@ -194,9 +197,9 @@ extension StackViewControllerTests {
     //
     func testThat_whenCallingPopToRootViewControllerOnNonEmptyStack_itReceivesAndSendsProperEvents() {
         // Arrange
-        let yellow = EventReportingViewController()
-        let green = EventReportingViewController()
-        let red = EventReportingViewController()
+        let yellow = EventsReportingViewController(.yellow)
+        let green = EventsReportingViewController(.green)
+        let red = EventsReportingViewController(.red)
         sut = StackViewController()
         sut.stack = [yellow, green, red]
 
@@ -204,36 +207,36 @@ extension StackViewControllerTests {
         sut.popToRootViewController(animated: false)
 
         // Assert
-        XCTAssertEqual(yellow.receivedEventDates.count, 5)
-        XCTAssertEqual(yellow.willBeAddedToParentDates.count, 2)
-        XCTAssertEqual(yellow.wasAddedToParentDates.count, 1)
-        XCTAssertEqual(yellow.willBeRemovedFromParentDates.count, 1)
-        XCTAssertEqual(yellow.wasRemovedFromParentDates.count, 1)
+        XCTAssertEqual(yellow.allEventsTimestamps.count, 5)
+        XCTAssertEqual(yellow.willBeAddedToParentTimestamps.count, 2)
+        XCTAssertEqual(yellow.wasAddedToParentTimestamps.count, 1)
+        XCTAssertEqual(yellow.willBeRemovedFromParentTimestamps.count, 1)
+        XCTAssertEqual(yellow.wasRemovedFromParentTimestamps.count, 1)
 
-        XCTAssertEqual(green.receivedEventDates.count, 4)
-        XCTAssertEqual(green.willBeAddedToParentDates.count, 1)
-        XCTAssertEqual(green.wasAddedToParentDates.count, 1)
-        XCTAssertEqual(green.willBeRemovedFromParentDates.count, 1)
-        XCTAssertEqual(green.wasRemovedFromParentDates.count, 1)
+        XCTAssertEqual(green.allEventsTimestamps.count, 4)
+        XCTAssertEqual(green.willBeAddedToParentTimestamps.count, 1)
+        XCTAssertEqual(green.wasAddedToParentTimestamps.count, 1)
+        XCTAssertEqual(green.willBeRemovedFromParentTimestamps.count, 1)
+        XCTAssertEqual(green.wasRemovedFromParentTimestamps.count, 1)
 
-        XCTAssertEqual(red.receivedEventDates.count, 3)
-        XCTAssertEqual(red.willBeAddedToParentDates.count, 1)
-        XCTAssertEqual(red.willBeRemovedFromParentDates.count, 1)
-        XCTAssertEqual(red.wasRemovedFromParentDates.count, 1)
+        XCTAssertEqual(red.allEventsTimestamps.count, 3)
+        XCTAssertEqual(red.willBeAddedToParentTimestamps.count, 1)
+        XCTAssertEqual(red.willBeRemovedFromParentTimestamps.count, 1)
+        XCTAssertEqual(red.wasRemovedFromParentTimestamps.count, 1)
 
-        let totalEvents: [Date] =
-            Array(yellow.willBeAddedToParentDates.prefix(1))
-                + yellow.wasAddedToParentDates
-                + green.willBeAddedToParentDates
-                + green.wasAddedToParentDates
-                + red.willBeAddedToParentDates
-                + yellow.willBeRemovedFromParentDates
-                + yellow.wasRemovedFromParentDates
-                + green.willBeRemovedFromParentDates
-                + green.wasRemovedFromParentDates
-                + red.willBeRemovedFromParentDates
-                + red.wasRemovedFromParentDates
-                + Array(yellow.willBeAddedToParentDates.suffix(1))
+        let totalEvents: [TimeInterval] =
+            Array(yellow.willBeAddedToParentTimestamps.prefix(1))
+                + yellow.wasAddedToParentTimestamps
+                + green.willBeAddedToParentTimestamps
+                + green.wasAddedToParentTimestamps
+                + red.willBeAddedToParentTimestamps
+                + yellow.willBeRemovedFromParentTimestamps
+                + yellow.wasRemovedFromParentTimestamps
+                + green.willBeRemovedFromParentTimestamps
+                + green.wasRemovedFromParentTimestamps
+                + red.willBeRemovedFromParentTimestamps
+                + red.wasRemovedFromParentTimestamps
+                + Array(yellow.willBeAddedToParentTimestamps.suffix(1))
         XCTAssertEqual(totalEvents, totalEvents.sorted())
     }
 }
@@ -260,29 +263,29 @@ extension StackViewControllerTests {
         let sut = StackViewController()
         window.rootViewController = sut
 
-        let yellow = EventReportingViewController()
+        let yellow = EventsReportingViewController(.yellow)
 
         // Act
         sut.push(yellow, animated: false)
 
         // Assert
-        XCTAssertEqual(yellow.receivedEventDates.count, 7)
-        XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
-        XCTAssertEqual(yellow.viewDidLoadDates.count, 1)
-        XCTAssertEqual(yellow.beginAppearanceTransitionDates.count, 1)
-        XCTAssertEqual(yellow.viewWillAppearDates.count, 1)
-        XCTAssertEqual(yellow.endAppearanceTransitionDates.count, 1)
-        XCTAssertEqual(yellow.viewDidAppearDates.count, 1)
-        XCTAssertEqual(yellow.wasAddedToParentDates.count, 1)
+        XCTAssertEqual(yellow.allEventsTimestamps.count, 7)
+        XCTAssertEqual(yellow.willBeAddedToParentTimestamps.count, 1)
+        XCTAssertEqual(yellow.viewDidLoadTimestamps.count, 1)
+        XCTAssertEqual(yellow.beginAppearanceTransitionTimestamps.count, 1)
+        XCTAssertEqual(yellow.viewWillAppearTimestamps.count, 1)
+        XCTAssertEqual(yellow.endAppearanceTransitionTimestamps.count, 1)
+        XCTAssertEqual(yellow.viewDidAppearTimestamps.count, 1)
+        XCTAssertEqual(yellow.wasAddedToParentTimestamps.count, 1)
 
-        let timeline: [Date] = [
-            yellow.willBeAddedToParentDates.first,
-            yellow.viewDidLoadDates.first,
-            yellow.beginAppearanceTransitionDates.first,
-            yellow.viewWillAppearDates.first,
-            yellow.endAppearanceTransitionDates.first,
-            yellow.viewDidAppearDates.first,
-            yellow.wasAddedToParentDates.first
+        let timeline: [TimeInterval] = [
+            yellow.willBeAddedToParentTimestamps.first,
+            yellow.viewDidLoadTimestamps.first,
+            yellow.beginAppearanceTransitionTimestamps.first,
+            yellow.viewWillAppearTimestamps.first,
+            yellow.endAppearanceTransitionTimestamps.first,
+            yellow.viewDidAppearTimestamps.first,
+            yellow.wasAddedToParentTimestamps.first
         ].compactMap { $0 }
         XCTAssertEqual(timeline, timeline.sorted())
         XCTAssertEqual(timeline.count, 7)
@@ -295,45 +298,55 @@ extension StackViewControllerTests {
     //                         [viewDidLoad]
     //                         [beginAppearanceTransition]
     //                         [viewWillAppear]
-    //                         [endAppearanceTransition]
+    //                         [viewDidAppear]
+    //                         [didMoveToParent]
+    //
+    // note: UIKit does     => [willMoveToParent]
+    //                         [viewDidLoad]
+    //                         [beginAppearanceTransition]
+    //                         [viewWillAppear]
     //                         [viewDidAppear]
     //                         [didMoveToParent]
     //
     func testThat_whenInitWithARootViewControllerAndSetAsWindowRootViewController_thenProperEventsAreSent() throws {
         // Arrange
-        let yellow = EventReportingViewController()
+        let yellow = EventsReportingViewController(.yellow)
         let sut = UINavigationController(rootViewController: yellow)
 
         // Act
         window.rootViewController = sut
-        window.makeKeyAndVisible()
+        window.setNeedsLayout()
+        window.layoutIfNeeded()
 
         // Assert
-        let predicate = NSPredicate(value: sut.view.subviews.contains(yellow.view))
-        let expectation = self.expectation(for: predicate, evaluatedWith: nil)
-        let result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
-        print(result)
-        XCTAssertEqual(yellow.willBeAddedToParentDates.count, 1)
-        XCTAssertEqual(yellow.viewDidLoadDates.count, 1)
-        XCTAssertEqual(yellow.beginAppearanceTransitionDates.count, 1)
-        XCTAssertEqual(yellow.viewWillAppearDates.count, 1)
-        XCTAssertEqual(yellow.endAppearanceTransitionDates.count, 1)
-        XCTAssertEqual(yellow.viewDidAppearDates.count, 1)
-        XCTAssertEqual(yellow.wasAddedToParentDates.count, 1)
-        XCTAssertEqual(yellow.receivedEventDates.count, 7)
-
-        let timeline: [TimeInterval] = [
-            yellow.willBeAddedToParentDates.first,
-            yellow.beginAppearanceTransitionDates.first,
-            yellow.viewDidLoadDates.first,
-            yellow.viewWillAppearDates.first,
-            yellow.endAppearanceTransitionDates.first,
-            yellow.viewDidAppearDates.first,
-            yellow.wasAddedToParentDates.first
-            ].compactMap { $0?.timeIntervalSince1970 }
-
-        XCTAssertEqual(timeline, timeline.sorted())
-        XCTAssertEqual(timeline.count, 7)
+        let _ = waiter.wait(
+            for: [
+                expectation(for: yellow.willBeAddedToParentTimestamps, toBeOfSize: 1),
+                expectation(for: yellow.viewDidLoadTimestamps, toBeOfSize: 1),
+                expectation(for: yellow.beginAppearanceTransitionTimestamps, toBeOfSize: 1),
+                expectation(for: yellow.viewWillAppearTimestamps, toBeOfSize: 1),
+//                expectation(for: yellow.endAppearanceTransitionTimestamps, toBeOfSize: 1),
+                expectation(for: yellow.viewDidAppearTimestamps, toBeOfSize: 1),
+                expectation(for: yellow.wasAddedToParentTimestamps, toBeOfSize: 1)
+            ],
+            timeout: 5,
+            enforceOrder: true
+        )
+        XCTAssertEqual(yellow.allEventsTimestamps.count, 6)
     }
-
 }
+
+extension StackViewControllerTests {
+
+    func expectation(
+        for timestamps: [TimeInterval],
+        toBeOfSize count: Int
+    ) -> XCTestExpectation {
+        let predicate = NSPredicate(value: timestamps.count == count)
+        let exception = XCTNSPredicateExpectation(predicate: predicate, object: nil)
+        exception.assertForOverFulfill = true
+        return exception
+    }
+}
+
+

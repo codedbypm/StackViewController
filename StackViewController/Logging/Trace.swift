@@ -24,7 +24,13 @@ extension OSLog {
         category: "viewChanges"
     )
 
-    /// Logs the view conyroller containment events
+    /// Logs the appearance transition events
+    public static let appearanceTransitions = OSLog(
+        subsystem: subsystem,
+        category: "appearanceTransitions"
+    )
+
+    /// Logs the view controller containment events
     public static let viewControllerContainment = OSLog(
         subsystem: subsystem,
         category: "viewControllerContainment"

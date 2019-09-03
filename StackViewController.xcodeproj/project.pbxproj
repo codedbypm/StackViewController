@@ -56,6 +56,7 @@
 		FD76B791227A5B7A0090EDB2 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B790227A5B7A0090EDB2 /* Array+Extensions.swift */; };
 		FD83870522A19C750017E8F8 /* StackHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD83870422A19C750017E8F8 /* StackHandling.swift */; };
 		FDA6BD02231C41F8004DD3B1 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA6BD01231C41F8004DD3B1 /* View.swift */; };
+		FDA6BD07231CBDDF004DD3B1 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD76B789227917320090EDB2 /* NavigationController.swift */; };
 		FDAD73C822AD4A0400FB68BB /* MockStackHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73C722AD4A0400FB68BB /* MockStackHandler.swift */; };
 		FDAD73CB22AD4B4500FB68BB /* CollectionDifference+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73CA22AD4B4500FB68BB /* CollectionDifference+Extensions.swift */; };
 		FDAD73D022AD5E3900FB68BB /* TransitionHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD73CF22AD5E3900FB68BB /* TransitionHandling.swift */; };
@@ -67,6 +68,9 @@
 		FDF0BC7922C92850000EAAD5 /* MockTransitionHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */; };
 		FDF0BC7B22C936F4000EAAD5 /* MockAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */; };
 		FDF0BC7F22C9572C000EAAD5 /* MockInteractiveTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF0BC7E22C9572C000EAAD5 /* MockInteractiveTransitioning.swift */; };
+		FDF1A6F8231D9F8100E70937 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF1A6F7231D9F8100E70937 /* Color.swift */; };
+		FDF1A6F9231D9F8900E70937 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF1A6F7231D9F8100E70937 /* Color.swift */; };
+		FDF1A6FA231E996E00E70937 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA6BD01231C41F8004DD3B1 /* View.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -167,6 +171,7 @@
 		FDF0BC7822C92850000EAAD5 /* MockTransitionHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTransitionHandlerDelegate.swift; sourceTree = "<group>"; };
 		FDF0BC7A22C936F4000EAAD5 /* MockAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		FDF0BC7E22C9572C000EAAD5 /* MockInteractiveTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInteractiveTransitioning.swift; sourceTree = "<group>"; };
+		FDF1A6F7231D9F8100E70937 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,6 +246,7 @@
 				FD76B7622270DA340090EDB2 /* StackViewController+Extensions.swift */,
 				FD76B7642270E3B70090EDB2 /* TimeInterval+Extensions.swift */,
 				FDF0BC7622C9278D000EAAD5 /* TransitionContext+Extensions.swift */,
+				FDF1A6F7231D9F8100E70937 /* Color.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -583,6 +589,7 @@
 				FD76B6FB2270C5B30090EDB2 /* BaseViewController.swift in Sources */,
 				FD76B78A227917320090EDB2 /* NavigationController.swift in Sources */,
 				FD22605B226B6363007E44CE /* UIKitCoordinator.swift in Sources */,
+				FDF1A6F9231D9F8900E70937 /* Color.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -597,15 +604,18 @@
 				FDAD73CB22AD4B4500FB68BB /* CollectionDifference+Extensions.swift in Sources */,
 				FDAD73C822AD4A0400FB68BB /* MockStackHandler.swift in Sources */,
 				FD76B7672270E9C60090EDB2 /* StackViewControllerTests+Properties.swift in Sources */,
+				FDA6BD07231CBDDF004DD3B1 /* NavigationController.swift in Sources */,
 				FD44FF4E228C2F1A00DA2AEB /* StackViewControllerTests+InteractorDelegate.swift in Sources */,
 				FD76B7032270C9530090EDB2 /* StackViewControllerTests.swift in Sources */,
 				FDF0BC7722C9278D000EAAD5 /* TransitionContext+Extensions.swift in Sources */,
 				FD76B7652270E3B70090EDB2 /* TimeInterval+Extensions.swift in Sources */,
 				FD44FF46228B4C9600DA2AEB /* MockStackViewControllerDelegate.swift in Sources */,
 				FD44FF48228B65CF00DA2AEB /* MockStackViewControllerInteractor.swift in Sources */,
+				FDF1A6FA231E996E00E70937 /* View.swift in Sources */,
 				FD44FF3F228A09CD00DA2AEB /* StackViewControllerInteractorTests.swift in Sources */,
 				FD76B7632270DA340090EDB2 /* StackViewController+Extensions.swift in Sources */,
 				FDAD73D222AD5F6600FB68BB /* MockTransitionHandler.swift in Sources */,
+				FDF1A6F8231D9F8100E70937 /* Color.swift in Sources */,
 				FD52598C2284E9070072C6B8 /* Stack+Extensions.swift in Sources */,
 				FD44573D2315EA9B00DCC278 /* MockStackViewController.swift in Sources */,
 				FD44FF4A228B89C400DA2AEB /* StackViewControllerTests+ViewEvents.swift in Sources */,

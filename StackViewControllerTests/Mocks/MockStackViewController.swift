@@ -44,7 +44,7 @@ class MockStackViewController: StackViewController {
             + setStackDates
     }
 
-    var receivedEventDates: [Date] {
+    var allEventsTimestamps: [Date] {
         return (viewCycleEventDates + stackOperationDates).sorted()
     }
 

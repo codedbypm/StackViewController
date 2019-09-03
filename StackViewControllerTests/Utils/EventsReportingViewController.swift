@@ -1,5 +1,5 @@
 //
-//  MockViewController.swift
+//  EventsReportingViewController.swift
 //  StackViewControllerTests
 //
 //  Created by Paolo Moroni on 13/05/2019.
@@ -9,145 +9,189 @@
 import UIKit
 import StackViewController
 
-struct MoveToParentDates {
-    var removed: Date?
-    var added: Date?
-}
+class EventsReportingViewController: UIViewController, Tracing {
 
-extension MoveToParentDates {
-    var dates: [Date] {
-        return [removed, added].compactMap { $0 }
+    private let color: Color
+    override var description: String { return "ERVC \(color)" }
+
+    init(_ color: Color) {
+        self.color = color
+        super.init(nibName: nil, bundle: nil)
     }
-}
-
-class EventReportingViewController: UIViewController, Tracing {
-    var willBeAddedToParentDates: [Date] = []
-    var willBeRemovedFromParentDates: [Date] = []
-    var wasAddedToParentDates: [Date] = []
-    var wasRemovedFromParentDates: [Date] = []
-
-    var viewCycleEventDates: [Date] {
-        return
-            viewDidLoadDates
-            + viewWillAppearDates
-            + viewDidAppearDates
-            + viewWillDisappearDates
-            + viewDidDisappearDates
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    override func loadView() {
+        let view = View(description.appending(" view"))
+        self.view = view
     }
 
-    var appearanceEventDates: [Date] {
-        return beginAppearanceTransitionDates
-            + beginDisappearanceTransitionDates
-            + endAppearanceTransitionDates
-            + endDisppearanceTransitionDates
+
+    /// View life cycle
+    var viewDidLoadTimestamps: [TimeInterval] = []
+    var viewWillAppearTimestamps: [TimeInterval] = []
+    var viewDidAppearTimestamps: [TimeInterval] = []
+    var viewWillDisappearTimestamps: [TimeInterval] = []
+    var viewDidDisappearTimestamps: [TimeInterval] = []
+
+    /// Appearance transition
+    var beginAppearanceTransitionTimestamps: [TimeInterval] = []
+    var beginDisappearanceTransitionTimestamps: [TimeInterval] = []
+    var endAppearanceTransitionTimestamps: [TimeInterval] = []
+    var endDisppearanceTransitionTimestamps: [TimeInterval] = []
+
+    /// View controller containment
+    var willBeAddedToParentTimestamps: [TimeInterval] = []
+    var wasAddedToParentTimestamps: [TimeInterval] = []
+    var willBeRemovedFromParentTimestamps: [TimeInterval] = []
+    var wasRemovedFromParentTimestamps: [TimeInterval] = []
+
+    /// All events
+    var allEventsTimestamps: [TimeInterval] {
+        return viewLifeCycleTimestamps
+            + appearanceTransitionTimestamps
+            + viewControllerContainmentTimestamps
     }
 
-    var viewContainmentEventDates: [Date] {
-        return willBeAddedToParentDates
-            + wasAddedToParentDates
-            + willBeRemovedFromParentDates
-            + wasRemovedFromParentDates
-    }
-
-    var receivedEventDates: [Date] {
-        return (viewCycleEventDates + appearanceEventDates + viewContainmentEventDates)
-    }
-
-    var viewDidLoadDates: [Date] = []
-    override func viewDidLoad() {
-        trace(.viewLifeCycle, self, #function)
-        viewDidLoadDates.append(Date())
-        super.viewDidLoad()
-    }
-
-    var viewWillAppearDates: [Date] = []
-    override func viewWillAppear(_ animated: Bool) {
-        trace(.viewLifeCycle, self, #function)
-        viewWillAppearDates.append(Date())
-    }
-
-    var viewDidAppearDates: [Date] = []
-    override func viewDidAppear(_ animated: Bool) {
-        trace(.viewLifeCycle, self, #function)
-        viewDidAppearDates.append(Date())
-    }
-
-    var viewWillDisappearDates: [Date] = []
-    override func viewWillDisappear(_ animated: Bool) {
-        trace(.viewLifeCycle, self, #function)
-        viewWillDisappearDates.append(Date())
-    }
-
-    var viewDidDisappearDates: [Date] = []
-    override func viewDidDisappear(_ animated: Bool) {
-        trace(.viewLifeCycle, self, #function)
-        viewDidDisappearDates.append(Date())
-    }
-
-    // MARK: - AppearanceTransition
-
+    /// Misc
     var isAppearing: Bool?
     var isDisappearing: Bool?
     var isAnimated: Bool?
-    
     var didCallBeginAppearanceTransition: Bool?
-    var beginAppearanceTransitionDates: [Date] = []
-    var beginDisappearanceTransitionDates: [Date] = []
+    var didCallEndAppearanceTransition: Bool?
+    var didCallWillMoveToParent: Bool?
+    var willMoveToParentParent: UIViewController?
+    var didCallDidMoveToParent: Bool?
+    var didMoveToParentParent: UIViewController?
+    var didCallRemoveFromParent: Bool?
+}
+
+// MARK: - View Life Cycle
+
+extension EventsReportingViewController {
+
+    var viewLifeCycleTimestamps: [TimeInterval] {
+        return viewDidLoadTimestamps
+            + viewWillAppearTimestamps
+            + viewDidAppearTimestamps
+            + viewWillDisappearTimestamps
+            + viewDidDisappearTimestamps
+    }
+
+    override func viewDidLoad() {
+        trace(.viewLifeCycle, self, #function)
+        viewDidLoadTimestamps.append(Date().timeIntervalSinceReferenceDate)
+        super.viewDidLoad()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        trace(.viewLifeCycle, self, #function)
+        viewWillAppearTimestamps.append(Date().timeIntervalSinceReferenceDate)
+        super.viewWillAppear(animated)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        trace(.viewLifeCycle, self, #function)
+        viewDidAppearTimestamps.append(Date().timeIntervalSinceReferenceDate)
+        super.viewDidAppear(animated)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        trace(.viewLifeCycle, self, #function)
+        viewWillDisappearTimestamps.append(Date().timeIntervalSinceReferenceDate)
+        super.viewWillDisappear(animated)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        trace(.viewLifeCycle, self, #function)
+        viewDidDisappearTimestamps.append(Date().timeIntervalSinceReferenceDate)
+        super.viewDidDisappear(animated)
+    }
+}
+
+// MARK: - Appearance transition
+
+extension EventsReportingViewController {
+
+    var appearanceTransitionTimestamps: [TimeInterval] {
+        return beginAppearanceTransitionTimestamps
+            + beginDisappearanceTransitionTimestamps
+            + endAppearanceTransitionTimestamps
+            + endDisppearanceTransitionTimestamps
+    }
+
     override func beginAppearanceTransition(_ appearing: Bool, animated: Bool) {
         didCallBeginAppearanceTransition = true
         isAnimated = animated
 
         if appearing {
+            trace(.appearanceTransitions, self, #function, "isAppearing")
             isAppearing = true
-            beginAppearanceTransitionDates.append(Date())
+            beginAppearanceTransitionTimestamps.append(Date().timeIntervalSinceReferenceDate)
         } else {
+            trace(.appearanceTransitions, self, #function, "isDisappearing")
             isDisappearing = true
-            beginDisappearanceTransitionDates.append(Date())
+            beginDisappearanceTransitionTimestamps.append(Date().timeIntervalSinceReferenceDate)
         }
 
         super.beginAppearanceTransition(appearing, animated: animated)
     }
 
-    var didCallEndAppearanceTransition: Bool?
-    var endAppearanceTransitionDates: [Date] = []
-    var endDisppearanceTransitionDates: [Date] = []
     override func endAppearanceTransition() {
         didCallEndAppearanceTransition = true
 
         if case .some(true) = isAppearing {
-            endAppearanceTransitionDates.append(Date())
+            trace(.appearanceTransitions, self, #function, "hasAppeared")
+            endAppearanceTransitionTimestamps.append(Date().timeIntervalSinceReferenceDate)
         } else if case .some(true) = isDisappearing {
-            endDisppearanceTransitionDates.append(Date())
+            trace(.appearanceTransitions, self, #function, "hasDisappeared")
+            endDisppearanceTransitionTimestamps.append(Date().timeIntervalSinceReferenceDate)
         }
-
         super.endAppearanceTransition()
     }
+}
 
-    var didCallWillMoveToParent: Bool?
-    var willMoveToParentParent: UIViewController?
+// MARK: - View controller containment
+
+extension EventsReportingViewController {
+
+    var viewControllerContainmentTimestamps: [TimeInterval] {
+        return willBeAddedToParentTimestamps
+            + wasAddedToParentTimestamps
+            + willBeRemovedFromParentTimestamps
+            + wasRemovedFromParentTimestamps
+    }
+
     override func willMove(toParent parent: UIViewController?) {
         didCallWillMoveToParent = true
         willMoveToParentParent = parent
 
-        if parent == nil { willBeRemovedFromParentDates.append(Date()) }
-        else { willBeAddedToParentDates.append(Date()) }
+        if parent == nil {
+            trace(.viewControllerContainment, self, #function, "nil")
+            willBeRemovedFromParentTimestamps.append(Date().timeIntervalSinceReferenceDate)
+        } else {
+            trace(.viewControllerContainment, self, #function)
+            willBeAddedToParentTimestamps.append(Date().timeIntervalSinceReferenceDate)
+        }
 
         super.willMove(toParent: parent)
     }
 
-    var didCallDidMoveToParent: Bool?
-    var didMoveToParentParent: UIViewController?
     override func didMove(toParent parent: UIViewController?) {
         didCallDidMoveToParent = true
         didMoveToParentParent = parent
 
-        if parent == nil { wasRemovedFromParentDates.append(Date()) }
-        else { wasAddedToParentDates.append(Date()) }
+        if parent == nil {
+            trace(.viewControllerContainment, self, #function, "nil")
+            wasRemovedFromParentTimestamps.append(Date().timeIntervalSinceReferenceDate)
+        } else {
+            trace(.viewControllerContainment, self, #function)
+            wasAddedToParentTimestamps.append(Date().timeIntervalSinceReferenceDate)
+        }
 
         super.didMove(toParent: parent)
     }
 
-    var didCallRemoveFromParent: Bool?
     override func removeFromParent() {
         didCallRemoveFromParent = true
         super.removeFromParent()

@@ -8,10 +8,10 @@
 
 import Foundation
 
+// TODO: remove constraint over UIViewController or the interactor would know too much!!!
 protocol StackViewControllerInteractorDelegate: UIViewController, StackViewControllerDelegate {
     func prepareAddingChild(_: UIViewController)
     func finishAddingChild(_: UIViewController)
-
     func prepareRemovingChild(_: UIViewController)
     func finishRemovingChild(_: UIViewController)
 
@@ -200,6 +200,7 @@ extension StackViewControllerInteractor: TransitionHandlingDelegate {
 
     func willStartTransition(_ context: TransitionContext) {
         sendBeginTransitionViewEvents(using: context)
+        delegate?.view.addSubview(context.containerView)
     }
 
     func didEndTransition(_ context: TransitionContext, didComplete: Bool) {

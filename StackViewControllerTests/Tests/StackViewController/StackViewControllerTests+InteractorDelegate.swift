@@ -79,7 +79,7 @@ extension StackViewControllerTests {
 
     func testThat_whenPrepareAddingChildIsCalled_itCallsAddChild() {
         // Arrange
-        let child = EventReportingViewController()
+        let child = EventsReportingViewController(.random)
         sut = StackViewController.dummy
 
         XCTAssertTrue(child.parent !== sut)
@@ -97,7 +97,7 @@ extension StackViewControllerTests {
 
     func testThat_whenFinishAddingChildIsCalled_itCallsDidMoveToParentOnChild() {
         // Arrange
-        let child = EventReportingViewController()
+        let child = EventsReportingViewController(.random)
         sut = StackViewController.dummy
 
 
@@ -114,7 +114,7 @@ extension StackViewControllerTests {
 
     func testThat_whenPrepareRemovingChildIsCalled_itCallsWillMoveToParentOnChild() {
         // Arrange
-        let child = EventReportingViewController()
+        let child = EventsReportingViewController(.random)
         sut = StackViewController.dummy
         child.willMoveToParentParent = sut
 
@@ -134,7 +134,7 @@ extension StackViewControllerTests {
 
     func testThat_whenFinishRemovingChildIsCalled_itCallsRemoveFromParentOnChild() {
         // Arrange
-        let child = EventReportingViewController()
+        let child = EventsReportingViewController(.random)
         sut = StackViewController.dummy
 
         XCTAssertNil(child.didCallRemoveFromParent)
@@ -150,7 +150,7 @@ extension StackViewControllerTests {
 
     func testThat_whenPrepareAppearanceIsCalled_itCallsBeginAppearanceTransitionOnTheViewController() {
         // Arrange
-        let yellow = EventReportingViewController()
+        let yellow = EventsReportingViewController(.yellow)
         let animated = true
         sut = StackViewController.dummy
 
@@ -170,7 +170,7 @@ extension StackViewControllerTests {
 
     func testThat_whenFinishAppearanceIsCalled_itCallsEndAppearanceTransitionOnTheViewController() {
         // Arrange
-        let yellow = EventReportingViewController()
+        let yellow = EventsReportingViewController(.yellow)
         sut = StackViewController.dummy
 
         XCTAssertNil(yellow.didCallEndAppearanceTransition)
@@ -186,7 +186,7 @@ extension StackViewControllerTests {
 
     func testThat_whenPrepareDisappearanceIsCalled_itCallsBeginAppearanceTransitionOnTheViewController() {
         // Arrange
-        let yellow = EventReportingViewController()
+        let yellow = EventsReportingViewController(.yellow)
         let animated = true
         sut = StackViewController.dummy
 
@@ -207,7 +207,7 @@ extension StackViewControllerTests {
 
     func testThat_whenFinishDisappearanceIsCalled_itCallsEndAppearanceTransitionOnTheViewController() {
         // Arrange
-        let yellow = EventReportingViewController()
+        let yellow = EventsReportingViewController(.yellow)
         sut = StackViewController.dummy
 
         XCTAssertNil(yellow.didCallEndAppearanceTransition)

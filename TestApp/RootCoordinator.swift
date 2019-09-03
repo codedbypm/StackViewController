@@ -31,11 +31,10 @@ class RootCoordinator: NSObject {
 //            navigationController,
 //            stackViewController
         ]
-        window.rootViewController = navigationController
         window.makeKeyAndVisible()
+        window.rootViewController = navigationController
 
-        self.navigationController.push(BaseViewController.colored(), animated: true)
-
-//    }
+        print()
+    }
 }
 

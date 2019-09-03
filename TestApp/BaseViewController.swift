@@ -9,40 +9,6 @@
 import UIKit
 import StackViewController
 
-enum Color: String, CaseIterable {
-    case yellow
-    case green
-    case red
-    case magenta
-    case gray
-    case blue
-    case black
-
-
-    var uiColor: UIColor {
-        switch self {
-        case .yellow: return .yellow
-        case .green: return .green
-        case .red: return .red
-        case .magenta: return .magenta
-        case .gray: return .gray
-        case .blue: return .blue
-        case .black: return .black
-        }
-    }
-
-    var textColor: UIColor {
-        switch self {
-        case .red, .yellow, .magenta, .green : return .darkText
-        case .blue, .black, .gray: return .lightText
-        }
-    }
-
-    static var random: Color {
-        return allCases.randomElement()!
-    }
-}
-
 class BaseViewController: UIViewController, Tracing {
 
     weak var stack: StackViewControllerHandling?
@@ -142,14 +108,14 @@ class BaseViewController: UIViewController, Tracing {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func loadView() {
-        self.view = View("\(description) view")
-    }
-    
+//    override func loadView() {
+//        self.view = View("\(description) view")
+//    }
+//
     override func viewDidLoad() {
         trace(.viewLifeCycle, self, #function)
         super.viewDidLoad()
-
+        
         view.backgroundColor = color.uiColor
 
         addSubviews()
@@ -157,12 +123,12 @@ class BaseViewController: UIViewController, Tracing {
     }
 
     override func beginAppearanceTransition(_ isAppearing: Bool, animated: Bool) {
-        trace(.viewControllerContainment, self, #function, isAppearing ? "isAppearing" : "isDisappearing")
+        trace(.appearanceTransitions, self, #function, isAppearing ? "isAppearing" : "isDisappearing")
         super.beginAppearanceTransition(isAppearing, animated: animated)
     }
 
     override func endAppearanceTransition() {
-        trace(.viewControllerContainment, self, #function)
+        trace(.appearanceTransitions, self, #function)
         super.endAppearanceTransition()
     }
 

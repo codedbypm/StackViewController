@@ -12,10 +12,10 @@ extension UINavigationController: StackViewControllerHandling {}
 
 class UIKitCoordinator: NSObject {
 
-    lazy var navigationController: NavigationController = {
-//        let root = BaseViewController.colored(.yellow)
-        let navController = NavigationController()
-//        root.stack = navController
+    lazy var navigationController: UINavigationController = {
+        let root = BaseViewController.colored(.yellow)
+        let navController = UINavigationController(rootViewController: root)
+        root.stack = navController
 //        navController.push(root, animated: false)
 
         navController.delegate = self

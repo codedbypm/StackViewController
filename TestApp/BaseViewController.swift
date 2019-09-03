@@ -162,16 +162,6 @@ class BaseViewController: UIViewController, Tracing {
         super.didMove(toParent: parent)
     }
 
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        trace(.traitCollection, self, #function)
-        super.willTransition(to: newCollection, with: coordinator)
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        trace(.traitCollection, self, #function)
-        super.viewWillTransition(to: size, with: coordinator)
-    }
-
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         trace(.traitCollection, self, #function)
         super.traitCollectionDidChange(previousTraitCollection)
@@ -195,6 +185,21 @@ class BaseViewController: UIViewController, Tracing {
         button.setTitleColor(color.textColor, for: .normal)
         button.addTarget(self, action: #selector(didTap(button:)), for: .touchUpInside)
         return button
+    }
+
+    override func size(forChildContentContainer container: UIContentContainer, withParentContainerSize parentSize: CGSize) -> CGSize {
+        trace(.contentContainer, self, #function, "\(container) \(parentSize)")
+        return super.size(forChildContentContainer: container, withParentContainerSize: parentSize)
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        trace(.contentContainer, self, #function, "\(size) \(coordinator)")
+        super.viewWillTransition(to: size, with: coordinator)
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        trace(.traitCollection, self, #function)
+        super.willTransition(to: newCollection, with: coordinator)
     }
 }
 

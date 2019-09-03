@@ -18,6 +18,12 @@ extension OSLog {
         category: "viewLifeCycle"
     )
 
+    /// Logs the event of UIContentContainer protocol
+    public static let contentContainer = OSLog(
+        subsystem: subsystem,
+        category: "contentContainer"
+    )
+
     /// Logs events of view-related changes
     public static let viewChanges = OSLog(
         subsystem: subsystem,
